@@ -1,0 +1,480 @@
+[dir=rtl] .amag-private-admin .amgr-prevent-publishing {
+  left: auto;
+  right: 0; }
+  [dir=rtl] .amag-private-admin .amgr-prevent-publishing .amgr-message {
+    left: auto;
+    right: 0; }
+[dir=rtl] .amag-private-admin .postbox-container #amgr-group-article-access #amgr-article-page-inner-container.amgr-admin-categories .amgr-article-page-group-container ul li {
+  padding-right: unset;
+  padding-left: 24px; }
+[dir=rtl] .amag-private-admin .postbox-container #amgr-group-article-access #amgr-article-page-inner-container.amgr-admin-categories .amgr-article-page-categories-container ul li {
+  padding-right: auto;
+  padding-left: 24px; }
+[dir=rtl] .amag-private-admin .postbox-container #amgr-group-article-access #amgr-article-page-inner-container.amgr-admin-categories .amgr-article-page-categories-container ul .amgr-group-parent-placeholder .amgr-parent-name {
+  margin: 0 4px 0 0; }
+[dir=rtl] .amag-private-admin .postbox-container #amgr-group-article-access #amgr-article-page-inner-container.amgr-admin-categories .amgr-article-page-categories-container ul::-webkit-scrollbar-button {
+  display: block;
+  height: 100%;
+  border-radius: 0px;
+  background-color: #AAA; }
+[dir=rtl] .amag-private-admin .postbox-container #amgr-group-article-access #amgr-article-page-inner-container.amgr-admin-categories .amgr-article-page-categories-container ul::-webkit-scrollbar-button:hover {
+  background-color: #AAA; }
+[dir=rtl] .amag-private-admin .postbox-container #amgr-group-article-access #amgr-article-page-inner-container.amgr-admin-categories .amgr-article-page-categories-container ul::-webkit-scrollbar-thumb {
+  background-color: #000; }
+[dir=rtl] .amag-private-admin .postbox-container #amgr-group-article-access #amgr-article-page-inner-container.amgr-admin-categories .amgr-article-page-categories-container ul::-webkit-scrollbar-thumb:hover {
+  background-color: #3986cc; }
+[dir=rtl] .amag-private-admin .postbox-container #amgr-group-article-access #amgr-article-page-inner-container.amgr-admin-categories .amgr-article-page-categories-container ul::-webkit-scrollbar-track {
+  background-color: #ccc; }
+[dir=rtl] .amag-private-admin .postbox-container #amgr-group-article-access #amgr-article-page-inner-container.amgr-admin-categories .amgr-article-page-categories-container ul::-webkit-scrollbar-track:hover {
+  background-color: #CCCCCC; }
+[dir=rtl] .amag-private-admin .postbox-container #amgr-group-article-access #amgr-article-page-inner-container.amgr-admin-categories .amgr-article-page-categories-container ul::-webkit-scrollbar {
+  width: 3px; }
+[dir=rtl] .amag-private-admin .postbox-container #amgr-group-article-access #amgr-article-page-inner-container.amgr-group-categories .amgr-article-page-group-container ul li {
+  padding-right: unset;
+  padding-left: 24px; }
+[dir=rtl] .amag-private-admin .postbox-container #amgr-group-article-access #amgr-article-page-inner-container.amgr-group-categories .amgr-article-page-categories-container ul li {
+  padding-right: auto;
+  padding-left: 24px; }
+[dir=rtl] .amag-private-admin .postbox-container #amgr-group-article-access #amgr-article-page-inner-container.amgr-group-categories .amgr-article-page-categories-container ul .amgr-group-parent-placeholder .amgr-parent-name {
+  margin: 0 4px 0 0;
+  display: inline-block; }
+[dir=rtl] .amag-private-admin .postbox-container #amgr-group-article-access .amgr-group-icon-placeholder-container {
+  right: auto;
+  left: 0; }
+  [dir=rtl] .amag-private-admin .postbox-container #amgr-group-article-access .amgr-group-icon-placeholder-container .amgr-group-icon-placeholder {
+    float: right; }
+[dir=rtl] .amag-private-admin #amag-access-manager-container {
+  content: "";
+  display: block;
+  clear: both;
+  margin-right: unset;
+  margin-left: 20px; }
+  [dir=rtl] .amag-private-admin #amag-access-manager-container:after {
+    content: "";
+    display: block;
+    clear: both; }
+  [dir=rtl] .amag-private-admin #amag-access-manager-container * {
+    box-sizing: border-box;
+    font-size: 14px; }
+  [dir=rtl] .amag-private-admin #amag-access-manager-container h1 {
+    font-size: 27px !important;
+    font-weight: bold;
+    color: #525252; }
+  [dir=rtl] .amag-private-admin #amag-access-manager-container h2 {
+    font-size: 2em;
+    margin: 0; }
+  [dir=rtl] .amag-private-admin #amag-access-manager-container button {
+    display: inline-block;
+    border: none;
+    background-color: transparent;
+    padding: 4px 20px;
+    vertical-align: middle;
+    font-size: 14px;
+    color: #fff;
+    text-transform: uppercase;
+    border-radius: 3px; }
+    [dir=rtl] .amag-private-admin #amag-access-manager-container button:hover {
+      cursor: pointer;
+      background-color: #f9f9f9; }
+    [dir=rtl] .amag-private-admin #amag-access-manager-container button:focus {
+      outline: none; }
+  [dir=rtl] .amag-private-admin #amag-access-manager-container input[type="submit"] {
+    display: inline-block;
+    border: none;
+    padding: 4px 20px;
+    vertical-align: middle;
+    font-size: 14px; }
+    [dir=rtl] .amag-private-admin #amag-access-manager-container input[type="submit"]:hover {
+      cursor: pointer; }
+    [dir=rtl] .amag-private-admin #amag-access-manager-container input[type="submit"]:focus {
+      outline: none; }
+  [dir=rtl] .amag-private-admin #amag-access-manager-container ul {
+    float: right;
+    width: 100%;
+    list-style-type: disc;
+    padding-right: 30px; }
+  [dir=rtl] .amag-private-admin #amag-access-manager-container p {
+    margin: 0 0 1em 0; }
+  [dir=rtl] .amag-private-admin #amag-access-manager-container #amgr-config-main-nav {
+    float: right;
+    -webkit-box-shadow: -2px 15px 6px -9px rgba(0, 0, 0, 0.17);
+    -moz-box-shadow: -2px 15px 6px -9px rgba(0, 0, 0, 0.17);
+    box-shadow: -2px 15px 6px -9px rgba(0, 0, 0, 0.17);
+    margin-right: unset;
+    margin-left: 20px; }
+    [dir=rtl] .amag-private-admin #amag-access-manager-container #amgr-config-main-nav .amgr-nav-section {
+      float: right; }
+    [dir=rtl] .amag-private-admin #amag-access-manager-container #amgr-config-main-nav .amgr-kb-name-section #amgr-list-of-kbs {
+      float: right; }
+    [dir=rtl] .amag-private-admin #amag-access-manager-container #amgr-config-main-nav .amgr-kb-name-section .amgr-kb-name {
+      float: right; }
+    [dir=rtl] .amag-private-admin #amag-access-manager-container #amgr-config-main-nav .amgr-access-status .amgr-access-status-icon {
+      float: right; }
+    [dir=rtl] .amag-private-admin #amag-access-manager-container #amgr-config-main-nav .amgr-access-status span {
+      float: right;
+      margin: 2px 6px 0 0; }
+    [dir=rtl] .amag-private-admin #amag-access-manager-container #amgr-config-main-nav .amgr-info-save {
+      right: auto;
+      left: 27px; }
+      [dir=rtl] .amag-private-admin #amag-access-manager-container #amgr-config-main-nav .amgr-info-save .config-option-group {
+        float: right; }
+    @media only screen and (max-width: 933px) {
+      [dir=rtl] .amag-private-admin #amag-access-manager-container #amgr-config-main-nav .amgr-nav-buttons-group {
+        float: right; }
+        [dir=rtl] .amag-private-admin #amag-access-manager-container #amgr-config-main-nav .amgr-nav-buttons-group .amgr-nav-section:first-child {
+          border-bottom-left-radius: 0;
+          border-left: solid 1px #ddd;
+          border-bottom-right-radius: 5px;
+          border-right: none; } }
+    [dir=rtl] .amag-private-admin #amag-access-manager-container #amgr-config-main-nav .config-input-group {
+      float: right; }
+  [dir=rtl] .amag-private-admin #amag-access-manager-container #amgr-config-container {
+    float: right; }
+    [dir=rtl] .amag-private-admin #amag-access-manager-container #amgr-config-container .amgr-kb-manager ul li {
+      float: right; }
+    [dir=rtl] .amag-private-admin #amag-access-manager-container #amgr-config-container .amag-page-header {
+      float: right; }
+      [dir=rtl] .amag-private-admin #amag-access-manager-container #amgr-config-container .amag-page-header h2 {
+        float: right; }
+    [dir=rtl] .amag-private-admin #amag-access-manager-container #amgr-config-container .amag-tabs-container {
+      float: right; }
+      [dir=rtl] .amag-private-admin #amag-access-manager-container #amgr-config-container .amag-tabs-container .amag-nav-tabs {
+        float: right; }
+        [dir=rtl] .amag-private-admin #amag-access-manager-container #amgr-config-container .amag-tabs-container .amag-nav-tabs li {
+          float: right; }
+      [dir=rtl] .amag-private-admin #amag-access-manager-container #amgr-config-container .amag-tabs-container .amag-tab-content {
+        float: right; }
+    [dir=rtl] .amag-private-admin #amag-access-manager-container #amgr-config-container .amag-list {
+      float: right; }
+      [dir=rtl] .amag-private-admin #amag-access-manager-container #amgr-config-container .amag-list h3 {
+        padding: 20px 10px 20px 20px; }
+      [dir=rtl] .amag-private-admin #amag-access-manager-container #amgr-config-container .amag-list ol, [dir=rtl] .amag-private-admin #amag-access-manager-container #amgr-config-container .amag-list ul {
+        float: right; }
+        [dir=rtl] .amag-private-admin #amag-access-manager-container #amgr-config-container .amag-list ol li, [dir=rtl] .amag-private-admin #amag-access-manager-container #amgr-config-container .amag-list ul li {
+          float: right; }
+          [dir=rtl] .amag-private-admin #amag-access-manager-container #amgr-config-container .amag-list ol li .amag-user, [dir=rtl] .amag-private-admin #amag-access-manager-container #amgr-config-container .amag-list ul li .amag-user {
+            float: right; }
+          [dir=rtl] .amag-private-admin #amag-access-manager-container #amgr-config-container .amag-list ol li span, [dir=rtl] .amag-private-admin #amag-access-manager-container #amgr-config-container .amag-list ul li span {
+            float: right; }
+      [dir=rtl] .amag-private-admin #amag-access-manager-container #amgr-config-container .amag-list .amag-list-heading {
+        float: right; }
+      [dir=rtl] .amag-private-admin #amag-access-manager-container #amgr-config-container .amag-list .amag-list-username {
+        float: right; }
+      [dir=rtl] .amag-private-admin #amag-access-manager-container #amgr-config-container .amag-list .amag-list-name {
+        float: right; }
+      [dir=rtl] .amag-private-admin #amag-access-manager-container #amgr-config-container .amag-list .amag-list-email {
+        float: right; }
+      [dir=rtl] .amag-private-admin #amag-access-manager-container #amgr-config-container .amag-list .amag-list-name {
+        float: right; }
+      [dir=rtl] .amag-private-admin #amag-access-manager-container #amgr-config-container .amag-list .amag-list-action {
+        float: right; }
+    [dir=rtl] .amag-private-admin #amag-access-manager-container #amgr-config-container .amgr-access-lvl-1 h4 {
+      float: right; }
+    [dir=rtl] .amag-private-admin #amag-access-manager-container #amgr-config-container .amgr-access-lvl-1 .amgr-group-list-checkboxes {
+      float: right; }
+      [dir=rtl] .amag-private-admin #amag-access-manager-container #amgr-config-container .amgr-access-lvl-1 .amgr-group-list-checkboxes ul, [dir=rtl] .amag-private-admin #amag-access-manager-container #amgr-config-container .amgr-access-lvl-1 .amgr-group-list-checkboxes li {
+        float: right; }
+      [dir=rtl] .amag-private-admin #amag-access-manager-container #amgr-config-container .amgr-access-lvl-1 .amgr-group-list-checkboxes li .amgr-group-checkbox-container {
+        float: right; }
+        [dir=rtl] .amag-private-admin #amag-access-manager-container #amgr-config-container .amgr-access-lvl-1 .amgr-group-list-checkboxes li .amgr-group-checkbox-container .amgr-level-1-checkbox {
+          float: right; }
+        [dir=rtl] .amag-private-admin #amag-access-manager-container #amgr-config-container .amgr-access-lvl-1 .amgr-group-list-checkboxes li .amgr-group-checkbox-container .amgr-level-1-name {
+          float: right; }
+    [dir=rtl] .amag-private-admin #amag-access-manager-container #amgr-config-container #amgr-level_2-panel .amgr-info-box {
+      margin: 22px 13px 0 0; }
+    [dir=rtl] .amag-private-admin #amag-access-manager-container #amgr-config-container #amgr-level_3-panel .amgr-link-all-articles {
+      float: right; }
+    [dir=rtl] .amag-private-admin #amag-access-manager-container #amgr-config-container #amgr-level_3-panel .amgr-info-box {
+      margin: 0 13px 0 0;
+      float: right; }
+  [dir=rtl] .amag-private-admin #amag-access-manager-container #amgr-configuration-content {
+    float: right; }
+  [dir=rtl] .amag-private-admin #amag-access-manager-container #amgr-access-content {
+    float: right; }
+  [dir=rtl] .amag-private-admin #amag-access-manager-container .amag-notification-box {
+    float: right;
+    -webkit-box-shadow: 2px 9px 14px -10px rgba(0, 0, 0, 0.43);
+    -moz-box-shadow: 2px 9px 14px -10px rgba(0, 0, 0, 0.43);
+    box-shadow: 2px 9px 14px -10px rgba(0, 0, 0, 0.43); }
+    [dir=rtl] .amag-private-admin #amag-access-manager-container .amag-notification-box.amag-collapse .amag-content-toggle .fa-arrow-circle-down {
+      right: auto;
+      left: 15px; }
+    [dir=rtl] .amag-private-admin #amag-access-manager-container .amag-notification-box.amag-collapse .amag-content-toggle .fa-arrow-circle-up {
+      right: auto;
+      left: 15px; }
+    [dir=rtl] .amag-private-admin #amag-access-manager-container .amag-notification-box h3 {
+      float: right; }
+    [dir=rtl] .amag-private-admin #amag-access-manager-container .amag-notification-box section {
+      float: right; }
+    [dir=rtl] .amag-private-admin #amag-access-manager-container .amag-notification-box ul li {
+      float: right; }
+      [dir=rtl] .amag-private-admin #amag-access-manager-container .amag-notification-box ul li label {
+        float: left; }
+      [dir=rtl] .amag-private-admin #amag-access-manager-container .amag-notification-box ul li .input_container {
+        float: right; }
+      [dir=rtl] .amag-private-admin #amag-access-manager-container .amag-notification-box ul li input[type="checkbox"]:before {
+        margin: -10px -10px 0 0; }
+  [dir=rtl] .amag-private-admin #amag-access-manager-container .kb-info-section {
+    float: right; }
+    [dir=rtl] .amag-private-admin #amag-access-manager-container .kb-info-section .kb-info .kb-icon {
+      left: auto;
+      right: -16px; }
+    [dir=rtl] .amag-private-admin #amag-access-manager-container .kb-info-section .kb-header {
+      float: right; }
+      [dir=rtl] .amag-private-admin #amag-access-manager-container .kb-info-section .kb-header .kb-title {
+        float: right; }
+      [dir=rtl] .amag-private-admin #amag-access-manager-container .kb-info-section .kb-header .kb-brief {
+        float: right;
+        padding: 10px 50px 10px 10px; }
+        [dir=rtl] .amag-private-admin #amag-access-manager-container .kb-info-section .kb-header .kb-brief .kb-icon {
+          left: auto;
+          right: -16px; }
+      [dir=rtl] .amag-private-admin #amag-access-manager-container .kb-info-section .kb-header .kb-toggle {
+        float: left; }
+    [dir=rtl] .amag-private-admin #amag-access-manager-container .kb-info-section .kb-content {
+      float: right; }
+    [dir=rtl] .amag-private-admin #amag-access-manager-container .kb-info-section .kb-info-widget {
+      float: right; }
+      [dir=rtl] .amag-private-admin #amag-access-manager-container .kb-info-section .kb-info-widget .widget-header {
+        float: right; }
+      [dir=rtl] .amag-private-admin #amag-access-manager-container .kb-info-section .kb-info-widget .widget-content {
+        float: right; }
+      [dir=rtl] .amag-private-admin #amag-access-manager-container .kb-info-section .kb-info-widget .widget-toggle {
+        float: right; }
+  [dir=rtl] .amag-private-admin #amag-access-manager-container .amgr-toggle-box {
+    float: right; }
+    [dir=rtl] .amag-private-admin #amag-access-manager-container .amgr-toggle-box .amgr-toggle-box-header {
+      padding: 20px 20px 20px 60px;
+      float: right; }
+      [dir=rtl] .amag-private-admin #amag-access-manager-container .amgr-toggle-box .amgr-toggle-box-header h3 {
+        float: right; }
+      [dir=rtl] .amag-private-admin #amag-access-manager-container .amgr-toggle-box .amgr-toggle-box-header .amgr-toggle-box-icon {
+        right: auto;
+        left: -41px; }
+    [dir=rtl] .amag-private-admin #amag-access-manager-container .amgr-toggle-box .amgr-toggle-box-body {
+      float: right; }
+      [dir=rtl] .amag-private-admin #amag-access-manager-container .amgr-toggle-box .amgr-toggle-box-body .amgr-toggle-box-content ul {
+        padding-left: unset;
+        padding-right: 25px; }
+  [dir=rtl] .amag-private-admin #amag-access-manager-container .amgr-info-box .amgr-info-box-popup .amgr-info-box-container .amgr-info-box-close {
+    right: auto;
+    left: 0; }
+  [dir=rtl] .amag-private-admin #amag-access-manager-container .amgr-info-box .amgr-info-box-popup .amgr-info-box-container .amgr-info-box-icon-max {
+    right: auto;
+    left: 40px; }
+  [dir=rtl] .amag-private-admin #amag-access-manager-container .amgr-info-box .amgr-info-box-popup .amgr-info-box-container .amgr-info-box-icon-min {
+    right: auto;
+    left: 40px; }
+  [dir=rtl] .amag-private-admin #amag-access-manager-container .amgr-role-definitions ul {
+    text-align: right;
+    padding-left: unset;
+    padding-right: 26px; }
+  [dir=rtl] .amag-private-admin #amag-access-manager-container .amgr-role-definitions p {
+    text-align: right; }
+  [dir=rtl] .amag-private-admin #amag-access-manager-container .amgr-current-main-pages span {
+    float: right; }
+  [dir=rtl] .amag-private-admin #amag-access-manager-container .amgr-current-main-pages ul {
+    margin-left: unset;
+    margin-right: 25px; }
+  [dir=rtl] .amag-private-admin #amag-access-manager-container .amgr-switch-container {
+    float: right; }
+    [dir=rtl] .amag-private-admin #amag-access-manager-container .amgr-switch-container.switch-checked .amgr-left-name {
+      text-shadow: -1px 0px 0px #00a0d2; }
+    [dir=rtl] .amag-private-admin #amag-access-manager-container .amgr-switch-container .amgr-left-name {
+      float: right; }
+    [dir=rtl] .amag-private-admin #amag-access-manager-container .amgr-switch-container .amgr-right-name {
+      float: right;
+      text-shadow: -1px 0px 0px #5cb85c; }
+    [dir=rtl] .amag-private-admin #amag-access-manager-container .amgr-switch-container .amgr-switch {
+      float: right; }
+    [dir=rtl] .amag-private-admin #amag-access-manager-container .amgr-switch-container .amgr-slider:before {
+      right: auto;
+      left: 4px; }
+    [dir=rtl] .amag-private-admin #amag-access-manager-container .amgr-switch-container input:checked + .amgr-slider:before {
+      -webkit-transform: translateX(24px);
+      -ms-transform: translateX(24px);
+      transform: translateX(24px); }
+  [dir=rtl] .amag-private-admin #amag-access-manager-container .amgr-settings-box {
+    float: right; }
+    [dir=rtl] .amag-private-admin #amag-access-manager-container .amgr-settings-box .amgr-sb-title .amgr-sb-info .ep_font_icon_info {
+      right: auto;
+      left: 15px; }
+    [dir=rtl] .amag-private-admin #amag-access-manager-container .amgr-settings-box .amgr-sb-content li label {
+      margin-left: unset;
+      margin-right: 11px; }
+    [dir=rtl] .amag-private-admin #amag-access-manager-container .amgr-settings-box .amgr-sb-content li input:checked + label {
+      padding: 10px 46px 10px 23px;
+      margin-left: unset;
+      margin-right: -38px; }
+  [dir=rtl] .amag-private-admin #amag-access-manager-container .amgr-info-section-container {
+    float: right; }
+    [dir=rtl] .amag-private-admin #amag-access-manager-container .amgr-info-section-container .amgr-info-section-header {
+      float: right; }
+      [dir=rtl] .amag-private-admin #amag-access-manager-container .amgr-info-section-container .amgr-info-section-header .amgr-info-section-title {
+        float: right; }
+      [dir=rtl] .amag-private-admin #amag-access-manager-container .amgr-info-section-container .amgr-info-section-header .amgr-info-section-brief {
+        float: right;
+        padding: 10px 50px 10px 10px; }
+        [dir=rtl] .amag-private-admin #amag-access-manager-container .amgr-info-section-container .amgr-info-section-header .amgr-info-section-brief .amgr-info-section-icon {
+          left: auto;
+          right: -16px; }
+    [dir=rtl] .amag-private-admin #amag-access-manager-container .amgr-info-section-container .amgr-info-section-content {
+      float: right; }
+  [dir=rtl] .amag-private-admin #amag-access-manager-container .amgr-kb-confirmation-container {
+    float: right; }
+    [dir=rtl] .amag-private-admin #amag-access-manager-container .amgr-kb-confirmation-container .amgr-confirmation-cta {
+      float: right; }
+      [dir=rtl] .amag-private-admin #amag-access-manager-container .amgr-kb-confirmation-container .amgr-confirmation-cta .amgr-confirmation-icon-container {
+        float: right; }
+        [dir=rtl] .amag-private-admin #amag-access-manager-container .amgr-kb-confirmation-container .amgr-confirmation-cta .amgr-confirmation-icon-container .amgr-confirmation-icon {
+          float: right; }
+        [dir=rtl] .amag-private-admin #amag-access-manager-container .amgr-kb-confirmation-container .amgr-confirmation-cta .amgr-confirmation-icon-container .amgr-confirmation-text {
+          float: right;
+          margin: 11px 20px 0 0px; }
+    [dir=rtl] .amag-private-admin #amag-access-manager-container .amgr-kb-confirmation-container .amgr-confirmation-form {
+      float: right; }
+      [dir=rtl] .amag-private-admin #amag-access-manager-container .amgr-kb-confirmation-container .amgr-confirmation-form ul li {
+        float: right; }
+        [dir=rtl] .amag-private-admin #amag-access-manager-container .amgr-kb-confirmation-container .amgr-confirmation-form ul li label {
+          float: left; }
+        [dir=rtl] .amag-private-admin #amag-access-manager-container .amgr-kb-confirmation-container .amgr-confirmation-form ul li .input_container {
+          float: right; }
+  @media (min-width: 780px) {
+    [dir=rtl] .amag-private-admin #amag-access-manager-container .amgr-col-1,
+    [dir=rtl] .amag-private-admin #amag-access-manager-container .amgr-col-2,
+    [dir=rtl] .amag-private-admin #amag-access-manager-container .amgr-col-3,
+    [dir=rtl] .amag-private-admin #amag-access-manager-container .amgr-col-4,
+    [dir=rtl] .amag-private-admin #amag-access-manager-container .amgr-col-5,
+    [dir=rtl] .amag-private-admin #amag-access-manager-container .amgr-col-6,
+    [dir=rtl] .amag-private-admin #amag-access-manager-container .amgr-col-7,
+    [dir=rtl] .amag-private-admin #amag-access-manager-container .amgr-col-8,
+    [dir=rtl] .amag-private-admin #amag-access-manager-container .amgr-col-9,
+    [dir=rtl] .amag-private-admin #amag-access-manager-container .amgr-col-10,
+    [dir=rtl] .amag-private-admin #amag-access-manager-container .amgr-col-11,
+    [dir=rtl] .amag-private-admin #amag-access-manager-container .amgr-col-12 {
+      float: right; } }
+  [dir=rtl] .amag-private-admin #amag-access-manager-container #amgr-KB-content .amgr-kb-status-container {
+    float: right; }
+    [dir=rtl] .amag-private-admin #amag-access-manager-container #amgr-KB-content .amgr-kb-status-container .amgr-access-cta {
+      float: right; }
+      [dir=rtl] .amag-private-admin #amag-access-manager-container #amgr-KB-content .amgr-kb-status-container .amgr-access-cta .amgr-access-status-icon-container {
+        float: right; }
+        [dir=rtl] .amag-private-admin #amag-access-manager-container #amgr-KB-content .amgr-kb-status-container .amgr-access-cta .amgr-access-status-icon-container .amgr-access-status-icon {
+          float: right; }
+        [dir=rtl] .amag-private-admin #amag-access-manager-container #amgr-KB-content .amgr-kb-status-container .amgr-access-cta .amgr-access-status-icon-container .amgr-access-status-text {
+          float: right; }
+    [dir=rtl] .amag-private-admin #amag-access-manager-container #amgr-KB-content .amgr-kb-status-container .amgr-access-form {
+      float: right; }
+      [dir=rtl] .amag-private-admin #amag-access-manager-container #amgr-KB-content .amgr-kb-status-container .amgr-access-form ul li {
+        float: right; }
+        [dir=rtl] .amag-private-admin #amag-access-manager-container #amgr-KB-content .amgr-kb-status-container .amgr-access-form ul li label {
+          float: left; }
+        [dir=rtl] .amag-private-admin #amag-access-manager-container #amgr-KB-content .amgr-kb-status-container .amgr-access-form ul li .input_container {
+          float: right; }
+  [dir=rtl] .amag-private-admin #amag-access-manager-container #amgr-KB-content #amgr-enable-private-config {
+    float: right; }
+    [dir=rtl] .amag-private-admin #amag-access-manager-container #amgr-KB-content #amgr-enable-private-config label {
+      right: 0;
+      left: auto; }
+    [dir=rtl] .amag-private-admin #amag-access-manager-container #amgr-KB-content #amgr-enable-private-config #show_private_article_prefix {
+      right: 190px;
+      left: auto;
+      top: 0px; }
+    [dir=rtl] .amag-private-admin #amag-access-manager-container #amgr-KB-content #amgr-enable-private-config .info-icon {
+      right: 222px;
+      left: auto; }
+    [dir=rtl] .amag-private-admin #amag-access-manager-container #amgr-KB-content #amgr-enable-private-config .amgr-submit {
+      right: 272px;
+      left: auto; }
+  [dir=rtl] .amag-private-admin #amag-access-manager-container #amgr-articles-content {
+    float: right; }
+    [dir=rtl] .amag-private-admin #amag-access-manager-container #amgr-articles-content #amgr-read-only-article-access li {
+      float: right; }
+    [dir=rtl] .amag-private-admin #amag-access-manager-container #amgr-articles-content .amgr-full-access-icon {
+      margin: 0 0 0 2px; }
+    [dir=rtl] .amag-private-admin #amag-access-manager-container #amgr-articles-content .amgr-public-access-icon {
+      margin: 0 0 0 2px; }
+  [dir=rtl] .amag-private-admin #amag-access-manager-container #amgr-categories-content {
+    float: right; }
+    [dir=rtl] .amag-private-admin #amag-access-manager-container #amgr-categories-content .amgr-info-box {
+      margin: 2px 13px 0 0; }
+    [dir=rtl] .amag-private-admin #amag-access-manager-container #amgr-categories-content .amgr-content-categories {
+      float: right; }
+      [dir=rtl] .amag-private-admin #amag-access-manager-container #amgr-categories-content .amgr-content-categories .amgr-category-controls {
+        float: right; }
+        [dir=rtl] .amag-private-admin #amag-access-manager-container #amgr-categories-content .amgr-content-categories .amgr-category-controls fieldset legend {
+          margin-left: unset;
+          margin-right: 20px; }
+        [dir=rtl] .amag-private-admin #amag-access-manager-container #amgr-categories-content .amgr-content-categories .amgr-category-controls .amgr-edit-mode-container {
+          float: right; }
+          [dir=rtl] .amag-private-admin #amag-access-manager-container #amgr-categories-content .amgr-content-categories .amgr-category-controls .amgr-edit-mode-container ul li {
+            float: right; }
+          [dir=rtl] .amag-private-admin #amag-access-manager-container #amgr-categories-content .amgr-content-categories .amgr-category-controls .amgr-edit-mode-container .amgr-group-access-message {
+            float: right; }
+          [dir=rtl] .amag-private-admin #amag-access-manager-container #amgr-categories-content .amgr-content-categories .amgr-category-controls .amgr-edit-mode-container .amgr-edit-active-no {
+            box-shadow: -1px 3px 3px 0px rgba(0, 0, 0, 0.73); }
+          [dir=rtl] .amag-private-admin #amag-access-manager-container #amgr-categories-content .amgr-content-categories .amgr-category-controls .amgr-edit-mode-container .amgr-edit-btn-no-access {
+            box-shadow: -1px 3px 3px 0px rgba(0, 0, 0, 0.73); }
+          [dir=rtl] .amag-private-admin #amag-access-manager-container #amgr-categories-content .amgr-content-categories .amgr-category-controls .amgr-edit-mode-container .amgr-edit-btn-read-only-access {
+            box-shadow: -1px 3px 3px 0px rgba(0, 0, 0, 0.73); }
+          [dir=rtl] .amag-private-admin #amag-access-manager-container #amgr-categories-content .amgr-content-categories .amgr-category-controls .amgr-edit-mode-container .amgr-edit-btn-full-access {
+            box-shadow: -1px 3px 3px 0px rgba(0, 0, 0, 0.73); }
+        [dir=rtl] .amag-private-admin #amag-access-manager-container #amgr-categories-content .amgr-content-categories .amgr-category-controls .amgr-check-all-categories {
+          float: right; }
+          [dir=rtl] .amag-private-admin #amag-access-manager-container #amgr-categories-content .amgr-content-categories .amgr-category-controls .amgr-check-all-categories #amgr-check-all-categories {
+            margin: 3px 7px 0 0; }
+      [dir=rtl] .amag-private-admin #amag-access-manager-container #amgr-categories-content .amgr-content-categories #amgr-category-access-levels {
+        float: right; }
+        [dir=rtl] .amag-private-admin #amag-access-manager-container #amgr-categories-content .amgr-content-categories #amgr-category-access-levels .amgr-category-access-heading {
+          left: auto;
+          right: 30px; }
+        [dir=rtl] .amag-private-admin #amag-access-manager-container #amgr-categories-content .amgr-content-categories #amgr-category-access-levels li {
+          box-shadow: -4px 7px 6px 0px rgba(0, 0, 0, 0.55); }
+      [dir=rtl] .amag-private-admin #amag-access-manager-container #amgr-categories-content .amgr-content-categories .amgr-level-1 ul, [dir=rtl] .amag-private-admin #amag-access-manager-container #amgr-categories-content .amgr-content-categories .amgr-level-1 li {
+        float: right; }
+      [dir=rtl] .amag-private-admin #amag-access-manager-container #amgr-categories-content .amgr-content-categories .amgr-level-1 > li .amgr-level-1-category {
+        float: right; }
+      [dir=rtl] .amag-private-admin #amag-access-manager-container #amgr-categories-content .amgr-content-categories .amgr-level-1 > li .amgr-level-1-name {
+        float: right; }
+      [dir=rtl] .amag-private-admin #amag-access-manager-container #amgr-categories-content .amgr-content-categories .amgr-level-2 {
+        color: #333333; }
+        [dir=rtl] .amag-private-admin #amag-access-manager-container #amgr-categories-content .amgr-content-categories .amgr-level-2 > li .amgr-level-2-checkbox {
+          float: right; }
+        [dir=rtl] .amag-private-admin #amag-access-manager-container #amgr-categories-content .amgr-content-categories .amgr-level-2 > li .amgr-level-2-name {
+          float: right; }
+      [dir=rtl] .amag-private-admin #amag-access-manager-container #amgr-categories-content .amgr-content-categories .amgr-level-3 {
+        color: #595959; }
+        [dir=rtl] .amag-private-admin #amag-access-manager-container #amgr-categories-content .amgr-content-categories .amgr-level-3 > li .amgr-level-3-checkbox {
+          float: right; }
+        [dir=rtl] .amag-private-admin #amag-access-manager-container #amgr-categories-content .amgr-content-categories .amgr-level-3 > li .amgr-level-3-name {
+          float: right; }
+      [dir=rtl] .amag-private-admin #amag-access-manager-container #amgr-categories-content .amgr-content-categories .amgr-level-4 > li .amgr-level-3-checkbox {
+        float: right; }
+      [dir=rtl] .amag-private-admin #amag-access-manager-container #amgr-categories-content .amgr-content-categories .amgr-level-4 > li .amgr-level-4-name {
+        float: right; }
+      [dir=rtl] .amag-private-admin #amag-access-manager-container #amgr-categories-content .amgr-content-categories .amgr-level-5 > li .amgr-level-3-checkbox {
+        float: right; }
+      [dir=rtl] .amag-private-admin #amag-access-manager-container #amgr-categories-content .amgr-content-categories .amgr-level-5 > li .amgr-level-5-name {
+        float: right; }
+    [dir=rtl] .amag-private-admin #amag-access-manager-container #amgr-categories-content .amgr-public-access-icon {
+      margin: 0 0 0 2px; }
+[dir=rtl] .eckb-bottom-notice-message a.amgr_notice_reset_logs_ajax {
+  right: auto;
+  left: 5px; }
+[dir=rtl] .eckb-inline-error-notice {
+  float: right; }
+[dir=rtl] #ekb-admin-page-wrap .info-icon p:after {
+  border-right: 0px solid #fff;
+  left: auto;
+  border-left: 10px solid #fff;
+  right: -9px; }
+[dir=rtl] #ekb-admin-page-wrap .info-icon p:before {
+  border-left: 0px solid #999;
+  left: auto;
+  border-left: 10px solid #999;
+  right: -10px; }
+[dir=rtl] #ekb-admin-page-wrap input[type=checkbox] {
+  width: 25px;
+  padding-right: 5px; }
+  [dir=rtl] #ekb-admin-page-wrap input[type=checkbox]:before {
+    margin-right: 2px; }

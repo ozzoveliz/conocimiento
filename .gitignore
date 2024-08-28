@@ -29,6 +29,31 @@ wp-config.php
 # Uploads
 /wp-content/uploads/
 
+# autoptimize
+/wp-content/autoptimize_404_handler.php
+
+# cache
+/wp-content/cache
+/wp-content/advanced-cache.php
+/wp-content/db.php
+/wp-content/object-cache.php
+
+# updraft
+/wp-content/updraft
+
+# w3-total-cache
+/wp-content/w3tc-config
+
+# wordfence
+/wp-content/wflogs
+
+# wpvivid
+/wp-content/wpvivid_staging
+/wp-content/wpvivid_uploads
+/wp-content/wpvividbackups
+
+/info.php
+
 # Log files
 *.log
 

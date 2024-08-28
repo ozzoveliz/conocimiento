@@ -1,0 +1,927 @@
+div,
+div:before,
+div:after {
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+.motce_calendar_container {
+  overflow: hidden;
+  font-family: 'HelveticaNeue-UltraLight', 'Helvetica Neue UltraLight', 'Helvetica Neue', Arial, Helvetica, sans-serif;
+  font-weight: 100;
+  color: #616161;
+  margin: 0;
+  padding: 0;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+#motce_calendar {
+  -webkit-transform: translate3d(0, 0, 0);
+  -moz-transform: translate3d(0, 0, 0);
+  transform: translate3d(0, 0, 0);
+  width: 100%;
+  height: 780px;
+  overflow: hidden;
+}
+
+.motce_calendar_header {
+  height: 50px;
+  width: 100%;
+  background: #fff;
+  text-align: center;
+  position: relative;
+  z-index: 100;
+}
+
+.motce_calendar_header h1 {
+  margin: 0;
+  padding: 0;
+  font-size: 20px;
+  line-height: 50px;
+  font-weight: 100;
+  letter-spacing: 1px;
+  color: #000;
+}
+
+.motce_calendar_header_left_arrow,
+.motce_calendar_header_right_arrow {
+  position: absolute;
+  width: 0px;
+  height: 0px;
+  border-style: solid;
+  top: 50%;
+  margin-top: -7.5px;
+  cursor: pointer;
+}
+
+.motce_calendar_header_left_arrow {
+  border-width: 7.5px 10px 7.5px 0;
+  border-color: transparent rgba(160, 159, 160, 1) transparent transparent;
+  left: 20px;
+}
+
+.motce_calendar_header_right_arrow {
+  border-width: 7.5px 0 7.5px 10px;
+  border-color: transparent transparent transparent rgba(160, 159, 160, 1);
+  right: 20px;
+}
+
+.motce_calendar_month {
+  /*overflow: hidden;*/
+  opacity: 0;
+  margin-bottom: 60px;
+
+}
+
+.motce_calendar_month.new {
+  -webkit-animation: fadeIn 1s ease-out;
+  animation: fadeIn 1s ease-out;
+  opacity: 1;
+}
+
+.motce_calendar_month.in.next {
+  -webkit-animation: moveFromTopFadeMonth .4s ease-out;
+  -moz-animation: moveFromTopFadeMonth .4s ease-out;
+  animation: moveFromTopFadeMonth .4s ease-out;
+  opacity: 1;
+}
+
+.motce_calendar_month.out.next {
+  -webkit-animation: moveToTopFadeMonth .4s ease-in;
+  -moz-animation: moveToTopFadeMonth .4s ease-in;
+  animation: moveToTopFadeMonth .4s ease-in;
+  opacity: 1;
+}
+
+.motce_calendar_month.in.prev {
+  -webkit-animation: moveFromBottomFadeMonth .4s ease-out;
+  -moz-animation: moveFromBottomFadeMonth .4s ease-out;
+  animation: moveFromBottomFadeMonth .4s ease-out;
+  opacity: 1;
+}
+
+.motce_calendar_month.out.prev {
+  -webkit-animation: moveToBottomFadeMonth .4s ease-in;
+  -moz-animation: moveToBottomFadeMonth .4s ease-in;
+  animation: moveToBottomFadeMonth .4s ease-in;
+  opacity: 1;
+}
+
+.motce_calendar_week {
+  background: #fff;
+}
+
+.motce_calendar_day {
+  display: inline-block;
+  width: 14.28%;
+  height: 100px;
+  padding: 15px;
+  border: 1px solid #eee;
+  text-align: center;
+  vertical-align: top;
+  cursor: pointer;
+  background: #fff;
+  position: relative;
+  z-index: 100;
+}
+
+.motce_calendar_day.other {
+  color: #eee;
+}
+
+.motce_calendar_day.today {
+  color: rgba(156, 202, 235, 1);
+  border-top: 5px solid #0078D4;
+  font-weight: bold;
+}
+
+.motce_calendar_day.active{
+  background-color: #CFE4FA;
+}
+
+.motce_calendar_day-name {
+  font-size: 9px;
+  text-transform: uppercase;
+  margin-bottom: 5px;
+  color: #000;
+  letter-spacing: .7px;
+}
+
+.motce_calendar_day-number {
+  font-size: 24px;
+  letter-spacing: 1.5px;
+}
+
+
+.motce_calendar_day .motce_calendar_day-events {
+  list-style: none;
+  margin-top: 3px;
+  text-align: center;
+  height: 12px;
+  line-height: 6px;
+  /* overflow: hidden; */
+}
+
+.motce_calendar_day .motce_calendar_day-events span {
+  vertical-align: top;
+  display: inline-block;
+  padding: 0;
+  margin: 0;
+  width: 10px;
+  height: 10px;
+  line-height: 5px;
+  margin: 0 1px;
+}
+
+.motce_presetdefault {
+  background: rgba(156, 202, 235, 1);
+}
+
+.motce_preset0 {
+  background: #E74856;
+}
+
+.motce_preset1 {
+  background: #FF8C00;
+}
+
+.motce_preset2 {
+  background: #FFAB45;
+}
+
+.motce_preset3 {
+  background: #FFF100;
+}
+
+.motce_preset4 {
+  background: #47D041;
+}
+
+.motce_preset5 {
+  background: #30C6CC;
+}
+
+.motce_preset6 {
+  background: #73AA24;
+}
+
+.motce_preset7 {
+  background: #00BCF2;
+}
+
+.motce_preset8 {
+  background: #8764B8;
+}
+
+.motce_preset9 {
+  background: #F495BF;
+}
+
+.motce_preset10 {
+  background: #A0AEB2;
+}
+
+.motce_preset11 {
+  background: #004B60;
+}
+
+.motce_preset12 {
+  background: #B1ADAB;
+}
+
+.motce_preset13 {
+  background: #5D5A58;
+}
+
+.motce_preset14 {
+  background: #000000;
+}
+
+.motce_preset15 {
+  background: #750B1C;
+}
+
+.motce_preset16 {
+  background: #CA5010;
+}
+
+.motce_preset17 {
+  background: #AB620D;
+}
+
+.motce_preset18 {
+  background: #C19C00;
+}
+
+.motce_preset19 {
+  background: #004B1C;
+}
+
+.motce_preset20 {
+  background: #004B50;
+}
+
+.motce_preset21 {
+  background: #0B6A0B;
+}
+
+.motce_preset22 {
+  background: #002050;
+}
+
+.motce_preset23 {
+  background: #32145A;
+}
+
+.motce_preset24 {
+  background: #5C005C;
+}
+
+.motce_details {
+  position: relative;
+  width: 100%;
+  height: 75px;
+  background: #eee;
+  margin-top: 5px;
+  border-radius: 4px;
+}
+
+.motce_details.in {
+  -webkit-animation: moveFromTopFade .5s ease both;
+  -moz-animation: moveFromTopFade .5s ease both;
+  animation: moveFromTopFade .5s ease both;
+}
+
+.motce_details.out {
+  -webkit-animation: moveToTopFade .5s ease both;
+  -moz-animation: moveToTopFade .5s ease both;
+  animation: moveToTopFade .5s ease both;
+}
+
+.motce_arrow {
+  position: absolute;
+  top: -5px;
+  left: 50%;
+  margin-left: -2px;
+  width: 0px;
+  height: 0px;
+  border-style: solid;
+  border-width: 0 5px 5px 5px;
+  border-color: transparent transparent #eee transparent;
+  transition: all 0.7s ease;
+}
+
+.motce_events {
+  height: 75px;
+  padding: 7px 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.motce_events.in {
+  -webkit-animation: fadeIn .3s ease both;
+  -moz-animation: fadeIn .3s ease both;
+  animation: fadeIn .3s ease both;
+}
+
+.motce_events.in {
+  -webkit-animation-delay: .3s;
+  -moz-animation-delay: .3s;
+  animation-delay: .3s;
+}
+
+.motce_details.out .motce_events {
+  -webkit-animation: fadeOutShrink .4s ease both;
+  -moz-animation: fadeOutShink .4s ease both;
+  animation: fadeOutShink .4s ease both;
+}
+
+.motce_events.out {
+  -webkit-animation: fadeOut .3s ease both;
+  -moz-animation: fadeOut .3s ease both;
+  animation: fadeOut .3s ease both;
+}
+
+.motce_event {
+  font-size: 16px;
+  line-height: 22px;
+  letter-spacing: .5px;
+  padding: 2px 16px;
+  vertical-align: top;
+}
+
+.motce_event.empty {
+  color: #000;
+}
+
+.motce_event-category {
+  height: 10px;
+  width: 10px;
+  display: inline-block;
+  margin: 6px 0 0;
+  vertical-align: top;
+}
+
+.motce_event-link {
+  display: inline-block;
+  padding: 0 0 0 7px;
+  text-decoration: none;
+}
+
+.motce_event span {
+  display: inline-block;
+  padding: 0 0 0 7px;
+}
+
+.motce_legend {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  height: 30px;
+  background: #0078D4;
+  color: #fff;
+  line-height: 30px;
+
+}
+
+.motce_entry {
+  position: relative;
+  padding: 0 0 0 25px;
+  font-size: 13px;
+  display: inline-block;
+  line-height: 30px;
+  background: transparent;
+}
+
+.motce_entry:after {
+  position: absolute;
+  content: '';
+  height: 5px;
+  width: 5px;
+  top: 12px;
+  left: 14px;
+}
+
+.motce_entry.motce_presetdefault:after {
+  background: rgba(156, 202, 235, 1);
+}
+
+.motce_entry.motce_preset0:after {
+  background: #E74856;
+}
+
+.motce_entry.motce_preset1:after {
+  background: #FF8C00;
+}
+
+.motce_entry.motce_preset2:after {
+  background: #FFAB45;
+}
+
+.motce_entry.motce_preset3:after {
+  background: #FFF100;
+}
+
+.motce_entry.motce_preset4:after {
+  background: #47D041;
+}
+
+.motce_entry.motce_preset5:after {
+  background: #30C6CC;
+}
+
+.motce_entry.motce_preset6:after {
+  background: #73AA24;
+}
+
+.motce_entry.motce_preset7:after {
+  background: #00BCF2;
+}
+
+.motce_entry.motce_preset8:after {
+  background: #8764B8;
+}
+
+.motce_entry.motce_preset9:after {
+  background: #F495BF;
+}
+
+.motce_entry.motce_preset10:after {
+  background: #A0AEB2;
+}
+
+.motce_entry.motce_preset11:after {
+  background: #004B60;
+}
+
+.motce_entry.motce_preset12:after {
+  background: #B1ADAB;
+}
+
+.motce_entry.motce_preset13:after {
+  background: #5D5A58;
+}
+
+.motce_entry.motce_preset14:after {
+  background: #000000;
+}
+
+.motce_entry.motce_preset15:after {
+  background: #750B1C;
+}
+
+.motce_entry.motce_preset16:after {
+  background: #CA5010;
+}
+
+.motce_entry.motce_preset17:after {
+  background: #AB620D;
+}
+
+.motce_entry.motce_preset18:after {
+  background: #C19C00;
+}
+
+.motce_entry.motce_preset19:after {
+  background: #004B1C;
+}
+
+.motce_entry.motce_preset20:after {
+  background: #004B50;
+}
+
+.motce_entry.motce_preset21:after {
+  background: #0B6A0B;
+}
+
+.motce_entry.motce_preset22:after {
+  background: #002050;
+}
+
+.motce_entry.motce_preset23:after {
+  background: #32145A;
+}
+
+.motce_entry.motce_preset24:after {
+  background: #5C005C;
+}
+
+@-webkit-keyframes moveFromTopFade {
+  from {
+    opacity: .3;
+    height: 0px;
+    margin-top: 0px;
+    -webkit-transform: translateY(-100%);
+  }
+}
+
+@-moz-keyframes moveFromTopFade {
+  from {
+    height: 0px;
+    margin-top: 0px;
+    -moz-transform: translateY(-100%);
+  }
+}
+
+@keyframes moveFromTopFade {
+  from {
+    height: 0px;
+    margin-top: 0px;
+    transform: translateY(-100%);
+  }
+}
+
+@-webkit-keyframes moveToTopFade {
+  to {
+    opacity: .3;
+    height: 0px;
+    margin-top: 0px;
+    opacity: 0.3;
+    -webkit-transform: translateY(-100%);
+  }
+}
+
+@-moz-keyframes moveToTopFade {
+  to {
+    height: 0px;
+    -moz-transform: translateY(-100%);
+  }
+}
+
+@keyframes moveToTopFade {
+  to {
+    height: 0px;
+    transform: translateY(-100%);
+  }
+}
+
+@-webkit-keyframes moveToTopFadeMonth {
+  to {
+    opacity: 0;
+    -webkit-transform: translateY(-30%) scale(.95);
+  }
+}
+
+@-moz-keyframes moveToTopFadeMonth {
+  to {
+    opacity: 0;
+    -moz-transform: translateY(-30%);
+  }
+}
+
+@keyframes moveToTopFadeMonth {
+  to {
+    opacity: 0;
+    -moz-transform: translateY(-30%);
+  }
+}
+
+@-webkit-keyframes moveFromTopFadeMonth {
+  from {
+    opacity: 0;
+    -webkit-transform: translateY(30%) scale(.95);
+  }
+}
+
+@-moz-keyframes moveFromTopFadeMonth {
+  from {
+    opacity: 0;
+    -moz-transform: translateY(30%);
+  }
+}
+
+@keyframes moveFromTopFadeMonth {
+  from {
+    opacity: 0;
+    -moz-transform: translateY(30%);
+  }
+}
+
+@-webkit-keyframes moveToBottomFadeMonth {
+  to {
+    opacity: 0;
+    -webkit-transform: translateY(30%) scale(.95);
+  }
+}
+
+@-moz-keyframes moveToBottomFadeMonth {
+  to {
+    opacity: 0;
+    -webkit-transform: translateY(30%);
+  }
+}
+
+@keyframes moveToBottomFadeMonth {
+  to {
+    opacity: 0;
+    -webkit-transform: translateY(30%);
+  }
+}
+
+@-webkit-keyframes moveFromBottomFadeMonth {
+  from {
+    opacity: 0;
+    -webkit-transform: translateY(-30%) scale(.95);
+  }
+}
+
+@-moz-keyframes moveFromBottomFadeMonth {
+  from {
+    opacity: 0;
+    -webkit-transform: translateY(-30%);
+  }
+}
+
+@keyframes moveFromBottomFadeMonth {
+  from {
+    opacity: 0;
+    -webkit-transform: translateY(-30%);
+  }
+}
+
+@-webkit-keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+}
+
+@-moz-keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+}
+
+@-webkit-keyframes fadeOut {
+  to {
+    opacity: 0;
+  }
+}
+
+@-moz-keyframes fadeOut {
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes fadeOut {
+  to {
+    opacity: 0;
+  }
+}
+
+@-webkit-keyframes fadeOutShink {
+  to {
+    opacity: 0;
+    padding: 0px;
+    height: 0px;
+  }
+}
+
+@-moz-keyframes fadeOutShink {
+  to {
+    opacity: 0;
+    padding: 0px;
+    height: 0px;
+  }
+}
+
+@keyframes fadeOutShink {
+  to {
+    opacity: 0;
+    padding: 0px;
+    height: 0px;
+  }
+}
+
+/* Container for the user email and calendar type selection */
+#motce_group_calendar_adv {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  padding: 20px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background-color: #f9f9f9;
+  width: 100%;
+  max-width: 1500px;
+  margin: 20px auto;
+}
+
+/* Styling for the user email section */
+.user_email {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-grow: 1;
+}
+
+.user_email span {
+  font-weight: bold;
+  color: #333;
+}
+
+.user_email input {
+  margin-left: -11%;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background-color: #e9ecef;
+  color: #555;
+}
+
+.email_label_input{
+  width: 30%;
+}
+
+.email_label {
+  padding: 2px 22px;
+  font-size: 17px;
+  font-family: inherit;
+  width:30%
+}
+
+/* Dropdown menu css */
+.dropdown-container {
+  position: relative;
+  width: 195px;
+
+  .dropdown-toggle {
+    color: #000000;
+    background-color: #ffffff;
+    font-size: 16px;
+    padding: 18px 20px;
+    box-shadow: 0px 0px 4px -2px rgba(0, 0, 0, 0.5);
+    border-radius: 10px;
+    font-weight: 400;
+    cursor: pointer;
+    position: relative;
+    transition: all ease-in-out 0.3s;
+
+    label {
+      cursor: pointer;
+      width: 100%;
+    }
+
+    &:hover,
+    &:active,
+    &:focus {
+      background-color: #0979ce;
+      color: #ffffff;
+    }
+  }
+
+  .dropdown-menu {
+    width: 100%;
+    border-radius: 10px;
+    box-shadow: 0px 0px 4px -2px rgba(0, 0, 0, 0.5);
+    margin-top: 17px;
+    position: absolute;
+    left: 0;
+    top: 100%;
+    display: none;
+    background-color: #ffffff;
+    z-index: 10;
+
+    ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      overflow: hidden;
+      border-radius: 10px;
+      z-index: 10;
+    }
+
+    a {
+      text-decoration: none;
+      display: block;
+      color: #000000;
+      font-size: 15px;
+      padding: 16px 20px;
+      font-weight: 600;
+      box-shadow: 0px 0px 4px -2px rgba(0, 0, 0, 0.5);
+      transition: all ease-in-out 0.3s;
+
+      &:hover,
+      &:active,
+      &:focus {
+        background-color: #0979ce;
+        color: #ffffff;
+      }
+    }
+  }
+}
+
+.dropdown-menu,
+.dropdown-toggle {
+  position: relative;
+
+  &::before {
+    content: "";
+    position: absolute;
+    right: 20px;
+    top: 50%;
+    transform: translateY(-50%) rotate(45deg);
+    border: 5px solid;
+    border-top-color: rgba(0, 0, 0, 0);
+    border-left-color: rgba(0, 0, 0, 0);
+    margin-top: -2.5px;
+    background-color: rgba(0, 0, 0, 0);
+    transition: all ease-in-out 0.2s;
+  }
+}
+
+.dropdown-menu {
+  z-index: 10;
+  position: relative;
+
+  &::before {
+    z-index: -1;
+    transform: rotate(-135deg);
+    top: -4px;
+    border-color: #ffffff;
+    box-shadow: 1px 1px 4px -2px rgba(0, 0, 0, 0.4);
+  }
+}
+
+.dropdown-menu li {
+  margin-bottom: 0;
+}
+
+.dropdown-open {
+  .dropdown-menu.dropdown-active {
+    display: block;
+  }
+}
+
+.dropdown-container.dropdown-open {
+  .dropdown-toggle {
+    background-color: #a7abae;
+    color: #ffffff;
+
+    &:before {
+      transform: rotate(-135deg);
+    }
+  }
+}
+
+.crown-premium {
+  height: 35px;
+  width: 35px;
+  margin-top: -17px;
+  margin-bottom: -8px;
+  margin-left: 2px;
+}
+
+/* Tooltip styling */
+.premium-content {
+  position: relative;
+  display: inline-block;
+  cursor: not-allowed; /* Indicating it's disabled */
+}
+
+.premium-content .tooltip-premium {
+  visibility: hidden;
+  width: 160px;
+  background-color: black;
+  color: #fff;
+  text-align: center;
+  border-radius: 5px;
+  padding: 5px 0;
+  position: absolute;
+  z-index: 1;
+  top: 125%; /* Position the tooltip below the text */
+  left: 50%;
+  margin-left: -80px; /* Center the tooltip */
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.premium-content .tooltip-premium::after {
+  content: "";
+  position: absolute;
+  bottom: 100%; /* Arrow above the tooltip */
+  left: 50%;
+  margin-left: -5px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: transparent transparent black transparent;
+}
+
+.premium-content:hover .tooltip-premium {
+  visibility: visible;
+  opacity: 1;
+}

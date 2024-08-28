@@ -1,0 +1,333 @@
+.motce_isa_success {
+    color: #4F8A10;
+}
+.motce_isa_error {
+    color: #D8000C;
+}
+.motce-loader-container{
+    margin-left: 5px;
+    display: flex;
+}
+.motce-ellipsis {
+    display: inline-block;
+    position: relative;
+    width: 60px;
+    height: 24px;
+}
+.motce-ellipsis div {
+    position: absolute;
+    top: 9px;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #0078d4;
+    animation-timing-function: cubic-bezier(0, 1, 1, 0);
+}
+.motce-ellipsis div:nth-child(1) {
+    left: 10px;
+    animation: lds-ellipsis1 0.6s infinite;
+}
+.motce-ellipsis div:nth-child(2) {
+    left: 10px;
+    animation: lds-ellipsis2 0.6s infinite;
+}
+.motce-ellipsis div:nth-child(3) {
+    left: 30px;
+    animation: lds-ellipsis2 0.6s infinite;
+}
+.motce-ellipsis div:nth-child(4) {
+    left: 50px;
+    animation: lds-ellipsis3 0.6s infinite;
+}
+@keyframes lds-ellipsis1 {
+    0% {
+        transform: scale(0);
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+@keyframes lds-ellipsis3 {
+    0% {
+        transform: scale(1);
+    }
+    100% {
+        transform: scale(0);
+    }
+}
+@keyframes lds-ellipsis2 {
+    0% {
+        transform: translate(0, 0);
+    }
+    100% {
+        transform: translate(20px, 0);
+    }
+}
+.motce-loader{
+    display: none;
+}
+
+
+#motce-title-logo{
+    border: 50px;
+    width: 35px;
+    padding: 10px 15px 5px 15px;
+}
+
+.mo-container{
+    background-color: white;
+}
+.ms-tab-background{
+    background-color: #fff;
+}
+.motce-tab-border{
+    border-color: rgba(204,204,204,0.8);
+    border-bottom-width: 1px;
+    border-bottom-style: solid;
+}
+.motce-tab{
+    height: 36px;
+    margin: 0 20px;
+}
+.motce-tab-ul{
+    fill: black;
+    display: flex;
+    align-items: center;
+    padding: 0 0 8px;
+    height: 36px;
+}
+.motce-tab-li-icon{
+    height: 16px;
+    width: 16px;
+}
+.motce-tab-li{
+    display: inline-block;
+    box-sizing: border-box;
+    position: relative;
+    height: 36px;
+}
+.motce-tab-li a{
+    text-decoration: none;
+}
+.motce-tab-li-div{
+    fill: black;
+    display: flex;
+    align-items: center;
+    padding: 0 8px;
+    height: 36px;
+    color:#048387;
+}
+.motce-tab-li-div:hover{
+    background-color: #f3f2f1;
+}
+.motce-tab-li-label{
+    flex: 1 1 auto;
+    font-weight: 400;
+    font-size: 13px;
+    padding-left: 8px;
+    align-self: center;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    line-height: normal;
+}
+.motce-tab-li-div-active, .motce-tab-li-div-active:hover{
+    background-color: #e3e2e1;
+    text-decoration: none;
+}
+.motce-tab-content{
+    padding: 10px 20px 20px 20px;
+}
+.motce-tab-content h1{
+    color: #323130;
+    font-size: 20px;
+    font-weight: 200;
+}
+.motce-tab-content-information{
+    padding-left: 3px;
+    margin-bottom: 15px;
+}
+.motce-tab-content-left-border{
+    border-left: 1px solid rgb(216,216,216);
+    left: 12px;
+}
+.motce-tab-content-tile{
+    padding:10px 20px 20px;
+    border: 1px solid rgb(216,216,216);
+    margin-bottom: 15px;
+    box-shadow: rgb(207,213,222) 1px 2px 4px;
+    width: 85%;
+    display: inline-block;
+    margin-left: 20px;
+}
+.motce-tab-content-tile-content{
+    padding-top: 15px;
+}
+.motce-tab-content-app-config-table{
+    margin-top: 20px;
+    width: 100%;
+}
+.motce-tab-content-app-config-table td{
+    padding-bottom: 5px;
+}
+.motce-tab-content-app-config-table input[type=text], input[type=email], input[type=password], input[type=url], input[type=number]{
+    border-color: #8a8886;
+    height: 24px;
+    padding: 3px 8px 5px;
+    width: 100%;
+}
+.motce-tab-content-button{
+    box-sizing: border-box;
+    height: 24px;
+    font-size: 13px;
+    line-height: 20px;
+    font-weight: 600;
+    cursor: pointer;
+    border-width: 1px;
+    border-style: solid;
+    margin: 0;
+    background-color: #0078D4;
+    border-color: #0078D4;
+    color: white;
+    fill: white;
+    padding: 0 20px 0 20px;
+}
+
+.motce-tab-content-button__disabled{
+    box-sizing: border-box;
+    height: 24px;
+    font-size: 13px;
+    line-height: 20px;
+    font-weight: 600;
+    cursor: pointer;
+    border-width: 1px;
+    border-style: solid;
+    margin: 0;
+    background-color: #0078d4;
+    border-color: #0078d4;
+    color: white;
+    fill: white;
+    padding: 0 20px 0 20px;
+}
+
+.motce-tab-content-button:hover{
+    background-color:#106ebe ;
+    border-color: #106ebe;
+}
+.motce-tab-content-app-config-table td.left-div{
+    word-break: break-all;
+    width: 20%;
+}
+.motce-tab-content-app-config-table td.right-div{
+    word-break: break-all;
+}
+
+.motce-tab-name{
+    padding: 10px 20px 20px;
+    border: 1px solid rgb(216,216,216);
+}
+
+.motce-tab-button-content{
+    margin-top: 12px;
+    margin-left: 25px; 
+    border-radius: 5px;
+}
+
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 40px;
+    height: 24px;
+}
+
+.switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+/* The slider */
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #cdcdcd;
+    -webkit-transition: .4s;
+    transition: .4s;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 20px;
+    width: 20px;
+    left: 2px;
+    bottom: 2px;
+    background-color: white;
+    -webkit-transition: .4s;
+    transition: .4s;
+}
+
+input:checked + .slider {
+    background-color: #0085ba;
+}
+
+input:focus + .slider {
+    box-shadow: 0 0 1px #0085ba;
+}
+
+input:checked + .slider:before {
+    -webkit-transform: translateX(16px);
+    -ms-transform: translateX(16px);
+    transform: translateX(16px);
+}
+
+input:disabled + .slider{
+    background-color: #ebebeb;
+    cursor: default;
+}
+
+/* Rounded sliders */
+.slider.round {
+    border-radius: 24px;
+}
+
+.slider.round:before {
+    border-radius: 50%;
+}
+
+.motce-tab-content-app-config-table{
+    margin-top: 20px;
+    width: 100%;
+}
+
+.tooltip {
+    position: relative;
+    display: inline-block;
+    cursor: pointer;
+}
+
+.tooltip .tooltiptext {
+    display: hidden;
+    width: 120px;
+    background-color: black;
+    color: #fff;
+    text-align: center;
+    border-radius: 5px;
+    padding: 5px 0;
+    position: absolute;
+    z-index: 1;
+    top: 150%; /* Position below the button */
+    left: 50%;
+    transform: translateX(-50%);
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+.tooltip:hover .tooltiptext {
+    visibility: visible;
+    opacity: 1;
+}

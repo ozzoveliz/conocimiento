@@ -1,0 +1,87 @@
+# Copyright (C) 2020 Echo Plugins
+# This file is distributed under the same license as the KB - Multiple Knowledge Bases plugin.
+msgid ""
+msgstr ""
+"Project-Id-Version: KB - Multiple Knowledge Bases 1.11.1\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/echo-multiple-knowledge-bases\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"POT-Creation-Date: 2020-04-14T01:12:56+02:00\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"X-Generator: WP-CLI 2.4.0\n"
+"X-Domain: echo-multiple-knowledge-bases\n"
+
+#. Plugin Name of the plugin
+msgid "KB - Multiple Knowledge Bases"
+msgstr ""
+
+#. Plugin URI of the plugin
+msgid "https://www.echoknowledgebase.com/wordpress-add-ons/"
+msgstr ""
+
+#. Description of the plugin
+msgid "Create as many knowledge bases as you need and switch between them with a mouse click."
+msgstr ""
+
+#. Author of the plugin
+msgid "Echo Plugins"
+msgstr ""
+
+#. Author URI of the plugin
+msgid "https://www.echoknowledgebase.com"
+msgstr ""
+
+#: includes/admin/class-emkb-admin-notices.php:42
+msgid "Could not create a new knowledge base. Please try again later."
+msgstr ""
+
+#: includes/admin/class-emkb-admin-notices.php:45
+msgid "A new pre-configured Knowledge Base with KB Main page has been created. Use Wizard to complete the KB setup."
+msgstr ""
+
+#: includes/admin/class-emkb-admin-notices.php:49
+msgid "Could not archive the knowledge base. Please try again later."
+msgstr ""
+
+#: includes/admin/class-emkb-admin-notices.php:56
+msgid "Could not activate the knowledge base. Please try again later."
+msgstr ""
+
+#: includes/features/class-emkb-manage-kbs-page.php:33
+msgid "Manage Your KBs"
+msgstr ""
+
+#: includes/features/class-emkb-manage-kbs-page.php:69
+msgid "Name of KB Main Page *"
+msgstr ""
+
+#: includes/features/class-emkb-manage-kbs-page.php:78
+msgid "Slug (Leave empty for WP to generate)"
+msgstr ""
+
+#: includes/features/class-emkb-manage-kbs-page.php:133
+msgid "Retrieving KB..."
+msgstr ""
+
+#: includes/features/class-emkb-multiple-kbs-handler.php:28
+msgid "Manage KBs - Echo Knowledge Base"
+msgstr ""
+
+#: includes/features/class-emkb-multiple-kbs-handler.php:28
+msgid "Manage KBs"
+msgstr ""
+
+#: includes/features/class-emkb-multiple-kbs-handler.php:216
+msgid "Knowledge Base"
+msgstr ""
+
+#: includes/features/class-emkb-multiple-kbs-handler.php:260
+msgid "You are not logged in. Refresh your page and log in"
+msgstr ""
+
+#: includes/features/class-emkb-multiple-kbs-handler.php:260
+msgid "Cannot save your changes"
+msgstr ""

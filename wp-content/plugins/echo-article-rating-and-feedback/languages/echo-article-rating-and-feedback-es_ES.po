@@ -1,0 +1,1334 @@
+# Copyright (C) 2020 Echo Plugins
+# This file is distributed under the same license as the KB - Article Rating and Feedback plugin.
+msgid ""
+msgstr ""
+"Project-Id-Version: KB - Article Rating and Feedback 1.2.2\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/echo-article-"
+"rating-and-feedback\n"
+"POT-Creation-Date: 2023-08-01 10:05-0700\n"
+"PO-Revision-Date: 2023-08-05 07:34-0700\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: es_ES\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 3.3.2\n"
+"X-Domain: echo-article-rating-and-feedback\n"
+
+#: includes/admin/add-ons/class-eprf-add-ons-page.php:34
+msgid "Updating license status. Please wait."
+msgstr "Actualizando el estado de la licencia. Por favor, espere."
+
+#: includes/admin/add-ons/class-eprf-add-ons-page.php:35
+msgid "Updating license..."
+msgstr "Actualización de la licencia..."
+
+#: includes/admin/add-ons/class-eprf-add-ons-page.php:48
+#, fuzzy
+#| msgid "You do not have permission to edit this knowledge base"
+msgid "You do not have permission to view license info."
+msgstr "No tienes permiso para editar esta base de conocimiento"
+
+#: includes/admin/add-ons/class-eprf-add-ons-page.php:53
+msgid "Failed to initialize (M99)."
+msgstr "Fallo al inicializar (M99)."
+
+#: includes/admin/add-ons/class-eprf-add-ons-page.php:59
+msgid "Unknown licensing command: "
+msgstr "Comando de licencia desconocido:"
+
+#: includes/admin/add-ons/class-eprf-add-ons-page.php:63
+msgid "Failed to initialize (L99)"
+msgstr "Fallo al inicializar (L99)"
+
+#: includes/admin/add-ons/class-eprf-add-ons-page.php:111
+msgid "Server Error: Click here for more info"
+msgstr "Error del servidor: Haga clic aquí para obtener más información"
+
+#: includes/admin/add-ons/class-eprf-add-ons-page.php:113
+msgid "Server Errors:"
+msgstr "Errores del servidor:"
+
+#: includes/admin/add-ons/class-eprf-add-ons-page.php:116
+msgid ""
+"Please try again later. If the problem persists first check our license FAQ "
+"for a solution here"
+msgstr ""
+"Vuelva a intentarlo más tarde. Si el problema persiste, consulte primero "
+"nuestras preguntas frecuentes sobre licencias para encontrar una solución "
+"aquí"
+
+#: includes/admin/add-ons/class-eprf-add-ons-page.php:116
+msgid "documentation"
+msgstr "documentación"
+
+#: includes/admin/add-ons/class-eprf-add-ons-page.php:117
+msgid ""
+"If submitting a support ticket, please copy the above text and include it in "
+"the message."
+msgstr ""
+"Si envía una solicitud de asistencia, copie el texto anterior e inclúyalo en "
+"el mensaje."
+
+#: includes/admin/add-ons/class-eprf-add-ons-page.php:125
+#: includes/system/class-eprf-license-handler.php:559
+msgid "License is valid and active."
+msgstr "La licencia es válida y está activa."
+
+#: includes/admin/add-ons/class-eprf-add-ons-page.php:129
+msgid "License "
+msgstr "Licencia "
+
+#: includes/admin/add-ons/class-eprf-add-ons-page.php:129
+msgid " has been removed and deactivated for this website."
+msgstr " ha sido eliminado y desactivado para este sitio web."
+
+#: includes/admin/add-ons/class-eprf-add-ons-page.php:166
+#: includes/system/class-eprf-license-handler.php:574
+msgid ""
+"The add-on will not run until both this add-on and KB core have compatible "
+"versions. See the message at the top of the page for details."
+msgstr ""
+"El complemento no funcionará hasta que tanto este complemento como el núcleo "
+"KB tengan versiones compatibles. Consulte el mensaje de la parte superior de "
+"la página para obtener más información."
+
+#: includes/admin/add-ons/class-eprf-add-ons-page.php:168
+msgid ""
+"Your license has to be both <strong>active</strong> and <strong>valid</"
+"strong> in order to receive <strong>add-on fixes, new features and support</"
+"strong>."
+msgstr ""
+"Su licencia debe estar <strong>activa</strong> y <strong>ser válida</strong> "
+"para recibir <strong>correcciones, nuevas funciones y asistencia</strong>."
+
+#: includes/admin/add-ons/class-eprf-add-ons-page.php:171
+msgid "Warning:"
+msgstr "Advertencia:"
+
+#: includes/admin/add-ons/class-eprf-add-ons-page.php:176
+msgid "License Key:"
+msgstr "Clave de Licencia:"
+
+#: includes/admin/add-ons/class-eprf-add-ons-page.php:178
+msgid "Enter your license key"
+msgstr "Introduce tu clave de licencia"
+
+#: includes/admin/add-ons/class-eprf-add-ons-page.php:180
+msgid "Save"
+msgstr "Guardar"
+
+#: includes/admin/add-ons/class-eprf-add-ons-page.php:190
+msgid "Status:"
+msgstr "Estado:"
+
+#: includes/admin/add-ons/class-eprf-add-ons-page.php:199
+msgid "No valid license key detected"
+msgstr "No se ha detectado ninguna clave de licencia válida"
+
+#: includes/admin/add-ons/class-eprf-add-ons-page.php:208
+msgid "Expires on:"
+msgstr "Válido hasta:"
+
+#: includes/admin/add-ons/class-eprf-add-ons-page.php:221
+msgid "Add-on Version:"
+msgstr "Versión complementaria:"
+
+#: includes/admin/add-ons/class-eprf-add-ons-page.php:222
+msgid "Installed:"
+msgstr "Instalado:"
+
+#: includes/admin/add-ons/class-eprf-add-ons-page.php:223
+msgid "Latest:"
+msgstr "Última:"
+
+#: includes/admin/add-ons/class-eprf-add-ons-page.php:229
+msgid "Update Plugin"
+msgstr "Actualizar Plugin"
+
+#: includes/admin/class-eprf-admin-notices.php:32
+#: includes/features/rating/class-eprf-rating-admin-ctrl.php:38
+#: includes/features/rating/class-eprf-rating-cntrl.php:27
+#: includes/features/rating/class-eprf-rating-cntrl.php:110
+msgid "Refresh your page"
+msgstr "Actualiza la página"
+
+#: includes/admin/class-eprf-admin-notices.php:36
+msgid "Error occurred. Please refresh your browser and try again."
+msgstr "Ha ocurrido un error. Actualiza el navegador e inténtalo de nuevo."
+
+#: includes/admin/class-eprf-admin-notices.php:39
+msgid "You do not have permission."
+msgstr "No tienes permiso."
+
+#: includes/admin/class-eprf-admin-notices.php:57
+msgid "Security check failed"
+msgstr "Control de seguridad falló"
+
+#: includes/admin/class-eprf-admin-notices.php:57
+#: includes/system/class-eprf-edd-sl-plugin-updater.php:503
+#, fuzzy
+msgid "Error"
+msgstr "Error: "
+
+#: includes/admin/editor/class-eprf-kb-editor-article-page-config.php:34
+msgid "Button Text"
+msgstr "Texto del botón"
+
+#: includes/admin/editor/class-eprf-kb-editor-article-page-config.php:64
+msgid "Ratings Statistics Pop-up"
+msgstr "Estadísticas de audiencia"
+
+#: includes/admin/editor/class-eprf-kb-editor-article-page-config.php:123
+#, fuzzy
+#| msgid "Rating Average"
+msgid "Ratings Messages"
+msgstr "Media de calificación"
+
+#: includes/admin/editor/class-eprf-kb-editor-article-page-config.php:134
+msgid "User Feedback Form"
+msgstr "Formulario de comentarios de los usuarios"
+
+#: includes/admin/editor/class-eprf-kb-editor-article-page-config.php:144
+#: includes/admin/editor/class-eprf-kb-editor-article-page-config.php:154
+msgid "Learn More"
+msgstr "Saber más"
+
+#: includes/admin/editor/class-eprf-kb-editor-article-page-config.php:251
+msgid "Edit the row style here"
+msgstr "Edite aquí el estilo de la fila"
+
+#: includes/admin/editor/class-eprf-kb-editor-article-page-config.php:257
+msgid "Open Feedback Button"
+msgstr "Abrir el botón de comentarios"
+
+#: includes/admin/editor/class-eprf-kb-editor-article-page-config.php:337
+msgid "Control the row settings in the Article Content section."
+msgstr ""
+"Controle la configuración de las filas en la sección Contenido del artículo."
+
+#: includes/admin/editor/class-eprf-kb-editor-article-page-config.php:376
+msgid "Form Settings"
+msgstr "Configuración del formulario"
+
+#: includes/admin/editor/class-eprf-kb-editor-article-page-config.php:430
+#: includes/admin/kb-configuration/class-eprf-kb-config-specs.php:148
+msgid "Rating Element"
+msgstr "Elemento de calificación"
+
+#: includes/admin/editor/class-eprf-kb-editor-article-page-config.php:466
+#, fuzzy
+#| msgid "Rating Instructions"
+msgid "Rating Statistics"
+msgstr "Instrucciones para calificar"
+
+#: includes/admin/kb-configuration/class-eprf-kb-config-specs.php:31
+#: includes/admin/kb-configuration/class-eprf-kb-config-specs.php:73
+msgid "Row"
+msgstr "Fila"
+
+#: includes/admin/kb-configuration/class-eprf-kb-config-specs.php:35
+#: includes/admin/kb-configuration/class-eprf-kb-config-specs.php:77
+msgctxt "echo-article-rating-and-feedback"
+msgid "Row 1"
+msgstr "Fila 1"
+
+#: includes/admin/kb-configuration/class-eprf-kb-config-specs.php:36
+#: includes/admin/kb-configuration/class-eprf-kb-config-specs.php:78
+msgctxt "echo-article-rating-and-feedback"
+msgid "Row 2"
+msgstr "Fila 2"
+
+#: includes/admin/kb-configuration/class-eprf-kb-config-specs.php:37
+#: includes/admin/kb-configuration/class-eprf-kb-config-specs.php:79
+msgctxt "echo-article-rating-and-feedback"
+msgid "Row 3"
+msgstr "Fila 3"
+
+#: includes/admin/kb-configuration/class-eprf-kb-config-specs.php:38
+#: includes/admin/kb-configuration/class-eprf-kb-config-specs.php:80
+msgctxt "echo-article-rating-and-feedback"
+msgid "Row 4"
+msgstr "Fila 4"
+
+#: includes/admin/kb-configuration/class-eprf-kb-config-specs.php:39
+#: includes/admin/kb-configuration/class-eprf-kb-config-specs.php:81
+msgctxt "echo-article-rating-and-feedback"
+msgid "Row 5"
+msgstr "Fila 5"
+
+#: includes/admin/kb-configuration/class-eprf-kb-config-specs.php:40
+msgctxt "echo-article-rating-and-feedback"
+msgid "Article Bottom"
+msgstr "Artículo Inferior"
+
+#: includes/admin/kb-configuration/class-eprf-kb-config-specs.php:44
+#: includes/admin/kb-configuration/class-eprf-kb-config-specs.php:86
+msgid "Alignment"
+msgstr "Alineación"
+
+#: includes/admin/kb-configuration/class-eprf-kb-config-specs.php:48
+#: includes/admin/kb-configuration/class-eprf-kb-config-specs.php:90
+msgctxt "echo-article-rating-and-feedback"
+msgid "Left"
+msgstr "Izquierda"
+
+#: includes/admin/kb-configuration/class-eprf-kb-config-specs.php:49
+#: includes/admin/kb-configuration/class-eprf-kb-config-specs.php:91
+msgctxt "echo-article-rating-and-feedback"
+msgid "Right"
+msgstr "Derecha"
+
+#: includes/admin/kb-configuration/class-eprf-kb-config-specs.php:53
+#: includes/admin/kb-configuration/class-eprf-kb-config-specs.php:96
+msgid "Sequence in the Alignment"
+msgstr "Secuencia en la alineación"
+
+#: includes/admin/kb-configuration/class-eprf-kb-config-specs.php:57
+#: includes/admin/kb-configuration/class-eprf-kb-config-specs.php:100
+msgctxt "echo-article-rating-and-feedback"
+msgid "1"
+msgstr "1"
+
+#: includes/admin/kb-configuration/class-eprf-kb-config-specs.php:58
+#: includes/admin/kb-configuration/class-eprf-kb-config-specs.php:101
+msgctxt "echo-article-rating-and-feedback"
+msgid "2"
+msgstr "2"
+
+#: includes/admin/kb-configuration/class-eprf-kb-config-specs.php:59
+#: includes/admin/kb-configuration/class-eprf-kb-config-specs.php:102
+msgctxt "echo-article-rating-and-feedback"
+msgid "3"
+msgstr "3"
+
+#: includes/admin/kb-configuration/class-eprf-kb-config-specs.php:60
+#: includes/admin/kb-configuration/class-eprf-kb-config-specs.php:103
+msgctxt "echo-article-rating-and-feedback"
+msgid "4"
+msgstr "4"
+
+#: includes/admin/kb-configuration/class-eprf-kb-config-specs.php:61
+#: includes/admin/kb-configuration/class-eprf-kb-config-specs.php:104
+msgctxt "echo-article-rating-and-feedback"
+msgid "5"
+msgstr "5"
+
+#: includes/admin/kb-configuration/class-eprf-kb-config-specs.php:67
+msgid "Top Rating Statistics"
+msgstr "Estadísticas de las mejores puntuaciones"
+
+#: includes/admin/kb-configuration/class-eprf-kb-config-specs.php:111
+#, fuzzy
+#| msgid "Rating Layout"
+msgid "Show Rating Stats"
+msgstr "Disposición de calificación"
+
+#: includes/admin/kb-configuration/class-eprf-kb-config-specs.php:120
+#, fuzzy
+#| msgid "KB - Article Rating and Feedback"
+msgid "User Rating and Feedback"
+msgstr "BC: Calificación y opiniones de un artículo"
+
+#: includes/admin/kb-configuration/class-eprf-kb-config-specs.php:126
+msgid "Rating Layout"
+msgstr "Disposición de calificación"
+
+#: includes/admin/kb-configuration/class-eprf-kb-config-specs.php:138
+msgid "Mode"
+msgstr "Modo"
+
+#: includes/admin/kb-configuration/class-eprf-kb-config-specs.php:142
+msgid "5 Stars"
+msgstr "5 Estrellas"
+
+#: includes/admin/kb-configuration/class-eprf-kb-config-specs.php:143
+#, fuzzy
+#| msgid "Like/Dislike Style"
+msgid "Like / Dislike"
+msgstr "Estilo Me gusta/No me gusta"
+
+#: includes/admin/kb-configuration/class-eprf-kb-config-specs.php:157
+msgid "Button Up "
+msgstr "Botón arriba"
+
+#: includes/admin/kb-configuration/class-eprf-kb-config-specs.php:166
+msgid "Button Down"
+msgstr "Botón abajo"
+
+#: includes/admin/kb-configuration/class-eprf-kb-config-specs.php:175
+msgid "Rating Element Size"
+msgstr "Tamaño del elemento de calificación"
+
+#: includes/admin/kb-configuration/class-eprf-kb-config-specs.php:183
+msgid "Out Of Stars Text"
+msgstr "Texto de Out Of Stars"
+
+#: includes/admin/kb-configuration/class-eprf-kb-config-specs.php:190
+msgid "out of 5 stars"
+msgstr "из 5 звезд"
+
+#: includes/admin/kb-configuration/class-eprf-kb-config-specs.php:193
+#, fuzzy
+#| msgid "Stars"
+msgid "Stars Text"
+msgstr "Estrellas"
+
+#: includes/admin/kb-configuration/class-eprf-kb-config-specs.php:200
+msgid "Stars"
+msgstr "Estrellas"
+
+#: includes/admin/kb-configuration/class-eprf-kb-config-specs.php:203
+msgid "Rating Hover Description 1"
+msgstr "Rating Hover Descripción 1"
+
+#: includes/admin/kb-configuration/class-eprf-kb-config-specs.php:210
+msgid "Unusable Documentation"
+msgstr "Documentación inservible"
+
+#: includes/admin/kb-configuration/class-eprf-kb-config-specs.php:213
+msgid "Rating Hover Description 2"
+msgstr "Rating Hover Descripción 2"
+
+#: includes/admin/kb-configuration/class-eprf-kb-config-specs.php:220
+msgid "Poor Documentation"
+msgstr "Documentación escasa"
+
+#: includes/admin/kb-configuration/class-eprf-kb-config-specs.php:223
+msgid "Rating Hover Description 3"
+msgstr "Rating Hover Descripción 3"
+
+#: includes/admin/kb-configuration/class-eprf-kb-config-specs.php:230
+msgid "OK Documentation"
+msgstr "Documentación OK"
+
+#: includes/admin/kb-configuration/class-eprf-kb-config-specs.php:233
+msgid "Rating Hover Description 4"
+msgstr "Rating Hover Descripción 4"
+
+#: includes/admin/kb-configuration/class-eprf-kb-config-specs.php:240
+msgid "Good Documentation"
+msgstr "Documentación buena"
+
+#: includes/admin/kb-configuration/class-eprf-kb-config-specs.php:243
+msgid "Rating Hover Description 5"
+msgstr "Valoración Descripción Hover 5"
+
+#: includes/admin/kb-configuration/class-eprf-kb-config-specs.php:250
+msgid "Excellent Documentation"
+msgstr "Documentación excelente"
+
+#: includes/admin/kb-configuration/class-eprf-kb-config-specs.php:253
+msgid "Like/Dislike Style"
+msgstr "Estilo Me gusta/No me gusta"
+
+#: includes/admin/kb-configuration/class-eprf-kb-config-specs.php:265
+msgid "Button Positive Text"
+msgstr "Texto botón positivo"
+
+#: includes/admin/kb-configuration/class-eprf-kb-config-specs.php:272
+msgid "Yes"
+msgstr "Sí"
+
+#: includes/admin/kb-configuration/class-eprf-kb-config-specs.php:275
+msgid "Button Negative Text"
+msgstr "Texto botón negativo"
+
+#: includes/admin/kb-configuration/class-eprf-kb-config-specs.php:282
+msgid "No"
+msgstr "No"
+
+#: includes/admin/kb-configuration/class-eprf-kb-config-specs.php:285
+msgid "Rating Instructions"
+msgstr "Instrucciones para calificar"
+
+#: includes/admin/kb-configuration/class-eprf-kb-config-specs.php:292
+msgid "Was this article helpful?"
+msgstr "¿Te ha resultado útil este artículo?"
+
+#: includes/admin/kb-configuration/class-eprf-kb-config-specs.php:295
+msgid "Text"
+msgstr "Texto"
+
+#: includes/admin/kb-configuration/class-eprf-kb-config-specs.php:304
+msgid "Stats Drop-Down"
+msgstr "Desplegable de estadísticas"
+
+#: includes/admin/kb-configuration/class-eprf-kb-config-specs.php:313
+msgid "Typography"
+msgstr "Tipografía"
+
+#: includes/admin/kb-configuration/class-eprf-kb-config-specs.php:326
+msgid "Show message after user voted."
+msgstr "Mostrar mensaje después de que el usuario haya votado."
+
+#: includes/admin/kb-configuration/class-eprf-kb-config-specs.php:332
+msgid "Your vote has been submitted. Thanks!"
+msgstr "Tu voto ha sido registrado. ¡Gracias!"
+
+#: includes/admin/kb-configuration/class-eprf-kb-config-specs.php:335
+msgid "Show message if user voted twice."
+msgstr "Mostrar mensaje si el usuario ha votado dos veces."
+
+#: includes/admin/kb-configuration/class-eprf-kb-config-specs.php:341
+msgid "We already received your feedback."
+msgstr "Ya hemos recibido sus comentarios."
+
+#: includes/admin/kb-configuration/class-eprf-kb-config-specs.php:346
+msgid "Title Shown When Form Always Visible"
+msgstr "Título mostrado cuando el formulario está siempre visible"
+
+#: includes/admin/kb-configuration/class-eprf-kb-config-specs.php:351
+msgid "Please Share Your Feedback"
+msgstr "Comparta sus comentarios"
+
+#: includes/admin/kb-configuration/class-eprf-kb-config-specs.php:354
+msgid "Title Shown When Feedback Required"
+msgstr "Título mostrado cuando se requiere retroalimentación"
+
+#: includes/admin/kb-configuration/class-eprf-kb-config-specs.php:359
+#, fuzzy
+#| msgid "How can we improve this article?"
+msgid "How Can We Improve This Article?"
+msgstr "¿Cómo podemos mejorar este artículo?"
+
+#: includes/admin/kb-configuration/class-eprf-kb-config-specs.php:362
+#, fuzzy
+#| msgid "Show the Name Field?"
+msgid "Show the Feedback Name Field?"
+msgstr "¿Mostrar campo de nombre?"
+
+#: includes/admin/kb-configuration/class-eprf-kb-config-specs.php:368
+#, fuzzy
+#| msgid "Show the Email Field?"
+msgid "Show the Feedback Email Field?"
+msgstr "¿Mostrar campo de email?"
+
+#: includes/admin/kb-configuration/class-eprf-kb-config-specs.php:374
+#, fuzzy
+#| msgid "Description Hint for the User"
+msgid "Name Hint for the User"
+msgstr "Sugerencia de descripción para el usuario"
+
+#: includes/admin/kb-configuration/class-eprf-kb-config-specs.php:379
+msgid "Name"
+msgstr "Nombre"
+
+#: includes/admin/kb-configuration/class-eprf-kb-config-specs.php:383
+#, fuzzy
+#| msgid "Description Hint for the User"
+msgid "Email Hint for the User"
+msgstr "Sugerencia de descripción para el usuario"
+
+#: includes/admin/kb-configuration/class-eprf-kb-config-specs.php:388
+msgid "Email"
+msgstr "Email"
+
+#: includes/admin/kb-configuration/class-eprf-kb-config-specs.php:392
+msgid "Description Hint for the User"
+msgstr "Sugerencia de descripción para el usuario"
+
+#: includes/admin/kb-configuration/class-eprf-kb-config-specs.php:401
+msgid "Text for Support URL Link"
+msgstr "Texto para URL del enlace de apoyo"
+
+#: includes/admin/kb-configuration/class-eprf-kb-config-specs.php:406
+msgid "Need help?"
+msgstr "¿Necesitas ayuda?"
+
+#: includes/admin/kb-configuration/class-eprf-kb-config-specs.php:410
+msgid "Support Link URL (format: https://&lt;your link&gt;)"
+msgstr "URL del enlace de asistencia (formato: https://&lt;su enlace&gt;)"
+
+#: includes/admin/kb-configuration/class-eprf-kb-config-specs.php:419
+msgid "Submit Button"
+msgstr "Botón de enviar"
+
+#: includes/admin/kb-configuration/class-eprf-kb-config-specs.php:428
+msgid "Submit Button Text"
+msgstr "Texto del botón de enviar"
+
+#: includes/admin/kb-configuration/class-eprf-kb-config-specs.php:431
+msgid "Submit"
+msgstr "Enviar"
+
+#: includes/admin/kb-configuration/class-eprf-kb-config-specs.php:434
+#: includes/admin/kb-configuration/class-eprf-kb-config-specs.php:458
+#, fuzzy
+#| msgid "When Does the Feedback Form Becomes Visible?"
+msgid "When Does the Feedback Form Become Visible?"
+msgstr "¿Cuándo aparece el formulario de reseñas?"
+
+#: includes/admin/kb-configuration/class-eprf-kb-config-specs.php:438
+#: includes/admin/kb-configuration/class-eprf-kb-config-specs.php:462
+msgid "Always"
+msgstr "Siempre"
+
+#: includes/admin/kb-configuration/class-eprf-kb-config-specs.php:439
+msgid "If user votes"
+msgstr "Si el usuario vota"
+
+#: includes/admin/kb-configuration/class-eprf-kb-config-specs.php:440
+#: includes/admin/kb-configuration/class-eprf-kb-config-specs.php:453
+msgid "If user votes less than 5 stars"
+msgstr "Si el usuario vota menos de 5 estrellas"
+
+#: includes/admin/kb-configuration/class-eprf-kb-config-specs.php:441
+#: includes/admin/kb-configuration/class-eprf-kb-config-specs.php:452
+msgid "If user votes less than 4 stars"
+msgstr "Si el usuario vota menos de 4 estrellas"
+
+#: includes/admin/kb-configuration/class-eprf-kb-config-specs.php:442
+#: includes/admin/kb-configuration/class-eprf-kb-config-specs.php:464
+msgid "The feedback form only becomes visible if filling it out is mandatory"
+msgstr ""
+"El formulario de opinión sólo se hace visible si es obligatorio rellenarlo"
+
+#: includes/admin/kb-configuration/class-eprf-kb-config-specs.php:447
+#: includes/admin/kb-configuration/class-eprf-kb-config-specs.php:469
+msgid "Filling out feedback form is mandatory to submit article rating"
+msgstr ""
+"Rellenar el formulario de comentarios es obligatorio para enviar la "
+"valoración del artículo"
+
+#: includes/admin/kb-configuration/class-eprf-kb-config-specs.php:451
+#: includes/admin/kb-configuration/class-eprf-kb-config-specs.php:473
+msgid "Never"
+msgstr "Nunca"
+
+#: includes/admin/kb-configuration/class-eprf-kb-config-specs.php:463
+#: includes/admin/kb-configuration/class-eprf-kb-config-specs.php:474
+msgid "If user votes down"
+msgstr "Si el usuario vota en negativo"
+
+#: includes/admin/kb-configuration/class-eprf-kb-config-specs.php:480
+msgid "Enable Open Feedback Button"
+msgstr "Activar el botón Abrir comentarios"
+
+#: includes/admin/kb-configuration/class-eprf-kb-config-specs.php:486
+#, fuzzy
+#| msgid "Submit Button Text"
+msgid "Open Feedback Button Text"
+msgstr "Texto del botón de enviar"
+
+#: includes/admin/kb-configuration/class-eprf-kb-config-specs.php:491
+msgid "Send Feedback"
+msgstr "Envía tu opinión"
+
+#: includes/admin/kb-configuration/class-eprf-kb-config-specs.php:494
+msgid "Color"
+msgstr "Color"
+
+#: includes/admin/kb-configuration/class-eprf-kb-config-specs.php:503
+msgid "Color Hover"
+msgstr "Color por encima"
+
+#: includes/admin/kb-configuration/class-eprf-kb-config-specs.php:512
+msgid "Background Color"
+msgstr "Color del fondo"
+
+#: includes/admin/kb-configuration/class-eprf-kb-config-specs.php:521
+msgid "Background Color Hover"
+msgstr "Color del fondo: al pasar por encima"
+
+#: includes/admin/kb-configuration/class-eprf-kb-config-specs.php:530
+msgid "Border Color"
+msgstr "Color del borde"
+
+#: includes/admin/kb-configuration/class-eprf-kb-config-specs.php:539
+msgid "Border Color Hover"
+msgstr "Color del borde: al pasar por encima"
+
+#: includes/admin/kb-configuration/class-eprf-kb-config-specs.php:548
+msgid "Border Radius"
+msgstr "Radio del borde"
+
+#: includes/admin/kb-configuration/class-eprf-kb-config-specs.php:557
+msgid "Border Width"
+msgstr "Ancho del borde"
+
+#: includes/class-eprf-html-forms.php:341
+msgid "Accept"
+msgstr "Aceptar"
+
+#: includes/class-eprf-html-forms.php:346
+msgid "Cancel"
+msgstr "Cancelar"
+
+#: includes/class-eprf-input-filter.php:52
+#: includes/class-eprf-input-filter.php:215
+#: includes/class-eprf-input-filter.php:347
+#: includes/class-eprf-input-filter.php:387
+#: includes/class-eprf-input-filter.php:405
+#: includes/class-eprf-input-filter.php:449
+msgid "Error Occurred"
+msgstr "Ha ocurrido un error"
+
+#: includes/class-eprf-input-filter.php:68
+msgid "Label"
+msgstr "Etiqueta"
+
+#: includes/class-eprf-input-filter.php:145
+#, php-format
+msgid "Please change value of the %s field."
+msgstr "Por favor, cambia el valor del campo %s."
+
+#: includes/class-eprf-input-filter.php:236
+#: includes/class-eprf-input-filter.php:425
+#, php-format
+msgid "The value is too long. Remove %d character."
+msgid_plural "The value is too long. Remove %d characters."
+msgstr[0] "El valor es demasiado largo. Elimina %d carácter."
+msgstr[1] "El valor es demasiado largo. Elimina %d caracteres."
+
+#: includes/class-eprf-input-filter.php:243
+#: includes/class-eprf-input-filter.php:432
+#, php-format
+msgid "The value is too short. Add at least %d character."
+msgid_plural "The value is too short. Add at least %d characters."
+msgstr[0] "El valor es demasiado corto. Al menos, añade %d carácter."
+msgstr[1] "El valor es demasiado corto. Al menos, añade %d caracteres."
+
+#: includes/class-eprf-input-filter.php:281
+#: includes/class-eprf-utilities.php:1005
+msgid "empty"
+msgstr "vacío"
+
+#: includes/class-eprf-input-filter.php:282
+#, php-format
+msgid "The value cannot be %s. %sValid values are: %s"
+msgstr "El valor no puede ser %s. %sLos valores válidos son: %s"
+
+#: includes/class-eprf-input-filter.php:304
+#, php-format
+msgid "The value \"%s\" is not valid"
+msgstr "El valor «%s» no es válido"
+
+#: includes/class-eprf-input-filter.php:319
+#, php-format
+msgid "The value \"%s\" is not a number"
+msgstr "El valor «%s» no es un número"
+
+#: includes/class-eprf-input-filter.php:323
+#, php-format
+msgid "The value %s is larger than maximum of %s"
+msgstr "El valor %s es mayor que el máximo de %s"
+
+#: includes/class-eprf-input-filter.php:326
+#, php-format
+msgid "The value %s is smaller than minimum of %s"
+msgstr "El valor %s es menor que el mínimo de %s"
+
+#: includes/class-eprf-input-filter.php:374
+#, php-format
+msgid "The value \"%s\" is not valid HEX color. Expected format: #xxxxxx"
+msgstr ""
+"El valor «%s» no es un color hexadecimal válido. Formato esperado: #xxxxxx"
+
+#: includes/class-eprf-utilities.php:23
+msgid "Draft"
+msgstr "Borrador"
+
+#: includes/class-eprf-utilities.php:23
+msgid "Pending"
+msgstr "Pendiente"
+
+#: includes/class-eprf-utilities.php:24
+msgid "Published"
+msgstr "Publicado"
+
+#: includes/class-eprf-utilities.php:24
+msgid "Scheduled"
+msgstr "Programado"
+
+#: includes/class-eprf-utilities.php:25
+msgid "Private"
+msgstr "Privado"
+
+#: includes/class-eprf-utilities.php:26
+msgid "Trash"
+msgstr "Papelera"
+
+#: includes/class-eprf-utilities.php:221
+msgid "year"
+msgstr "año"
+
+#: includes/class-eprf-utilities.php:222
+msgid "month"
+msgstr "mes"
+
+#: includes/class-eprf-utilities.php:223
+msgid "week"
+msgstr "semana"
+
+#: includes/class-eprf-utilities.php:224
+msgid "day"
+msgstr "día"
+
+#: includes/class-eprf-utilities.php:225
+msgid "hour"
+msgstr "hora"
+
+#: includes/class-eprf-utilities.php:226
+msgid "min"
+msgstr "minuto"
+
+#: includes/class-eprf-utilities.php:227
+msgid "sec"
+msgstr "seg"
+
+#: includes/class-eprf-utilities.php:277
+msgid "You are not logged in. Refresh your page and log in."
+msgstr "No has iniciado sesión. Actualiza la página e inicia sesión."
+
+#: includes/class-eprf-utilities.php:277
+msgid "Cannot save your changes"
+msgstr "No se han podido guardar los cambios"
+
+#: includes/class-eprf-utilities.php:301
+#, fuzzy
+msgid "Please contact us for support"
+msgstr " Contáctanos si necesita ayuda: "
+
+#: includes/class-eprf-utilities.php:302
+msgid "here"
+msgstr "aquí"
+
+#: includes/class-eprf-utilities.php:310
+msgid "We'd love to hear your feedback!"
+msgstr "Nos encantaría conocer su opinión"
+
+#: includes/class-eprf-utilities.php:311
+msgid "click here"
+msgstr "haz clic aquí"
+
+#: includes/class-eprf-utilities.php:327 includes/class-eprf-utilities.php:332
+#: includes/class-eprf-utilities.php:770 includes/class-eprf-utilities.php:810
+#: includes/class-eprf-utilities.php:823 includes/class-eprf-utilities.php:867
+#: includes/class-eprf-utilities.php:879 includes/class-eprf-utilities.php:907
+#: includes/class-eprf-utilities.php:911 includes/class-eprf-utilities.php:924
+#: includes/class-eprf-utilities.php:933 includes/class-eprf-utilities.php:940
+#: includes/class-eprf-utilities.php:945 includes/class-eprf-utilities.php:951
+#: includes/class-eprf-utilities.php:1557
+#: includes/class-eprf-utilities.php:1590
+#: includes/system/scripts-registration.php:38
+#: includes/system/scripts-registration.php:99
+#: includes/system/scripts-registration.php:114
+#: includes/system/scripts-registration.php:189
+msgid "Error occurred"
+msgstr "Ha ocurrido un error"
+
+#: includes/class-eprf-utilities.php:702 includes/class-eprf-utilities.php:708
+#, fuzzy
+#| msgid "You do not have permission to edit this knowledge base"
+msgid "Login or refresh this page to edit this knowledge base"
+msgstr "No tienes permiso para editar esta base de conocimiento"
+
+#: includes/class-eprf-utilities.php:715
+msgid "You do not have permission to edit this knowledge base"
+msgstr "No tienes permiso para editar esta base de conocimiento"
+
+#: includes/class-eprf-utilities.php:1568
+#: includes/class-eprf-utilities.php:1572
+#: includes/class-eprf-utilities.php:1582
+#: includes/class-eprf-utilities.php:1586
+msgid "Invalid email"
+msgstr "Email no válido"
+
+#: includes/class-eprf-utilities.php:1598
+msgid "New message"
+msgstr "Nuevo mensaje"
+
+#: includes/class-eprf-utilities.php:1598
+msgctxt "email sent from someone"
+msgid "from"
+msgstr "de"
+
+#: includes/class-eprf-utilities.php:1602
+msgid "Invalid subject"
+msgstr "Asunto no válido"
+
+#: includes/class-eprf-utilities.php:1606
+msgid "Email message is too long"
+msgstr "El mensaje de correo electrónico es demasiado largo"
+
+#: includes/class-eprf-utilities.php:1639
+msgid "Failed to send the email."
+msgstr "Ha fallado el envío del correo electrónico."
+
+#: includes/features/rating/class-eprf-analytics-view.php:41
+#, fuzzy
+#| msgid "Rating Layout"
+msgid "Rating Data"
+msgstr "Disposición de calificación"
+
+#: includes/features/rating/class-eprf-rating-admin-ctrl.php:49
+msgid "Could not reset (0)"
+msgstr "No se ha podido restablecer (0)"
+
+#: includes/features/rating/class-eprf-rating-admin-ctrl.php:55
+msgid "Could not reset (1)"
+msgstr "No se ha podido restablecer (1)"
+
+#: includes/features/rating/class-eprf-rating-admin-ctrl.php:58
+msgid "Article ratings were reset"
+msgstr "Se han restablecido las calificaciones del artículo"
+
+#: includes/features/rating/class-eprf-rating-admin-view.php:55
+#: includes/features/rating/class-eprf-rating-admin-view.php:59
+#: includes/features/rating/class-eprf-rating-admin-view.php:297
+#: js/admin-gutenberg-scripts.js:23
+msgid "Rating"
+msgstr "Calificación"
+
+#: includes/features/rating/class-eprf-rating-admin-view.php:58
+msgid "Rating Average"
+msgstr "Media de calificación"
+
+#: includes/features/rating/class-eprf-rating-admin-view.php:106
+#: includes/features/rating/class-eprf-rating-view.php:389
+msgid "Not rated"
+msgstr "Sin calificar"
+
+#: includes/features/rating/class-eprf-rating-admin-view.php:362
+msgid "All Ratings"
+msgstr "Todas las calificaciones"
+
+#: includes/features/rating/class-eprf-rating-admin-view.php:365
+msgid "Stars Rating"
+msgstr "Calificaciones de estrella"
+
+#: includes/features/rating/class-eprf-rating-cntrl.php:22
+#, fuzzy
+#| msgid "Could not vote (0)"
+msgid "Could not vote "
+msgstr "No se ha podido votar (0)"
+
+#: includes/features/rating/class-eprf-rating-cntrl.php:32
+#: includes/features/rating/class-eprf-rating-cntrl.php:37
+#: includes/features/rating/class-eprf-rating-cntrl.php:42
+#: includes/features/rating/class-eprf-rating-cntrl.php:56
+#: includes/features/rating/class-eprf-rating-cntrl.php:63
+#: includes/features/rating/class-eprf-rating-cntrl.php:82
+#: includes/features/rating/class-eprf-rating-cntrl.php:91
+#: includes/features/rating/class-eprf-rating-cntrl.php:105
+#: includes/features/rating/class-eprf-rating-cntrl.php:115
+#: includes/features/rating/class-eprf-rating-cntrl.php:120
+#: includes/features/rating/class-eprf-rating-cntrl.php:125
+#: includes/features/rating/class-eprf-rating-cntrl.php:138
+#, fuzzy
+#| msgid "Could not vote (0)"
+msgid "Could not vote"
+msgstr "No se ha podido votar (0)"
+
+#: includes/features/rating/class-eprf-rating-cntrl.php:76
+#, fuzzy
+#| msgid "Could not record the vote (5)"
+msgid "Could not record the vote"
+msgstr "No se ha podido registrar el voto (5)"
+
+#: includes/features/rating/class-eprf-rating-cntrl.php:159
+#, fuzzy
+#| msgid "Your vote has been submitted. Thanks!"
+msgid "You have already submitted feedback."
+msgstr "Tu voto ha sido registrado. ¡Gracias!"
+
+#: includes/features/rating/class-eprf-rating-comments.php:67
+#, fuzzy
+#| msgid "KB - Article Rating and Feedback"
+msgid "Rating Feedback"
+msgstr "Calificación y opiniones de un artículo"
+
+#: includes/features/rating/class-eprf-rating-view.php:308
+msgid "Loading..."
+msgstr "Cargando..."
+
+#: includes/features/rating/class-eprf-rating-view.php:430
+msgid "rating"
+msgstr "calificación"
+
+#: includes/system/class-eprf-edd-sl-plugin-updater.php:251
+#, php-format
+msgid ""
+"There is a new version of %1$s available. %2$sView version %3$s details%4$s."
+msgstr "Está disponible nueva versión de %1$s. %2$sVer los %3$s detalles%4$s."
+
+#: includes/system/class-eprf-edd-sl-plugin-updater.php:259
+#, php-format
+msgid ""
+"There is a new version of %1$s available. %2$sView version %3$s details%4$s "
+"or %5$supdate now%6$s."
+msgstr ""
+"Hay una nueva versión de %1$s disponible. %2$s Ver versión %3$s detalles "
+"%4$s o %5$s actualiza ahora %6$s."
+
+#: includes/system/class-eprf-edd-sl-plugin-updater.php:503
+msgid "You do not have permission to install plugin updates"
+msgstr "No tiene permiso para instalar actualizaciones del plugin"
+
+#: includes/system/class-eprf-license-handler.php:109
+msgid "Could not retrieve license state"
+msgstr "No se ha podido recuperar el estado de la licencia"
+
+#: includes/system/class-eprf-license-handler.php:117
+#, php-format
+msgid "Please update %s to its latest version %s"
+msgstr "Por favor, actualice %s a su última versión %s"
+
+#: includes/system/class-eprf-license-handler.php:152
+#: includes/system/class-eprf-license-handler.php:154
+msgid "Unknown status."
+msgstr "Estado desconocido."
+
+#: includes/system/class-eprf-license-handler.php:169
+msgid "Security check failed."
+msgstr "La comprobación de seguridad ha fallado."
+
+#: includes/system/class-eprf-license-handler.php:204
+#, fuzzy
+#| msgid "Could not reset (0)"
+msgid "Could not save settings."
+msgstr "No se ha podido restablecer (0)"
+
+#: includes/system/class-eprf-license-handler.php:206
+msgid "Settings NOT saved due to following problems:"
+msgstr "Los ajustes NO se guardan debido a los siguientes problemas:"
+
+#: includes/system/class-eprf-license-handler.php:273
+msgid "Please enter your license."
+msgstr "Por favor introduce tu licencia."
+
+#: includes/system/class-eprf-license-handler.php:358
+msgid "visit your account page"
+msgstr "visite la página de su cuenta"
+
+#: includes/system/class-eprf-license-handler.php:364
+#, php-format
+msgid "License for %s is missing. Please enter and activate your license."
+msgstr "Falta la licencia para %s. Por favor, introduzca y active su licencia."
+
+#: includes/system/class-eprf-license-handler.php:370
+#, php-format
+msgid ""
+"Your license key expired on %s. Please <a href=\"%s\" target=\"_blank\" "
+"title=\"Renew your license key\">renew your license key</a>."
+msgstr ""
+"Tu código de licencia se ha caducado el %s. <a href=\"%s\" target=\"_blank\" "
+"title=\"Renew license\">Renueva tu código de licencia</a>."
+
+#: includes/system/class-eprf-license-handler.php:375
+#, php-format
+msgid "Invalid license key. Please %s and verify it."
+msgstr "Clave de licencia no válida. Por favor %s y verifíquela."
+
+#: includes/system/class-eprf-license-handler.php:379
+#, php-format
+msgid ""
+"This license is not active for this URL. Either activate (save) the license "
+"or %s to manage your license key URLs."
+msgstr ""
+"Esta licencia no está activa para esta URL. Active (guarde) la licencia o %s "
+"para gestionar sus URL de clave de licencia."
+
+#: includes/system/class-eprf-license-handler.php:383
+#, php-format
+msgid ""
+"The entered license is not valid. Please enter a valid license or %s to "
+"manage your license key(s)."
+msgstr ""
+"La licencia introducida no es válida. Introduzca una licencia válida o %s "
+"para gestionar su(s) clave(s) de licencia."
+
+#: includes/system/class-eprf-license-handler.php:388
+#, fuzzy
+msgid "This license is not for "
+msgstr "Emisión de licencia"
+
+#: includes/system/class-eprf-license-handler.php:393
+#, php-format
+msgid ""
+"This license key is registered on other %s website%s which is the license "
+"limit. In order to register the license on this website you can either: a) "
+"increase the number of websites the license can handle OR b) de-register "
+"your old website URL and register this website URL. Please %s to make the "
+"URL change."
+msgstr ""
+"Esta clave de licencia está registrada en otro %s sitio web%s que es el "
+"límite de licencia. Para poder registrar la licencia en este sitio web "
+"puede: a) aumentar el número de sitios web que puede manejar la licencia O "
+"b) dar de baja la URL de su antiguo sitio web y registrar la URL de este "
+"sitio web. Por favor %s para hacer el cambio de URL."
+
+#: includes/system/class-eprf-license-handler.php:401
+#, php-format
+msgid ""
+"Your license key has been disabled. Please <a href=\"%s\" "
+"target=\"_blank\">contact support</a> for more information."
+msgstr ""
+"Su clave de licencia ha sido deshabilitada. Para obtener más información, "
+"póngase en <a href=\"%s\" target=\"_blank\">contacto con el servicio de "
+"asistencia</a>."
+
+#: includes/system/class-eprf-license-handler.php:406
+msgid ""
+"The key you entered belongs to a bundle, please use this add-on specific "
+"license key."
+msgstr ""
+"La clave que ha introducido pertenece a un paquete, utilice esta clave de "
+"licencia específica del complemento."
+
+#: includes/system/class-eprf-license-handler.php:410
+msgid "Error occurred (a30)"
+msgstr "Se ha producido un error (a30)"
+
+#: includes/system/class-eprf-license-handler.php:414
+msgid "Error occurred (a31)"
+msgstr "Se ha producido un error (a31)"
+
+#: includes/system/class-eprf-license-handler.php:418
+msgid "Error occurred (a32)"
+msgstr "Se ha producido un error (a32)"
+
+#: includes/system/class-eprf-license-handler.php:451
+msgid "Please"
+msgstr "Por favor"
+
+#: includes/system/class-eprf-license-handler.php:452
+msgid "renew your license key"
+msgstr "renueve su clave de licencia"
+
+#: includes/system/class-eprf-license-handler.php:455
+#, php-format
+msgid "Your license will expire in %s days."
+msgstr "Su licencia caducará en %s días."
+
+#: includes/system/class-eprf-license-handler.php:457
+#, fuzzy
+msgid "Your license "
+msgstr "Accede a tu cuenta de licencia %s aquí%s"
+
+#: includes/system/class-eprf-license-handler.php:457
+msgid "expired "
+msgstr "caducado"
+
+#: includes/system/class-eprf-license-handler.php:458
+msgid " days ago. "
+msgstr " días atrás."
+
+#: includes/system/class-eprf-license-handler.php:458
+msgid " will expire today. "
+msgstr " expirará hoy."
+
+#: includes/system/class-eprf-license-handler.php:465
+msgid "unknown error (334)"
+msgstr "error desconocido (334)"
+
+#: includes/system/class-eprf-license-handler.php:524
+#, php-format
+msgid ""
+"Could not contact licensing server.<a href=\"%s\" target=\"_blank\">Check "
+"your license status here.</a>."
+msgstr ""
+"No se ha podido contactar con el servidor de licencias<a href=\"%s\" "
+"target=\"_blank\">.</a>"
+
+#: includes/system/class-eprf-license-handler.php:563
+#, php-format
+msgid "License %s has been removed and deactivated for this website."
+msgstr "La licencia %s ha sido eliminada y desactivada para este sitio web."
+
+#: includes/system/class-eprf-license-handler.php:576
+msgid ""
+"Your license has to be both <strong>active</strong> and <strong>valid</"
+"strong> in order to receive <strong>add-on fixes, new features and support</"
+"strong>.<br/>"
+msgstr ""
+"Su licencia debe estar <strong>activa</strong> y <strong>ser válida</strong> "
+"para recibir <strong>correcciones, nuevas funciones y asistencia</strong>."
+"<br/>"
+
+#: includes/system/class-eprf-upgrades.php:134
+msgid "Article Rating and Feedback"
+msgstr "Valoración y opiniones del artículo"
+
+#: includes/system/class-eprf-upgrades.php:135
+#, php-format
+msgctxt " version number, link to what is new page"
+msgid "add-on was updated to version %s."
+msgstr "se ha actualizado a la versión %s."
+
+#: includes/system/plugin-links.php:18
+msgid "Documentation"
+msgstr "Documentación"
+
+#: includes/system/plugin-links.php:18
+msgid "Docs"
+msgstr "Documentos"
+
+#: includes/system/plugin-links.php:19
+msgid "Support"
+msgstr "Soporte"
+
+#: includes/system/scripts-registration.php:37
+#: includes/system/scripts-registration.php:98
+#: includes/system/scripts-registration.php:113
+#: includes/system/scripts-registration.php:188
+msgid "Please try again later."
+msgstr "Inténtalo de nuevo más tarde."
+
+#: includes/system/scripts-registration.php:39
+#: includes/system/scripts-registration.php:190
+msgid "Error occurred - configuration NOT saved (6)."
+msgstr "Ha ocurrido un error. La configuración NO se ha guardado (6)."
+
+#: includes/system/scripts-registration.php:40
+#: includes/system/scripts-registration.php:101
+#: includes/system/scripts-registration.php:116
+#: includes/system/scripts-registration.php:191
+msgid "Unknown error"
+msgstr "Error desconocido"
+
+#: includes/system/scripts-registration.php:41
+#: includes/system/scripts-registration.php:102
+#: includes/system/scripts-registration.php:117
+#: includes/system/scripts-registration.php:192
+msgid "Please reload the page and try again."
+msgstr "Vuelve a cargar la página e inténtalo de nuevo."
+
+#: includes/system/scripts-registration.php:42
+#: includes/system/scripts-registration.php:103
+#: includes/system/scripts-registration.php:118
+#: includes/system/scripts-registration.php:193
+msgid "Saving configuration"
+msgstr "Guardando configuración"
+
+#: includes/system/scripts-registration.php:43
+#: includes/system/scripts-registration.php:104
+#: includes/system/scripts-registration.php:119
+#: includes/system/scripts-registration.php:194
+msgid "Input is required"
+msgstr "Se requiere entrada"
+
+#: includes/system/scripts-registration.php:100
+msgid "Error occurred - configuration NOT saved (12)."
+msgstr "Ha ocurrido un error. La configuración NO se ha guardado (12)."
+
+#: includes/system/scripts-registration.php:106
+msgid ""
+"Do you want to delete all rating on this article? This cannot be undone."
+msgstr ""
+"¿Quieres eliminar todas las calificaciones de este artículo? Esta acción no "
+"podrá deshacerse."
+
+#: includes/system/scripts-registration.php:115
+#, fuzzy
+msgid "Error occurred - configuration NOT saved."
+msgstr "Ha ocurrido un error. La configuración NO se ha guardado (5)."
+
+#. Plugin Name of the plugin/theme
+msgid "KB - Article Rating and Feedback"
+msgstr "BC: Calificación y opiniones de un artículo"
+
+#. Plugin URI of the plugin/theme
+msgid "https://www.echoknowledgebase.com/wordpress-add-ons/"
+msgstr "https://www.echoknowledgebase.com/wordpress-add-ons/"
+
+#. Description of the plugin/theme
+msgid ""
+"allow reader of your articles to vote on article quality and provide "
+"feedback."
+msgstr "permite que el lector vote la calidad de un artículo y deje su opinión"
+
+#. Author of the plugin/theme
+msgid "Echo Plugins"
+msgstr "Echo Plugins"
+
+#. Author URI of the plugin/theme
+msgid "https://www.echoknowledgebase.com"
+msgstr "https://www.echoknowledgebase.com"
+
+#~ msgid "Text 1 Star"
+#~ msgstr "Texto 1 estrella"
+
+#~ msgid "Text 2 Stars"
+#~ msgstr "Texto 2 estrellas"
+
+#~ msgid "Text 3 Stars"
+#~ msgstr "Texto 3 estrellas"
+
+#~ msgid "Text 4 Stars"
+#~ msgstr "Texto 4 estrellas"
+
+#~ msgid "Text 5 Stars"
+#~ msgstr "Texto 5 estrellas"
+
+#~ msgid "Rating Meta Information"
+#~ msgstr "Información meta de calificación"
+
+#~ msgid "Not Displayed"
+#~ msgstr "No se muestra"
+
+#~ msgid "Show Above Article"
+#~ msgstr "Mostrar arriba del artículo"
+
+#~ msgid "Show Below Article"
+#~ msgstr "Mostrar debajo del artículo"
+
+#~ msgid "Location of Rating"
+#~ msgstr "Ubicación de la calificación"
+
+#~ msgid "Text Font Size ( px )"
+#~ msgstr "Tamaño fuente del texto ( px )"
+
+#~ msgid "Positive Confirmation"
+#~ msgstr "Confirmación positiva"
+
+#~ msgid "We will use your feedback to improve this article."
+#~ msgstr "Tu opinión nos servirá para mejorar este artículo."
+
+#~ msgid "Form Title"
+#~ msgstr "Título del formulario"
+
+#~ msgid "Search"
+#~ msgstr "Buscar"
+
+#~ msgid "Top-10"
+#~ msgstr "Los mejores 10"
+
+#~ msgid "Top-100"
+#~ msgstr "Los mejores 100"
+
+#~ msgid "Title"
+#~ msgstr "Título"
+
+#~ msgid "Average"
+#~ msgstr "Media"
+
+#~ msgid "Votes"
+#~ msgstr "Votos"
+
+#~ msgid "First refresh your page"
+#~ msgstr "Actualiza primero tu página"
+
+#~ msgid "Could not vote (11)"
+#~ msgstr "No se ha podido votar (11)"
+
+#~ msgid "Could not vote (1)"
+#~ msgstr "No se ha podido votar (1)"
+
+#~ msgid "Could not vote (3)"
+#~ msgstr "No se ha podido votar (3)"
+
+#~ msgid "Could not vote (8)"
+#~ msgstr "No se ha podido votar (8)"
+
+#~ msgid "Could not vote (5)"
+#~ msgstr "No se ha podido votar (5)"
+
+#~ msgid "Could not vote (6)"
+#~ msgstr "No se ha podido votar (6)"
+
+#~ msgid "Could not vote (2)"
+#~ msgstr "No se ha podido votar (2)"

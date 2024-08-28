@@ -1,0 +1,107 @@
+# Copyright (C) 2020 Echo Plugins
+# This file is distributed under the same license as the KB - Multiple Knowledge Bases plugin.
+msgid ""
+msgstr ""
+"Project-Id-Version: KB - Multiple Knowledge Bases 1.11.1\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/echo-multiple-"
+"knowledge-bases\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"POT-Creation-Date: 2020-04-14T01:12:56+02:00\n"
+"PO-Revision-Date: 2020-05-06 16:42+0200\n"
+"X-Generator: Poedit 2.3\n"
+"X-Domain: echo-multiple-knowledge-bases\n"
+"Last-Translator: \n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Language: de\n"
+
+#. Plugin Name of the plugin
+msgid "KB - Multiple Knowledge Bases"
+msgstr "KB - Multiple Knowledge Bases"
+
+#. Plugin URI of the plugin
+msgid "https://www.echoknowledgebase.com/wordpress-add-ons/"
+msgstr "https://www.echoknowledgebase.com/wordpress-add-ons/"
+
+#. Description of the plugin
+msgid ""
+"Create as many knowledge bases as you need and switch between them with a "
+"mouse click."
+msgstr ""
+"Erstellen Sie so viele Wissensdatenbanken, wie Sie benötigen, und wechseln "
+"Sie mit einem Mausklick zwischen ihnen."
+
+#. Author of the plugin
+msgid "Echo Plugins"
+msgstr "Echo Plugins"
+
+#. Author URI of the plugin
+msgid "https://www.echoknowledgebase.com"
+msgstr "https://www.echoknowledgebase.com"
+
+#: includes/admin/class-emkb-admin-notices.php:42
+msgid "Could not create a new knowledge base. Please try again later."
+msgstr ""
+"Eine neue Wissensdatenbank konnte nicht erstellt werden. Bitte versuchen "
+"Sie es später erneut."
+
+#: includes/admin/class-emkb-admin-notices.php:45
+msgid ""
+"A new pre-configured Knowledge Base with KB Main page has been created. Use "
+"Wizard to complete the KB setup."
+msgstr ""
+"Es wurde eine neue vorkonfigurierte Wissensdatenbank mit KB-Hauptseite "
+"erstellt. Verwenden Sie den Assistenten, um die KB-Einrichtung "
+"abzuschließen."
+
+#: includes/admin/class-emkb-admin-notices.php:49
+msgid "Could not archive the knowledge base. Please try again later."
+msgstr ""
+"Die Wissensdatenbank kann nicht archiviert werden. Bitte versuchen Sie es "
+"später erneut."
+
+#: includes/admin/class-emkb-admin-notices.php:56
+msgid "Could not activate the knowledge base. Please try again later."
+msgstr ""
+"Konnte die Wissensdatenbank nicht aktivieren. Bitte versuchen Sie es später "
+"noch einmal."
+
+#: includes/features/class-emkb-manage-kbs-page.php:33
+msgid "Manage Your KBs"
+msgstr "Verwalten Sie Ihre KBs"
+
+#: includes/features/class-emkb-manage-kbs-page.php:69
+msgid "Name of KB Main Page *"
+msgstr "Name der KB-Hauptseite *"
+
+#: includes/features/class-emkb-manage-kbs-page.php:78
+msgid "Slug (Leave empty for WP to generate)"
+msgstr "Titelform (leer lassen, damit WP erzeugen kann)"
+
+#: includes/features/class-emkb-manage-kbs-page.php:133
+msgid "Retrieving KB..."
+msgstr "KB wird abgerufen…"
+
+#: includes/features/class-emkb-multiple-kbs-handler.php:28
+msgid "Manage KBs - Echo Knowledge Base"
+msgstr "KBs verwalten - Echo Knowledge Base"
+
+#: includes/features/class-emkb-multiple-kbs-handler.php:28
+msgid "Manage KBs"
+msgstr "KBs verwalten"
+
+#: includes/features/class-emkb-multiple-kbs-handler.php:216
+msgid "Knowledge Base"
+msgstr "Knowledge Base"
+
+#: includes/features/class-emkb-multiple-kbs-handler.php:260
+msgid "You are not logged in. Refresh your page and log in"
+msgstr ""
+"Sie sind nicht eingeloggt. Aktualisieren Sie Ihre Seite und melden Sie sich "
+"an"
+
+#: includes/features/class-emkb-multiple-kbs-handler.php:260
+msgid "Cannot save your changes"
+msgstr "Ihre Änderungen können nicht gespeichert werden"

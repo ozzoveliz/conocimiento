@@ -1,0 +1,10 @@
+.amgr-access-denied-notification{border:solid 1px #666666;font-size:14px;margin:15px 0}.amgr-access-denied-notification .amgr-access-denied-header{background-color:#d9534f;display:block;width:100%;padding:20px}.amgr-access-denied-notification .amgr-access-denied-header h3{color:#fff;font-size:2em;margin:0;padding:0;text-align:center}.amgr-access-denied-notification .amgr-access-denied-body{display:block;width:100%;padding:20px 20px;text-align:center;background-color:#fff}.amgr_kb_mode{display:none}.amgr-fadein-1{animation:amgrFadeIn 1s}.amgr-fadein-2{animation:amgrFadeIn 2s}.amgr-fadein-3{animation:amgrFadeIn 3s}.amgr-fadein-4{animation:amgrFadeIn 4s}.amgr-fadeOut-1{animation:amgrFadeOut 1s}.amgr-fadeOut-2{animation:amgrFadeOut 2s}.amgr-fadeOut-3{animation:amgrFadeOut 3s}.amgr-fadeOut-4{animation:amgrFadeOut 4s}@keyframes amgrFadeIn{from{opacity:0}to{opacity:1}}@keyframes amgrFadeOut{from{opacity:1}to{opacity:0}}
+
+.epkb-doc-search-container h2 {
+	text-align: center !important;
+	font-size: 36px !important;
+	margin-bottom: 23px !important; }
+
+@media only screen and (max-width: 768px) {
+	.epkb-doc-search-container h2 {
+		font-size: 30px !important; } }

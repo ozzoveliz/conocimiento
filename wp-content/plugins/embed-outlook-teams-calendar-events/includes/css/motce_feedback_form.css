@@ -1,0 +1,243 @@
+
+/*Included for the feedback form*/
+.mo_modal {
+	display: none;
+	overflow: hidden;
+	position: fixed;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	left: 0;
+	z-index: 1050;
+	-webkit-overflow-scrolling: touch;
+	outline: 0;
+
+}
+
+.mo_modal-content {
+	position: relative;
+	background-color: #ffffff;
+	border: 1px solid #999999;
+	border: 1px solid rgba(0, 0, 0, 0.2);
+	border-radius: 6px;
+	-webkit-box-shadow: 0 3px 9px rgba(0, 0, 0, 0.5);
+	box-shadow: 0 3px 9px rgba(0, 0, 0, 0.5);
+	-webkit-background-clip: padding-box;
+	background-clip: padding-box;
+	outline: 0;
+	margin-left: 20%;
+	margin-right: 24%;
+	margin-top:6%;
+}
+
+.mo_close {
+	color: #aaaaaa;
+	float: right;
+	font-size: 28px;
+	font-weight: bold;
+}
+.overlay{
+	position: fixed;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	width: 100%;
+	height: 100%;
+	background: #000;
+	opacity: .5;
+	z-index: 0;
+
+}
+.fade {
+	opacity: 0;
+	-webkit-transition: opacity 0.15s linear;
+	-o-transition: opacity 0.15s linear;
+	transition: opacity 0.15s linear;
+}
+.fade.in {
+	opacity: 1;
+}
+.modal-header {
+	padding: 15px;
+	border-bottom: 1px solid #e5e5e5;
+}
+.modal-header .close {
+	margin-top: -2px;
+}
+.modal-title {
+	margin: 0;
+	line-height: 1.42857143;
+	font-size: large;
+}
+.modal-body {
+	position: relative;
+	padding: 15px;
+}
+.modal-dialog {
+	position: relative;
+	width: auto;
+	margin: 10px;
+}
+.modal.fade .modal-dialog {
+	-webkit-transform: translate(0, -25%);
+	-ms-transform: translate(0, -25%);
+	-o-transform: translate(0, -25%);
+	transform: translate(0, -25%);
+	-webkit-transition: -webkit-transform 0.3s ease-out;
+	-o-transition: -o-transform 0.3s ease-out;
+	transition: transform 0.3s ease-out;
+}
+.modal.in .modal-dialog {
+	-webkit-transform: translate(0, 0);
+	-ms-transform: translate(0, 0);
+	-o-transform: translate(0, 0);
+	transform: translate(0, 0);
+}
+.modal-footer {
+	padding: 15px;
+	text-align: center;
+	border-top: 1px solid #e5e5e5;
+	position: relative;
+	margin: 220px;
+	margin-top: 35%;
+}
+.modal-footer .btn + .btn {
+	margin-left: 5px;
+	margin-bottom: 0;
+}
+.modal-footer .btn-group .btn + .btn {
+	margin-left: -1px;
+}
+.modal-footer .btn-block + .btn-block {
+	margin-left: 0;
+}
+.close {
+	float: right;
+	font-size: 21px;
+	font-weight: bold;
+	line-height: 1;
+	color: #000000;
+	text-shadow: 0 1px 0 #ffffff;
+	opacity: 0.2;
+	filter: alpha(opacity=20);
+}
+.close:hover,
+.close:focus {
+	color: #000000;
+	text-decoration: none;
+	cursor: pointer;
+	opacity: 0.5;
+	filter: alpha(opacity=50);
+}
+button.close {
+	padding: 0;
+	cursor: pointer;
+	background: transparent;
+	border: 0;
+	-webkit-appearance: none;
+}
+
+.mo-span-circle{
+	display: inline-block;
+	padding: 15px;
+	line-height: 100%;
+
+	-moz-border-radius: 50%;
+	border-radius: 50%;
+
+	background-color: black;
+	color: white;
+	text-align: center;
+	font-size: 2em;
+
+}
+.nav-tab-active{
+	margin-bottom: -1px;
+	background: white;
+	border-bottom: white;
+	border-bottom: 3px solid white;
+}
+.nav-tab-active:hover{
+	color: black;
+	background: white;
+	border-bottom: white;
+	border-bottom: 3px solid white;
+}
+
+/* The Modal (background) */
+.modal {
+	display: none; /* Hidden by default */
+	position: fixed; /* Stay in place */
+	z-index: 3; /* Sit on top */
+	padding-top: 100px; /* Location of the box */
+	left: 0;
+	top: 0;
+	width: 100%; /* Full width */
+	height: 100%; /* Full height */
+	/*overflow: auto;  Enable scroll if needed */
+	background-color: rgb(0,0,0); /* Fallback color */
+	background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+	transition: all 1s;
+}
+
+/* Modal Content */
+.modal-content {
+	background-color: #FFFFFF;
+	margin: 0;
+	padding: 20px;
+	border: 1px solid #888;
+	width: 70%;
+	border-radius: 20px;
+	box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.25);
+
+	position: fixed;
+	top: 50%;
+	left: 50%;
+	margin-right: -50%;
+	transform: translate(-50%, -50%);
+	height: 700px;
+}
+
+.modal-button {
+	width: 15%;
+	height: 50px;
+	font-size: 20px !important;
+}
+.add-new-hover:hover{
+	color: white !important;
+}
+
+.editable{
+	text-align:center;
+	width:1em;
+	height:1em;
+}
+.sm {
+	text-align:center;
+	width: 2vw;
+	height: 2vw;
+	padding: 1vw;
+}
+
+.sm:hover {
+	opacity:0.6;
+	cursor: pointer;
+}
+
+.sm:active {
+	opacity:0.4;
+	cursor: pointer;
+}
+
+input[type=radio]:checked + label > .sm {
+	border: 2px solid #21ecdc;
+}
+
+.mo-epbr-col-md-8
+ {
+    position: relative;
+    width: 100%;
+    min-height: 1px;
+
+}

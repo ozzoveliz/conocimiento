@@ -1,0 +1,260 @@
+# Copyright (C) 2020 Echo Plugins
+# This file is distributed under the same license as the KB - Widgets plugin.
+msgid ""
+msgstr ""
+"Project-Id-Version: KB - Widgets 1.8.2\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/echo-widgets\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"POT-Creation-Date: 2020-04-30T20:59:58+02:00\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"X-Generator: WP-CLI 2.4.0\n"
+"X-Domain: echo-widgets\n"
+
+#. Plugin Name of the plugin
+msgid "KB - Widgets"
+msgstr ""
+
+#. Plugin URI of the plugin
+msgid "https://www.echoknowledgebase.com/wordpress-add-ons/"
+msgstr ""
+
+#. Description of the plugin
+msgid "This Widget extension lets you place KB Widgets, Shortcodes and Sidebars anywhere on your website."
+msgstr ""
+
+#. Author of the plugin
+msgid "Echo Plugins"
+msgstr ""
+
+#. Author URI of the plugin
+msgid "https://www.echoknowledgebase.com"
+msgstr ""
+
+#: includes/admin/kb-configuration/class-widg-kb-config-page.php:155
+#: includes/admin/wizard/class-widg-kb-wizard-features.php:60
+msgid "Configure KB Sidebar"
+msgstr ""
+
+#: includes/admin/kb-configuration/class-widg-kb-config-page.php:182
+msgid "View different styles"
+msgstr ""
+
+#: includes/admin/kb-configuration/class-widg-kb-config-specs.php:29
+msgid "Article Sidebar Location"
+msgstr ""
+
+#: includes/admin/kb-configuration/class-widg-kb-config-specs.php:39
+msgid "Widget CSS Reset"
+msgstr ""
+
+#: includes/admin/kb-configuration/class-widg-kb-config-specs.php:45
+msgid "Widget CSS Defaults"
+msgstr ""
+
+#: includes/admin/kb-configuration/class-widg-kb-config-specs.php:51
+msgid "Shortcode CSS Reset"
+msgstr ""
+
+#: includes/admin/kb-configuration/class-widg-kb-config-specs.php:57
+msgid "Shortcode CSS Defaults"
+msgstr ""
+
+#: includes/admin/kb-configuration/class-widg-kb-config-specs.php:63
+msgid "Widget Search Preset Styles"
+msgstr ""
+
+#: includes/admin/kb-configuration/class-widg-kb-config-specs.php:79
+msgid "Search results limit"
+msgstr ""
+
+#: includes/admin/wizard/class-widg-kb-wizard-features.php:40
+msgid "Widgets Bar"
+msgstr ""
+
+#: includes/admin/wizard/class-widg-kb-wizard-search.php:28
+msgid "Search Widget"
+msgstr ""
+
+#: includes/admin/wizard/class-widg-kb-wizard-search.php:42
+msgid "Read about this widget"
+msgstr ""
+
+#: includes/features/kbs/class-widg-kb-search.php:24
+msgid "Error occurred. Please try again later."
+msgstr ""
+
+#: includes/features/kbs/class-widg-kb-search.php:27
+msgid "Enter a word with at least one character."
+msgstr ""
+
+#: includes/features/kbs/class-widg-kb-search.php:28
+msgid "No matches found"
+msgstr ""
+
+#: includes/features/kbs/class-widg-kb-search.php:29
+msgid "Search Results for"
+msgstr ""
+
+#: includes/features/shortcodes/class-widg-categories-list-shortcode.php:20
+#: includes/features/widgets/class-widg-categories-list-widget.php:12
+#: includes/features/widgets/class-widg-categories-list-widget.php:39
+msgid "Categories"
+msgstr ""
+
+#: includes/features/shortcodes/class-widg-categories-list-shortcode.php:43
+#: includes/features/shortcodes/class-widg-category-articles-shortcode.php:54
+#: includes/features/shortcodes/class-widg-recent-articles-shortcode.php:44
+#: includes/features/shortcodes/class-widg-tag-articles-shortcode.php:52
+#: includes/features/shortcodes/class-widg-tags-list-shortcode.php:40
+#: includes/features/widgets/class-widg-categories-list-widget.php:60
+#: includes/features/widgets/class-widg-category-articles-widget.php:60
+#: includes/features/widgets/class-widg-recent-articles-widget.php:55
+#: includes/features/widgets/class-widg-tag-articles-widget.php:58
+#: includes/features/widgets/class-widg-tags-list-widget.php:52
+msgid "Coming Soon"
+msgstr ""
+
+#: includes/features/shortcodes/class-widg-category-articles-shortcode.php:27
+#: includes/features/widgets/class-widg-category-articles-widget.php:12
+#: includes/features/widgets/class-widg-category-articles-widget.php:35
+#: includes/features/widgets/class-widg-category-articles-widget.php:180
+msgid "Category Articles"
+msgstr ""
+
+#: includes/features/shortcodes/class-widg-recent-articles-shortcode.php:20
+#: includes/features/widgets/class-widg-recent-articles-widget.php:12
+#: includes/features/widgets/class-widg-recent-articles-widget.php:34
+#: includes/features/widgets/class-widg-recent-articles-widget.php:141
+msgid "Recent Articles"
+msgstr ""
+
+#: includes/features/shortcodes/class-widg-search-articles-shortcode.php:21
+#: includes/features/widgets/class-widg-search-articles-widget.php:36
+msgid "Search Articles"
+msgstr ""
+
+#: includes/features/shortcodes/class-widg-search-articles-shortcode.php:30
+#: includes/features/widgets/class-widg-search-articles-widget.php:45
+msgid "Search the documentation..."
+msgstr ""
+
+#: includes/features/shortcodes/class-widg-search-articles-shortcode.php:33
+#: includes/features/widgets/class-widg-search-articles-widget.php:12
+#: includes/features/widgets/class-widg-search-articles-widget.php:49
+msgid "Search"
+msgstr ""
+
+#: includes/features/shortcodes/class-widg-tag-articles-shortcode.php:26
+#: includes/features/widgets/class-widg-tag-articles-widget.php:12
+msgid "Articles with Given Tag"
+msgstr ""
+
+#: includes/features/shortcodes/class-widg-tags-list-shortcode.php:20
+#: includes/features/widgets/class-widg-tags-list-widget.php:12
+#: includes/features/widgets/class-widg-tags-list-widget.php:34
+msgid "Tags"
+msgstr ""
+
+#: includes/features/widgets/class-widg-categories-list-widget.php:14
+msgid "Displays a list of top KB categories."
+msgstr ""
+
+#: includes/features/widgets/class-widg-categories-list-widget.php:171
+msgid "Top KB Categories"
+msgstr ""
+
+#: includes/features/widgets/class-widg-categories-list-widget.php:181
+#: includes/features/widgets/class-widg-category-articles-widget.php:192
+#: includes/features/widgets/class-widg-recent-articles-widget.php:151
+#: includes/features/widgets/class-widg-search-articles-widget.php:139
+#: includes/features/widgets/class-widg-tag-articles-widget.php:191
+#: includes/features/widgets/class-widg-tags-list-widget.php:128
+msgid "Title:"
+msgstr ""
+
+#: includes/features/widgets/class-widg-categories-list-widget.php:188
+#: includes/features/widgets/class-widg-category-articles-widget.php:199
+#: includes/features/widgets/class-widg-recent-articles-widget.php:158
+#: includes/features/widgets/class-widg-search-articles-widget.php:161
+#: includes/features/widgets/class-widg-tag-articles-widget.php:198
+#: includes/features/widgets/class-widg-tags-list-widget.php:135
+msgid "KB ID:"
+msgstr ""
+
+#: includes/features/widgets/class-widg-categories-list-widget.php:195
+msgid "Filter:"
+msgstr ""
+
+#: includes/features/widgets/class-widg-categories-list-widget.php:201
+#: includes/features/widgets/class-widg-category-articles-widget.php:223
+msgid "Category ID(s):"
+msgstr ""
+
+#: includes/features/widgets/class-widg-category-articles-widget.php:14
+msgid "Displays a list of articles for specific categories."
+msgstr ""
+
+#: includes/features/widgets/class-widg-category-articles-widget.php:206
+#: includes/features/widgets/class-widg-recent-articles-widget.php:165
+#: includes/features/widgets/class-widg-tag-articles-widget.php:205
+msgid "Number of Articles to Display:"
+msgstr ""
+
+#: includes/features/widgets/class-widg-category-articles-widget.php:213
+#: includes/features/widgets/class-widg-recent-articles-widget.php:172
+#: includes/features/widgets/class-widg-tag-articles-widget.php:212
+msgid "Order By:"
+msgstr ""
+
+#: includes/features/widgets/class-widg-category-articles-widget.php:229
+msgid "Include Articles in Sub Categories:"
+msgstr ""
+
+#: includes/features/widgets/class-widg-recent-articles-widget.php:14
+msgid "Displays a list of recently created or modified articles."
+msgstr ""
+
+#: includes/features/widgets/class-widg-search-articles-widget.php:14
+msgid "Knowledge Base Search box."
+msgstr ""
+
+#: includes/features/widgets/class-widg-search-articles-widget.php:129
+msgid "KB Search"
+msgstr ""
+
+#: includes/features/widgets/class-widg-search-articles-widget.php:146
+msgid "Search Box Hint: (optional)"
+msgstr ""
+
+#: includes/features/widgets/class-widg-search-articles-widget.php:153
+msgid "Search Button Name: (optional)"
+msgstr ""
+
+#: includes/features/widgets/class-widg-tag-articles-widget.php:14
+msgid "Displays a list of articles that have specified tags."
+msgstr ""
+
+#: includes/features/widgets/class-widg-tag-articles-widget.php:34
+#: includes/features/widgets/class-widg-tag-articles-widget.php:179
+msgid "Tagged Articles"
+msgstr ""
+
+#: includes/features/widgets/class-widg-tag-articles-widget.php:222
+msgid "operator:"
+msgstr ""
+
+#: includes/features/widgets/class-widg-tag-articles-widget.php:232
+msgid "Tag ID(s):"
+msgstr ""
+
+#: includes/features/widgets/class-widg-tags-list-widget.php:14
+msgid "Displays a list of KB tags."
+msgstr ""
+
+#: includes/features/widgets/class-widg-tags-list-widget.php:120
+msgid "KB Tags"
+msgstr ""

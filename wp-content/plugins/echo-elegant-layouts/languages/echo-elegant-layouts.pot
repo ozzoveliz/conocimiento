@@ -1,0 +1,869 @@
+# Copyright (C) 2020 Echo Plugins
+# This file is distributed under the same license as the KB - Elegant Layouts plugin.
+msgid ""
+msgstr ""
+"Project-Id-Version: KB - Elegant Layouts 2.5.1\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/echo-elegant-layouts\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"POT-Creation-Date: 2020-04-26T21:02:41+02:00\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"X-Generator: WP-CLI 2.4.0\n"
+"X-Domain: echo-elegant-layouts\n"
+
+#. Plugin Name of the plugin
+msgid "KB - Elegant Layouts"
+msgstr ""
+
+#. Plugin URI of the plugin
+msgid "https://www.echoknowledgebase.com/wordpress-add-ons/"
+msgstr ""
+
+#. Description of the plugin
+msgid "Combine Basic, Tabs, Grid and Sidebar layouts in many cool ways."
+msgstr ""
+
+#. Author of the plugin
+msgid "Echo Plugins"
+msgstr ""
+
+#. Author URI of the plugin
+msgid "https://www.echoknowledgebase.com"
+msgstr ""
+
+#: includes/admin/kb-configuration/class-elay-kb-config-advanced.php:41
+#: includes/admin/wizard/class-elay-kb-wizard-search.php:57
+#: includes/admin/wizard/class-elay-kb-wizard-text.php:76
+msgid "Grid Search"
+msgstr ""
+
+#: includes/admin/kb-configuration/class-elay-kb-config-advanced.php:50
+#: includes/admin/kb-configuration/class-elay-kb-config-advanced.php:125
+#: includes/admin/kb-configuration/class-elay-kb-config-advanced.php:229
+msgid "Padding( px )"
+msgstr ""
+
+#: includes/admin/kb-configuration/class-elay-kb-config-advanced.php:60
+#: includes/admin/kb-configuration/class-elay-kb-config-advanced.php:239
+msgid "Margin( px )"
+msgstr ""
+
+#: includes/admin/kb-configuration/class-elay-kb-config-advanced.php:99
+#: includes/admin/wizard/class-elay-kb-wizard-features.php:92
+msgid "Grid Categories"
+msgstr ""
+
+#: includes/admin/kb-configuration/class-elay-kb-config-advanced.php:115
+msgid "Box Border( px )"
+msgstr ""
+
+#: includes/admin/kb-configuration/class-elay-kb-config-advanced.php:135
+msgid "Icon Padding ( px )"
+msgstr ""
+
+#: includes/admin/kb-configuration/class-elay-kb-config-advanced.php:145
+msgid "Name Padding ( px )"
+msgstr ""
+
+#: includes/admin/kb-configuration/class-elay-kb-config-advanced.php:155
+msgid "Description Padding ( px )"
+msgstr ""
+
+#: includes/admin/kb-configuration/class-elay-kb-config-advanced.php:185
+#: includes/admin/kb-configuration/class-elay-kb-config-advanced.php:310
+msgid "Padding ( px )"
+msgstr ""
+
+#: includes/admin/kb-configuration/class-elay-kb-config-advanced.php:220
+#: includes/admin/wizard/class-elay-kb-wizard-search.php:106
+#: includes/admin/wizard/class-elay-kb-wizard-search.php:175
+#: includes/admin/wizard/class-elay-kb-wizard-text.php:200
+msgid "Sidebar Search"
+msgstr ""
+
+#: includes/admin/kb-configuration/class-elay-kb-config-advanced.php:275
+msgid "Sidebar Articles"
+msgstr ""
+
+#: includes/admin/kb-configuration/class-elay-kb-config-advanced.php:285
+msgid "Article Spacing ( px )"
+msgstr ""
+
+#: includes/admin/kb-configuration/class-elay-kb-config-advanced.php:328
+msgid "Sidebar Categories"
+msgstr ""
+
+#: includes/admin/kb-configuration/class-elay-kb-config-advanced.php:337
+msgid "Category Heading Padding ( px )"
+msgstr ""
+
+#: includes/admin/kb-configuration/class-elay-kb-config-advanced.php:355
+msgid "Box Border ( px )"
+msgstr ""
+
+#: includes/admin/kb-configuration/class-elay-kb-config-layout-grid.php:53
+msgid "Page Width"
+msgstr ""
+
+#: includes/admin/kb-configuration/class-elay-kb-config-layout-grid.php:57
+msgid "Boxed Width"
+msgstr ""
+
+#: includes/admin/kb-configuration/class-elay-kb-config-layout-grid.php:58
+msgid "Full Width"
+msgstr ""
+
+#: includes/admin/kb-configuration/class-elay-kb-config-layout-grid.php:62
+#: includes/admin/kb-configuration/class-elay-kb-config-layout-sidebar.php:85
+msgid "Relative Text Size"
+msgstr ""
+
+#: includes/admin/kb-configuration/class-elay-kb-config-layout-grid.php:66
+#: includes/admin/kb-configuration/class-elay-kb-config-layout-sidebar.php:89
+msgctxt "font size"
+msgid "Extra Small"
+msgstr ""
+
+#: includes/admin/kb-configuration/class-elay-kb-config-layout-grid.php:67
+#: includes/admin/kb-configuration/class-elay-kb-config-layout-sidebar.php:90
+msgctxt "font size"
+msgid "Small"
+msgstr ""
+
+#: includes/admin/kb-configuration/class-elay-kb-config-layout-grid.php:68
+#: includes/admin/kb-configuration/class-elay-kb-config-layout-sidebar.php:91
+msgctxt "font size"
+msgid "Medium"
+msgstr ""
+
+#: includes/admin/kb-configuration/class-elay-kb-config-layout-grid.php:69
+#: includes/admin/kb-configuration/class-elay-kb-config-layout-sidebar.php:92
+msgctxt "font size"
+msgid "Large"
+msgstr ""
+
+#: includes/admin/kb-configuration/class-elay-kb-config-layout-grid.php:73
+msgid "Number of Columns"
+msgstr ""
+
+#: includes/admin/kb-configuration/class-elay-kb-config-layout-grid.php:80
+msgid "Category Icon"
+msgstr ""
+
+#: includes/admin/kb-configuration/class-elay-kb-config-layout-grid.php:87
+msgid "Icons Location/Turn Off"
+msgstr ""
+
+#: includes/admin/kb-configuration/class-elay-kb-config-layout-grid.php:91
+msgid "No Icons"
+msgstr ""
+
+#: includes/admin/kb-configuration/class-elay-kb-config-layout-grid.php:92
+#: includes/admin/kb-configuration/class-elay-kb-config-layout-grid.php:149
+#: includes/admin/kb-configuration/class-elay-kb-config-layout-grid.php:181
+#: includes/admin/kb-configuration/class-elay-kb-config-layout-grid.php:219
+#: includes/admin/kb-configuration/class-elay-kb-config-layout-grid.php:263
+#: includes/admin/kb-configuration/class-elay-kb-config-layout-grid.php:295
+#: includes/admin/kb-configuration/class-elay-kb-config-layout-grid.php:409
+#: includes/admin/kb-configuration/class-elay-kb-config-layout-grid.php:449
+#: includes/admin/kb-configuration/class-elay-kb-config-layout-sidebar.php:162
+#: includes/admin/kb-configuration/class-elay-kb-config-layout-sidebar.php:194
+#: includes/admin/kb-configuration/class-elay-kb-config-layout-sidebar.php:239
+#: includes/admin/kb-configuration/class-elay-kb-config-layout-sidebar.php:337
+msgid "Top"
+msgstr ""
+
+#: includes/admin/kb-configuration/class-elay-kb-config-layout-grid.php:93
+#: includes/admin/kb-configuration/class-elay-kb-config-layout-grid.php:165
+#: includes/admin/kb-configuration/class-elay-kb-config-layout-grid.php:212
+#: includes/admin/kb-configuration/class-elay-kb-config-layout-grid.php:235
+#: includes/admin/kb-configuration/class-elay-kb-config-layout-grid.php:256
+#: includes/admin/kb-configuration/class-elay-kb-config-layout-grid.php:279
+#: includes/admin/kb-configuration/class-elay-kb-config-layout-grid.php:311
+#: includes/admin/kb-configuration/class-elay-kb-config-layout-grid.php:425
+#: includes/admin/kb-configuration/class-elay-kb-config-layout-grid.php:465
+#: includes/admin/kb-configuration/class-elay-kb-config-layout-sidebar.php:178
+#: includes/admin/kb-configuration/class-elay-kb-config-layout-sidebar.php:232
+#: includes/admin/kb-configuration/class-elay-kb-config-layout-sidebar.php:255
+#: includes/admin/kb-configuration/class-elay-kb-config-layout-sidebar.php:353
+msgid "Left"
+msgstr ""
+
+#: includes/admin/kb-configuration/class-elay-kb-config-layout-grid.php:94
+#: includes/admin/kb-configuration/class-elay-kb-config-layout-grid.php:173
+#: includes/admin/kb-configuration/class-elay-kb-config-layout-grid.php:214
+#: includes/admin/kb-configuration/class-elay-kb-config-layout-grid.php:243
+#: includes/admin/kb-configuration/class-elay-kb-config-layout-grid.php:258
+#: includes/admin/kb-configuration/class-elay-kb-config-layout-grid.php:287
+#: includes/admin/kb-configuration/class-elay-kb-config-layout-grid.php:319
+#: includes/admin/kb-configuration/class-elay-kb-config-layout-grid.php:433
+#: includes/admin/kb-configuration/class-elay-kb-config-layout-grid.php:473
+#: includes/admin/kb-configuration/class-elay-kb-config-layout-sidebar.php:186
+#: includes/admin/kb-configuration/class-elay-kb-config-layout-sidebar.php:234
+#: includes/admin/kb-configuration/class-elay-kb-config-layout-sidebar.php:263
+#: includes/admin/kb-configuration/class-elay-kb-config-layout-sidebar.php:361
+msgid "Right"
+msgstr ""
+
+#: includes/admin/kb-configuration/class-elay-kb-config-layout-grid.php:95
+#: includes/admin/kb-configuration/class-elay-kb-config-layout-grid.php:157
+#: includes/admin/kb-configuration/class-elay-kb-config-layout-grid.php:189
+#: includes/admin/kb-configuration/class-elay-kb-config-layout-grid.php:227
+#: includes/admin/kb-configuration/class-elay-kb-config-layout-grid.php:271
+#: includes/admin/kb-configuration/class-elay-kb-config-layout-grid.php:303
+#: includes/admin/kb-configuration/class-elay-kb-config-layout-grid.php:417
+#: includes/admin/kb-configuration/class-elay-kb-config-layout-grid.php:457
+#: includes/admin/kb-configuration/class-elay-kb-config-layout-sidebar.php:170
+#: includes/admin/kb-configuration/class-elay-kb-config-layout-sidebar.php:202
+#: includes/admin/kb-configuration/class-elay-kb-config-layout-sidebar.php:247
+#: includes/admin/kb-configuration/class-elay-kb-config-layout-sidebar.php:345
+msgid "Bottom"
+msgstr ""
+
+#: includes/admin/kb-configuration/class-elay-kb-config-layout-grid.php:100
+msgid "Category Icon Thickness"
+msgstr ""
+
+#: includes/admin/kb-configuration/class-elay-kb-config-layout-grid.php:104
+msgid "Normal"
+msgstr ""
+
+#: includes/admin/kb-configuration/class-elay-kb-config-layout-grid.php:105
+msgid "Bold"
+msgstr ""
+
+#: includes/admin/kb-configuration/class-elay-kb-config-layout-grid.php:110
+msgid "Icon Size ( px )"
+msgstr ""
+
+#: includes/admin/kb-configuration/class-elay-kb-config-layout-grid.php:118
+msgid "Show Articles Count"
+msgstr ""
+
+#: includes/admin/kb-configuration/class-elay-kb-config-layout-grid.php:128
+#: includes/admin/kb-configuration/class-elay-kb-config-layout-sidebar.php:135
+msgid "Layout"
+msgstr ""
+
+#: includes/admin/kb-configuration/class-elay-kb-config-layout-grid.php:132
+#: includes/admin/kb-configuration/class-elay-kb-config-layout-sidebar.php:139
+msgid "Rounded search button is on the right"
+msgstr ""
+
+#: includes/admin/kb-configuration/class-elay-kb-config-layout-grid.php:133
+#: includes/admin/kb-configuration/class-elay-kb-config-layout-sidebar.php:140
+msgid "Squared search Button is on the right"
+msgstr ""
+
+#: includes/admin/kb-configuration/class-elay-kb-config-layout-grid.php:134
+#: includes/admin/kb-configuration/class-elay-kb-config-layout-sidebar.php:141
+msgid "Search button is below"
+msgstr ""
+
+#: includes/admin/kb-configuration/class-elay-kb-config-layout-grid.php:135
+#: includes/admin/kb-configuration/class-elay-kb-config-layout-sidebar.php:142
+msgid "No search button"
+msgstr ""
+
+#: includes/admin/kb-configuration/class-elay-kb-config-layout-grid.php:136
+#: includes/admin/kb-configuration/class-elay-kb-config-layout-sidebar.php:143
+msgid "No search box"
+msgstr ""
+
+#: includes/admin/kb-configuration/class-elay-kb-config-layout-grid.php:141
+#: includes/admin/kb-configuration/class-elay-kb-config-layout-sidebar.php:154
+msgid "Border (px)"
+msgstr ""
+
+#: includes/admin/kb-configuration/class-elay-kb-config-layout-grid.php:197
+#: includes/admin/kb-configuration/class-elay-kb-config-layout-sidebar.php:210
+msgid "Width (%)"
+msgstr ""
+
+#: includes/admin/kb-configuration/class-elay-kb-config-layout-grid.php:208
+#: includes/admin/kb-configuration/class-elay-kb-config-layout-sidebar.php:228
+msgid "Head Text Alignment"
+msgstr ""
+
+#: includes/admin/kb-configuration/class-elay-kb-config-layout-grid.php:213
+#: includes/admin/kb-configuration/class-elay-kb-config-layout-grid.php:257
+#: includes/admin/kb-configuration/class-elay-kb-config-layout-sidebar.php:233
+msgid "Centered"
+msgstr ""
+
+#: includes/admin/kb-configuration/class-elay-kb-config-layout-grid.php:252
+msgid "Body Text Alignment"
+msgstr ""
+
+#: includes/admin/kb-configuration/class-elay-kb-config-layout-grid.php:327
+#: includes/admin/kb-configuration/class-elay-kb-config-layout-sidebar.php:271
+msgid "Description"
+msgstr ""
+
+#: includes/admin/kb-configuration/class-elay-kb-config-layout-grid.php:335
+#: includes/admin/kb-configuration/class-elay-kb-config-layout-sidebar.php:277
+msgid "Radius"
+msgstr ""
+
+#: includes/admin/kb-configuration/class-elay-kb-config-layout-grid.php:343
+#: includes/admin/kb-configuration/class-elay-kb-config-layout-sidebar.php:285
+msgid "Width"
+msgstr ""
+
+#: includes/admin/kb-configuration/class-elay-kb-config-layout-grid.php:351
+#: includes/admin/kb-configuration/class-elay-kb-config-layout-sidebar.php:293
+msgid "Article List Shadow"
+msgstr ""
+
+#: includes/admin/kb-configuration/class-elay-kb-config-layout-grid.php:355
+#: includes/admin/kb-configuration/class-elay-kb-config-layout-sidebar.php:297
+msgid "No Shadow"
+msgstr ""
+
+#: includes/admin/kb-configuration/class-elay-kb-config-layout-grid.php:356
+#: includes/admin/kb-configuration/class-elay-kb-config-layout-sidebar.php:298
+msgid "Light Shadow"
+msgstr ""
+
+#: includes/admin/kb-configuration/class-elay-kb-config-layout-grid.php:357
+#: includes/admin/kb-configuration/class-elay-kb-config-layout-sidebar.php:299
+msgid "Medium Shadow"
+msgstr ""
+
+#: includes/admin/kb-configuration/class-elay-kb-config-layout-grid.php:358
+#: includes/admin/kb-configuration/class-elay-kb-config-layout-sidebar.php:300
+msgid "Bottom Shadow"
+msgstr ""
+
+#: includes/admin/kb-configuration/class-elay-kb-config-layout-grid.php:363
+msgid "Hover Effect"
+msgstr ""
+
+#: includes/admin/kb-configuration/class-elay-kb-config-layout-grid.php:367
+msgid "No Effect"
+msgstr ""
+
+#: includes/admin/kb-configuration/class-elay-kb-config-layout-grid.php:368
+msgid "Hover 1: Gives Opacity 70% "
+msgstr ""
+
+#: includes/admin/kb-configuration/class-elay-kb-config-layout-grid.php:369
+msgid "Hover 2: Gives Opacity 80% "
+msgstr ""
+
+#: includes/admin/kb-configuration/class-elay-kb-config-layout-grid.php:370
+msgid "Hover 3: Gives Opacity 90% "
+msgstr ""
+
+#: includes/admin/kb-configuration/class-elay-kb-config-layout-grid.php:371
+msgid "Hover 4: Gives Lightest Grey Background "
+msgstr ""
+
+#: includes/admin/kb-configuration/class-elay-kb-config-layout-grid.php:372
+msgid "Hover 5: Gives Lighter Grey Background "
+msgstr ""
+
+#: includes/admin/kb-configuration/class-elay-kb-config-layout-grid.php:377
+#: includes/admin/kb-configuration/class-elay-kb-config-layout-grid.php:606
+msgid "Divider"
+msgstr ""
+
+#: includes/admin/kb-configuration/class-elay-kb-config-layout-grid.php:383
+msgid "Divider Thickness (px)"
+msgstr ""
+
+#: includes/admin/kb-configuration/class-elay-kb-config-layout-grid.php:391
+#: includes/admin/kb-configuration/class-elay-kb-config-layout-sidebar.php:59
+#: includes/admin/kb-configuration/class-elay-kb-config-layout-sidebar.php:319
+msgid "Height Mode"
+msgstr ""
+
+#: includes/admin/kb-configuration/class-elay-kb-config-layout-grid.php:395
+#: includes/admin/kb-configuration/class-elay-kb-config-layout-sidebar.php:63
+#: includes/admin/kb-configuration/class-elay-kb-config-layout-sidebar.php:323
+msgid "Variable"
+msgstr ""
+
+#: includes/admin/kb-configuration/class-elay-kb-config-layout-grid.php:396
+#: includes/admin/kb-configuration/class-elay-kb-config-layout-sidebar.php:324
+msgid "Minimum"
+msgstr ""
+
+#: includes/admin/kb-configuration/class-elay-kb-config-layout-grid.php:397
+#: includes/admin/kb-configuration/class-elay-kb-config-layout-sidebar.php:325
+msgid "Maximum"
+msgstr ""
+
+#: includes/admin/kb-configuration/class-elay-kb-config-layout-grid.php:401
+msgid "Height"
+msgstr ""
+
+#: includes/admin/kb-configuration/class-elay-kb-config-layout-grid.php:441
+msgid "Spacing"
+msgstr ""
+
+#: includes/admin/kb-configuration/class-elay-kb-config-layout-grid.php:490
+#: includes/admin/kb-configuration/class-elay-kb-config-layout-grid.php:521
+#: includes/admin/kb-configuration/class-elay-kb-config-layout-grid.php:539
+#: includes/admin/kb-configuration/class-elay-kb-config-layout-grid.php:570
+#: includes/admin/kb-configuration/class-elay-kb-config-layout-grid.php:588
+#: includes/admin/kb-configuration/class-elay-kb-config-layout-sidebar.php:407
+#: includes/admin/kb-configuration/class-elay-kb-config-layout-sidebar.php:438
+#: includes/admin/kb-configuration/class-elay-kb-config-layout-sidebar.php:456
+#: includes/admin/kb-configuration/class-elay-kb-config-layout-sidebar.php:505
+#: includes/admin/kb-configuration/class-elay-kb-config-layout-sidebar.php:523
+msgid "Background"
+msgstr ""
+
+#: includes/admin/kb-configuration/class-elay-kb-config-layout-grid.php:503
+#: includes/admin/kb-configuration/class-elay-kb-config-layout-sidebar.php:420
+msgid "Title"
+msgstr ""
+
+#: includes/admin/kb-configuration/class-elay-kb-config-layout-grid.php:512
+#: includes/admin/kb-configuration/class-elay-kb-config-layout-sidebar.php:429
+msgid "Search Background"
+msgstr ""
+
+#: includes/admin/kb-configuration/class-elay-kb-config-layout-grid.php:530
+#: includes/admin/kb-configuration/class-elay-kb-config-layout-grid.php:548
+#: includes/admin/kb-configuration/class-elay-kb-config-layout-grid.php:597
+#: includes/admin/kb-configuration/class-elay-kb-config-layout-sidebar.php:447
+#: includes/admin/kb-configuration/class-elay-kb-config-layout-sidebar.php:465
+#: includes/admin/kb-configuration/class-elay-kb-config-layout-sidebar.php:541
+msgid "Border"
+msgstr ""
+
+#: includes/admin/kb-configuration/class-elay-kb-config-layout-grid.php:561
+#: includes/admin/kb-configuration/class-elay-kb-config-layout-grid.php:624
+#: includes/admin/kb-configuration/class-elay-kb-config-layout-sidebar.php:478
+#: includes/admin/kb-configuration/class-elay-kb-config-layout-sidebar.php:496
+#: includes/admin/kb-configuration/class-elay-kb-config-layout-sidebar.php:514
+#: includes/admin/kb-configuration/class-elay-kb-config-layout-sidebar.php:559
+#: includes/admin/kb-configuration/class-elay-kb-config-layout-sidebar.php:581
+msgid "Text"
+msgstr ""
+
+#: includes/admin/kb-configuration/class-elay-kb-config-layout-grid.php:579
+#: includes/admin/kb-configuration/class-elay-kb-config-layout-sidebar.php:532
+msgid "Category Description"
+msgstr ""
+
+#: includes/admin/kb-configuration/class-elay-kb-config-layout-grid.php:615
+#: includes/admin/kb-configuration/class-elay-kb-config-layout-sidebar.php:487
+#: includes/admin/kb-configuration/class-elay-kb-config-layout-sidebar.php:568
+msgid "Icon"
+msgstr ""
+
+#: includes/admin/kb-configuration/class-elay-kb-config-layout-grid.php:642
+#: includes/admin/kb-configuration/class-elay-kb-config-layout-sidebar.php:601
+msgid "Search Title"
+msgstr ""
+
+#: includes/admin/kb-configuration/class-elay-kb-config-layout-grid.php:648
+#: includes/admin/kb-configuration/class-elay-kb-config-layout-sidebar.php:607
+msgid "How Can We Help?"
+msgstr ""
+
+#: includes/admin/kb-configuration/class-elay-kb-config-layout-grid.php:651
+#: includes/admin/kb-configuration/class-elay-kb-config-layout-sidebar.php:610
+msgid "Search Hint"
+msgstr ""
+
+#: includes/admin/kb-configuration/class-elay-kb-config-layout-grid.php:657
+#: includes/admin/kb-configuration/class-elay-kb-config-layout-sidebar.php:616
+msgid "Search the documentation..."
+msgstr ""
+
+#: includes/admin/kb-configuration/class-elay-kb-config-layout-grid.php:660
+#: includes/admin/kb-configuration/class-elay-kb-config-layout-sidebar.php:619
+msgid "Search Button Name"
+msgstr ""
+
+#: includes/admin/kb-configuration/class-elay-kb-config-layout-grid.php:666
+#: includes/admin/kb-configuration/class-elay-kb-config-layout-sidebar.php:625
+msgid "Search"
+msgstr ""
+
+#: includes/admin/kb-configuration/class-elay-kb-config-layout-grid.php:669
+#: includes/admin/kb-configuration/class-elay-kb-config-layout-sidebar.php:628
+msgid "Search Results Message"
+msgstr ""
+
+#: includes/admin/kb-configuration/class-elay-kb-config-layout-grid.php:675
+#: includes/admin/kb-configuration/class-elay-kb-config-layout-sidebar.php:634
+msgid "Search Results for"
+msgstr ""
+
+#: includes/admin/kb-configuration/class-elay-kb-config-layout-grid.php:678
+#: includes/admin/kb-configuration/class-elay-kb-config-layout-sidebar.php:637
+msgid "No Matches Found Text"
+msgstr ""
+
+#: includes/admin/kb-configuration/class-elay-kb-config-layout-grid.php:684
+#: includes/admin/kb-configuration/class-elay-kb-config-layout-sidebar.php:643
+msgid "No matches found"
+msgstr ""
+
+#: includes/admin/kb-configuration/class-elay-kb-config-layout-grid.php:687
+#: includes/admin/kb-configuration/class-elay-kb-config-layout-sidebar.php:646
+msgid "Minimum Search Word Size Message"
+msgstr ""
+
+#: includes/admin/kb-configuration/class-elay-kb-config-layout-grid.php:693
+#: includes/admin/kb-configuration/class-elay-kb-config-layout-sidebar.php:652
+msgid "Enter a word with at least one character."
+msgstr ""
+
+#: includes/admin/kb-configuration/class-elay-kb-config-layout-grid.php:700
+#: includes/admin/kb-configuration/class-elay-kb-config-layout-sidebar.php:655
+msgid "Empty Category Notice"
+msgstr ""
+
+#: includes/admin/kb-configuration/class-elay-kb-config-layout-grid.php:706
+#: includes/admin/kb-configuration/class-elay-kb-config-layout-sidebar.php:661
+msgid "Articles coming soon"
+msgstr ""
+
+#: includes/admin/kb-configuration/class-elay-kb-config-layout-grid.php:709
+msgid "Additional Text"
+msgstr ""
+
+#: includes/admin/kb-configuration/class-elay-kb-config-layout-grid.php:719
+msgid "Articles Count Text"
+msgstr ""
+
+#: includes/admin/kb-configuration/class-elay-kb-config-layout-grid.php:725
+msgid "article"
+msgstr ""
+
+#: includes/admin/kb-configuration/class-elay-kb-config-layout-grid.php:728
+msgid "Articles Count Plural Text"
+msgstr ""
+
+#: includes/admin/kb-configuration/class-elay-kb-config-layout-grid.php:734
+msgid "articles"
+msgstr ""
+
+#: includes/admin/kb-configuration/class-elay-kb-config-layout-grid.php:863
+#: includes/admin/kb-configuration/class-elay-kb-config-layout-grid.php:1007
+#: includes/admin/kb-configuration/class-elay-kb-config-layout-grid.php:1095
+#: includes/admin/kb-configuration/class-elay-kb-config-layout-sidebar.php:791
+#: includes/admin/kb-configuration/class-elay-kb-config-layout-sidebar.php:942
+#: includes/admin/kb-configuration/class-elay-kb-config-layout-sidebar.php:999
+msgid "Padding (px)"
+msgstr ""
+
+#: includes/admin/kb-configuration/class-elay-kb-config-layout-grid.php:873
+#: includes/admin/kb-configuration/class-elay-kb-config-layout-sidebar.php:801
+msgid "Margin (px)"
+msgstr ""
+
+#: includes/admin/kb-configuration/class-elay-kb-config-layout-grid.php:883
+msgid "Search Box Input ( % ) ( px )"
+msgstr ""
+
+#: includes/admin/kb-configuration/class-elay-kb-config-layout-grid.php:973
+#: includes/admin/wizard/class-elay-kb-wizard-features.php:174
+msgid "Category Box Height"
+msgstr ""
+
+#: includes/admin/kb-configuration/class-elay-kb-config-layout-grid.php:997
+#: includes/admin/kb-configuration/class-elay-kb-config-layout-sidebar.php:1017
+msgid "Box Border (px)"
+msgstr ""
+
+#: includes/admin/kb-configuration/class-elay-kb-config-layout-grid.php:1033
+msgid "Icon Padding (px)"
+msgstr ""
+
+#: includes/admin/kb-configuration/class-elay-kb-config-layout-grid.php:1043
+msgid "Name Padding (px)"
+msgstr ""
+
+#: includes/admin/kb-configuration/class-elay-kb-config-layout-grid.php:1053
+msgid "Description Padding (px)"
+msgstr ""
+
+#: includes/admin/kb-configuration/class-elay-kb-config-layout-grid.php:1085
+msgid "Text Spacing (px)"
+msgstr ""
+
+#: includes/admin/kb-configuration/class-elay-kb-config-layout-grid.php:1161
+#: includes/admin/kb-configuration/class-elay-kb-config-layout-sidebar.php:1110
+#: includes/admin/wizard/class-elay-kb-wizard.php:193
+#: includes/admin/wizard/class-elay-kb-wizard.php:567
+msgid "Input Text Field"
+msgstr ""
+
+#: includes/admin/kb-configuration/class-elay-kb-config-layout-grid.php:1168
+#: includes/admin/kb-configuration/class-elay-kb-config-layout-sidebar.php:1117
+msgid "Button"
+msgstr ""
+
+#: includes/admin/kb-configuration/class-elay-kb-config-layout-grid.php:1196
+#: includes/admin/kb-configuration/class-elay-kb-config-layout-sidebar.php:1181
+msgid "Category Box Heading"
+msgstr ""
+
+#: includes/admin/kb-configuration/class-elay-kb-config-layout-sidebar.php:51
+msgid "Sidebar Width ( % )"
+msgstr ""
+
+#: includes/admin/kb-configuration/class-elay-kb-config-layout-sidebar.php:64
+msgid "Fixed (Scrollbar)"
+msgstr ""
+
+#: includes/admin/kb-configuration/class-elay-kb-config-layout-sidebar.php:68
+#: includes/admin/kb-configuration/class-elay-kb-config-layout-sidebar.php:329
+msgid "Height ( px )"
+msgstr ""
+
+#: includes/admin/kb-configuration/class-elay-kb-config-layout-sidebar.php:76
+msgid "Scroll Bar style"
+msgstr ""
+
+#: includes/admin/kb-configuration/class-elay-kb-config-layout-sidebar.php:96
+msgid "Top Categories Collapsed"
+msgstr ""
+
+#: includes/admin/kb-configuration/class-elay-kb-config-layout-sidebar.php:102
+msgid "Number of Articles Listed"
+msgstr ""
+
+#: includes/admin/kb-configuration/class-elay-kb-config-layout-sidebar.php:110
+msgid "Show Articles"
+msgstr ""
+
+#: includes/admin/kb-configuration/class-elay-kb-config-layout-sidebar.php:114
+msgid "Before Categories"
+msgstr ""
+
+#: includes/admin/kb-configuration/class-elay-kb-config-layout-sidebar.php:115
+msgid "After Categories"
+msgstr ""
+
+#: includes/admin/kb-configuration/class-elay-kb-config-layout-sidebar.php:120
+msgid "Icon to Expand/Collapse Articles"
+msgstr ""
+
+#: includes/admin/kb-configuration/class-elay-kb-config-layout-sidebar.php:123
+msgctxt "icon type"
+msgid "Plus Box"
+msgstr ""
+
+#: includes/admin/kb-configuration/class-elay-kb-config-layout-sidebar.php:124
+msgctxt "icon type"
+msgid "Plus Sign"
+msgstr ""
+
+#: includes/admin/kb-configuration/class-elay-kb-config-layout-sidebar.php:125
+msgctxt "icon type"
+msgid "Arrow Triangle"
+msgstr ""
+
+#: includes/admin/kb-configuration/class-elay-kb-config-layout-sidebar.php:126
+msgctxt "icon type"
+msgid "Arrow Caret"
+msgstr ""
+
+#: includes/admin/kb-configuration/class-elay-kb-config-layout-sidebar.php:127
+msgctxt "icon type"
+msgid "Arrow Caret 2"
+msgstr ""
+
+#: includes/admin/kb-configuration/class-elay-kb-config-layout-sidebar.php:128
+msgctxt "icon type"
+msgid "Folder"
+msgstr ""
+
+#: includes/admin/kb-configuration/class-elay-kb-config-layout-sidebar.php:148
+msgid "Collapse mode: Always Open"
+msgstr ""
+
+#: includes/admin/kb-configuration/class-elay-kb-config-layout-sidebar.php:218
+msgid "Search Results: Match Article Colors"
+msgstr ""
+
+#: includes/admin/kb-configuration/class-elay-kb-config-layout-sidebar.php:305
+#: includes/admin/kb-configuration/class-elay-kb-config-layout-sidebar.php:550
+msgid "Article List Divider"
+msgstr ""
+
+#: includes/admin/kb-configuration/class-elay-kb-config-layout-sidebar.php:311
+msgid "Divider Thickness ( px )"
+msgstr ""
+
+#: includes/admin/kb-configuration/class-elay-kb-config-layout-sidebar.php:369
+msgid "Article Underline Hover"
+msgstr ""
+
+#: includes/admin/kb-configuration/class-elay-kb-config-layout-sidebar.php:375
+msgid "Article Active Bold"
+msgstr ""
+
+#: includes/admin/kb-configuration/class-elay-kb-config-layout-sidebar.php:381
+msgid "Indentation"
+msgstr ""
+
+#: includes/admin/kb-configuration/class-elay-kb-config-layout-sidebar.php:389
+msgid "Between"
+msgstr ""
+
+#: includes/admin/kb-configuration/class-elay-kb-config-layout-sidebar.php:588
+msgid ""
+"\r\n"
+"                        <h2>Welcome to our Knowledge Base.</h2>\r\n"
+"                        <h3 style=\"color: red;\"><strong>To edit this welcome text go to the Text Wizard</strong></h3>\r\n"
+"                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Id eu nisl nunc mi. Sed nisi lacus sed viverra tellus in hac habitasse platea. Quam elementum pulvinar etiam non quam lacus suspendisse faucibus. Eleifend donec pretium vulputate sapien nec. Neque aliquam vestibulum morbi blandit cursus risus. Ultrices dui sapien eget mi proin sed. Massa massa ultricies mi quis hendrerit dolor. Ullamcorper malesuada proin libero nunc consequat interdum varius sit. Risus feugiat in ante metus dictum at tempor. Massa sapien faucibus et molestie ac feugiat sed lectus vestibulum. Risus nullam eget felis eget nunc lobortis. Malesuada nunc vel risus commodo viverra. Amet commodo nulla facilisi nullam. Vel risus commodo viverra maecenas accumsan lacus vel facilisis volutpat. Urna condimentum mattis pellentesque id nibh. Aliquam purus sit amet luctus. Vestibulum lorem sed risus ultricies.</p>"
+msgstr ""
+
+#: includes/admin/kb-configuration/class-elay-kb-config-layout-sidebar.php:664
+msgid "Collapse Articles Text"
+msgstr ""
+
+#: includes/admin/kb-configuration/class-elay-kb-config-layout-sidebar.php:670
+msgid "Collapse Articles"
+msgstr ""
+
+#: includes/admin/kb-configuration/class-elay-kb-config-layout-sidebar.php:673
+msgid "Show All Articles Text"
+msgstr ""
+
+#: includes/admin/kb-configuration/class-elay-kb-config-layout-sidebar.php:679
+msgid "Show all articles"
+msgstr ""
+
+#: includes/admin/kb-configuration/class-elay-kb-config-layout-sidebar.php:811
+#: includes/admin/wizard/class-elay-kb-wizard-search.php:84
+#: includes/admin/wizard/class-elay-kb-wizard-search.php:134
+#: includes/admin/wizard/class-elay-kb-wizard-search.php:199
+msgid "Search Box Input"
+msgstr ""
+
+#: includes/admin/kb-configuration/class-elay-kb-config-layout-sidebar.php:849
+#: includes/admin/wizard/class-elay-kb-wizard-features.php:246
+msgid "Overall Sidebar Height"
+msgstr ""
+
+#: includes/admin/kb-configuration/class-elay-kb-config-layout-sidebar.php:899
+#: includes/admin/wizard/class-elay-kb-wizard-features.php:293
+msgid "Articles List Height"
+msgstr ""
+
+#: includes/admin/kb-configuration/class-elay-kb-config-layout-sidebar.php:917
+msgid "Article Spacing (px)"
+msgstr ""
+
+#: includes/admin/kb-configuration/class-elay-kb-config-layout-sidebar.php:1036
+msgid "Introductory Text for the Sidebar Main Page"
+msgstr ""
+
+#: includes/admin/kb-configuration/class-elay-kb-config-layout-sidebar.php:1145
+msgid "Articles"
+msgstr ""
+
+#: includes/admin/kb-configuration/class-elay-kb-config-layout-sidebar.php:1152
+#: includes/admin/wizard/class-elay-kb-wizard.php:329
+msgid "Active Article"
+msgstr ""
+
+#: includes/admin/kb-configuration/class-elay-kb-config-layout-sidebar.php:1167
+msgid "Sub-category"
+msgstr ""
+
+#: includes/admin/wizard/class-elay-kb-wizard-features.php:27
+msgid "Grid Setup"
+msgstr ""
+
+#: includes/admin/wizard/class-elay-kb-wizard-features.php:233
+msgid "Elegant Layout - Sidebar"
+msgstr ""
+
+#: includes/admin/wizard/class-elay-kb-wizard-features.php:300
+msgid "Elegant Layout - Sidebar Categories"
+msgstr ""
+
+#: includes/admin/wizard/class-elay-kb-wizard-text.php:27
+msgid "Grid Texts"
+msgstr ""
+
+#: includes/admin/wizard/class-elay-kb-wizard-text.php:138
+msgid "Sidebar Text"
+msgstr ""
+
+#: includes/admin/wizard/class-elay-kb-wizard.php:102
+msgid "Category Name"
+msgstr ""
+
+#: includes/admin/wizard/class-elay-kb-wizard.php:103
+msgid "Article Counter"
+msgstr ""
+
+#: includes/admin/wizard/class-elay-kb-wizard.php:104
+msgid "Panel Border"
+msgstr ""
+
+#: includes/admin/wizard/class-elay-kb-wizard.php:105
+msgid "Panel Top Background"
+msgstr ""
+
+#: includes/admin/wizard/class-elay-kb-wizard.php:106
+msgid "Panel Bottom Background"
+msgstr ""
+
+#: includes/admin/wizard/class-elay-kb-wizard.php:159
+msgid "Grid Search Box"
+msgstr ""
+
+#: includes/admin/wizard/class-elay-kb-wizard.php:199
+#: includes/admin/wizard/class-elay-kb-wizard.php:573
+msgid "Search Button"
+msgstr ""
+
+#: includes/admin/wizard/class-elay-kb-wizard.php:322
+msgid "Sidebar Background"
+msgstr ""
+
+#: includes/admin/wizard/class-elay-kb-wizard.php:323
+msgid "Category Text"
+msgstr ""
+
+#: includes/admin/wizard/class-elay-kb-wizard.php:324
+msgid "Category Background"
+msgstr ""
+
+#: includes/admin/wizard/class-elay-kb-wizard.php:325
+msgid "Subcategory Icon"
+msgstr ""
+
+#: includes/admin/wizard/class-elay-kb-wizard.php:326
+msgid "Subcategory Title"
+msgstr ""
+
+#: includes/admin/wizard/class-elay-kb-wizard.php:327
+msgid "Article Icon"
+msgstr ""
+
+#: includes/admin/wizard/class-elay-kb-wizard.php:328
+msgid "Article"
+msgstr ""
+
+#: includes/admin/wizard/class-elay-kb-wizard.php:330
+msgid "Active Article background"
+msgstr ""
+
+#: includes/admin/wizard/class-elay-kb-wizard.php:334
+msgid "Sidebar Colors"
+msgstr ""
+
+#: includes/admin/wizard/class-elay-kb-wizard.php:532
+msgid "Search Box"
+msgstr ""
+
+#: includes/features/kbs/class-elay-kb-search.php:24
+msgid "Error occurred. Please try again later."
+msgstr ""

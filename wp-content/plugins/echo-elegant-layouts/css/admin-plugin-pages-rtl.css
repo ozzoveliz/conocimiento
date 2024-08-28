@@ -1,0 +1,18 @@
+[dir=rtl] .elay-close-notice {
+  left: 0;
+  right: auto; }
+[dir=rtl] #elay-grid-layout-page-container {
+  float: right; }
+[dir=rtl] #elay-sidebar-layout-page-container {
+  float: right; }
+[dir=rtl] .elay-inactive-text {
+  margin-right: unset;
+  margin-left: 30px; }
+[dir=rtl] .elay-category-icon-list {
+  float: left; }
+[dir=rtl] .elay-category-icon-list .radio-buttons-vertical li i {
+  float: right;
+  margin-right: unset;
+  margin-left: 14px; }
+[dir=rtl] .elay-category-icon-list .radio-buttons-vertical li .elay-label {
+  float: left; }
