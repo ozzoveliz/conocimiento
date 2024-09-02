@@ -1,9 +1,9 @@
 <?php
 /**
  * Plugin Name: KB - Multiple Knowledge Bases
- * Plugin URI: https://www.echoknowledgebase.com/wordpress-add-ons/
+ * Plugin URI: https://www.echoknowledgebase.com/documentation/
  * Description: Create as many knowledge bases as you need and switch between them with a mouse click.
- * Version: 2.5.1
+ * Version: 2.5.3
  * Author: Echo Plugins
  * Author URI: https://www.echoknowledgebase.com
  * Text Domain: echo-multiple-knowledge-bases
@@ -41,7 +41,7 @@ final class Echo_Multiple_Knowledge_Bases {
 	/* @var Echo_Multiple_Knowledge_Bases */
 	private static $instance;
 
-	public static $version = '2.5.1';
+	public static $version = '2.5.3';
 	public static $plugin_dir;
 	public static $plugin_url;
 	public static $plugin_file = __FILE__;
@@ -68,7 +68,7 @@ final class Echo_Multiple_Knowledge_Bases {
 	 */
 	public static function instance( $dormant=false ) {
 
-		if ( isset( self::$instance ) || self::$instance instanceof Echo_Multiple_Knowledge_Bases  ) {
+		if ( ! empty( self::$instance ) && ( self::$instance instanceof Echo_Multiple_Knowledge_Bases ) ) {
 			return self::$instance;
 		}
 

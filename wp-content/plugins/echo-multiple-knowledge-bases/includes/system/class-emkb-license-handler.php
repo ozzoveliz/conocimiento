@@ -32,7 +32,6 @@ class EMKB_License_Handler {
 		$this->version     = $_version;
 		$this->license_key = EMKB_Utilities::get_wp_option( self::LICENSE_KEY_OPTION_ID, '' );
 		$this->setup_hooks();
-		$this->auto_updater();
 	}
 
 	public function get_license_key() {
@@ -43,6 +42,7 @@ class EMKB_License_Handler {
 	 * Setup hooks for various license functions
 	 */
 	private function setup_hooks() {
+		add_action( 'init',  array( $this, 'auto_updater' ) );
 		add_filter( EMKB_KB_Core::EMKB_KB_ADD_ON_LICENSE_MSG, array( $this, 'get_license_status_short') );
 	}
 
@@ -55,24 +55,18 @@ class EMKB_License_Handler {
 	/**
 	 *  Update the plugin if the license is valid and there is a new version available
 	 */
-	private function auto_updater() {
+	public function auto_updater() {
 
-		// setup the updater
+		// To support auto-updates, this needs to run during the wp_version_check cron job for privileged users.
+		$doing_cron = defined( 'DOING_CRON' ) && DOING_CRON;
+		if ( ! current_user_can( 'manage_options' ) && ! $doing_cron ) {
+			return;
+		}
+
+		// set up the updater
 		if ( ! class_exists( 'EMKB_EDD_SL_Plugin_Updater' ) ) {
 			require_once 'class-emkb-edd-sl-plugin-updater.php';
 		}
-
-		// data to send in our API request
-		/* $api_params = array(
-			'edd_action'	=> 'get_version',
-			'license' 	    => '',
-			'item_name'	    => 'Article Features'
-		);
-
-		// Call the API
-		$get_url = esc_url_raw( add_query_arg( $api_params, self::LICENSE_SERVER_URL ) );
-		$get_args = array( 'timeout' => 60, 'body' => $api_params, 'sslverify' => false );
-		$response = wp_remote_get( $get_url, $get_args ); */
 
 		new EMKB_EDD_SL_Plugin_Updater(
 			$this->license_server_url,
@@ -81,11 +75,11 @@ class EMKB_License_Handler {
 				'version' 	=> $this->version,
 				'license' 	=> $this->license_key,
 				'item_name'	=> self::PLUGIN_NAME,
-				'author' 	=> $this->author
+				'author' 	=> $this->author,
+				'beta'    => false
 			)
 		);
 	}
-
 
 	/****************************************************************************
 	 *
@@ -97,7 +91,7 @@ class EMKB_License_Handler {
 	 * Invoked through filter by Overview tab and top page.
 	 *
 	 * @param string $output
-	 * @return string
+	 * @return array
 	 * @throws Exception
 	 */
 	public function get_license_status_short( $output ) {
@@ -283,7 +277,7 @@ class EMKB_License_Handler {
 		// Call the API
 		$get_url = esc_url_raw( add_query_arg( $api_params, self::LICENSE_SERVER_URL ) );
 		$get_args = array( 'timeout' => 60, 'body' => $api_params, 'sslverify' => false );
-		$response = wp_remote_get( $get_url, $get_args );
+		$response = wp_remote_post( $get_url, $get_args );
 
 		// make sure the response came back okay
 		if ( is_wp_error( $response ) ) {

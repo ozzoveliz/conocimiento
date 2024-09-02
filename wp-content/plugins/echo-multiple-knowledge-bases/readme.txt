@@ -1,11 +1,10 @@
 === KB - Multiple Knowledge Bases ===
 Author URI: https://www.echoknowledgebase.com
-Plugin URI: https://www.echoknowledgebase.com/wordpress-plugin/multiple-knowledge-bases/
 Contributors: echoplugins
 Tags: multiple knowledge bases, knowledge base, articles, documents, documentation, wiki, categories, plugin, add-on
-Requires at least: 4.5
-Tested up to: 6.0
-Stable tag: 2.5.1
+Requires at least: 5.4
+Tested up to: 6.5
+Stable tag: 2.5.3
 
 Create as many knowledge bases as you need and switch between them with a mouse click.
 
@@ -16,14 +15,14 @@ This is an add-on the the core knowledge base plugin, adding the capability to h
 
 Features:
 - SUPER EASY and intuitive
-- Multiple knowledge bases for each of your topics, products, services and teams
+- Unlimited knowledge bases for each of your topics, products, services and teams
 - Switch between knowledge bases with a mouse click.
 - Simple configuration interface
 - Each knowledge base has its own set of admin screens for adding articles, categories and tags
 - Each knowledge base has its own configuration independent of others
 - Responsive design optimizes articles for phones and tablets
 
-More information about this plugin can be found at [Echo Knowledge Base.com](http://www.echoknowledgebase.com/documentation)
+More information about this plugin can be found at [Echo Knowledge Base.com](https://www.echoknowledgebase.com/documentation)
 
 == Installation ==
 
@@ -44,6 +43,12 @@ Please read instructions at https://www.echoknowledgebase.com/documentation/?top
 Please read instructions at https://www.echoknowledgebase.com/documentation/?top-category=add-ons
 
 == Changelog ==
+
+= 2.5.3 Apr 13, 2024 =
+* Fix: Cleanup and minor fixes
+
+= 2.5.2 Mar 15, 2024 =
+* Fix: Cleanup and minor fixes
 
 = 2.5.1, Aug 23, 2022 =
 * Fix: Cleanup and minor fixes
