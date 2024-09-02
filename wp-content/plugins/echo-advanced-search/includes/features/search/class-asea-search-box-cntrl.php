@@ -183,10 +183,12 @@ class ASEA_Search_Box_cntrl {
 				$article_title_icon = apply_filters( 'eckb_article_icon_filter', $article_title_icon, $post->ID );
 				$article_title_icon = empty( $article_title_icon ) ? 'epkbfa-file-text-o' : $article_title_icon;
 			}
+
 			// linked articles have open in new tab option
-			$new_tab  = '';
+			$new_tab = '';
 			if ( ASEA_Utilities::is_link_editor_enabled() ) {
-				$new_tab = ASEA_Utilities::is_link_editor( $post ) ? 'target="_blank"' : '';
+				$link_editor_config = ASEA_Utilities::get_postmeta( $post->ID, 'kblk-link-editor-data', [], true );
+				$new_tab = empty( $link_editor_config['open-new-tab'] ) ? '' : 'target="_blank"';
 			}
 
 			// show top category in search results if ON

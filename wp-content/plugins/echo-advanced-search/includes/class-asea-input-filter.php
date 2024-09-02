@@ -135,19 +135,19 @@ class ASEA_Input_Filter {
 			$result = $this->filter_input_field( $input_value, $field_spec );
 			if ( is_wp_error( $result ) ) {
 
-                ASEA_Logging::add_log( 'Please change the value of ' . $field_spec['label'] . ' field. Current value: "' . $input_value . '" - ' . $result->get_error_message() . ', code: ' . $result->get_error_message(), $result );
+                ASEA_Logging::add_log( 'Please change the value of ' . $field_spec['label'] . ' field. Current value: "' . $input_value . '" - ' . $result->get_error_message() . ', code: ' . $result->get_error_code(), $result );
 
 				// log error only if a) NOT internal fields and more than 1 error encountered OR b) debug on
-                if ( ( empty($field_spec['internal']) && count($errors) > 0 ) || ( defined('SCRIPT_DEBUG') && SCRIPT_DEBUG ) ||
-                 ! in_array( $field_spec['type'], array(self::CHECKBOX, self::SELECTION, self::CHECKBOXES_MULTI_SELECT, self::CHECKBOXES_MULTI_SELECT_NOT, self::TRUE_FALSE, self::ENUMERATION) )) {
+				if ( ( empty($field_spec['internal']) && count($errors) > 0 ) || ( defined('SCRIPT_DEBUG') && SCRIPT_DEBUG ) ||
+					! in_array( $field_spec['type'], array(self::CHECKBOX, self::SELECTION, self::CHECKBOXES_MULTI_SELECT, self::CHECKBOXES_MULTI_SELECT_NOT, self::TRUE_FALSE, self::ENUMERATION) )) {
 
-                    $lang = '<strong style="color:#d5ff8b">' . esc_html( $field_spec['label'] ) . '</strong>';
-                    $errors[] = '<div style="padding: 20px 0 20px 0;">'. sprintf( esc_html__( 'Please change value of the %s field.', 'echo-knowledge-base' ), $lang ) . ' ' . $result->get_error_message() . '</div>';
+					$lang = '<strong style="color:#d5ff8b">' . esc_html( $field_spec['label'] ) . '</strong>';
+					$errors[] = '<div style="padding: 20px 0 20px 0;">'. sprintf( esc_html__( 'Please change value of the %s field.', 'echo-knowledge-base' ), $lang ) . ' ' . $result->get_error_message() . '</div>';
 
-                // internal fields and first error will just use default value
-                } else {
-                    $sanitized_input[$key] = $field_spec['default'];
-                }
+					// internal fields and first error will just use default value
+				} else {
+					$sanitized_input[$key] = $field_spec['default'];
+				}
 
 			} else {
 				$sanitized_input[$key] = $result;
@@ -174,7 +174,7 @@ class ASEA_Input_Filter {
 
 			case self::LICENSE_KEY:
 				return $this->filter_license_key( $value, $field_spec );
-				
+
 			case self::CHECKBOX:
 				return $this->filter_checkbox( $value );
 
@@ -273,7 +273,7 @@ class ASEA_Input_Filter {
 	private function filter_select( $value, $field_spec ) {
 
 		// don't check layouts
-		if ( $field_spec['name'] == 'kb_main_page_layout' || $field_spec['name'] == 'kb_article_page_layout' ) {
+		if ( $field_spec['name'] == 'kb_main_page_layout' ) {
 			return $value;
 		}
 		
@@ -558,7 +558,7 @@ class ASEA_Input_Filter {
 			}
 
 			if ( gettype($input_value) !== 'array' ) $input_value = stripslashes( $input_value );
-			
+
 			if ( $spec['type'] == self::WP_EDITOR ) {
 				$name_values += array( $key => wp_kses( $input_value, ASEA_Utilities::get_extended_html_tags() ) );
 			} elseif ( $spec['type'] == self::TYPOGRAPHY ) {

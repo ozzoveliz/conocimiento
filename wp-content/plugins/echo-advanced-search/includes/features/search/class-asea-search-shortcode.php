@@ -48,6 +48,7 @@ class ASEA_Search_Shortcode {
 
 		$kb_config['search_multiple_kbs'] = count($search_kb_ids) > 1 ? implode( ",", $search_kb_ids ) : '';
 		$kb_config['seq_id'] = empty($attributes['seq_id']) ? 1 : $attributes['seq_id'];
+		$kb_config['advanced_search_mp_visibility'] = 'off';   // Show search Toggle Button
 		$asea_config = asea_get_instance()->kb_config_obj->get_kb_config_or_default( $kb_id );
 
 		$kb_config = array_merge($asea_config, $kb_config);

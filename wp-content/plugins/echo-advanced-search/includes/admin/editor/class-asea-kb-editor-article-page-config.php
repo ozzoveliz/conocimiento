@@ -44,6 +44,10 @@ class ASEA_KB_Editor_Article_Page_Config {
 			],
 
 			// Features Tab
+			'advanced_search_ap_visibility' => [
+				'editor_tab' => self::EDITOR_TAB_FEATURES,
+				'reload' => 1
+			],
 
 			'advanced_search_ap_box_font_width' => [
 				'editor_tab' => self::EDITOR_TAB_FEATURES,
@@ -192,6 +196,9 @@ class ASEA_KB_Editor_Article_Page_Config {
 				'title'     =>  __( 'Advanced Search Box', 'echo-advanced-search'),
 				'classes'   => '#asea-doc-search-container',
 				'settings'  => $settings,
+				'disabled_settings' => [
+					'advanced_search_ap_visibility' => 'on'
+				],
 				'parent_zone_tab_title' => __( 'Advanced Search Box', 'echo-advanced-search' ),
 			]];
 	}

@@ -31,7 +31,7 @@ class ASEA_Templates {
 	 */
 	public static function template_loader( $template ) {
 		/** @var WP_Query $wp_query */
-        global $wp_query, $eckb_is_kb_main_page;
+        global $wp_query;
 
 		if ( isset( $wp_query ) && $wp_query->is_404() ) {
 			return $template;
@@ -59,7 +59,7 @@ class ASEA_Templates {
 		}
 
 		// is this KB Main Page ?
-		if ( $eckb_is_kb_main_page ) {
+		if ( ASEA_Utilities::is_kb_main_page() ) {
 			$kb_id = ASEA_Utilities::get_eckb_kb_id();
 		} else {
 			// if not KB Main Page is this KB Article Page ?

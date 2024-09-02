@@ -19,19 +19,19 @@ class ASEA_Core_Utilities {
 
 		$config_name = str_replace('*', self::get_search_index( $kb_config ), $config_name);
 
-		if ( isset($kb_config[$config_name]) ) {
+		if ( isset( $kb_config[$config_name] ) ) {
 			return $kb_config[$config_name];
 		}
 
 		$default_specs = ASEA_KB_Config_Specs::get_default_kb_config();
 
-		return isset($default_specs[$config_name]) ? $default_specs[$config_name] : '';
+		return isset( $default_specs[$config_name] ) ? $default_specs[$config_name] : '';
 	}
 
 	public static function get_search_index( $kb_config=array() ) {
-		global $asea_use_main_page_settings;    // ASEA shortcode
+		global $asea_use_main_page_settings;
 
-		$ix =  ASEA_Utilities::is_kb_main_page() || ! empty( $asea_use_main_page_settings ) ? 'mp' : 'ap';
+		$ix = ASEA_Utilities::is_kb_main_page() || ASEA_Utilities::get( 'is_kb_main_page' ) == 1 || ! empty( $asea_use_main_page_settings ) ? 'mp' : 'ap';
 		$ix = empty( $kb_config['kb_main_page_layout'] ) || $kb_config['kb_main_page_layout'] != 'Sidebar' ? $ix : 'mp';
 
 		return $ix;
@@ -123,9 +123,9 @@ class ASEA_Core_Utilities {
 		$order = $order_by == 'name' ? 'ASC' : 'DESC';
 		$order_by = $order_by == 'date' ? 'term_id' : $order_by;   // terms don't have date so use id
 		$kb_category_taxonomy_name = ASEA_KB_Handler::get_category_taxonomy_name( $kb_id );
-		$result = $wpdb->get_results( $wpdb->prepare("SELECT t.*, tt.*
-												   FROM $wpdb->terms AS t INNER JOIN $wpdb->term_taxonomy AS tt ON t.term_id = tt.term_id
-												   WHERE tt.taxonomy IN (%s) ORDER BY " . esc_sql('t.' . $order_by) . ' ' . $order . ' ', $kb_category_taxonomy_name ) );
+		$result = $wpdb->get_results( $wpdb->prepare("SELECT t.*, tt.* " .
+												   " FROM $wpdb->terms AS t INNER JOIN $wpdb->term_taxonomy AS tt ON t.term_id = tt.term_id " .
+												   " WHERE tt.taxonomy = %s ORDER BY " . esc_sql( 't.' . $order_by ) . ' ' . esc_sql( $order ), $kb_category_taxonomy_name ) );
 		return isset($result) && is_array($result) ? $result : null;
 	}
 
@@ -194,7 +194,7 @@ class ASEA_Core_Utilities {
 			return null;
 		}
 
-		$categories = ! is_array( $post_taxonomy_objs ) ? array() : $post_taxonomy_objs;
+		$categories = $post_taxonomy_objs === null || ! is_array($post_taxonomy_objs) ? array() : $post_taxonomy_objs;
 
 		// convert to term objects
 		$categories_obj = [];

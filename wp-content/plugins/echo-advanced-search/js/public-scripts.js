@@ -95,7 +95,7 @@ jQuery(document).ready(function ($) {
 			asea_kb_id: $('#asea_kb_id').val(),
 			search_categories: categories.join(',') || [],
 			search_words: request.term,
-			is_kb_main_page: $('.eckb_search_on_main_page').length
+			is_kb_main_page: $('.eckb_search_on_main_page').length ? 1 : 0
 		};
 
 		if( $('#asea_seq_id').length ){

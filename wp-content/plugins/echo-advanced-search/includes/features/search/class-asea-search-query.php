@@ -256,7 +256,7 @@ class ASEA_Search_Query {
 
 		// NEW installation:
 		// - in SQL for logged-in users select only those articles which they are allowed to see
-		} else if ( ASEA_Utilities::is_new_user( '7.4.0' ) && is_user_logged_in() ) {
+		} else if ( is_user_logged_in() ) {
 			$where_post_status .= current_user_can( 'read_private_posts' )
 					? " OR wp.post_status = 'private' "
 					: " OR ( wp.post_status = 'private' AND wp.post_author = " . get_current_user_id() . " ) ";
@@ -460,7 +460,7 @@ class ASEA_Search_Query {
 
 		// NEW installation:
 		// - in SQL for logged-in users select only those articles which they are allowed to see
-		} else if ( ASEA_Utilities::is_new_user( '7.4.0' ) && is_user_logged_in() ) {
+		} else if ( is_user_logged_in() ) {
 			$where_post_status .= current_user_can( 'read_private_posts' )
 				? " OR p.post_status = 'private' "
 				: " OR ( p.post_status = 'private' AND p.post_author = " . get_current_user_id() . " ) ";
@@ -482,11 +482,10 @@ class ASEA_Search_Query {
 								FROM {$wpdb->prefix}term_taxonomy " .
 			                    $where . $limit;
 
-			$sql = $wpdb->prepare( $sql, $search_keyword );
-			$this->audit( 'sql (tags)', $sql );
+			$this->audit( 'sql (tags)', $wpdb->prepare( $sql, $search_keyword ) );
 
-			$result = $wpdb->get_results( $sql );
-			if ( ! empty($wpdb->last_error) || $result === null ) {
+			$result = $wpdb->get_results( $wpdb->prepare( $sql, $search_keyword ) );
+			if ( ! empty( $wpdb->last_error ) || $result === null ) {
 				ASEA_Logging::add_log( "DB failure: " . $wpdb->last_error );
 				return false;
 			}

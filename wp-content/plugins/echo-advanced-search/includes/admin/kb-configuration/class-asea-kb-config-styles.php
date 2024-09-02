@@ -76,6 +76,7 @@ class ASEA_KB_Config_Styles {
 	public static function get_default_box_styles( $pix ) {
 		return array(
 			//Setup Settings ------------------------------------------/
+			'advanced_search_' . $pix . '_visibility' =>  'off',
 
 			//Container Settings
 			'advanced_search_' . $pix . '_box_padding_top' =>  50,

@@ -44,6 +44,10 @@ class ASEA_KB_Editor_Main_Page_Config {
 			],
 
 			// Features Tab
+			'advanced_search_mp_visibility' => [
+				'editor_tab' => self::EDITOR_TAB_FEATURES,
+				'reload' => 1
+			],
 
 			// search box width style (boxed, full) in KB Core
 			'width' => [    // search box width
@@ -201,6 +205,9 @@ class ASEA_KB_Editor_Main_Page_Config {
 				'title'     =>  __( 'Advanced Search Box', 'echo-advanced-search'),
 				'classes'   => '#asea-doc-search-container',
 				'settings'  => $settings,
+				'disabled_settings' => [
+					'advanced_search_mp_visibility' => 'on'
+				],
 				'parent_zone_tab_title' => __( 'Advanced Search Box', 'echo-advanced-search' ),
 			]];
 	}
