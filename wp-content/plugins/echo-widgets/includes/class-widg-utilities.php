@@ -1241,18 +1241,6 @@ class WIDG_Utilities {
 	}
 
 	/**
-	 * Check first installed version. Return true if $version less or equal than first installed version. Also return true if epkb_version_first was removed. Use to apply some functions only to new users
-	 * for the NEW install return true
-	 * @param $version
-	 * @return bool
-	 */
-	public static function is_new_user( $version ) {
-		$plugin_first_version = self::get_wp_option( 'epkb_version_first', $version );      // TODO replace with $kb_config['first_plugin_version']
-		return ! version_compare( $plugin_first_version, $version, '<' );
-	}
-
-
-	/**
 	 * Output inline CSS style based on configuration.
 	 *
 	 * @param string $styles A list of Configuration Setting styles

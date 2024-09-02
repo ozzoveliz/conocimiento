@@ -3,7 +3,7 @@
  * Plugin Name: KB - Widgets
  * Plugin URI: https://www.echoknowledgebase.com/wordpress-add-ons/
  * Description: This Widget extension lets you place KB Widgets, Shortcodes and Sidebars anywhere on your website.
- * Version: 2.0.1
+ * Version: 2.0.2
  * Author: Echo Plugins
  * Author URI: https://www.echoknowledgebase.com
  * Text Domain: echo-widgets
@@ -41,7 +41,7 @@ final class Echo_Widgets {
 	/* @var Echo_Widgets */
 	private static $instance;
 
-	public static $version = '2.0.1';
+	public static $version = '2.0.2';
 	public static $plugin_dir;
 	public static $plugin_url;
 	public static $plugin_file = __FILE__;
