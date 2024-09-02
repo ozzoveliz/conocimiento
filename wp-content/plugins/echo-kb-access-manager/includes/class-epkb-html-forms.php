@@ -26,7 +26,7 @@ class EPKB_HTML_Forms {
 	 * @param array $args
 	 * @param bool $return_html
 	 *
-	 * @return false|string|void
+	 * @return false|string
 	 */
 	public static function notification_box_popup( array $args = array(), $return_html=false ) {
 
@@ -34,7 +34,7 @@ class EPKB_HTML_Forms {
 		switch ( $args['type']) {
 			case 'error':   $icon = 'epkbfa-exclamation-triangle';
 				break;
-			case 'error-no-icon':   $icon = '';
+			case 'error-no-icon':
 				break;
 			case 'success': $icon = 'epkbfa-check-circle';
 				break;
@@ -199,12 +199,11 @@ class EPKB_HTML_Forms {
 	public static function notification_box_middle( array $args = array(), $return_html=false ) {
 
 		$icon = '';
-		switch ( $args['type']) {
+		$box_type = isset( $args['type'] ) ? $args['type'] : 'info';
+		switch ( $box_type ) {
 			case 'error':   $icon = 'epkbfa-exclamation-triangle';
 				break;
-				break;
 			case 'success': $icon = 'epkbfa-check-circle';
-				break;
 				break;
 			case 'warning': $icon = 'epkbfa-exclamation-circle';
 				break;
@@ -220,7 +219,7 @@ class EPKB_HTML_Forms {
 			ob_start();
 		}        ?>
 
-		<div <?php echo isset( $args['id'] ) ? 'id="' . esc_attr( $args['id'] ) . '"' : ''; ?> class="epkb-notification-box-middle <?php echo 'epkb-notification-box-middle--' . esc_attr( $args['type'] ); ?>">
+		<div <?php echo isset( $args['id'] ) ? 'id="' . esc_attr( $args['id'] ) . '"' : ''; ?> class="epkb-notification-box-middle <?php echo 'epkb-notification-box-middle--' . esc_attr( $box_type ); ?>">
 
 			<div class="epkb-notification-box-middle__icon">
 				<div class="epkb-notification-box-middle__icon__inner epkbfa <?php echo esc_html( $icon ); ?>"></div>
@@ -294,16 +293,15 @@ class EPKB_HTML_Forms {
 		global $EZSQL_ERROR;
 
 		if ( EPKB_Utilities::is_amag_on() && ! empty($EZSQL_ERROR) && is_array($EZSQL_ERROR) ) {
-			foreach ( $EZSQL_ERROR as $error ){
+			foreach ( $EZSQL_ERROR as $error ) {
 				$amgr_tables = array("amgr_access_kb_categories", "amgr_access_read_articles", "amgr_access_read_categories", "amgr_kb_group_users", "amgr_kb_groups", "amgr_kb_public_groups");
 				foreach ( $amgr_tables as $table_name ) {
-					if ( !empty($error['error_str']) && strpos($error['error_str'], $table_name) !== false ) {
+					if ( ! empty( $error['error_str'] ) && strpos( $error['error_str'], $table_name ) !== false ) {
 						//LOG Only Access Manager Error
 						EPKB_Logging::add_log( 'Database error', $EZSQL_ERROR );
-						$message .= __( '. Database Error.', 'echo-knowledge-base' );
+						$message .= esc_html__( '. Database Error.', 'echo-knowledge-base' );
 					}
 				}
-
 			}
 		}
 
@@ -394,22 +392,37 @@ class EPKB_HTML_Forms {
 	 * @param: string $args['show_close_btn']  ( Optional | Yes / No ) Default: No
 	 *
 	 */
-	public static function dialog_pro_feature_ad( $args ) { ?>
-		<div id="<?php echo esc_attr( $args[ 'id' ] ); ?>" class="epkb-dialog-pro-feature-ad">  <?php
-			echo self::pro_feature_ad_box( array(
-				'title'             => $args['title'],
-				'footer_desc'       => $args['footer_desc'] ?? '',
-				'list'              => $args['list'] ?? [],
-				'btn_text'          => $args['btn_text'] ?? '',
-				'btn_url'           => $args['btn_url'] ?? '',
-				'return_html'       => true,
-			) );
-			if ( ! empty( $args['show_close_btn'] ) && $args['show_close_btn'] === 'yes' ) { 		?>
-				<div class="epkb-dbf__close epkbfa epkbfa-times"></div>             <?php
-			} 		?>
+	public static function dialog_pro_feature_ad( $args ) {
+
+		$class = empty( $args['img_list'] ) ? 'epkb-dialog-pro-feature-ad' : 'epkb-dialog-pro-feature-ad2';		?>
+		
+		<div id="<?php echo esc_attr( $args[ 'id' ] ); ?>" class="<?php echo esc_attr( $class ); ?>">  <?php
+
+			if ( ! empty( $args['img_list'] ) ) {
+				self:: pro_feature_ad_box_with_images( array(
+					'title'             => $args['title'],
+					'footer_desc'       => $args['footer_desc'] ?? '',
+					'img_list'          => $args['img_list'] ?? [],
+					'btn_text'          => $args['btn_text'] ?? '',
+					'btn_url'           => $args['btn_url'] ?? '',
+				) );
+			} else {
+				self::pro_feature_ad_box( array(
+					'title'             => $args['title'],
+					'footer_desc'       => $args['footer_desc'] ?? '',
+					'list'              => $args['list'] ?? [],
+					'btn_text'          => $args['btn_text'] ?? '',
+					'btn_url'           => $args['btn_url'] ?? '',
+				) );
+				if ( ! empty( $args['show_close_btn'] ) && $args['show_close_btn'] === 'yes' ) { 		?>
+					<div class="epkb-dbf__close epkbfa epkbfa-times"></div>             <?php
+				}
+			} 			?>
+
 		</div>
 		<div class="epkb-dialog-pro-feature-ad-black-background"></div>		<?php
 	}
+
 
 
 	/********************************************************************************
@@ -523,7 +536,7 @@ class EPKB_HTML_Forms {
 	 */
 	public static function advertisement_ad_box( $args ) {
 
-		if ( isset( $args['return_html'] ) ) {
+		if ( $args['return_html'] ) {
 			ob_start();
 		}
 
@@ -574,7 +587,7 @@ class EPKB_HTML_Forms {
 			</div>
 		</div>	<?php
 
-		if ( isset( $args['return_html'] ) ) {
+		if ( $args['return_html'] ) {
 			return ob_get_clean();
 		}
 
@@ -604,7 +617,7 @@ class EPKB_HTML_Forms {
 	 */
 	public static function pro_feature_ad_box( $args ) {
 
-		if ( isset( $args['return_html'] ) ) {
+		if ( ! empty( $args['return_html'] ) ) {
 			ob_start();
 		}
 		$allowed_tags = array(
@@ -618,22 +631,22 @@ class EPKB_HTML_Forms {
 		<div<?php echo empty( $args['id'] ) ? '' : ' id="' . esc_attr( $args['id'] ) . '"'; ?> class="epkb-admin-pro-feature-ad-container <?php echo esc_attr( $args['class'] ); ?>">
 
 			<div class="epkb-admin-ad-icon">
-				<img src="<?php echo Echo_Knowledge_Base::$plugin_url . 'img/ad/' . 'kb-pro-icon.png'; ?>">
+				<img src="<?php echo esc_url( Echo_Knowledge_Base::$plugin_url . 'img/ad/' . 'kb-pro-icon.png' ); ?>">
 			</div>
 
-			<!----- Header ----->
-			<?php if ( !empty( $args['title'] ) ) { ?>
-			<div class="epkb-aa__header-container">
-				<div class="epkb-header__title"><?php echo wp_kses( $args['title'] , $allowed_tags ); ?></div>
-			</div>
-			<?php } ?>
+			<!----- Header ----->			<?php
+			if ( !empty( $args['title'] ) ) { ?>
+				<div class="epkb-aa__header-container">
+					<div class="epkb-header__title"><?php echo wp_kses( $args['title'] , $allowed_tags ); ?></div>
+				</div>			<?php
+			} ?>
 
 			<!----- Body ------->
-			<div class="epkb-aa__body-container">
+			<div class="epkb-aa__body-container">				<?php
 
-				<?php if ( !empty( $args['desc'] ) ) { ?>
-					<p class="epkb-body__desc"><?php echo esc_html( $args['desc'] ); ?></p>
-				<?php } ?>
+				if ( !empty( $args['desc'] ) ) { ?>
+					<p class="epkb-body__desc"><?php echo esc_html( $args['desc'] ); ?></p>				<?php
+				} ?>
 
 				<ul class="epkb-body__check-mark-list-container">					<?php
 					if ( $args['list'] ) {
@@ -649,10 +662,10 @@ class EPKB_HTML_Forms {
 			</div>
 
 			<!----- Footer ----->
-			<div class="epkb-aa__footer-container">
-				<?php if ( !empty( $args['footer_desc'] ) ) { ?>
-					<p class="epkb-body__footer_desc"><?php echo esc_html( $args['footer_desc'] ); ?></p>
-				<?php }
+			<div class="epkb-aa__footer-container">				<?php
+				if ( !empty( $args['footer_desc'] ) ) { ?>
+					<p class="epkb-body__footer_desc"><?php echo esc_html( $args['footer_desc'] ); ?></p>				<?php
+				}
 
 				if ( $args['btn_text'] ) { ?>
 					<a href="<?php echo esc_url( $args['btn_url'] ); ?>" class="epkb-btn" target="_blank" ><?php echo esc_html( $args['btn_text'] ); ?></a>				<?php
@@ -660,13 +673,110 @@ class EPKB_HTML_Forms {
 
 			</div>
 
-			<img src="<?php echo Echo_Knowledge_Base::$plugin_url . 'img/ad/' . 'kb-pro-background.jpg'; ?>" class="epkb-admin-pro-feature-ad-background-img" alt="">
+			<img src="<?php echo esc_url( Echo_Knowledge_Base::$plugin_url . 'img/ad/' . 'kb-pro-background.jpg' ); ?>" class="epkb-admin-pro-feature-ad-background-img" alt="">
 		</div>	<?php
 
-		if ( isset( $args['return_html'] ) ) {
+		if ( ! empty( $args['return_html'] ) ) {
 			return ob_get_clean();
 		}
 
+		return '';
+	}
+
+	/**
+	 * Pro Feature Advertisement Box with 6 featured images.
+	 * This box will have a title, image, either a description or list a button and more info link.
+	 * $values:
+	 *
+	 * CSS ---------------------------------------------------------------
+	 * @param: string $args['id']              ( Optional ) Container ID, used for targeting with other JS
+	 * @param: string $args['class']           ( Optional ) Container CSS, used for targeting with CSS
+	 *
+	 *
+	 * CONTENT ------------------------------------------------------------
+	 * @param: string $args['title']           ( Required ) The text title
+	 * @param: string $args['desc']            ( Optional ) Paragraph Text at the top.
+	 * @param: string $args['footer_desc']     ( Optional ) Paragraph Text at the bottom.
+	 * @param: array  $args['list']            ( Optional ) array() of list items.
+	 * @param: string $args['btn_text']        ( Optional ) Button Text
+	 * @param: string $args['btn_url']         ( Optional ) Button URL
+	 *
+	 *
+	 * @return false|string
+	 */
+	public static function pro_feature_ad_box_with_images( $args ) {
+
+		if ( ! empty( $args['return_html'] ) ) {
+			ob_start();
+		}
+		$allowed_tags = array(
+			'strong'  => array(),
+			'i'       => array(),
+			'br'      => array(),
+		);
+
+		$args = EPKB_HTML_Elements::add_defaults( $args );		?>
+
+		<div<?php echo empty( $args['id'] ) ? '' : ' id="' . esc_attr( $args['id'] ) . '"'; ?> class="epkb-admin-pro-feature-ad2-container <?php echo esc_attr( $args['class'] ); ?>">
+
+			<!----- Header ----->
+			<div class="epkb-aa__header-container">				<?php
+
+				if ( ! empty( $args['title'] ) ) { ?>
+					<div class="epkb-feature-header__title">
+						<h4><?php echo wp_kses( $args['title'] , $allowed_tags ); ?></h4>
+					</div>				<?php
+				} ?>
+
+			</div>
+
+			<!----- Body ------->
+			<div class="epkb-aa__body-container">
+
+				<div class="epkb-feature-list-container">					<?php
+
+					if ( ! empty( $args['img_list'] ) ) {
+						foreach ( $args['img_list'] as $index => $item ) { ?>
+
+							<div class="epkb-feature-container <?php echo $index === 0 ? 'epkb-feature--active' : ''; ?>">
+
+								<div class="epkb-feature-previous epkbfa ep_font_icon_arrow_carrot_left"></div>
+								<div class="epkb-feature-next ep_font_icon_arrow_carrot_right"></div>
+
+								<!-- Image -->
+								<div class="epkb-feature-img">    <?php
+									echo '<img class="epkb-featured-img-url" src="' . esc_html( $item[3] ) . '" >'; ?>
+								</div>
+
+								<div class="epkb-feature-footer">
+
+									<!-- Description -->
+									<div class="epkb-feature-footer__desc">
+										<p><?php echo esc_html( $item[1] ); ?></p>
+									</div>
+									<!-- Button -->
+									<div class="epkb-feature-footer__btn-container">										<?php
+										echo '<a href="'.esc_url( $item[2] ).'" class="epkb-view-demo-btn" target="_blank">' . esc_html( $item[0] ) . '</a>';
+
+										if ( $args['btn_text'] ) { ?>
+											<a href="<?php echo esc_url( $args['btn_url'] ); ?>" class="epkb-buy-btn" target="_blank" ><?php echo esc_html( $args['btn_text'] ); ?></a>				<?php
+										} ?>
+									</div>
+								</div>
+
+							</div>							<?php
+						}
+					} ?>
+
+				</div>
+			</div>
+
+		</div>	<?php
+
+		if ( ! empty( $args['return_html'] ) ) {
+			return ob_get_clean();
+		}
+		
 		return '';
 	}
 
@@ -740,7 +850,7 @@ class EPKB_HTML_Forms {
 		}   ?>
 
 		<!-- Admin Box -->
-		<div class="epkb-admin__boxes-list__box <?php echo $box_options['class']; ?>">  <?php
+		<div class="epkb-admin__boxes-list__box <?php echo esc_attr( $box_options['class'] ); ?>">  <?php
 
 			// Display header
 			if ( ! empty( $box_options['title'] ) ){    ?>
@@ -766,7 +876,7 @@ class EPKB_HTML_Forms {
 
 				// Display HTML Content
 				$box_options['extra_tags'] = isset( $box_options['extra_tags'] ) ? $box_options['extra_tags'] : array();   ?>
-				<div class="epkb-admin__boxes-list__box__content"><?php echo EPKB_Utilities::admin_ui_wp_kses( $box_options['html'], $box_options['extra_tags'] ); ?></div>
+				<div class="epkb-admin__boxes-list__box__content"><?php echo EPKB_Utilities::admin_ui_wp_kses( $box_options['html'], $box_options['extra_tags'] ); //phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped  ?></div>
 
 			</div>
 
@@ -812,10 +922,10 @@ class EPKB_HTML_Forms {
 		ob_start(); ?>
 
 		<div class="epkb-kbnh__feature-container__col epkb-kbnh__feature__icon-col"><span
-				class="<?php echo $feature['icon']; ?>"></span></div>
+				class="<?php echo esc_attr( $feature['icon'] ); ?>"></span></div>
 
 		<div class="epkb-kbnh__feature-container__col epkb-kbnh__feature__content-col">
-			<h3 class="epkb-kbnh__feature-name <?php echo $feature['title_class']; ?>"><?php echo esc_html( $feature['title'] ); ?> <?php
+			<h3 class="epkb-kbnh__feature-name <?php echo esc_attr( $feature['title_class'] ); ?>"><?php echo esc_html( $feature['title'] ); ?> <?php
 				// Optional experimental label
 				if ( ! empty( $feature['experimental'] ) ) {   ?>
 					<div class="epkb-kbnh__feature-experimental"><?php
@@ -835,9 +945,10 @@ class EPKB_HTML_Forms {
 
 				// Action Button
 				if ( ! empty( $feature['button_id'] ) && ! empty( $feature['button_title'] ) ) { ?>
-					<button class="epkb-primary-btn" id="<?php echo $feature['button_id']; ?>" type="button"><?php echo esc_html( $feature['button_title'] ); ?></button> <?php
+					<button class="epkb-primary-btn" id="<?php echo esc_attr( $feature['button_id'] ); ?>" type="button"><?php echo esc_html( $feature['button_title'] ); ?></button> <?php
 				}
 
+				// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 				echo $feature['custom_links'];
 
 				// Link to Configure ( only if dedicated plugin is active and initial KB installation is completed )
@@ -876,7 +987,7 @@ class EPKB_HTML_Forms {
 			} else if ( $feature['plugin'] == 'ep'.'hd' && empty( $feature['hide_install_btn'] ) ) {
 				echo '<a class="epkb-kbnh__feature-status epkb-kbnh__feature--disabled epkb-success-btn" href="https://wordpress.org/plugins/help-dialog/" target="_blank"><span>' . esc_html__( 'Install Now', 'echo-knowledge-base' ) . '</span></a>';
 			} else if ( empty( $feature['hide_install_btn'] ) ) {
-				echo '<a class="epkb-kbnh__feature-status epkb-kbnh__feature--disabled epkb-success-btn" href="' . EPKB_Core_Utilities::get_plugin_sales_page( $feature['plugin'] ) . '" target="_blank"><span>' . esc_html__( 'Install Now', 'echo-knowledge-base' ) . '</span></a>';
+				echo '<a class="epkb-kbnh__feature-status epkb-kbnh__feature--disabled epkb-success-btn" href="' . esc_url( EPKB_Core_Utilities::get_plugin_sales_page( $feature['plugin'] ) ) . '" target="_blank"><span>' . esc_html__( 'Install Now', 'echo-knowledge-base' ) . '</span></a>';
 			} ?>
 
 		</div><?php
@@ -930,6 +1041,7 @@ class EPKB_HTML_Forms {
 			</thead>    <?php
 
 			// Items list body
+			//phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 			echo self::get_html_table_rows( $list_of_items, $item_primary_key, $item_column_fields, $item_row_fields, $item_optional_row_fields, $columns_count );    ?>
 
 			<!-- Items List No Results -->
@@ -948,7 +1060,7 @@ class EPKB_HTML_Forms {
 			<div class="epkb-admin__items-list__more-items-message">
 				<form>
 					<input type="hidden" name="page_number" value="1">   <?php
-					EPKB_HTML_Elements::submit_button_v2( __( 'See More', 'echo-knowledge-base' ), $load_more_action, 'epkb-admin__items-list__more-items-message__button', '', false );   ?>
+					EPKB_HTML_Elements::submit_button_v2( esc_html__( 'See More', 'echo-knowledge-base' ), $load_more_action, 'epkb-admin__items-list__more-items-message__button', '', false );   ?>
 				</form>
 			</div>  <?php
 		}

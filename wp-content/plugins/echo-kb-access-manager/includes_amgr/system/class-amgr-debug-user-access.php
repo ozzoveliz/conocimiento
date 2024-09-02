@@ -36,13 +36,13 @@ class AMGR_Debug_User_Access {
 				EPKB_HTML_Elements::checkbox_toggle( [
 					'id'            => self::AMGR_USER_ACCESS_DEBUG,
 					'name'          => self::AMGR_USER_ACCESS_DEBUG,
-					'text'          => __( 'Debugging', 'echo-knowledge-base' ),
+					'text'          => esc_html__( 'Debugging', 'echo-knowledge-base' ),
 					'textLoc'       => 'left',
 					'checked'       => (bool)$debug_user_access_id,
 				] );
 
 				EPKB_HTML_Elements::text( [
-					'label'         => __( 'Search User', 'echo-knowledge-base' ),
+					'label'         => esc_html__( 'Search User', 'echo-knowledge-base' ),
 					'name'          => 'amgr_debug_user_search',
 					'size'          => '50',
 					'max'           => '100',
@@ -53,17 +53,17 @@ class AMGR_Debug_User_Access {
 					'tooltip_args'  => [ 'open-icon' => 'info' ],
 				] ); ?>
 				<div class="epkb-input-group epkb-admin__user-field">
-					<label><?php esc_html_e( 'User ID', 'echo-knowledge-base' ); ?>:</label> <strong id="amgr_debug_user_id"><?php echo $debug_user_access_id; ?></strong>
+					<label><?php esc_html_e( 'User ID', 'echo-knowledge-base' ); ?>:</label> <strong id="amgr_debug_user_id"><?php esc_html_e( $debug_user_access_id, 'echo-knowledge-base' ); ?></strong>
 				</div>
 				<div class="epkb-input-group epkb-admin__user-field">
-					<label><?php esc_html_e( 'User Name', 'echo-knowledge-base' ); ?>:</label> <strong id="amgr_debug_user_name"><?php echo $user_name; ?></strong>
+					<label><?php esc_html_e( 'User Name', 'echo-knowledge-base' ); ?>:</label> <strong id="amgr_debug_user_name"><?php esc_html_e( $user_name, 'echo-knowledge-base' ); ?></strong>
 				</div>
 				<div class="epkb-input-group epkb-admin__user-field">
-					<label><?php esc_html_e( 'User email', 'echo-knowledge-base' ); ?>:</label> <strong id="amgr_debug_user_email"><?php echo $user_email; ?></strong>
+					<label><?php esc_html_e( 'User email', 'echo-knowledge-base' ); ?>:</label> <strong id="amgr_debug_user_email"><?php esc_html_e( $user_email, 'echo-knowledge-base' ); ?></strong>
 				</div>
 			</section>
 			<section>				<?php
-				EPKB_HTML_Elements::submit_button_v2( __( 'Apply', 'echo-knowledge-base' ), 'amgr_enable_debug_user_access', '', '', true, '', 'epkb-primary-btn' );				?>
+				EPKB_HTML_Elements::submit_button_v2( esc_html__( 'Apply', 'echo-knowledge-base' ), 'amgr_enable_debug_user_access', '', '', true, '', 'epkb-primary-btn' );				?>
 			</section>
 		</div> <?php
 
@@ -79,7 +79,7 @@ class AMGR_Debug_User_Access {
 
 		$search = EPKB_Utilities::post( 'search' );
 		if ( empty( $search ) ) {
-			EPKB_Utilities::ajax_show_error_die( __( 'Wrong search request', 'echo-knowledge-base' ) );
+			EPKB_Utilities::ajax_show_error_die( esc_html__( 'Wrong search request', 'echo-knowledge-base' ) );
 		}
 
 		$user = get_user_by( 'login', $search );
@@ -97,11 +97,11 @@ class AMGR_Debug_User_Access {
 		}
 
 		if ( empty( $user ) ) {
-			EPKB_Utilities::ajax_show_error_die( __( 'User not found', 'echo-knowledge-base' ) );
+			EPKB_Utilities::ajax_show_error_die( esc_html__( 'User not found', 'echo-knowledge-base' ) );
 		}
 
 		// show success message
-		wp_die( json_encode( array( 'message' => EPKB_HTML_Forms::notification_box_bottom( __( 'User found', 'echo-knowledge-base' ) ), 'id' => $user->ID, 'name' => $user->display_name, 'email' => $user->user_email ) ) );
+		wp_die( wp_json_encode(  array( 'message' => EPKB_HTML_Forms::notification_box_bottom( esc_html__( 'User found', 'echo-knowledge-base' ) ), 'id' => $user->ID, 'name' => $user->display_name, 'email' => $user->user_email ) ) );
 	}
 
 	/**
@@ -114,21 +114,21 @@ class AMGR_Debug_User_Access {
 		$enable = EPKB_Utilities::post( 'enable' );
 		if ( $enable != '1' ) {
 			delete_transient( self::AMGR_USER_ACCESS_DEBUG );
-			EPKB_Utilities::ajax_show_info_die( __( 'Disabled User Access Debugging', 'echo-knowledge-base' ) );
+			EPKB_Utilities::ajax_show_info_die( esc_html__( 'Disabled User Access Debugging', 'echo-knowledge-base' ) );
 		}
 
 		$id = EPKB_Utilities::post( 'id' );
 		if ( empty( $id ) ) {
-			EPKB_Utilities::ajax_show_error_die( __( 'Invalid user ID', 'echo-knowledge-base' ) );
+			EPKB_Utilities::ajax_show_error_die( esc_html__( 'Invalid user ID', 'echo-knowledge-base' ) );
 		}
 
 		$user = get_user_by( 'id', $id );
 		if ( empty( $user ) ) {
-			EPKB_Utilities::ajax_show_error_die( __( 'User not found', 'echo-knowledge-base' ) );
+			EPKB_Utilities::ajax_show_error_die( esc_html__( 'User not found', 'echo-knowledge-base' ) );
 		}
 
 		set_transient( self::AMGR_USER_ACCESS_DEBUG, $id, HOUR_IN_SECONDS );
 
-		EPKB_Utilities::ajax_show_info_die( __( 'Enabled User Access Debugging for one hour', 'echo-knowledge-base' ) );
+		EPKB_Utilities::ajax_show_info_die( esc_html__( 'Enabled User Access Debugging for one hour', 'echo-knowledge-base' ) );
 	}
 }

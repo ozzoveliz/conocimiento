@@ -122,7 +122,7 @@ class EPKB_KB_Config_Controller {
 		ob_start();
 
 		EPKB_HTML_Elements::custom_dropdown( [
-			'label' => __( 'Font Family', 'echo-knowledge-base' ),
+			'label' => esc_html__( 'Font Family', 'echo-knowledge-base' ),
 			'name' => 'general_typography_font_family',
 			'specs' => '',
 			'value' => $active_font_family,
@@ -150,13 +150,13 @@ class EPKB_KB_Config_Controller {
 		}
 
 		// verify that request is authentic
-		if ( ! isset( $_REQUEST['_wpnonce_epkb_ajax_action'] ) || ! wp_verify_nonce( $_REQUEST['_wpnonce_epkb_ajax_action'], '_wpnonce_epkb_ajax_action' ) ) {
+		if ( ! isset( $_REQUEST['_wpnonce_epkb_ajax_action'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_REQUEST['_wpnonce_epkb_ajax_action'] ) ), '_wpnonce_epkb_ajax_action' ) ) {
 			return [ 'error' => EPKB_Utilities::report_generic_error( 1 ) ];
 		}
 
 		// only admin user can handle these actions
 		if ( ! current_user_can( 'manage_options' ) ) {
-			return [ 'error' => __( 'You do not have permission.', 'echo-knowledge-base' ) ];
+			return [ 'error' => esc_html__( 'You do not have permission.', 'echo-knowledge-base' ) ];
 		}
 
 		if ( $action == 'enable_editor_backend_mode' ) {
@@ -166,7 +166,7 @@ class EPKB_KB_Config_Controller {
 				return [ 'error' => EPKB_Utilities::report_generic_error( 1 ) ];
 			}
 
-			return [ 'success' => __( 'Backend visual Editor enabled', 'echo-knowledge-base' ) ];
+			return [ 'success' => esc_html__( 'Backend visual Editor enabled', 'echo-knowledge-base' ) ];
 		}
 
 		// retrieve KB ID we are saving
@@ -218,7 +218,7 @@ class EPKB_KB_Config_Controller {
 
 		// ensure that user has correct permissions
 		if ( ! EPKB_Admin_UI_Access::is_user_access_to_context_allowed( 'admin_eckb_access_frontend_editor_write' ) ) {
-			EPKB_Utilities::ajax_show_error_die( __( 'You do not have permission to edit this knowledge base', 'echo-knowledge-base' ) );
+			EPKB_Utilities::ajax_show_error_die( esc_html__( 'You do not have permission to edit this knowledge base', 'echo-knowledge-base' ) );
 		}
 
 		$kb_id = (int)EPKB_Utilities::post( 'epkb_kb_id', 0 );
@@ -229,16 +229,32 @@ class EPKB_KB_Config_Controller {
 		// get new KB configuration
 		$new_config = EPKB_Utilities::post( 'kb_config', [], 'db-config-json' );
 		if ( empty( $new_config ) ) {
-			EPKB_Utilities::ajax_show_error_die( __( 'Invalid parameters. Please refresh your page.', 'echo-knowledge-base' ) );
+			EPKB_Utilities::ajax_show_error_die( esc_html__( 'Invalid parameters. Please refresh your page.', 'echo-knowledge-base' ) );
 		}
 
 		// prepare article sidebar component priority
 		$article_sidebar_component_priority = array();
 		foreach( EPKB_KB_Config_Specs::get_sidebar_component_priority_names() as $component ) {
-			if ( isset( $new_config[$component] ) ) {
-				$article_sidebar_component_priority[$component] = sanitize_text_field( $new_config[$component] );
+			$article_sidebar_component_priority[ $component ] = '0';
+
+			// set component priority
+			foreach ( [ '_left', '_right' ] as $sidebar_suffix ) {
+
+				// Categories and Articles Navigation
+				if ( $component == 'nav_sidebar' . $sidebar_suffix && isset( $new_config[ 'nav_sidebar' . $sidebar_suffix ] ) && $new_config[ 'nav_sidebar' . $sidebar_suffix ] > 0 ) {
+					$article_sidebar_component_priority[ $component ] = sanitize_text_field( $new_config[ 'nav_sidebar' . $sidebar_suffix ] );
+
+				// Widgets from KB Sidebar
+				} else if ( $component == 'kb_sidebar' . $sidebar_suffix && isset( $new_config[ 'kb_sidebar' . $sidebar_suffix ] ) && $new_config[ 'kb_sidebar' . $sidebar_suffix ] > 0 ) {
+					$article_sidebar_component_priority[ $component ] = sanitize_text_field( $new_config[ 'kb_sidebar' . $sidebar_suffix ] );
+
+				// Table of Contents ( TOC )
+				} else if ( $component == 'toc' . $sidebar_suffix && isset( $new_config[ 'toc' . $sidebar_suffix ] ) && $new_config[ 'toc' . $sidebar_suffix ] > 0 ) {
+					$article_sidebar_component_priority[ $component ] = sanitize_text_field( $new_config[ 'toc' . $sidebar_suffix ] );
+				}
 			}
 		}
+		$article_sidebar_component_priority['toc_content'] = sanitize_text_field( $new_config['toc_content'] );
 		$new_config['article_sidebar_component_priority'] = $article_sidebar_component_priority;
 
 		EPKB_Core_Utilities::start_update_kb_configuration( $kb_id, $new_config );

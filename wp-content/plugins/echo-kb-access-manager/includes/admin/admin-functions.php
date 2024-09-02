@@ -3,8 +3,7 @@
 /*** GENERIC NON-KB functions  ***/
 
 /**
- * When page is added/updated, check if it contains KB main page shortcode. If it does,
- * add the page to KB config.
+ * When page is added/updated, check if it contains KB main page shortcode. If it does, add the page to KB config.
  *
  * @param int     $post_id Post ID.
  * @param WP_Post $post    Post object.
@@ -12,16 +11,16 @@
 function epkb_add_main_page_if_required( $post_id, $post ) {
 
 	// ignore autosave/revision which is not article submission; same with ajax and bulk edit
-	if ( ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) || wp_is_post_autosave( $post_id ) || ( defined( 'DOING_AJAX') && DOING_AJAX ) || isset( $_REQUEST['bulk_edit'] ) || empty($post->post_status) ) {
+	if ( ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) || wp_is_post_autosave( $post_id ) || ( defined( 'DOING_AJAX') && DOING_AJAX ) || isset( $_REQUEST['bulk_edit'] ) || empty( $post->post_status ) ) {
 		return;
 	}
 
-	// only interested in pages that were deleted, or published, or restored (can be restored to draft or to publish)
-	if ( ! in_array( $post->post_status, array( 'inherit', 'trash', 'draft', 'publish', 'private' ) ) || $post->post_type == 'post' ) {
+	// ignore posts, block templates and articles; only interested in pages that were deleted, or published, or restored (can be restored to draft or to publish)
+	if ( in_array( $post->post_type, ['post', 'wp_template'] ) || EPKB_KB_Handler::is_kb_post_type( $post->post_type ) || ! in_array( $post->post_status, array( 'trash', 'draft', 'publish', 'private' ) ) ) {
 		return;
 	}
 
-	// return if this page does not have KB shortcode or error occurred
+	// return if this page does not have KB shortcode or error occurred; we remove old pages elsewhere
 	$kb_id = EPKB_KB_Handler::get_kb_id_from_kb_main_shortcode( $post );
 	if ( empty( $kb_id ) ) {
 		return;
@@ -30,7 +29,6 @@ function epkb_add_main_page_if_required( $post_id, $post ) {
 	// get KB main pages
 	$kb_main_pages = epkb_get_instance()->kb_config_obj->get_value( $kb_id, 'kb_main_pages' );
 	if ( ! is_array( $kb_main_pages ) ) {
-		EPKB_Logging::add_log( 'Could not update KB Main Pages (2)', $kb_id );
 		return;
 	}
 
@@ -40,91 +38,24 @@ function epkb_add_main_page_if_required( $post_id, $post ) {
 			return;
 		}
 		unset( $kb_main_pages[$post_id] );
-		$result = epkb_get_instance()->kb_config_obj->set_value( $kb_id, 'kb_main_pages', $kb_main_pages );
-		if ( is_wp_error( $result ) ) {
-			EPKB_Logging::add_log( 'Could not update KB Main Pages', $kb_id );
-			return;
-		}
+		epkb_get_instance()->kb_config_obj->set_value( $kb_id, 'kb_main_pages', $kb_main_pages );
+		return;
 	}
 
-	// don't update if the page is stored with same title
+	// don't update if the page is stored with the same title
 	if ( in_array( $post_id, array_keys( $kb_main_pages ) ) && $kb_main_pages[$post_id] == $post->post_title ) {
 		return;
 	}
 
-	// prepend the page if it is marked as the current active KB Main Page
-	$is_current_active_kb_main_page = get_post_meta( $post_id, 'is_active_kb_main_page', true );
-	if ( ! empty( $is_current_active_kb_main_page ) ) {
-		unset( $kb_main_pages[$post_id] );
-		$kb_main_pages = array( $post_id => $post->post_title ) + $kb_main_pages;
-		delete_post_meta( $post_id, 'is_active_kb_main_page' );
-
-	// append the page if it is not marked as the current active KB Main Page
-	} else {
-		$kb_main_pages[$post_id] = $post->post_title;
-	}
+	$kb_main_pages[$post_id] = $post->post_title;
 
 	// sanitize and save configuration in the database.
 	$result = epkb_get_instance()->kb_config_obj->set_value( $kb_id, 'kb_main_pages', $kb_main_pages );
 	if ( is_wp_error( $result ) ) {
-		EPKB_Logging::add_log('Could not update KB Main Pages', $kb_id);
 		return;
 	}
 }
 add_action( 'save_post', 'epkb_add_main_page_if_required', 10, 2 );
-
-/**
- * Remove page from KB Main Pages list if KB shortcode was removed from its content
- *
- * @param $post_id
- * @param $post_after
- * @param $post_before
- */
-function epkb_remove_kb_main_page_if_required( $post_id, $post_after, $post_before ) {
-
-	// ignore autosave/revision which is not article submission; same with ajax and bulk edit
-	if ( ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) || wp_is_post_autosave( $post_id ) || ( defined( 'DOING_AJAX') && DOING_AJAX ) || isset( $_REQUEST['bulk_edit'] ) || empty($post_before->post_status) ) {
-		return;
-	}
-
-	// return if this page did not have KB shortcode
-	$kb_id_before = EPKB_KB_Handler::get_kb_id_from_kb_main_shortcode( $post_before );
-	if ( empty( $kb_id_before ) ) {
-		return;
-	}
-
-	// get KB main pages
-	$kb_main_pages = epkb_get_instance()->kb_config_obj->get_value( $kb_id_before, 'kb_main_pages' );
-	if ( ! is_array( $kb_main_pages ) ) {
-		EPKB_Logging::add_log( 'Could not update KB Main Pages (2)', $kb_id_before );
-		return;
-	}
-
-	// don't update if the current page is not present in KB main pages list
-	if ( ! in_array( $post_id, array_keys( $kb_main_pages ) ) ) {
-		return;
-	}
-
-	// check if the page is the current active KB Main Page
-	$kb_config = epkb_get_instance()->kb_config_obj->get_kb_config( $kb_id_before );
-	$slug_before = EPKB_Core_Utilities::get_main_page_slug_by_obj( $post_before );
-	delete_post_meta( $post_id, 'is_active_kb_main_page' );
-	if ( $slug_before == $kb_config['kb_articles_common_path'] ) {
-
-		// mark the page as active KB Main Page to prepend it later (to have it at the top of KB Main Pages list)
-		update_post_meta( $post_id, 'is_active_kb_main_page', 'yes' );
-	}
-
-	// update list of KB Main Pages
-	unset( $kb_main_pages[$post_id] );
-
-	// sanitize and save configuration in the database
-	$result = epkb_get_instance()->kb_config_obj->set_value( $kb_id_before, 'kb_main_pages', $kb_main_pages );
-	if ( is_wp_error( $result ) ) {
-		EPKB_Logging::add_log( 'Could not update KB Main Pages', $kb_id_before );
-	}
-}
-add_action( 'post_updated', 'epkb_remove_kb_main_page_if_required', 10, 3 );
 
 /**
  * If user changed slug for page with KB shortcode and we do not have matching Article Common Path then let user know.
@@ -135,6 +66,11 @@ function epkb_does_path_for_articles_need_update( $post_id, $post ) {
 	
 	// ignore autosave/revision which is not article submission; same with ajax and bulk edit
 	if ( ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) || wp_is_post_autosave( $post_id ) || ( defined( 'DOING_AJAX') && DOING_AJAX ) || isset( $_REQUEST['bulk_edit'] ) ) {
+		return;
+	}
+
+	// ignore posts and articles and non-published pages
+	if ( $post->post_type == 'post' || EPKB_KB_Handler::is_kb_post_type( $post->post_type ) || ! in_array( $post->post_status, array( 'publish', 'private' ) ) ) {
 		return;
 	}
 
@@ -186,17 +122,15 @@ function epkb_does_path_for_articles_need_update( $post_id, $post ) {
 	}
 
 	// check if the Article Common Path does not match anymore any of the KB Main Page paths
-	foreach( $kb_main_page_slugs as $kb_main_page_slug ) {
-		if ( $kb_config['kb_articles_common_path'] == $kb_main_page_slug ) {
-			return;
-		}
+	if ( in_array( $kb_config['kb_articles_common_path'], $kb_main_page_slugs ) ) {
+		return;
 	}
 
 	EPKB_Admin_Notices::remove_dismissed_ongoing_notice( $notice_id );
 	EPKB_Admin_Notices::add_ongoing_notice( 'warning', $notice_id,
 			__( 'We detected that your KB Main Page slug has changed. Please update slug for your articles for KB', 'echo-knowledge-base' ) . ' #' . $kb_config['id'] .
 	        ' <a class="epkb-admin__step-cta-box__link" data-target="kb-url" href="' . esc_url( admin_url( 'edit.php?post_type=epkb_post_type_' . $kb_config['id'] . '&page=epkb-kb-configuration#kb-url' ) ) . '">' .
-	        __( 'Update Slug here', 'echo-knowledge-base' ) . '</a> ' );
+	        esc_html__( 'Update Slug here', 'echo-knowledge-base' ) . '</a> ' );
 	
 }
 add_action( 'save_post', 'epkb_does_path_for_articles_need_update', 15, 2 );  // needs to run AFTER epkb_add_main_page_if_required()
@@ -213,7 +147,7 @@ function epkb_add_delete_kb_page_warning( $post_id ) {
 	}
 
 	// only interested in pages
-	if ( ! in_array( $post->post_status, array( 'inherit', 'trash', 'publish', 'private' ) ) || $post->post_type == 'post' ) {
+	if ( $post->post_type == 'post' || EPKB_KB_Handler::is_kb_post_type( $post->post_type ) || ! in_array( $post->post_status, array( 'inherit', 'trash', 'publish', 'private' ) ) ) {
 		return;
 	}
 
@@ -245,7 +179,7 @@ function epkb_add_delete_kb_page_warning( $post_id ) {
 	$main_page_slug = EPKB_Core_Utilities::get_main_page_slug( $post_id );
 	
 	if ( $kb_articles_common_path == $main_page_slug ) {
-		EPKB_Admin_Notices::add_one_time_notice( 'warning', sprintf( __( 'We detected that you deleted KB Main Page "%s". If you did this by accident you can restore here: ', 'echo-knowledge-base' ), $post->post_title ) .
+		EPKB_Admin_Notices::add_one_time_notice( 'warning', sprintf( esc_html__( 'We detected that you deleted KB Main Page "%s". If you did this by accident you can restore here: ', 'echo-knowledge-base' ), $post->post_title ) .
 		                                                    ' <a href="' . esc_url( admin_url( 'edit.php?post_status=trash&post_type=page' ) ) . '">' . esc_html__( 'Restore', 'echo-knowledge-base' ) . '</a> ' );
 	}
 }
@@ -254,20 +188,32 @@ add_action( 'wp_trash_post', 'epkb_add_delete_kb_page_warning', 15, 2 );
 // Add "KB Page" to the page's list 
 function epkb_add_post_state( $post_states, $post ) {
 
-	if ( empty($post->post_type) || $post->post_type != 'page' ) {
+	if ( empty( $post->post_type ) || empty( $post->ID ) || $post->post_type != 'page' ) {
 		return $post_states;
 	}
 
-	$kb_id = EPKB_KB_Handler::get_kb_id_from_kb_main_shortcode( $post );
-	if ( empty( $kb_id ) ) {
+	// start with default KB
+	$kb_config = get_option( EPKB_KB_Config_DB::KB_CONFIG_PREFIX . EPKB_KB_Config_DB::DEFAULT_KB_ID );
+	if ( empty( $kb_config ) || is_wp_error( $kb_config ) || empty( $kb_config['kb_main_pages'] ) || ! is_array( $kb_config['kb_main_pages'] ) ) {
 		return $post_states;
 	}
-	
-	$post_states[] = __( 'Knowledge Base Page', 'echo-knowledge-base' ) . ' #' . $kb_id;
-	
+
+	/* $all_kb_configs = epkb_get_instance()->kb_config_obj->get_kb_configs();
+	foreach ( $all_kb_configs as $one_kb_config ) {
+		if ( in_array( $post->ID, array_keys( $kb_main_pages ) ) ) {
+			$kb_id = $one_kb_config['id'];
+			$kb_name = $one_kb_config[ 'kb_name' ];
+			break;
+		}
+	} */
+
+	if ( in_array( $post->ID, array_keys( $kb_config['kb_main_pages'] ) ) ) {
+		$post_states[] = $kb_config[ 'kb_name' ] . ' [ ' . __( 'KB', 'echo-knowledge-base' ) . ' #' . EPKB_KB_Config_DB::DEFAULT_KB_ID . ' ]';
+	}
+
 	return $post_states;
 }
-// TODO what the impact is ? add_filter( 'display_post_states', 'epkb_add_post_state', 10, 2 );
+add_filter( 'display_post_states', 'epkb_add_post_state', 10, 2 );
 
 /**
  * Show notice about CREL
@@ -302,7 +248,7 @@ function epkb_crel_notice() {
 	}
 
 	$link = '<a href="' . esc_url( 'https://wordpress.org/plugins/creative-addons-for-elementor/' ) . '" target="_blank">' . esc_html__( 'Free Download', 'echo-knowledge-base' ) . '</a>';
-	$message = __( 'Hey, did you know that makers of the Echo Knowledge Page plugin developed free Elementor widgets to help you create amazing documentation? See more details about our Creative Addons here: ' , 'echo-knowledge-base' ) . ' ' . $link;
+	$message = esc_html__( 'Hey, did you know that makers of the Echo Knowledge Page plugin developed free Elementor widgets to help you create amazing documentation? See more details about our Creative Addons here: ' , 'echo-knowledge-base' ) . ' ' . $link;
 
 	EPKB_Admin_Notices::add_ongoing_notice( 'large-info',  'epkb_crel_notice',
 		$message,
@@ -312,7 +258,7 @@ function epkb_crel_notice() {
 }
 add_action( 'admin_init', 'epkb_crel_notice' );
 
-/*
+/**
  * Show notices about site builders
  */
 new EPKB_Site_Builders();

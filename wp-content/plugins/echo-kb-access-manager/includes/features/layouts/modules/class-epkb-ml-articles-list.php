@@ -19,7 +19,7 @@ class EPKB_ML_Articles_List {
 	 */
 	public function display_articles_list() { ?>
 
-		<div id="epkb-ml-article-list-<?php echo strtolower( $this->kb_config['kb_main_page_layout'] ); ?>-layout" class="epkb-ml-article-list-container">   <?php
+		<div id="epkb-ml-article-list-<?php echo esc_attr( strtolower( $this->kb_config['kb_main_page_layout'] ) ); ?>-layout" class="epkb-ml-article-list-container">   <?php
 
 			if ( $this->kb_config['ml_articles_list_title_location'] != 'none' ) { ?>
 				<h2 class="epkb-ml-articles-list__title"><?php echo esc_html( $this->kb_config['ml_articles_list_title_text'] ); ?></h2> <?php

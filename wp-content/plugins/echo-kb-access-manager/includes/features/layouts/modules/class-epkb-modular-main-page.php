@@ -13,8 +13,8 @@ class EPKB_Modular_Main_Page extends EPKB_Layout {
 	/**
 	 * Generate content of the KB main page
 	 */
-	public function generate_kb_main_page() { ?>
-		<div id="epkb-modular-main-page-container" role="main" aria-labelledby="epkb-modular-main-page-container" class="epkb-css-full-reset <?php echo EPKB_Utilities::get_active_theme_classes( 'mp' ); ?>">			<?php
+	public function generate_non_modular_kb_main_page() { ?>
+		<div id="epkb-modular-main-page-container" role="main" aria-labelledby="epkb-modular-main-page-container" class="epkb-css-full-reset <?php echo esc_attr( EPKB_Utilities::get_active_theme_classes() ); ?>">			<?php
 			$this->display_modular_container(); ?>
 		</div>   <?php
 	}
@@ -80,8 +80,14 @@ class EPKB_Modular_Main_Page extends EPKB_Layout {
 			return;
 		}
 
-		$layout = EPKB_Utilities::is_kb_main_page() ? $kb_config['ml_search_layout'] : $kb_config['ml_article_search_layout'];
-		$search_handler = new EPKB_ML_Search( $kb_config ); ?>
+		// Archive page styling is controlled by Main Page
+		// For Sidebar Layout the Article Page search is controlled by the search settings on the Main Page.
+		$is_sidebar_layout = $kb_config['kb_main_page_layout'] == EPKB_Layout::SIDEBAR_LAYOUT;
+		$layout = ( EPKB_Utilities::is_kb_main_page() || is_archive() || $is_sidebar_layout ) ? $kb_config['ml_search_layout'] : $kb_config['ml_article_search_layout'];
+
+		$search_handler = new EPKB_ML_Search( $kb_config );
+
+		EPKB_Core_Utilities::display_missing_css_message( $kb_config ); ?>
 
 		<div id="epkb-ml__module-search" class="epkb-ml__module">   <?php
 
@@ -109,7 +115,7 @@ class EPKB_Modular_Main_Page extends EPKB_Layout {
 			$categories_articles_sidebar_class = 'epkb-ml-cat-article-sidebar--active';
 		} ?>
 
-		<div id="epkb-ml__module-categories-articles" class="epkb-ml__module <?php echo $categories_articles_sidebar_class; ?>">  <?php
+		<div id="epkb-ml__module-categories-articles" class="epkb-ml__module <?php echo esc_attr( $categories_articles_sidebar_class ); ?>">  <?php
 
 			// Display Left Sidebar
 			if ( $this->kb_config['ml_categories_articles_sidebar_toggle'] == 'on' && $this->kb_config['ml_categories_articles_sidebar_location'] == 'left' ) {
@@ -154,10 +160,11 @@ class EPKB_Modular_Main_Page extends EPKB_Layout {
 				if ( $layout == EPKB_Layout::SIDEBAR_LAYOUT ) {
 					apply_filters( 'sidebar_display_categories_and_articles', $this->kb_config, $this->category_seq_data, $this->articles_seq_data, $this->sidebar_layout_content );
 				} else {
-					apply_filters(strtolower($layout) . '_display_categories_and_articles', $this->kb_config, $this->category_seq_data, $this->articles_seq_data );
+					apply_filters( strtolower( $layout ) . '_display_categories_and_articles', $this->kb_config, $this->category_seq_data, $this->articles_seq_data );
 				}
 				$layout_output = ob_get_clean();
 				if ( ! empty( $layout_output ) ) {
+					//phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 					echo $layout_output;
 				}
 			}
@@ -438,7 +445,6 @@ class EPKB_Modular_Main_Page extends EPKB_Layout {
 				EPKB_Layout::GRID_LAYOUT,
 			];
 
-			// TODO REMOVE
 			if ( ! in_array( $kb_config['ml_categories_articles_sidebar_desktop_width'], [25, 28, 30] ) ) {
 				$kb_config['ml_categories_articles_sidebar_desktop_width'] = EPKB_Upgrades::update_modular_sidebar_width( $kb_config );
 			}

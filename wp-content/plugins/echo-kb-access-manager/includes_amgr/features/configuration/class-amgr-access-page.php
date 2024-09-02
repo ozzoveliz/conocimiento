@@ -14,7 +14,7 @@ class AMGR_Access_Page {
 
 		// ensure user has correct permissions
 		if ( ! current_user_can('admin_eckb_access_manager_page') ) {
-			wp_die(__( 'You do not have permission to change access', 'echo-knowledge-base' ), 403 );
+			wp_die( esc_html__( 'You do not have permission to change access', 'echo-knowledge-base' ), 403 );
 		}
 
 		add_filter( 'eckb_hide_kb_tabs', array( $this, 'hide_kb_tabs' ) );
@@ -101,7 +101,7 @@ class AMGR_Access_Page {
 		               } else {
 		                  $level_name    = 'Error occurred';
 		               }                       ?>
-		               <div class="amgr-access-status-icon epkbfa <?php echo $icon . ' ' . $class; ?>"></div><span><?php echo $level_name; ?></span>
+		               <div class="amgr-access-status-icon epkbfa <?php echo esc_attr( $icon . ' ' . $class ); ?>"></div><span><?php echo esc_html( $level_name ); ?></span>
 
 		           </div>
 
@@ -197,7 +197,7 @@ class AMGR_Access_Page {
 		       </div>
 
 		      <form>
-		         <input type="hidden"  id="amag_kb_id" value="<?php echo esc_attr($this->kb_config['id']); ?>"/>
+		         <input type="hidden"  id="amag_kb_id" value="<?php echo esc_attr( $this->kb_config['id'] ); ?>"/>
 		         <input type="hidden" id="_wpnonce_amar_access_content_action_ajax" name="_wpnonce_amar_access_content_action_ajax"
 		                value="<?php echo wp_create_nonce( "_wpnonce_amar_access_content_action_ajax" ); ?>"/>
 		      </form>
@@ -228,7 +228,7 @@ class AMGR_Access_Page {
 
         <div class="callout callout_error">
             <h4><?php
-                $html->submit_button_v2( __( 'Clear Logs', 'echo-knowledge-base' ), 'amgr_reset_logs_ajax', '', '', true, '', 'amag-primary-btn' ); ?>
+                $html->submit_button_v2( esc_html__( 'Clear Logs', 'echo-knowledge-base' ), 'amgr_reset_logs_ajax', '', '', true, '', 'amag-primary-btn' ); ?>
             </h4>			<?php
 
 			$ix = 0;
@@ -266,13 +266,13 @@ class AMGR_Access_Page {
 			$active = ( $this->kb_config['id'] == $kb_id ? 'selected' : '' );
 			$tab_url = 'edit.php?post_type=' . EPKB_KB_Handler::KB_POST_TYPE_PREFIX . $kb_id . '&page=amag-access-mgr';
 
-			$list_output .= '<option value="' .$kb_id . '" ' . $active . ' data-kb-admin-url=' . esc_url($tab_url) . '>' . esc_html( $kb_name ) . '</option>';
+			$list_output .= '<option value="' . esc_attr( $kb_id ) . '" ' . esc_attr( $active ) . ' data-kb-admin-url=' . esc_url( $tab_url ) . '>' . esc_html( $kb_name ) . '</option>';
 			$list_output .= '</a>';
 		}
 
 		$list_output .= '</select>';
 
-		echo $list_output;
+		echo $list_output;  //phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 	}
 }
 

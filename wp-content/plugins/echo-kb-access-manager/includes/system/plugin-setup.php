@@ -46,7 +46,7 @@ function epkb_activate_plugin_do() {
 
 		// update KB versions
 		EPKB_Utilities::save_wp_option( 'epkb_version', Echo_Knowledge_Base::$version );
-		EPKB_Utilities::save_wp_option( 'epkb_version_first', Echo_Knowledge_Base::$version );
+		EPKB_Utilities::save_wp_option( 'epkb_version_first', Echo_Knowledge_Base::$version );  // TODO REMOVE end 2024
 	}
 
 	set_transient( '_amgr_plugin_activated', true, 3600 );

@@ -30,6 +30,6 @@ $tags_list = get_the_term_list( $article->ID, $taxonomy_name, '<ul class="eckb-t
 
 if ( ! is_wp_error( $tags_list ) && $tags_list ) {
 	echo '<div class="eckb-tag-container" ' . $tag_style1 . ' >';
-	printf( '<span class="eckb-tag-description">%1$s </span>%2$s', _x( 'Tags', 'Text used in front of tag names.', 'echo-knowledge-base' ) . ': ',	$tags_list );
+	printf( '<span class="eckb-tag-description">%1$s </span>%2$s', esc_html_x( 'Tags', 'Text used in front of tag names.', 'echo-knowledge-base' ) . ': ',	wp_kses_post( $tags_list ) );
 	echo '</div>';
 }

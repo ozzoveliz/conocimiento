@@ -3538,6 +3538,70 @@
         box-sizing: border-box;
         color: #fff;
         border: 1px solid #3e3e3e; }
+  .epkb-ai-help-sidebar .epkb-notification-box-middle {
+    padding: 10px !important;
+    display: flex;
+    border-left-width: 4px !important;
+    border-left-style: solid !important;
+    width: 100% -20px;
+    color: #000;
+    margin: 20px; }
+    .epkb-ai-help-sidebar .epkb-notification-box-middle .epkb-notification-box-middle__body__title {
+      color: #000000; }
+    .epkb-ai-help-sidebar .epkb-notification-box-middle .epkb-notification-box-middle__icon {
+      font-size: 30px;
+      margin-top: 6px; }
+      .epkb-ai-help-sidebar .epkb-notification-box-middle .epkb-notification-box-middle__icon .epkb-notification-box-middle__icon__inner {
+        padding: 0;
+        border-radius: 0; }
+    .epkb-ai-help-sidebar .epkb-notification-box-middle .epkb-notification-box-middle__body {
+      padding: 5px 20px; }
+      .epkb-ai-help-sidebar .epkb-notification-box-middle .epkb-notification-box-middle__body .epkb-notification-box-middle__body__title {
+        margin: 0 0 8px 0; }
+      .epkb-ai-help-sidebar .epkb-notification-box-middle .epkb-notification-box-middle__body .epkb-notification-box-middle__body__desc {
+        margin-bottom: 0;
+        line-height: 22px; }
+    .epkb-ai-help-sidebar .epkb-notification-box-middle .epkb-notification-box-middle__buttons-wrap {
+      text-align: center; }
+      .epkb-ai-help-sidebar .epkb-notification-box-middle .epkb-notification-box-middle__buttons-wrap .epkb-notification-box-middle__button-confirm {
+        padding: 10px 20px;
+        min-width: 100px;
+        height: auto;
+        font-size: 16px;
+        text-decoration: none;
+        display: inline-block;
+        background-color: #2EA3F2;
+        color: #fff;
+        text-align: center;
+        margin-top: 20px;
+        cursor: pointer; }
+  .epkb-ai-help-sidebar .epkb-notification-box-middle--success {
+    border-left-color: #78b956 !important;
+    background-color: #ddedd4 !important; }
+    .epkb-ai-help-sidebar .epkb-notification-box-middle--success .epkb-notification-box-middle__icon {
+      color: #78b956; }
+  .epkb-ai-help-sidebar .epkb-notification-box-middle--error {
+    border-left-color: #d95651 !important;
+    background-color: #f9e4e4 !important; }
+    .epkb-ai-help-sidebar .epkb-notification-box-middle--error .epkb-notification-box-middle__icon {
+      color: #d95651; }
+  .epkb-ai-help-sidebar .epkb-notification-box-middle--error-no-icon {
+    border-left-color: #d95651 !important;
+    background-color: #f9e4e4 !important; }
+    .epkb-ai-help-sidebar .epkb-notification-box-middle--error-no-icon .epkb-notification-box-middle__icon {
+      display: none; }
+    .epkb-ai-help-sidebar .epkb-notification-box-middle--error-no-icon .epkb-notification-box-middle__icon {
+      color: #d95651; }
+  .epkb-ai-help-sidebar .epkb-notification-box-middle--warning {
+    border-left-color: #F0BC71 !important;
+    background-color: #fff1dd !important; }
+    .epkb-ai-help-sidebar .epkb-notification-box-middle--warning .epkb-notification-box-middle__icon {
+      color: #F0BC71; }
+  .epkb-ai-help-sidebar .epkb-notification-box-middle--info {
+    border-left-color: #2EA3F2 !important;
+    background-color: #d6edfc !important; }
+    .epkb-ai-help-sidebar .epkb-notification-box-middle--info .epkb-notification-box-middle__icon {
+      color: #2EA3F2; }
 
 body:not(.is-fullscreen-mode) .epkb-ai-help-sidebar {
   top: 32px;

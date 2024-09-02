@@ -23,7 +23,7 @@ class AMGR_Access_Page_View_Articles {
 	public function ajax_update_tab_content( $kb_group_id ) {
 
 		if ( ! current_user_can('admin_eckb_access_manager_page') ) {
-			EPKB_Utilities::ajax_show_error_die( __( 'You do not have permission.', 'echo-knowledge-base' ) . ' (E88)' );
+			EPKB_Utilities::ajax_show_error_die( esc_html__( 'You do not have permission.', 'echo-knowledge-base' ) . ' (E88)' );
 		}
 
 		$kb_groups = epkb_get_instance()->db_kb_groups->get_groups( $this->kb_id );
@@ -34,20 +34,20 @@ class AMGR_Access_Page_View_Articles {
 		}   ?>
 
 		<section class="amag-page-header">
-			<h2>Read-only Access to Articles</h2>
+			<h2><?php esc_html_e( 'Read-only Access to Articles', 'echo-knowledge-base' ); ?></h2>
 			<ul>    <?php
 				if ( AMGR_WP_Roles::use_kb_groups() ) { ?>
-					<li>Articles for which the group has full access are marked as <span class="amgr-full-access-icon">F</span>.</li>
-					<li>Articles with public access are marked as <span class="amgr-public-access-icon">P</span>.</li>  <?php
+					<li><?php esc_html_e( 'Articles for which the group has full access are marked as ', 'echo-knowledge-base' ); ?><span class="amgr-full-access-icon">F</span>.</li>
+					<li><?php esc_html_e( 'Articles with public access are marked as ', 'echo-knowledge-base' ); ?><span class="amgr-public-access-icon">P</span>.</li>  <?php
 				}					?>
-				<li>Assigning individual articles to groups will not provide that group with Category access. Groups with access to individual articles will, however, see the Category structure that the article is nested in.</li>
+				<li><?php esc_html_e( 'Assigning individual articles to groups will not provide that group with Category access. Groups with access to individual articles will, however, see the Category structure that the article is nested in.', 'echo-knowledge-base' ); ?></li>
 			</ul>
 		</section>      <?php
 
 		if ( empty($kb_groups) ) {  ?>
             <div class="callout callout_error">
-                <h4>No Groups have been created.</h4>
-                <p>Create one or more groups before configuring read-only access to articles.</p>
+                <h4><?php esc_html_e( 'No Groups have been created.', 'echo-knowledge-base' ); ?></h4>
+                <p><?php esc_html_e( 'Create one or more groups before configuring read-only access to articles.', 'echo-knowledge-base' ); ?></p>
             </div>     <?php
 			return true;
 		}
@@ -72,7 +72,7 @@ class AMGR_Access_Page_View_Articles {
 
         <label>Group:</label>
         <select id="amgr-access-tabs-kb-group-list-articles">
-            <option value="0">Choose a Group</option>   <?php
+            <option value="0"><?php esc_html_e( 'Choose a Group', 'echo-knowledge-base' ); ?></option>   <?php
 			foreach( $this->kb_groups as $kb_group ) {
 				$is_group_public = epkb_get_instance()->db_kb_public_groups->is_public_group( $this->kb_id, $kb_group->kb_group_id );
 				if ( $is_group_public === null ) {
@@ -97,7 +97,7 @@ class AMGR_Access_Page_View_Articles {
 
         <input type="hidden" id="amgr_kb_group_id_article_access" name="amgr_kb_group_id_article_access" value="<?php echo esc_attr($kb_group_id); ?>" />   <?php
 
-		$this->html->submit_button_v2( __( 'Save', 'echo-knowledge-base' ), 'amgr_save_articles_access_ajax', 'epkb-btn-wrap--plain', '', true, '', 'amag-primary-btn' );
+		$this->html->submit_button_v2( esc_html__( 'Save', 'echo-knowledge-base' ), 'amgr_save_articles_access_ajax', 'epkb-btn-wrap--plain', '', true, '', 'amag-primary-btn' );
 
 		return $isSuccess;
 	}
@@ -187,11 +187,11 @@ class AMGR_Access_Page_View_Articles {
                  <li>
                     <span>
                         <input type="checkbox" class="amgr-article-read-only-access"
-                               id="<?php echo 'amgr-read-only-article-' . $article_id; ?>"
-                               name="<?php echo 'ammgr-read-only-article-' . $article_id; ?>"
-                               value="<?php echo $article_id; ?>" <?php echo $isChecked ? 'checked' : ''; ?>>
+                               id="<?php echo esc_attr( 'amgr-read-only-article-' . $article_id ); ?>"
+                               name="<?php echo esc_attr( 'ammgr-read-only-article-' . $article_id ); ?>"
+                               value="<?php echo esc_attr( $article_id ); ?>" <?php echo ( $isChecked ? 'checked' : '' ); ?>>
 
-                        <label for="<?php echo 'amgr-read-only-article-' . $article_id; ?>"><?php echo esc_html( $article_title ); ?></label>
+                        <label for="<?php echo esc_attr( 'amgr-read-only-article-' . $article_id ); ?>"><?php echo esc_html( $article_title ); ?></label>
                     </span>
 					<span><a href="<?php echo esc_url( $link ); ?>" target="_blank" >link</a></span>
 				</li>			       <?php

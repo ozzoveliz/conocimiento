@@ -38,6 +38,23 @@ class EPKB_Categories_DB {
 		return array_values( $terms );   // rearrange array keys
 	}
 
+	public static function get_sub_categories( $category_seq_data, $category_id, $levels=1 ) {
+		foreach ( $category_seq_data as $sub_category_id => $sub_category_seq_data ) {
+			if ( $sub_category_id == $category_id ) {
+				return $sub_category_seq_data;
+			} else if ( ! empty( $sub_category_seq_data ) ) {
+				if ( $levels < 6 ) {
+					$sub_category_seq_data = self::get_sub_categories( $sub_category_seq_data, $category_id, $levels + 1 );
+					if ( is_array( $sub_category_seq_data ) ) {
+						return $sub_category_seq_data;
+					}
+				}
+			}
+		}
+
+		return false;
+	}
+
 	/**
 	 * Get all categories that belong to given parent
 	 *

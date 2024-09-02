@@ -16,12 +16,16 @@ class EPKB_Editor_Utilities {
 	 * @param string $article_page_zone_name
 	 * @param string $archive_page_zone_name
 	 * @param bool $use_backend_mode
+	 * @param string $preopen_setting
 	 * @return array
 	 */
 	public static function get_editor_urls( $kb_config, $main_page_zone_name='', $article_page_zone_name='', $archive_page_zone_name='', $use_backend_mode = true, $preopen_setting = '' ) {
 
 		if ( $use_backend_mode && EPKB_Core_Utilities::is_kb_flag_set( 'editor_backend_mode' ) ) {
-			$url = admin_url( '/edit.php?post_type=' . EPKB_KB_Handler::get_post_type( EPKB_KB_Handler::get_current_kb_id() ) . '&page=epkb-kb-configuration#settings__editor' );
+			$kb_id = EPKB_KB_Handler::get_current_kb_id();
+			$kb_id = is_wp_error( $kb_id ) ? EPKB_KB_Config_DB::DEFAULT_KB_ID : $kb_id;
+
+			$url = admin_url( '/edit.php?post_type=' . EPKB_KB_Handler::get_post_type( $kb_id ) . '&page=epkb-kb-configuration#settings__editor' );
 
 			return [
 				'main_page_url' => $url,
@@ -32,7 +36,6 @@ class EPKB_Editor_Utilities {
 		}
 
 		$params = array( 'action' => 'epkb_load_editor' );
-
 		if ( ! empty( $preopen_setting ) ) {
 			$params['preopen_setting'] = $preopen_setting;
 		}
@@ -62,8 +65,6 @@ class EPKB_Editor_Utilities {
 				$search_query = substr( $posts[0]->post_title, 0, 1 );
 
 				$search_query_param = apply_filters( 'eckb_search_query_param', '', $kb_config['id'] );
-
-				/* TODO: remove in May 2023, bypass for Advanced Search */
 				if ( empty( $search_query_param ) ) {
 					$search_query_param = _x( 'kb-search', 'search query parameter in URL', 'echo-advanced-search' );
 				}
@@ -118,23 +119,33 @@ class EPKB_Editor_Utilities {
 
 		$kb_id = EPKB_Utilities::get_eckb_kb_id();
 		$editor_type = '';
-		
+
 		if ( is_archive() ) {
+
+			$kb_config = epkb_get_instance()->kb_config_obj->get_kb_config_or_default( $kb_id );
+			if ( $kb_config['archive_page_v3_toggle'] == 'on' ) {
+				return '';
+			}
+
 			// show Editor link except on Category Archive Page without any article
-			$editor_type = empty($post) ? '' : 'archive-page';
-			
-		} else if ( ! empty($post) && $post->post_type == 'page' ) {
+			$editor_type = empty( $post ) ? '' : 'archive-page';
+
+		} else if ( ! empty( $post ) && $post->post_type == 'page' ) {
+
+			$kb_config = epkb_get_instance()->kb_config_obj->get_kb_config_or_default( $kb_id );
+			if ( $kb_config['modular_main_page_toggle'] == 'on' ) {
+				return '';
+			}
+
 			$editor_type = 'main-page';
-			
-		} else if ( ! empty($post) && EPKB_KB_Handler::is_kb_post_type( $post->post_type ) ) {
+
+		} else if ( ! empty( $post ) && EPKB_KB_Handler::is_kb_post_type( $post->post_type ) ) {
 			$editor_type = 'article-page';
 		}
 
 		if ( $editor_type == 'main-page' && EPKB_Utilities::is_advanced_search_enabled() ) {
 
 			$search_query_param = apply_filters( 'eckb_search_query_param', '', $kb_id );
-
-			/* TODO: remove in May 2023, bypass for Advanced Search */
 			if ( empty( $search_query_param ) ) {
 				$search_query_param = _x( 'kb-search', 'search query parameter in URL', 'echo-advanced-search' );
 			}
@@ -167,20 +178,6 @@ class EPKB_Editor_Utilities {
 			return $kb_config;
 		}
 
-		// if user selected preset then populate the config from the preset
-		if ( ! empty( $_REQUEST['epkb-editor-preset'] ) ) {
-
-			$preset_fields = EPKB_KB_Wizard_Themes::get_theme_fields();
-			$preset_values = json_decode(stripcslashes($_REQUEST['epkb-editor-preset'] ), true);
-			foreach ( $preset_fields as $field_name ) {
-				if ( ! isset( $preset_values[$field_name] ) || $preset_values[$field_name] === '' ) {
-					continue;
-				}
-
-				$kb_config[$field_name] = $preset_values[$field_name];
-			}
-		}
-
 		// populate kb config from Editor settings
 		foreach ( $new_kb_config as $zone_name => $zone ) {
 			foreach ( $zone['settings'] as $field_name => $field ) {
@@ -189,7 +186,7 @@ class EPKB_Editor_Utilities {
 					continue;
 				}
 
-				// handle sidebar components priority differently TODO FUTURE remove if live preview instead of reload for sidebar config changes
+				// handle sidebar components priority differently
 				if ( EPKB_Editor_Config_Base::is_sidebar_priority( $field_name ) ) {
 					$kb_config['article_sidebar_component_priority'][$field_name] = $field['value'];
 				} else {

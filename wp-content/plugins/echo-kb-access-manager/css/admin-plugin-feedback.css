@@ -2570,86 +2570,88 @@
       line-height: 1.8;
       margin: 0;
       color: #4A5568; }
-  #epkb-deactivate-modal .epkb-deactivate-modal-body {
-    padding: 5px 20px 20px 20px; }
-    #epkb-deactivate-modal .epkb-deactivate-modal-body .reason-input {
-      margin-top: 5px;
-      margin-left: 20px; }
   #epkb-deactivate-modal .epkb-deactivate-modal-footer {
     border-top: 1px solid #E8E8E8;
     padding: 20px;
     text-align: right; }
   #epkb-deactivate-modal .epkb-deactivate-modal-reasons-bottom {
     margin: 0; }
-  #epkb-deactivate-modal .epkb-deactivate-modal-body ul.epkb-deactivate-reasons {
-    display: flex;
-    margin: 0 -5px 0 -5px;
-    padding-bottom: 20px; }
-    #epkb-deactivate-modal .epkb-deactivate-modal-body ul.epkb-deactivate-reasons li {
-      flex: 1;
-      padding: 0 5px;
-      margin: 0; }
-      #epkb-deactivate-modal .epkb-deactivate-modal-body ul.epkb-deactivate-reasons li.epkb-deactivate-reason-selected label {
-        background-color: #3B86FF;
-        border-color: #3B86FF; }
-        #epkb-deactivate-modal .epkb-deactivate-modal-body ul.epkb-deactivate-reasons li.epkb-deactivate-reason-selected label :after {
-          content: ""; }
-      #epkb-deactivate-modal .epkb-deactivate-modal-body ul.epkb-deactivate-reasons li.epkb-deactivate-reason-selected .epkb-deactivate-reason-icon,
-      #epkb-deactivate-modal .epkb-deactivate-modal-body ul.epkb-deactivate-reasons li.epkb-deactivate-reason-selected .epkb-deactivate-reason-text {
-        color: #FFF; }
-    #epkb-deactivate-modal .epkb-deactivate-modal-body ul.epkb-deactivate-reasons label {
-      position: relative;
-      border: 1px solid #E8E8E8;
-      border-radius: 4px;
-      display: block;
-      text-align: center;
-      height: 100%;
-      padding: 15px 3px 8px 3px; }
-      #epkb-deactivate-modal .epkb-deactivate-modal-body ul.epkb-deactivate-reasons label :after {
-        width: 0;
-        height: 0;
-        border-left: 8px solid transparent;
-        border-right: 8px solid transparent;
-        border-top: 10px solid #3B86FF;
-        position: absolute;
-        left: 50%;
-        top: 100%;
-        margin-left: -8px; }
-      #epkb-deactivate-modal .epkb-deactivate-modal-body ul.epkb-deactivate-reasons label input[type="radio"] {
-        position: absolute;
-        left: 0;
-        right: 0;
-        opacity: 0; }
-  #epkb-deactivate-modal .epkb-deactivate-modal-body .epkb-deactivate-reason-text {
-    color: #4A5568;
-    font-size: 13px; }
-  #epkb-deactivate-modal .epkb-deactivate-modal-body .epkb-deactivate-reason-icon {
-    margin-bottom: 7px;
-    color: #3B86FF;
-    font-size: 25px; }
-  #epkb-deactivate-modal .epkb-deactivate-modal-body .epkb-deactivate-modal-reason-inputs {
-    min-height: 185px;
-    margin-bottom: 15px;
-    display: none; }
-    #epkb-deactivate-modal .epkb-deactivate-modal-body .epkb-deactivate-modal-reason-inputs.inputs-active {
-      display: block; }
-    #epkb-deactivate-modal .epkb-deactivate-modal-body .epkb-deactivate-modal-reason-inputs textarea {
-      background: #FAFAFA;
-      border: 1px solid #287EB8;
-      border-radius: 4px;
-      width: 100%;
-      height: 100px;
-      color: #524242;
-      font-size: 13px;
-      line-height: 1.4;
-      padding: 11px 15px;
-      resize: none;
-      -webkit-box-shadow: none; }
-      #epkb-deactivate-modal .epkb-deactivate-modal-body .epkb-deactivate-modal-reason-inputs textarea :focus {
-        outline: 0 none;
-        box-shadow: 0 0 0; }
-    #epkb-deactivate-modal .epkb-deactivate-modal-body .epkb-deactivate-modal-reason-inputs input[type="email"] {
-      width: 100%; }
+  #epkb-deactivate-modal .epkb-deactivate-modal-body {
+    padding: 5px 20px 20px 20px; }
+    #epkb-deactivate-modal .epkb-deactivate-modal-body ul.epkb-deactivate-reasons {
+      display: flex;
+      margin: 0 -5px 0 -5px;
+      padding-bottom: 20px; }
+      #epkb-deactivate-modal .epkb-deactivate-modal-body ul.epkb-deactivate-reasons li {
+        flex: 1;
+        padding: 0 5px;
+        margin: 0; }
+        #epkb-deactivate-modal .epkb-deactivate-modal-body ul.epkb-deactivate-reasons li.epkb-deactivate-reason-selected label {
+          background-color: #3B86FF;
+          border-color: #3B86FF; }
+          #epkb-deactivate-modal .epkb-deactivate-modal-body ul.epkb-deactivate-reasons li.epkb-deactivate-reason-selected label :after {
+            content: ""; }
+        #epkb-deactivate-modal .epkb-deactivate-modal-body ul.epkb-deactivate-reasons li.epkb-deactivate-reason-selected .epkb-deactivate-reason-icon,
+        #epkb-deactivate-modal .epkb-deactivate-modal-body ul.epkb-deactivate-reasons li.epkb-deactivate-reason-selected .epkb-deactivate-reason-text {
+          color: #FFF; }
+      #epkb-deactivate-modal .epkb-deactivate-modal-body ul.epkb-deactivate-reasons label {
+        position: relative;
+        border: 1px solid #E8E8E8;
+        border-radius: 4px;
+        display: block;
+        text-align: center;
+        height: 100%;
+        padding: 15px 3px 8px 3px; }
+        #epkb-deactivate-modal .epkb-deactivate-modal-body ul.epkb-deactivate-reasons label :after {
+          width: 0;
+          height: 0;
+          border-left: 8px solid transparent;
+          border-right: 8px solid transparent;
+          border-top: 10px solid #3B86FF;
+          position: absolute;
+          left: 50%;
+          top: 100%;
+          margin-left: -8px; }
+        #epkb-deactivate-modal .epkb-deactivate-modal-body ul.epkb-deactivate-reasons label input[type="radio"] {
+          position: absolute;
+          left: 0;
+          right: 0;
+          opacity: 0; }
+    #epkb-deactivate-modal .epkb-deactivate-modal-body .epkb-deactivate-reason-text {
+      color: #4A5568;
+      font-size: 13px; }
+    #epkb-deactivate-modal .epkb-deactivate-modal-body .epkb-deactivate-reason-icon {
+      margin-bottom: 7px;
+      color: #3B86FF;
+      font-size: 25px; }
+    #epkb-deactivate-modal .epkb-deactivate-modal-body .reason-input {
+      margin-top: 5px;
+      margin-left: 20px; }
+    #epkb-deactivate-modal .epkb-deactivate-modal-body .epkb-deactivate-modal-reason-inputs {
+      min-height: 185px;
+      margin-bottom: 15px; }
+      #epkb-deactivate-modal .epkb-deactivate-modal-body .epkb-deactivate-modal-reason-inputs.inputs-active {
+        display: block; }
+      #epkb-deactivate-modal .epkb-deactivate-modal-body .epkb-deactivate-modal-reason-inputs textarea {
+        background: #FAFAFA;
+        border: 1px solid #287EB8;
+        border-radius: 4px;
+        width: 100%;
+        height: 100px;
+        color: #524242;
+        font-size: 13px;
+        line-height: 1.4;
+        padding: 11px 15px;
+        resize: none;
+        -webkit-box-shadow: none; }
+        #epkb-deactivate-modal .epkb-deactivate-modal-body .epkb-deactivate-modal-reason-inputs textarea :focus {
+          outline: 0 none;
+          box-shadow: 0 0 0; }
+      #epkb-deactivate-modal .epkb-deactivate-modal-body .epkb-deactivate-modal-reason-inputs input[type="email"] {
+        width: 100%; }
+    #epkb-deactivate-modal .epkb-deactivate-modal-body .epkb-deactivate-feedback-text {
+      width: 50%;
+      height: 100px; }
   #epkb-deactivate-modal .epkb-deactivate-modal-footer .epkb-deactivate-button-secondary,
   #epkb-deactivate-modal .epkb-deactivate-modal-footer .epkb-deactivate-button-secondary:hover {
     display: inline-block;

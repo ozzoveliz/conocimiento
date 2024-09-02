@@ -1,4 +1,4 @@
-<?php
+<?php if ( ! defined( 'ABSPATH' ) ) exit;
 
 /**
  * @copyright   Copyright (C) 2018, Echo Plugins
@@ -39,14 +39,14 @@ class AMGR_Admin_Notices {
 		}
 
 		// get the problem detailed message
-		$message = __( 'Please copy the error and contact customer support.' . '<br>' . 'You can then clear the error' . '<br>' . $error_message, 'echo-knowledge-base' );  ?>
+		$message = esc_html__( 'Please copy the error and contact customer support.' . '<br>' . 'You can then clear the error' . '<br>' . $error_message, 'echo-knowledge-base' );  ?>
 
 		<div class="eckb-bottom-notice-message-large eckb-bottom-notice-message--error-large">
 
             <div class="eckb-bottom-notice-message__header">
-                <div class="eckb-bottom-notice-message__header__title"><?php echo __( 'Access Manager found an issue', 'echo-knowledge-base' ); ?></div>
+                <div class="eckb-bottom-notice-message__header__title"><?php echo esc_html__( 'Access Manager found an issue', 'echo-knowledge-base' ); ?></div>
                     <div class="eckb-bottom-notice-message__header__clear-log">
-                        <a href="#" class="amgr_notice_reset_logs_ajax" data-nonce="<?php echo wp_create_nonce( "_wpnonce_epkb_ajax_action" ); ?>"><?php echo __( 'Clear Log', 'echo-knowledge-base' ); ?></a>
+                        <a href="#" class="amgr_notice_reset_logs_ajax" data-nonce="<?php echo wp_create_nonce( "_wpnonce_epkb_ajax_action" ); ?>"><?php echo esc_html__( 'Clear Log', 'echo-knowledge-base' ); ?></a>
                     </div>
                 <div class="eckb-bottom-notice-message__header__close epkb-close-notice epkbfa epkbfa-window-close"></div>
             </div>

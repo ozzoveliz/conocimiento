@@ -1,6 +1,6 @@
  <?php
 /**
- * The template for displaying KB Categories Archive page.
+ * Template for KB Category Archive Page front-end setup for V2
  *
  */
 
@@ -16,10 +16,10 @@ if ( empty( $hide_header_footer ) ) {
 	get_header();
 }
 
-if ( epkb_is_archive_structure_v2( $kb_config ) ) {
-	epkb_category_archive_v2( $kb_config );
+if ( $kb_config['archive_page_v3_toggle'] == 'on' ) {
+	EPKB_Category_Archive_Setup::get_category_archive_page_v3( $kb_config );
 } else {
-	epkb_category_archive_v1( $kb_config );
+	epkb_category_archive_v2( $kb_config );
 }
 
 if ( empty( $hide_header_footer ) ) {
@@ -34,7 +34,7 @@ if ( empty( $hide_header_footer ) ) {
 function epkb_category_archive_v2( $kb_config ) {
 
 	// setup hooks for the new layout
-	add_action( 'eckb-categories-archive__body__left-sidebar', 'epkb_category_lists', 10, 3 );
+	add_action( 'eckb-categories-archive__body__left-sidebar', 'epkb_display_categories_sidebar', 10, 3 );
 	add_action( 'eckb-categories-archive__body__content__body', 'epkb_main_content', 10, 3 );
 	add_action( 'eckb-categories-archive__body__content__header', 'epkb_archive_header', 10, 3 );
 
@@ -46,7 +46,7 @@ function epkb_category_archive_v2( $kb_config ) {
 	<!--- Category Archive Version 2 --->
 
 	<!-- Categories Archive Container -->
-	<div id="eckb-categories-archive-container-v2" class="eckb-category-archive-reset eckb-categories-archive-container-v2 <?php echo $activeWPTheme; ?>">
+	<div id="eckb-categories-archive-container-v2" class="eckb-category-archive-reset eckb-categories-archive-container-v2 <?php echo esc_attr( $activeWPTheme ); ?>">
 
 		<!-- Categories Archive Header -->
 		<div id="eckb-categories-archive__header"><?php epkb_category_archive_section( 'eckb-categories-archive__header', array( 'id' => $kb_config['id'], 'config' => $kb_config ) ); ?></div>
@@ -100,14 +100,11 @@ function generate_archive_structure_css_v2( $kb_config ) {
 	$archive_content_bgColor        = $kb_config['archive-content-background-color-v2'];
 
 	// Categories Archive Body - Content
-	$archive_body_content_title_fontSize            = '35'; //TODO Future to convert to KB Settings ( Title of the Category page )
-	$archive_body_content_article_fontSize    = '15'; //TODO Future to convert to KB Settings ( Title of the Each Article )
+	$archive_body_content_title_fontSize      = '35';
+	$archive_body_content_article_fontSize    = '15';
 
 	// Right Sidebar Settings
-	//$archive_right_sidebar_width     = $kb_config['archive-right-sidebar-width-v2'];
-	$archive_right_sidebar_width     = 0; //TODO Remove this and add back to config one once we add right sidebar into a release.
-	//$archive_right_sidebar_padding   = $kb_config['archive-right-sidebar-padding-v2'];
-	//$archive_right_sidebar_bgColor   = $kb_config['archive-right-sidebar-background-color-v2'];
+	$archive_right_sidebar_width     = 0; // no right sidebar for v2
 
 	// Advanced
 	$mobile_width                    = $kb_config['archive-mobile-break-point-v2'];
@@ -116,12 +113,10 @@ function generate_archive_structure_css_v2( $kb_config ) {
 		$mobile_width -= 400;
 	}
 		
-	$is_left_sidebar_on =  // TODO in future if needed: $kb_config['archive-left-sidebar-on-v2'] == 'on'  ||
-	                      $kb_config['kb_sidebar_location'] == 'left-sidebar' ||
+	$is_left_sidebar_on = $kb_config['kb_sidebar_location'] == 'left-sidebar' ||
 						  $kb_config['kb_main_page_layout'] == EPKB_Layout::CATEGORIES_LAYOUT;
 
-	$is_right_sidebar_on = // TODO in future if needed: $kb_config['archive-right-sidebar-on-v2'] == 'on' ||
-						   $kb_config['kb_sidebar_location'] == 'right-sidebar';
+	$is_right_sidebar_on = $kb_config['kb_sidebar_location'] == 'right-sidebar';
 
 
 	$archive_length = '';
@@ -194,7 +189,7 @@ function generate_archive_structure_css_v2( $kb_config ) {
 	if ( $is_left_sidebar_on && $is_right_sidebar_on ) {
 		$archive_length = '
 					#eckb-categories-archive-container-v2 #eckb-categories-archive__body {
-					      grid-template-columns: '.$archive_left_sidebar_width.'% '.$archive_content_width.'% '.$archive_right_sidebar_width.'%;
+					      grid-template-columns: ' . $archive_left_sidebar_width . '% ' . $archive_content_width . '% ' . $archive_right_sidebar_width . '%;
 					}
 					';
 	}	?>
@@ -202,42 +197,42 @@ function generate_archive_structure_css_v2( $kb_config ) {
 	<!-- archive Version 2 Style -->
 	<style><?php
 		ob_start();
-		echo $archive_length;   ?>
+		echo esc_attr( $archive_length );   ?>
 		#eckb-categories-archive-container-v2 {
-			width:<?php echo $archive_container_width.$archive_container_width_units; ?>;
+			width:<?php echo esc_attr( $archive_container_width.$archive_container_width_units ); ?>;
 		}
 		#eckb-categories-archive-container-v2 #eckb-categories-archive__body__left-sidebar {
-			padding: <?php echo $archive_left_sidebar_padding.'px'; ?>;
-			background-color: <?php echo $archive_left_sidebar_bgColor; ?>
+			padding: <?php echo esc_attr( $archive_left_sidebar_padding . 'px' ); ?>;
+			background-color: <?php echo esc_attr( $archive_left_sidebar_bgColor ); ?>
 		}
 		#eckb-categories-archive-container-v2 #eckb-categories-archive__body__content {
-			padding: <?php echo $archive_content_padding.'px'; ?>;
-			background-color: <?php echo $archive_content_bgColor; ?>
+			padding: <?php echo esc_attr( $archive_content_padding . 'px' ); ?>;
+			background-color: <?php echo esc_attr( $archive_content_bgColor ); ?>
 		}
 		/* Right Sidebar */
 		/*#eckb-categories-archive-container-v2 #eckb-categories-archive__body__right-sidebar {
-			padding: <?php //echo $archive_right_sidebar_padding.'px'; ?>;
-			background-color: <?php //echo $archive_right_sidebar_bgColor; ?>
+			padding: <?php //echo esc_attr( $archive_right_sidebar_padding.'px' ); ?>;
+			background-color: <?php //echo esc_attr( $archive_right_sidebar_bgColor ); ?>
 		}*/
 		/* Categories Archive Body - Content ----------------------------------------*/
 		#eckb-categories-archive-container-v2 .eckb-category-archive-title h1 {
-			font-size: <?php echo $archive_body_content_title_fontSize.'px'; ?>;
+			font-size: <?php echo esc_attr( $archive_body_content_title_fontSize . 'px' ); ?>;
 		}
 		#eckb-categories-archive-container-v2 .eckb-article-container {
-			font-size: <?php echo $archive_body_content_article_fontSize.'px'; ?>;
+			font-size: <?php echo esc_attr( $archive_body_content_article_fontSize . 'px' ); ?>;
 		}
 
 
 		/* Media Queries ------------------------------------------------------------*/
 		/* Grid Adjust Column sizes for smaller screen */
-		/*@media only screen and ( max-width: <?php //echo $tablet_width; ?>px ) {
+		/*@media only screen and ( max-width: <?php //echo esc_attr( $tablet_width ); ?>px ) {
 			#eckb-categories-archive-container-v2 #eckb-categories-archive__body {
 				grid-template-columns: 20% 60% 20%;
 			}
 		}*/
 
 		/* Grid becomes 1 Column Layout */
-		@media only screen and ( max-width: <?php echo $mobile_width; ?>px ) {
+		@media only screen and ( max-width: <?php echo esc_attr( $mobile_width ); ?>px ) {
 
 			#eckb-categories-archive-container-v2 {
 				width:100%;
@@ -260,6 +255,8 @@ function generate_archive_structure_css_v2( $kb_config ) {
 			}
 		}   <?php
 		$archive_styles = ob_get_clean();
+
+		//phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		echo EPKB_Utilities::minify_css( $archive_styles );
 	?></style>  <?php
 }
@@ -280,22 +277,21 @@ function generate_archive_structure_css_v2( $kb_config ) {
   * @param $args
   * @noinspection PhpUnused*/
  function epkb_archive_header( $args ) {
-	 $category_archive_title_icon    = 'epkbfa epkbfa-folder-open';
-	 $category_title                 = single_cat_title( '', false );
-	 $category_title                 = empty($category_title) ? '' : $category_title;    ?>
+	 $category_archive_title_icon = 'epkbfa epkbfa-folder-open';
+	 $category_title = single_cat_title( '', false );
+	 $category_title = empty( $category_title ) ? '' : $category_title;    ?>
 
 	 <header class="eckb-category-archive-header">
 		 <div class="eckb-category-archive-title">
 			 <h1>
-				 <span class="eckb-category-archive-title-icon <?php esc_attr_e($category_archive_title_icon); ?>"></span>
-				 <span class="eckb-category-archive-title-desc"><?php echo esc_html($args['config']['template_category_archive_page_heading_description']); ?></span>
-				 <span class="eckb-category-archive-title-name"><?php echo esc_html($category_title); ?></span>
+				 <span class="eckb-category-archive-title-icon <?php esc_attr_e( $category_archive_title_icon ); ?>"></span>
+				 <span class="eckb-category-archive-title-desc"><?php echo esc_html( $args['config']['template_category_archive_page_heading_description'] ); ?></span>
+				 <span class="eckb-category-archive-title-name"><?php echo esc_html( $category_title ); ?></span>
 			 </h1>
 		 </div>            <?php
 
 		 epkb_archive_category_description();
 		 epkb_archive_category_breadcrumb( $args['config'] );     ?>
-
 	 </header>   <?php
  }
 
@@ -324,7 +320,7 @@ function epkb_main_content( $args ) {
 
 	// if category has no article then show proper message
 	if ( ! have_posts() ) {
-		echo '<main class="eckb-category-archive-main ' . esc_attr($preset_style) . '"><p>' . $args['config']['category_empty_msg'] . '</p></main>';
+		echo '<main class="eckb-category-archive-main ' . esc_attr( $preset_style ) . '"><p>' . esc_html( $args['config']['category_empty_msg'] ) . '</p></main>';
 		return;
 	}
 
@@ -335,8 +331,8 @@ function epkb_main_content( $args ) {
 	$orig_category_seq_data = EPKB_Utilities::get_kb_option( $kb_id, EPKB_Categories_Admin::KB_CATEGORIES_SEQ_META, array(), true );
 
 	$kb_groups_set = AMGR_Access_Utilities::get_main_page_group_sets( $kb_id, $orig_category_seq_data, $orig_articles_seq_data );
-	if ( empty($kb_groups_set) ) {
-		echo $args['config']['category_empty_msg'] . '</p></main>';
+	if ( empty( $kb_groups_set ) ) {
+		echo esc_html( $args['config']['category_empty_msg'] ) . '</p></main>';
 		return;
 	}
 
@@ -469,10 +465,6 @@ function epkb_main_content( $args ) {
 			$post = get_post( $post_id );
 			$post_date = sprintf( '<time class="entry-date" datetime="%1$s">%2$s</time>', esc_attr( get_the_date( DATE_W3C, $post ) ), esc_html(get_the_date( '', $post )) );
 			
-			$published_date_esc   = '<span class="eckb-article-meta-name">' . $meta_date_text . '</span> ' . $post_date;
-			$author_esc           = '<span class="eckb-article-meta-name">' . $meta_author_text .  '</span> ' . get_the_author();
-			$categories_esc       = '<span class="eckb-article-meta-name">' . $meta_categories_text .  '</span> ' . get_the_category_list(', ');
-
 			// linked articles have their own icon
 			$article_title_icon = 'epkbfa-file-text-o';
 			if ( has_filter('eckb_single_article_filter' ) ) {
@@ -483,7 +475,6 @@ function epkb_main_content( $args ) {
 			$new_tab = '';
 			if ( has_filter('eckb_link_newtab_filter' ) ) {
 				$new_tab = apply_filters( 'eckb_link_newtab_filter', $post->ID );
-				$new_tab = esc_attr( $new_tab );
 			}
 
 			$article_link = get_permalink( $post_id );
@@ -498,17 +489,17 @@ function epkb_main_content( $args ) {
 				</div>
 				<div class="eckb-article-header">
 					<div class="eckb-article-title">
-						<h2><a href="<?php echo $article_link; ?>"  <?php echo $new_tab; ?>><?php the_title(); ?></a></h2>
+						<h2><a href="<?php echo esc_url( $article_link ); ?>"  <?php echo esc_attr( $new_tab ); ?>><?php the_title(); ?></a></h2>
 						<span class="eckb-article-title-icon epkbfa <?php esc_attr_e($article_title_icon); ?>"></span>
 					</div><?php
                     if ( $meta_date_on == 'on' || $meta_author_on == 'on' || $meta_categories_on == 'on' ) { ?>
                         <div class="eckb-article-metadata">
                             <ul><?php if ( $meta_date_on == 'on' ) { ?>
-                                    <li class="eckb-article-posted-on"><?php echo $published_date_esc ?></li><?php
+                                    <li class="eckb-article-posted-on"><span class="eckb-article-meta-name"><?php echo esc_html( $meta_date_text ) . '</span> ' . wp_kses_post( $post_date ); ?></li><?php
                                 } if ( $meta_author_on == 'on' ) { ?>
-                                    <li class="eckb-article-byline"><?php echo $author_esc; ?></li><?php
+                                    <li class="eckb-article-byline"><span class="eckb-article-meta-name"><?php echo esc_html( $meta_author_text ) . '</span> ' . esc_html( get_the_author() ); ?></li><?php
                                 } if ( $meta_categories_on == 'on' ) { ?>
-                                    <li class="eckb-article-categories"><?php echo $categories_esc; ?></li><?php
+                                    <li class="eckb-article-categories"><span class="eckb-article-meta-name"><?php echo esc_html( $meta_categories_text ) . '</span> ' . get_the_category_list(', '); ?></li><?php
                                 } ?>
                             </ul>
                         </div><?php
@@ -517,17 +508,18 @@ function epkb_main_content( $args ) {
 				<div class="eckb-article-body">					    <?php
 
 					if ( post_password_required() ) {
+						//phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 						echo get_the_password_form();
 					} else {
 						$epkb_password_checked = true;
 
 						if ( has_excerpt( $post_id ) ) {
-							echo get_the_excerpt( $post_id );
+							echo esc_html( get_the_excerpt( $post_id ) );
 						} ?>
 
-						<a href="<?php echo $article_link; ?>" class="eckb-article-read-more">
-							<div class="eckb-article-read-more-text"><?php echo esc_html($read_more); ?></div>
-							<div class="eckb-article-read-more-icon <?php echo esc_html($read_more_icon); ?>"></div>
+						<a href="<?php echo esc_url( $article_link ); ?>" class="eckb-article-read-more">
+							<div class="eckb-article-read-more-text"><?php echo esc_html( $read_more ); ?></div>
+							<div class="eckb-article-read-more-icon <?php echo esc_html( $read_more_icon ); ?>"></div>
 						</a>    <?php
 					}	    ?>
 
@@ -545,8 +537,8 @@ function epkb_main_content( $args ) {
 
 		the_posts_pagination(
 			array(
-				'prev_text'          => __( 'Previous', 'echo-knowledge-base' ),
-				'next_text'          => __( 'Next', 'echo-knowledge-base' ),
+				'prev_text'          => esc_html__( 'Previous', 'echo-knowledge-base' ),
+				'next_text'          => esc_html__( 'Next', 'echo-knowledge-base' ),
 				'before_page_number' => '<span>' . esc_html__( 'Page', 'echo-knowledge-base' ) . ' </span>',
 			)
 		);
@@ -568,8 +560,8 @@ function epkb_main_content( $args ) {
 	 foreach ($category_array as $key => $value) {
 		 $keys[] = $key;
 
-		 if ( is_array($category_array[$key]) ) {
-			 $keys = array_merge($keys, epkb_get_array_keys_multi( $category_array[$key] ));
+		 if ( is_array($value) ) {
+			 $keys = array_merge($keys, epkb_get_array_keys_multi($value));
 		 }
 	 }
 
@@ -582,7 +574,7 @@ function epkb_main_content( $args ) {
   * @param $args
   *
   * @noinspection PhpUnused*/
- function epkb_category_lists( $args ) {
+ function epkb_display_categories_sidebar($args ) {
 
 	 // for Category Focused Layout show sidebar with list of top-level categories
 	 if ( $args['config']['kb_main_page_layout'] != EPKB_Layout::CATEGORIES_LAYOUT ) {
@@ -590,19 +582,20 @@ function epkb_main_content( $args ) {
 	 }
 
 	// find parent ID
-	$category_id = 0;
+	$parent_category_id = 0;
 	$active_id = 0;
 	$breadcrumb_tree = EPKB_Templates_Various::get_term_breadcrumb( $args['config'], get_queried_object()->term_id );
 	
 	$breadcrumb_tree[] = get_queried_object()->term_id;
 	
 	if ( $args['config']['categories_layout_list_mode'] == 'list_top_categories' ) {
-		$active_id = $breadcrumb_tree[0];
+		if ( isset( $breadcrumb_tree[0] ) ) {
+			$active_id = $breadcrumb_tree[0];
+		}
 	} else {		
 		$tree_count = count( $breadcrumb_tree );
-		
 		if ( $tree_count > 1 ) {
-			$category_id = $breadcrumb_tree[$tree_count - 2];
+			$parent_category_id = $breadcrumb_tree[$tree_count - 2];
 			$active_id = $breadcrumb_tree[$tree_count - 1];
 		}
 		
@@ -611,11 +604,12 @@ function epkb_main_content( $args ) {
 		}
 	}
 
-	echo EPKB_Layout_Category_Sidebar::get_layout_categories_list( $args['id'], $args['config'], $category_id, $active_id );
+	 //phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+	echo EPKB_Layout_Category_Sidebar::get_layout_categories_list( $args['id'], $args['config'], $parent_category_id, $active_id );
  }
 
  /**
-  * V1 + V2 - Output breadcrumb
+  * Output breadcrumb
   * @param $kb_config
   */
  function epkb_archive_category_breadcrumb( $kb_config ) {
@@ -634,7 +628,7 @@ function epkb_main_content( $args ) {
  }
 
  /**
-  * V1 + V2 - Output term description
+  * Output term description
   */
  function epkb_archive_category_description() {
 
@@ -644,140 +638,12 @@ function epkb_main_content( $args ) {
 	 }
 
 	 $term_description = get_term_field( 'description', $term );
-	 if ( empty($term_description) || is_wp_error($term_description) ) {
+	 if ( empty( $term_description ) || is_wp_error( $term_description)  ) {
 		 return;
 	 }
 
-	 echo '<div class="eckb-category-archive-description">' . $term_description . '</div>';
+	 echo '<div class="eckb-category-archive-description">' . wp_kses_post( $term_description ) . '</div>';
  }
-
- /**
-  * V1 page structure
-  *
-  * @param $kb_config
-  */
-function epkb_category_archive_v1( $kb_config ) {
-
-	global $epkb_password_checked;
-
-	$preset_style                = $kb_config['template_category_archive_page_style'];
-	$category_archive_title_icon = 'epkbfa epkbfa-folder-open';
-	$read_more                   = $kb_config['template_category_archive_read_more'];
-	$read_more_icon              = 'epkbfa epkbfa-long-arrow-right';
-
-	$category_title = single_cat_title( '', false );
-	$category_title = empty($category_title) ? '' : $category_title;	?>
-
-	<section id="eckb-categories-archive-container">
-		<div class="eckb-category-archive-reset eckb-category-archive-defaults <?php esc_attr_e($preset_style); ?>">
-			<header class="eckb-category-archive-header">
-				<div class="eckb-category-archive-title">
-					<h1>
-						<span class="eckb-category-archive-title-icon <?php esc_attr_e($category_archive_title_icon); ?>"></span>
-						<span class="eckb-category-archive-title-desc"><?php echo esc_html($kb_config['template_category_archive_page_heading_description']); ?></span>
-						<span class="eckb-category-archive-title-name"><?php echo esc_html($category_title); ?></span>
-					</h1>
-				</div>            <?php
-
-				epkb_archive_category_description();
-				epkb_archive_category_breadcrumb( $kb_config );     ?>
-
-			</header>	    <?php
-
-			// for Category Focused layout show sidebar with list of top-level categories
-			if ( $kb_config['kb_main_page_layout'] == EPKB_Layout::CATEGORIES_LAYOUT ) {
-				// find parent ID
-				$category_id = 0;
-				$active_id = 0;
-				$breadcrumb_tree = EPKB_Templates_Various::get_article_breadcrumb( $kb_config, get_queried_object()->term_id );
-
-				if ( $breadcrumb_tree ) {
-					$breadcrumb_tree = array_keys( $breadcrumb_tree );
-					$tree_count = count( $breadcrumb_tree );
-
-					if ( $tree_count > 1 ) {
-						$category_id = $breadcrumb_tree[$tree_count - 1];
-						$active_id = get_queried_object()->term_id;
-					}
-				}
-
-				echo EPKB_Layout_Category_Sidebar::get_layout_categories_list( $kb_config['id'], $kb_config, $category_id, $active_id );
-			}		    	                ?>
-
-			<main class="eckb-category-archive-main">   <?php
-
-				while ( have_posts() ) {
-
-					the_post();
-
-					// Future Options
-					$post = get_post();
-					$post_date = sprintf( '<time class="entry-date" datetime="%1$s">%2$s</time>', esc_attr( get_the_date( DATE_W3C, $post ) ), esc_html(get_the_date( '', $post )) );
-					 
-					// linked articles have their own icon
-					$article_title_icon = 'epkbfa-file-text-o';
-					if ( has_filter('eckb_single_article_filter' ) ) {
-						$article_title_icon = apply_filters( 'eckb_article_icon_filter', $article_title_icon, $post->ID );
-						$article_title_icon = empty( $article_title_icon ) ? 'epkbfa-file-text-o' : $article_title_icon;
-					}
-
-					$new_tab = '';
-					if ( has_filter('eckb_link_newtab_filter' ) ) {
-						$new_tab = apply_filters( 'eckb_link_newtab_filter', $post->ID );
-						$new_tab = esc_attr( $new_tab );
-					}	?>
-
-					<article class="eckb-article-container" id="post-<?php the_ID(); ?>">
-						<div class="eckb-article-image">
-							<?php the_post_thumbnail(); ?>
-						</div>
-						<div class="eckb-article-header">
-							<div class="eckb-article-title">
-								<h2><a href="<?php the_permalink(); ?>"  <?php echo $new_tab; ?>><?php the_title(); ?></a></h2>
-								<span class="eckb-article-title-icon epkbfa <?php esc_attr_e($article_title_icon); ?>"></span>
-							</div>
-						</div>
-						<div class="eckb-article-body">					    <?php
-
-							if ( post_password_required() ) {
-								echo get_the_password_form();
-							} else {
-								$epkb_password_checked = true;
-
-								if ( has_excerpt( get_the_ID() ) ) {
-									echo get_the_excerpt( get_the_ID() );
-								} ?>
-
-								<a href="<?php the_permalink(); ?>" class="eckb-article-read-more">
-									<div class="eckb-article-read-more-text"><?php echo esc_html($read_more); ?></div>
-									<div class="eckb-article-read-more-icon <?php echo esc_html($read_more_icon); ?>"></div>
-								</a>    <?php
-							}	    ?>
-
-						</div>
-						<div class="eckb-article-footer"></div>
-					</article>			    <?php
-				}
-
-				the_posts_pagination(
-						array(
-								'prev_text'          => __( 'Previous', 'echo-knowledge-base' ),
-								'next_text'          => __( 'Next', 'echo-knowledge-base' ),
-								'before_page_number' => '<span>' . __( 'Page', 'echo-knowledge-base' ) . ' </span>',
-						)
-				);      ?>
-
-			</main>
-		</div>
-	</section>      <?php
-}
-
-function epkb_is_archive_structure_v2( $kb_config ) {
-   	$plugin_first_version = get_option( 'epkb_version_first' );
-   	// TODO 'category-archive-structure-version'
-	$category_archive_version = $kb_config['kb_main_page_layout'] == EPKB_Layout::CATEGORIES_LAYOUT || ! empty($plugin_first_version) ? 'version-2' : 'version-1';
-	return $category_archive_version === 'version-2';
-}
 
  /**
   * Get article sequence no for breadcrumbs based on categories and articles sequence

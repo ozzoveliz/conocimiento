@@ -2,14 +2,13 @@
 
 /**
  * Various utility functions
- *
- * @copyright   Copyright (C) 2018, Echo Plugins
- * @license http://opensource.org/licenses/gpl-2.0.php GNU Public License
  */
 class EPKB_Utilities {
 
 	static $wp_options_cache = array();
 	static $postmeta = array();
+
+	const ADMIN_CAPABILITY = 'manage_options';
 
 	 /**
 	 * Get Post status translation.
@@ -18,12 +17,12 @@ class EPKB_Utilities {
 	 */
 	public static function get_post_status_text( $post_status ) {
 
-		$post_statuses = array( 'draft' => __( 'Draft' ), 'pending' => __( 'Pending' ),
-								'publish' => __( 'Published' ), 'future' => __( 'Scheduled' ),
-								'private' => __( 'Private' ),
-								'trash'   => __( 'Trash' ));
+		$post_statuses = array( 'draft' => esc_html__( 'Draft' ), 'pending' => esc_html__( 'Pending' ),
+		                        'publish' => esc_html__( 'Published' ), 'future' => esc_html__( 'Scheduled' ),
+								'private' => esc_html__( 'Private' ),
+								'trash'   => esc_html__( 'Trash' ));
 
-		if ( empty($post_status) || ! in_array($post_status, array_keys($post_statuses)) ) {
+		if ( empty( $post_status ) || ! in_array( $post_status, array_keys( $post_statuses ) ) ) {
 			return $post_status;
 		}
 
@@ -33,6 +32,11 @@ class EPKB_Utilities {
 	public static function get_eckb_kb_id( $default=1 ) {
 		global $eckb_kb_id;
 		return empty( $eckb_kb_id ) ? $default : $eckb_kb_id;
+	}
+
+	public static function get_current_category() {
+		$term = get_queried_object();
+		return empty( $term ) || ! $term instanceof WP_Term ? null : $term;
 	}
 
 
@@ -53,8 +57,8 @@ class EPKB_Utilities {
 	 * @return string
 	 */
 	public static function substr( $string, $start, $length=null ) {
-		$result = substr($string, $start, $length);
-		return empty($result) ? '' : $result;
+		$result = substr( $string, $start, $length );
+		return empty( $result ) ? '' : $result;
 	}
 
 	/**
@@ -121,19 +125,19 @@ class EPKB_Utilities {
 
 	/**
 	 * Determine if value is positive integer ( > 0 )
-	 * @param int $number is check
+	 * @param int $number is checked
 	 * @return bool
 	 */
 	public static function is_positive_int( $number ) {
 
 		// no invalid format
-		if ( empty($number) || ! is_numeric($number) ) {
+		if ( empty( $number ) || ! is_numeric( $number ) ) {
 			return false;
 		}
 
 		// no non-digit characters
 		$numbers_only = preg_replace('/\D/', "", $number );
-		if ( empty($numbers_only) || $numbers_only != $number ) {
+		if ( empty( $numbers_only ) || $numbers_only != $number ) {
 			return false;
 		}
 
@@ -277,13 +281,13 @@ class EPKB_Utilities {
 		$time = abs($time2 - $time1);
 		$time = ( $time < 1 )? 1 : $time;
 		$tokens = array (
-			31536000 => __( 'year' ),
-			2592000 => __( 'month' ),
-			604800 => __( 'week' ),
-			86400 => __( 'day' ),
-			3600 => __( 'hour' ),
-			60 => __( 'min' ),
-			1 => __( 'sec' )
+			31536000 => esc_html__( 'year' ),
+			2592000 => esc_html__( 'month' ),
+			604800 => esc_html__( 'week' ),
+			86400 => esc_html__( 'day' ),
+			3600 => esc_html__( 'hour' ),
+			60 => esc_html__( 'min' ),
+			1 => esc_html__( 'sec' )
 		);
 
 		$output = '';
@@ -314,14 +318,14 @@ class EPKB_Utilities {
 
 		// check wpnonce
 		$wp_nonce = self::post( '_wpnonce_epkb_ajax_action' );
-		if ( empty( $wp_nonce ) || ! wp_verify_nonce( $wp_nonce, '_wpnonce_epkb_ajax_action' ) ) {
-			self::ajax_show_error_die( __( 'Login or refresh this page to edit this knowledge base', 'echo-knowledge-base' ) . ' (E01)'  );
+		if ( empty( $wp_nonce ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $wp_nonce ) ), '_wpnonce_epkb_ajax_action' ) ) {
+			self::ajax_show_error_die( esc_html__( 'Login or refresh this page to edit this knowledge base', 'echo-knowledge-base' ) . ' (E01)'  );
 		}
 
 		// without context only admins can make changes
 		if ( empty( $context ) ) {
-			if ( ! current_user_can( EPKB_Admin_UI_Access::EPKB_ADMIN_CAPABILITY ) ) {
-				self::ajax_show_error_die( __( 'Login or refresh this page', 'echo-knowledge-base' ) . ' (E02)' );
+			if ( ! current_user_can( self::ADMIN_CAPABILITY ) ) {
+				self::ajax_show_error_die( esc_html__( 'Login or refresh this page', 'echo-knowledge-base' ) . ' (E02)' );
 			}
 			return;
 		}
@@ -341,18 +345,18 @@ class EPKB_Utilities {
 
 		// check wpnonce
 		$wp_nonce = self::post( '_wpnonce_epkb_ajax_action' );
-		if ( empty( $wp_nonce ) || ! wp_verify_nonce( $wp_nonce, '_wpnonce_epkb_ajax_action' ) ) {
-			self::ajax_show_error_die( __( 'Login or refresh this page to edit this knowledge base', 'echo-knowledge-base' ) . ' (E03)'  );
+		if ( empty( $wp_nonce ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $wp_nonce ) ), '_wpnonce_epkb_ajax_action' ) ) {
+			self::ajax_show_error_die( esc_html__( 'Login or refresh this page to edit this knowledge base', 'echo-knowledge-base' ) . ' (E03)'  );
 		}
 
 		// no needs check permission if capability false or user admin
-		if ( $capability === false || current_user_can( EPKB_Admin_UI_Access::EPKB_ADMIN_CAPABILITY ) ) {
+		if ( $capability === false || current_user_can( self::ADMIN_CAPABILITY ) ) {
 			return;
 		}
 
 		// ensure user has correct permission
 		if ( ! current_user_can( $capability ) ) {
-			self::ajax_show_error_die( __( 'You do not have permission to edit this knowledge base', 'echo-knowledge-base' ) . ' (E04)' );
+			self::ajax_show_error_die( esc_html__( 'You do not have permission to edit this knowledge base', 'echo-knowledge-base' ) . ' (E04)' );
 		}
 	}
 
@@ -384,7 +388,7 @@ class EPKB_Utilities {
 
 	public static function user_not_logged_in() {
 		if ( defined('DOING_AJAX') ) {
-			self::ajax_show_error_die( '<p>' . __( 'You are not logged in. Refresh your page and log in.', 'echo-knowledge-base' ) . '</p>', __( 'Cannot save your changes', 'echo-knowledge-base' ) );
+			self::ajax_show_error_die( '<p>' . esc_html__( 'You are not logged in. Refresh your page and log in.', 'echo-knowledge-base' ) . '</p>', esc_html__( 'Cannot save your changes', 'echo-knowledge-base' ) );
 		}
 	}
 
@@ -400,11 +404,11 @@ class EPKB_Utilities {
 		}
 
 		$user = wp_get_current_user();
-		if ( empty( $user ) || empty ( $user->roles ) ) {
+		if ( empty( $user ) || empty( $user->roles ) ) {
 			return '';
 		}
 
-		if ( ! in_array( 'administrator', $user->roles ) && ! in_array( 'administrator', $user->roles ) ) {
+		if ( ! in_array( 'administrator', $user->roles ) ) {
 			return '';
 		}
 
@@ -552,6 +556,12 @@ class EPKB_Utilities {
         return $sanitized_array;
     }
 
+	public static function sanitize_html_tag( $tag, $default='div' ) {
+		$tag = trim( $tag );
+		$tag = substr( $tag, 0, 4);
+		return in_array( $tag, ['h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'div', 'span', 'p'] ) ? $tag : $default;
+	}
+
 	/**
 	 * Decode and sanitize form fields.
 	 *
@@ -560,13 +570,13 @@ class EPKB_Utilities {
 	 * @return array
 	 */
 	public static function retrieve_and_sanitize_form( $form, $all_fields_specs ) {
-		if ( empty($form) ) {
+		if ( empty( $form ) ) {
 			return array();
 		}
 
 		// first urldecode()
-		if (is_string($form)) {
-			parse_str($form, $submitted_fields);
+		if ( is_string( $form ) ) {
+			parse_str( $form, $submitted_fields );
 		} else {
 			$submitted_fields = $form;
 		}
@@ -605,13 +615,13 @@ class EPKB_Utilities {
 	 */
 	public static function sanitize_comma_separated_ints( $text, $default='' ) {
 
-		if ( empty($text) || ! is_string($text) ) {
+		if ( empty( $text ) || ! is_string( $text ) ) {
 			return $default;
 		}
 
-		$text = preg_replace('/[^0-9 \,_]/', '', $text);
+		$text = preg_replace( '/[^0-9 \,_]/', '', $text );
 
-		return empty($text) ? $default : $text;
+		return empty( $text ) ? $default : $text;
 	}
 
 	/**
@@ -623,6 +633,8 @@ class EPKB_Utilities {
 	 * @param int $max_length
 	 * @return array|string - empty if not found
 	 */
+	// phpcs:disable WordPress.Security.NonceVerification.Recommended -- Verified elsewhere.
+	// phpcs:disable WordPress.Security.NonceVerification.Missing -- Verified elsewhere.
 	public static function post( $key, $default = '', $value_type = 'text', $max_length = 0 ) {
 
 		if ( isset( $_POST[$key] ) ) {
@@ -645,6 +657,8 @@ class EPKB_Utilities {
 	 * @param int $max_length
 	 * @return array|string - empty if not found
 	 */
+	// phpcs:disable WordPress.Security.NonceVerification.Recommended -- Verified elsewhere.
+	// phpcs:disable WordPress.Security.NonceVerification.Missing -- Verified elsewhere.
 	private static function post_sanitize( $key, $default = '', $value_type = 'text', $max_length = 0 ) {
 
 		if ( $_POST[$key] === null || is_object( $_POST[$key] )  ) {
@@ -663,17 +677,7 @@ class EPKB_Utilities {
 		}
 
 		if ( is_array( $_POST[$key] ) ) {
-			return self::sanitize_array( $_POST[$key] );
-		}
-
-		// jquery serialized form. sanitize values in array
-		if ( $value_type == 'form' ) {
-			$result = is_array( $default ) ? $default : [];
-			wp_parse_str( stripslashes( $_POST[$key] ), $decoded_form );
-			foreach ( $decoded_form as $field => $val ) {
-				$result[$field] = wp_kses_post( $val );
-			}
-			return $result;
+			return array_map( 'sanitize_text_field', $_POST[$key] );
 		}
 
 		if ( $value_type == 'text-area' ) {
@@ -681,7 +685,7 @@ class EPKB_Utilities {
 		} else if ( $value_type == 'email' ) {
 			$value = sanitize_email( $_POST[$key] );  // strips out all characters that are not allowable in an email
 		} else if ( $value_type == 'url' ) {
-			$value = sanitize_text_field( urldecode( $_POST[$key] ) );
+			$value = sanitize_url( urldecode( $_POST[$key] ) );
 		} else if ( $value_type == 'wp_editor' ) {
 			$value = wp_kses( $_POST[$key], self::get_extended_html_tags() );
 		} else {
@@ -690,15 +694,16 @@ class EPKB_Utilities {
 
 		// optionally limit the value by length
 		if ( ! empty( $max_length ) ) {
-			$value = substr( $value, 0, $max_length );
+			$value = self::substr( $value, 0, $max_length );
 		}
 
 		return $value;
 	}
 
+	// phpcs:disable WordPress.Security.NonceVerification.Recommended -- Verified elsewhere.
 	public static function request_key( $key, $default = '' ) {
 
-		if ( is_string( $_REQUEST[$key] ) ) {
+		if ( isset( $_REQUEST[$key] ) && is_string( $_REQUEST[$key] ) ) {
 			return sanitize_key( $_REQUEST[$key] );
 		}
 
@@ -714,6 +719,7 @@ class EPKB_Utilities {
 	 * @param int $max_length
 	 * @return array|string - empty if not found
 	 */
+	// phpcs:disable WordPress.Security.NonceVerification.Recommended -- Verified elsewhere.
 	public static function get( $key, $default = '', $value_type = 'text', $max_length = 0 ) {
 
 		if ( isset( $_GET[$key] ) ) {
@@ -736,6 +742,7 @@ class EPKB_Utilities {
 	 * @param int $max_length
 	 * @return array|string - empty if not found
 	 */
+	// phpcs:disable WordPress.Security.NonceVerification.Recommended -- Verified elsewhere.
 	private static function get_sanitize( $key, $default = '', $value_type = 'text', $max_length = 0 ) {
 
 		if ( $_GET[$key] === null || is_object( $_GET[$key] )  ) {
@@ -754,17 +761,7 @@ class EPKB_Utilities {
 		}
 
 		if ( is_array( $_GET[$key] ) ) {
-			return self::sanitize_array( $_GET[$key] );
-		}
-
-		// jquery serialized form. sanitize values in array
-		if ( $value_type == 'form' ) {
-			$result = is_array( $default ) ? $default : [];
-			wp_parse_str( stripslashes( $_GET[$key] ), $decoded_form );
-			foreach ( $decoded_form as $field => $val ) {
-				$result[$field] = wp_kses_post( $val );
-			}
-			return $result;
+			return array_map( 'sanitize_text_field', $_GET[$key] );
 		}
 
 		if ( $value_type == 'text-area' ) {
@@ -772,7 +769,7 @@ class EPKB_Utilities {
 		} else if ( $value_type == 'email' ) {
 			$value = sanitize_email( $_GET[$key] );  // strips out all characters that are not allowable in an email
 		} else if ( $value_type == 'url' ) {
-			$value = sanitize_text_field( urldecode( $_GET[$key] ) );
+			$value = sanitize_url( urldecode( $_GET[$key] ) );
 		} else if ( $value_type == 'wp_editor' ) {
 			$value = wp_kses( $_GET[$key], self::get_extended_html_tags() );
 		} else {
@@ -781,7 +778,7 @@ class EPKB_Utilities {
 
 		// optionally limit value by length
 		if ( ! empty( $max_length ) ) {
-			$value = substr( $value, 0, $max_length );
+			$value = self::substr( $value, 0, $max_length );
 		}
 
 		return $value;
@@ -861,7 +858,7 @@ class EPKB_Utilities {
 		if ( $return_error && $option === null && ! empty($wpdb->last_error) ) {
 			$wpdb_last_error = $wpdb->last_error;   // add_log changes last_error so store it first
 			EPKB_Logging::add_log( "DB failure: " . $wpdb_last_error, 'Option Name: ' . $option_name );
-			return new WP_Error(__( 'Error occurred', 'echo-knowledge-base' ), $wpdb_last_error);
+			return new WP_Error( __( 'Error occurred', 'echo-knowledge-base' ), $wpdb_last_error );
 		}
 
 		// if WP option is missing then return defaults
@@ -925,7 +922,7 @@ class EPKB_Utilities {
 		if ( is_array( $option_value ) || is_object( $option_value ) ) {
 			$serialized_value = maybe_serialize($option_value);
 			if ( empty( $serialized_value ) ) {
-				return new WP_Error( '434', __( 'Error occurred', 'echo-knowledge-base' ) . ' ' . $option_name );
+				return new WP_Error( '434', esc_html__( 'Error occurred', 'echo-knowledge-base' ) . ' ' . $option_name );
 			}
 		}
 
@@ -956,24 +953,24 @@ class EPKB_Utilities {
 	 * @param $meta_key
 	 * @param $default
 	 * @param bool|false $is_array
-	 * @param bool $return_error
+	 * @param bool|WP_Error $return_error
 	 *
-	 * @return array|string or default or error if $return_error is true
+	 * @return array|string|WP_Error or default or error if $return_error is true
 	 */
 	public static function get_postmeta( $post_id, $meta_key, $default, $is_array=false, $return_error=false ) {
 		/** @var $wpdb Wpdb */
 		global $wpdb;
 
-		if ( isset(self::$postmeta[$post_id][$meta_key]) ) {
+		if ( isset( self::$postmeta[$post_id][$meta_key] ) ) {
 			return self::$postmeta[$post_id][$meta_key];
 		}
 
 		if ( ! self::is_positive_int( $post_id) ) {
-			return $return_error ? new WP_Error( __( 'Error occurred', 'echo-knowledge-base' ), self::get_variable_string( $post_id ) ) : $default;
+			return $return_error ? new WP_Error( esc_html__( 'Error occurred', 'echo-knowledge-base' ), self::get_variable_string( $post_id ) ) : $default;
 		}
 
 		// retrieve specific option
-		$option = $wpdb->get_var( $wpdb->prepare("SELECT meta_value FROM $wpdb->postmeta WHERE post_id = %d and meta_key = '%s'", $post_id, $meta_key ) );
+		$option = $wpdb->get_var( $wpdb->prepare( "SELECT meta_value FROM $wpdb->postmeta WHERE post_id = %d and meta_key = %s", $post_id, $meta_key ) );
 		if ($option !== null ) {
 			$option = maybe_unserialize( $option );
 		}
@@ -1009,11 +1006,11 @@ class EPKB_Utilities {
 		global $wpdb;
 
 		if ( ! self::is_positive_int( $post_id) ) {
-			return new WP_Error( __( 'Error occurred', 'echo-knowledge-base' ), self::get_variable_string( $post_id ) );
+			return new WP_Error( esc_html__( 'Error occurred', 'echo-knowledge-base' ), self::get_variable_string( $post_id ) );
 		}
 
 		if ( $sanitized !== true ) {
-			return new WP_Error( '433', __( 'Error occurred', 'echo-knowledge-base' ) . ' ' . $meta_key );
+			return new WP_Error( '433', esc_html__( 'Error occurred', 'echo-knowledge-base' ) . ' ' . $meta_key );
 		}
 
 		// do not store null
@@ -1026,34 +1023,34 @@ class EPKB_Utilities {
 		if ( is_array( $meta_value ) || is_object( $meta_value ) ) {
 			$serialized_value = maybe_serialize($meta_value);
 			if ( empty($serialized_value) ) {
-				return new WP_Error( '434', __( 'Error occurred', 'echo-knowledge-base' ) . ' ' . $meta_key );
+				return new WP_Error( '434', esc_html__( 'Error occurred', 'echo-knowledge-base' ) . ' ' . $meta_key );
 			}
 		}
 
 		// check if the meta field already exists before doing 'upsert'
-		$result = $wpdb->get_row( $wpdb->prepare( "SELECT meta_value FROM $wpdb->postmeta WHERE meta_key = '%s' AND post_id = %d", $meta_key, $post_id ) );
+		$result = $wpdb->get_row( $wpdb->prepare( "SELECT meta_value FROM $wpdb->postmeta WHERE meta_key = %s AND post_id = %d", $meta_key, $post_id ) );
 		if ( $result === null && ! empty($wpdb->last_error) ) {
 			$wpdb_last_error = $wpdb->last_error;   // add_log changes last_error so store it first
 			EPKB_Logging::add_log( "DB failure: " . $wpdb_last_error );
-			return new WP_Error(__( 'Error occurred', 'echo-knowledge-base' ), $wpdb_last_error);
+			return new WP_Error( esc_html__( 'Error occurred', 'echo-knowledge-base' ), $wpdb_last_error);
 		}
 
 		// INSERT or UPDATE the meta field
 		if ( empty($result) ) {
 			if ( false === $wpdb->query( $wpdb->prepare( "INSERT INTO $wpdb->postmeta (`meta_key`, `meta_value`, `post_id`) VALUES (%s, %s, %d)", $meta_key, $serialized_value, $post_id ) ) ) {
 				EPKB_Logging::add_log("Failed to insert meta data. ", $meta_key);
-				return new WP_Error( '33', __( 'Error occurred', 'echo-knowledge-base' ) );
+				return new WP_Error( '33', esc_html__( 'Error occurred', 'echo-knowledge-base' ) );
 			}
 		} else {
-			if ( false === $wpdb->query( $wpdb->prepare( "UPDATE $wpdb->postmeta SET meta_value = %s WHERE meta_key = '%s' AND post_id = %d", $serialized_value, $meta_key, $post_id ) ) ) {
+			if ( false === $wpdb->query( $wpdb->prepare( "UPDATE $wpdb->postmeta SET meta_value = %s WHERE meta_key = %s AND post_id = %d", $serialized_value, $meta_key, $post_id ) ) ) {
 				EPKB_Logging::add_log("Failed to update meta data. ", $meta_key);
-				return new WP_Error( '33', __( 'Error occurred', 'echo-knowledge-base' ) );
+				return new WP_Error( '33', esc_html__( 'Error occurred', 'echo-knowledge-base' ) );
 			}
 		}
 
 		if ( $result === false ) {
 			EPKB_Logging::add_log( 'Failed to update meta key', $meta_key );
-			return new WP_Error( '435', __( 'Error occurred', 'echo-knowledge-base' ) . ' ' . $meta_key );
+			return new WP_Error( '435', esc_html__( 'Error occurred', 'echo-knowledge-base' ) . ' ' . $meta_key );
 		}
 
 		self::$postmeta[$post_id][$meta_key] = $meta_value;
@@ -1078,7 +1075,7 @@ class EPKB_Utilities {
 		}
 
 		// delete specific option
-		if ( false === $wpdb->query( $wpdb->prepare( "DELETE FROM $wpdb->postmeta WHERE post_id = %d and meta_key = '%s'", $post_id, $meta_key ) ) ) {
+		if ( false === $wpdb->query( $wpdb->prepare( "DELETE FROM $wpdb->postmeta WHERE post_id = %d and meta_key = %s", $post_id, $meta_key ) ) ) {
 			EPKB_Logging::add_log( "Could not delete post '" . self::get_variable_string($meta_key) . "'' metadata: ", $post_id);
 			return false;
 		}
@@ -1107,7 +1104,7 @@ class EPKB_Utilities {
 		}
 
 		if ( empty($var) ) {
-			return '['. __( 'empty', 'echo-knowledge-base' ) . ']';
+			return '[empty]';
 		}
 
 		$output = 'array';
@@ -1171,7 +1168,11 @@ class EPKB_Utilities {
 			return $var ? 'TRUE' : 'FALSE';
 		}
 
-		if ( is_string($var) || is_numeric($var) ) {
+		if ( is_string( $var ) ) {
+			return empty( $var ) ? '<empty string>' : $var;
+		}
+
+		if ( is_numeric( $var ) ) {
 			return $var;
 		}
 
@@ -1268,43 +1269,12 @@ class EPKB_Utilities {
 	}
 
 	/**
-	 * Check first installed version. Return true if $version less or equal than first installed version. Also return true if epkb_version_first was removed. Use to apply some functions only to new users
-	 * for the NEW installation return true
-	 * @deprecated  Use is_new_user_3() instead
-	 * @param $version
-	 * @return bool
-	 */
-	public static function is_new_user( $version ) {
-		$plugin_first_version = self::get_wp_option( 'epkb_version_first', $version );      // TODO replace with is_new_user_3() below
-		return ! version_compare( $plugin_first_version, $version, '<' );
-	}
-
-	/**
-	 * Check the first installed version. Return true if $version less or equal than first installed version or not defined.
-	 * Also return false if epkb_version_first was removed. Use to apply some functions only to new users
-	 * For the NEW installation will return false
-	 * @deprecated  Use is_new_user_3() instead
-	 * @param $version
-	 * @return bool
-	 */
-	public static function is_new_user_2( $version ) {
-
-		$plugin_first_version = self::get_wp_option( 'epkb_version_first', '' );  // TODO replace with is_new_user_3() below
-		if ( empty( $plugin_first_version ) ) {
-			return false;
-		}
-
-		return ! version_compare( $plugin_first_version, $version, '<' );
-	}
-
-	/**
-	 * Check first installed version. Return true if $version less or equal than first installed version. Also return true if epkb_version_first was removed. Use to apply some functions only to new users
-	 * for the NEW installation return true
+	 * Check first installed version. Return true if $version less or equal than first installed version.
 	 * @param $kb_config
 	 * @param $version
 	 * @return bool
 	 */
-	public static function is_new_user_3( $kb_config, $version ) {
+	public static function is_new_user( $kb_config, $version ) {
 		$plugin_first_version = empty( $kb_config['first_plugin_version'] ) ? '11.30.0' : $kb_config['first_plugin_version'];
 		return ! version_compare( $plugin_first_version, $version, '<' );
 	}
@@ -1318,12 +1288,12 @@ class EPKB_Utilities {
 	 */
 	public static function get_inline_style( $styles, $config ) {
 
-		if ( empty($styles) || ! is_string($styles) ) {
+		if ( empty( $styles ) || ! is_string( $styles ) ) {
 			return '';
 		}
 
 		$style_array = explode(',', $styles);
-		if ( empty($style_array) ) {
+		if ( empty( $style_array ) ) {
 			return '';
 		}
 
@@ -1331,16 +1301,16 @@ class EPKB_Utilities {
 		foreach( $style_array as $style ) {
 
 			$key_value = array_map( 'trim', explode(':', $style) );
-			if ( empty($key_value[0]) ) {
+			if ( empty( $key_value[0] ) ) {
 				continue;
 			}
 
 			if ( $key_value[0] != 'typography' ) {
-				$output .= $key_value[0] . ': ';
+				$output .= esc_attr( $key_value[0] ) . ': ';
 			}
 
 			// true if using config value
-			if ( count($key_value) == 2 && isset($key_value[1]) ) {
+			if ( count( $key_value ) == 2 && isset( $key_value[1] ) ) {
 
 				if ( $key_value[0] == 'justify-content' ) {
 
@@ -1349,39 +1319,39 @@ class EPKB_Utilities {
 					} else if ( $key_value[1] == 'right' ) {
 						$output .= 'flex-end';
 					} else {
-						$output .= $key_value[1];
+						$output .= esc_attr( $key_value[1] );
 					}
 
-				} else if( $key_value[0] == ' text-align' ) {
+				} else if ( $key_value[0] == ' text-align' ) {
 
 					if ( $key_value[1] == 'left' ) {
 						$output .= 'start';
 					} else if ( $key_value[1] == 'right' ) {
 						$output .= 'end';
 					} else {
-						$output .= $key_value[1];
+						$output .= esc_attr( $key_value[1] );
 					}
 
 				} else {
-					$output .= $key_value[1];
+					$output .= esc_attr( $key_value[1] );
 				}
 
-			} else if ( $key_value[0] == 'typography' && isset($config[$key_value[2]]) ) { // typography field
+			} else if ( $key_value[0] == 'typography' && isset( $config[$key_value[2]] ) ) { // typography field
 
 				$typography_values = array_merge( EPKB_Typography::$typography_defaults, $config[$key_value[2]] );
-				if ( ! empty($typography_values['font-family']) ) {
-					$output .= 'font-family:' . $typography_values['font-family'] . ';';
+				if ( ! empty( $typography_values['font-family'] ) ) {
+					$output .= 'font-family:' . esc_attr( $typography_values['font-family'] ) . ';';
 				}
 
-				if ( ! empty($typography_values['font-size']) ) {
-					$output .= 'font-size:' . $typography_values['font-size'] . $typography_values['font-size-units'] . ';';
+				if ( ! empty( $typography_values['font-size'] ) ) {
+					$output .= 'font-size:' . esc_attr( $typography_values['font-size'] . $typography_values['font-size-units'] ) . ';';
 				}
 
-				if ( ! empty($typography_values['font-weight']) ) {
-					$output .= 'font-weight:' . $typography_values['font-weight'] . ';';
+				if ( ! empty( $typography_values['font-weight'] ) ) {
+					$output .= 'font-weight:' . esc_attr( $typography_values['font-weight'] ) . ';';
 				}
 
-			} else if ( isset($key_value[2]) && isset($config[$key_value[2]]) ) {
+			} else if ( isset( $key_value[2] ) && isset( $config[$key_value[2]] ) ) {
 
 				if ( $key_value[0] == 'justify-content' ) {
 
@@ -1390,7 +1360,7 @@ class EPKB_Utilities {
 					} else if ( $config[ $key_value[2] ] == 'right' ) {
 						$output .= 'flex-end';
 					} else {
-						$output .= $config[ $key_value[2] ];
+						$output .= esc_attr( $config[ $key_value[2] ] );
 					}
 
 				} else if ( $key_value[0] == 'text-align' ) {
@@ -1400,11 +1370,11 @@ class EPKB_Utilities {
 					} else if ( $config[ $key_value[2] ] == 'right' ) {
 						$output .= 'end';
 					} else {
-						$output .= $config[ $key_value[2] ];
+						$output .= esc_attr( $config[ $key_value[2] ] );
 					}
 
 				} else {
-					$output .= $config[ $key_value[2] ];
+					$output .= esc_attr( $config[ $key_value[2] ] );
 				}
 
 				switch ( $key_value[0] ) {
@@ -1450,22 +1420,22 @@ class EPKB_Utilities {
 	 */
 	public static function get_css_class( $classes, $config ) {
 
-		if ( empty($classes) || ! is_string($classes) ) {
+		if ( empty( $classes ) || ! is_string( $classes ) ) {
 			return '';
 		}
 
 		$output = ' class="';
 		foreach( array_map( 'trim', explode(',', $classes) ) as $class ) {
-			$class_name = trim(str_replace(':', '', $class));
+			$class_name = trim( str_replace( ':', '', $class ) );
 			$is_config = $class != $class_name;
 
 			if ( $is_config && empty( $config[$class_name] ) ) {
 				continue;
 			}
 
-			$output .= ( $is_config ? $config[$class_name] : $class ) . ' ';
+			$output .= ( $is_config ? esc_attr( $config[$class_name] ) : $class ) . ' ';
 		}
-		return trim($output) . '"';
+		return trim( $output ) . '"';
 	}
 
 	public static function get_font_css( $kb_config, $config_name, $font_param_name, $delta=0 ) {
@@ -1506,8 +1476,9 @@ class EPKB_Utilities {
 	}
 
 	public static function get_single_article_link( $kb_config, $title, $article_id, $type, $seq_no='' ) {
+		static $epkb_single_article_link = null;
 
-		$title_style = '';
+		$title_style_escaped = '';
 
 		switch( $type ) {
 
@@ -1515,10 +1486,19 @@ class EPKB_Utilities {
 				$a_tag_class = 'epkb-sidebar-article';
 				$outer_span = 'eckb-article-title';
 				$icon_class = 'eckb-article-title__icon ep_font_icon_document';
-				$article_color = self::get_inline_style( 'color:: sidebar_article_font_color', $kb_config );
-				$icon_color = self::get_inline_style( 'color:: sidebar_article_icon_color', $kb_config );
-				$title_style = self::get_inline_style( 'typography:: sidebar_section_body_typography', $kb_config );
+				$article_color_escaped = self::get_inline_style( 'color:: sidebar_article_font_color', $kb_config );
+				$icon_color_escaped = self::get_inline_style( 'color:: sidebar_article_icon_color', $kb_config );
+				$title_style_escaped = self::get_inline_style( 'typography:: sidebar_section_body_typography', $kb_config );
 				$title_class = 'eckb-article-title__text';
+				break;
+
+			case 'Category_Archive_Page':
+				$a_tag_class = 'epkb-ml-article-container';
+				$outer_span = 'epkb-article-inner';
+				$icon_class = 'epkb-article__icon ep_font_icon_document';
+				$article_color_escaped = self::get_inline_style( 'color:: sidebar_article_font_color', $kb_config );
+				$icon_color_escaped = self::get_inline_style( 'color:: sidebar_article_icon_color', $kb_config );
+				$title_class = 'epkb-article__text';
 				break;
 
 			case EPKB_Layout::CLASSIC_LAYOUT:
@@ -1527,14 +1507,14 @@ class EPKB_Utilities {
 				$a_tag_class = 'epkb-ml-article-container';
 				$outer_span = 'epkb-article-inner';
 				$icon_class = 'epkb-article__icon ep_font_icon_document';
-				$article_color = self::get_inline_style( 'color:: article_font_color', $kb_config );
+				$article_color_escaped = self::get_inline_style( 'color:: article_font_color', $kb_config );
 				$title_class = 'epkb-article__text';
 				switch ( $kb_config['kb_main_page_layout'] ) {
 					case EPKB_Layout::SIDEBAR_LAYOUT:
-						$icon_color = self::get_inline_style( 'color:: sidebar_article_icon_color', $kb_config );
+						$icon_color_escaped = self::get_inline_style( 'color:: sidebar_article_icon_color', $kb_config );
 						break;
 					default:
-						$icon_color = self::get_inline_style( 'color:: article_icon_color', $kb_config );
+						$icon_color_escaped = self::get_inline_style( 'color:: article_icon_color', $kb_config );
 				}
 				break;
 
@@ -1545,18 +1525,18 @@ class EPKB_Utilities {
 				$a_tag_class = 'epkb-mp-article';
 				$outer_span = 'eckb-article-title';
 				$icon_class = 'eckb-article-title__icon ep_font_icon_document';
-				$article_color = self::get_inline_style( 'color:: article_font_color', $kb_config );
-				$icon_color = self::get_inline_style( 'color:: article_icon_color', $kb_config );
+				$article_color_escaped = self::get_inline_style( 'color:: article_font_color', $kb_config );
+				$icon_color_escaped = self::get_inline_style( 'color:: article_icon_color', $kb_config );
 				$title_class = 'eckb-article-title__text';
 		}
 
 		// handle any add-on content
-		$escaped_title_attr = '';
+		$title_attr_escaped = '';
 		$new_tab = '';
 		$link = '';
 		if ( has_filter( 'eckb_single_article_filter' ) ) {
 
-			$result = apply_filters('eckb_single_article_filter', $article_id, array( $kb_config['id'], $title, $outer_span, $article_color, $icon_color ) );
+			$result = apply_filters('eckb_single_article_filter', $article_id, array( $kb_config['id'], $title, $outer_span, $article_color_escaped, $icon_color_escaped ) );
 
 			// keep for old compatibility for links to output separately
 			if ( ! empty( $result ) && $result === true ) {
@@ -1565,9 +1545,24 @@ class EPKB_Utilities {
 
 			if ( is_array( $result) && isset( $result['url_value'] ) ) {
 				$link = $result['url_value'];
-				$escaped_title_attr = 'title="' . esc_attr( $result['title_attr_value'] ) . '"';
+				$title_attr_escaped = 'title="' . esc_attr( $result['title_attr_value'] ) . '"';
 				$new_tab = $result['new_tab'];
 				$icon_class = 'eckb-article-title__icon epkbfa epkbfa-' . $result['icon'];
+			}
+		}
+
+		// custom article list icon
+		if ( empty( $link ) && EPKB_Utilities::is_elegant_layouts_enabled() && has_filter( 'eckb_article_list_icon_filter' ) ) {
+
+			if ( empty( $epkb_single_article_link ) ) {
+
+				$result = apply_filters( 'eckb_article_list_icon_filter', $article_id, array( $kb_config['id'], $type) );
+				if ( !empty( $result['icon'] ) ) {
+					$icon_class = $result['icon'];
+					$epkb_single_article_link = $icon_class;
+				}
+			} else {
+				$icon_class = $epkb_single_article_link;
 			}
 		}
 
@@ -1579,21 +1574,36 @@ class EPKB_Utilities {
 			}
 		}
 
-		// output link if wizard is not on otherwise output span
-		$wizard_off = empty( $_GET['wizard-on'] );
-		$opening_tag = $wizard_off ? '<a href="' . esc_url( $link ) . '"' : '<span';
-		$closing_tag = $wizard_off ? '</a>' : '</span>';		?>
+		$icon_toggle_class = '';
+		$icon_toggle = $type == 'Article_Sidebar' || $type == 'Category_Archive_Page' ? 'sidebar_article_icon_toggle' : 'article_icon_toggle';
+		if ( $kb_config[$icon_toggle] == 'off' ) {
+			$icon_class = '';
+			$icon_toggle_class = 'epkb-article--no-icon';
+		}
 
-		<?php echo $opening_tag . ' ' . $escaped_title_attr; ?> class="<?php echo $a_tag_class; ?>" data-kb-article-id="<?php echo esc_attr( $article_id ); ?>" <?php echo $new_tab; ?>>
-			<span class="<?php echo $outer_span; ?>" <?php echo $article_color; ?> >
-				<span class="<?php echo $icon_class; ?>" <?php echo $icon_color; ?> aria-hidden="true"></span>
-				<span class="<?php echo $title_class; ?>" <?php echo $title_style; ?>><?php echo esc_html( $title ); ?></span>
-			</span>
-		<?php echo $closing_tag;
+		// output link if wizard is not on otherwise output span
+		if ( ! empty( $_GET['ordering-wizard-on'] ) ) { ?>
+			<span class="<?php echo esc_attr( $a_tag_class ) . ' ' . esc_attr( $icon_toggle_class ); ?>" data-kb-article-id="<?php echo esc_attr( $article_id ); ?>">
+				<span class="<?php echo esc_attr( $icon_class ); ?>"></span>
+				<span class="<?php echo esc_attr( $title_class ); ?>"><?php echo esc_html( $title ); ?></span>
+			</span> <?php
+			return;
+		}   ?>
+
+		<a href="<?php echo esc_url( $link ); ?>" <?php echo $title_attr_escaped; ?> class="<?php echo esc_attr( $a_tag_class ) . ' ' . esc_attr( $icon_toggle_class ); ?>"
+		            data-kb-article-id="<?php echo esc_attr( $article_id ); ?>" <?php echo ( empty( $new_tab ) ? '' : 'target="_blank"' ); ?>>
+			<span class="<?php echo esc_attr( $outer_span ); ?>" <?php echo $article_color_escaped; ?> >
+				<span class="<?php echo esc_attr( $icon_class ); ?>" <?php echo $icon_color_escaped; ?> aria-hidden="true"></span>
+				<span class="<?php echo esc_attr( $title_class ); ?>" <?php echo $title_style_escaped; ?>><?php echo esc_html( $title ); ?></span>
+			</span> <?php
+			if ( $type == 'Category_Archive_Page' && ! empty( $kb_config['archive_content_articles_arrow_toggle'] ) && $kb_config['archive_content_articles_arrow_toggle'] == 'on' ) { ?>
+				<span class="eckb-category-archive-arrow epkbfa epkbfa-arrow-right"></span> <?php
+			}   ?>
+		</a>    <?php
 	}
 
 	/**
-	 * Check if Aaccess Manager is considered active.
+	 * Check if Access Manager is considered active.
 	 *
 	 * @param bool $is_active_check_only
 	 * @return bool
@@ -1611,9 +1621,9 @@ class EPKB_Utilities {
 		}
 
 		$table = $wpdb->prefix . 'am'.'gr_kb_groups';
-		$result = $wpdb->get_var( "SHOW TABLES LIKE '" . $table ."'" );
+		$result = $wpdb->get_var( $wpdb->prepare( "SHOW TABLES LIKE %s", $table ) );
 
-		return ( ! empty($result) && ( $table == $result ) );
+		return ( ! empty( $result ) && ( $table == $result ) );
 	}
 	
 	/**
@@ -1661,7 +1671,7 @@ class EPKB_Utilities {
 	 * @return bool
 	 */
 	public static function is_wpml_plugin_active() {
-		return defined('ICL_SITEPRESS_VERSION');
+		return defined( 'ICL_SITEPRESS_VERSION' );
 	}
 
 	public static function is_advanced_search_enabled( $kb_config=array() ) {
@@ -1815,14 +1825,15 @@ class EPKB_Utilities {
 	 *
 	 * @return string - return '' if email sent otherwise return error message
 	 */
-	public static function send_email( $message, $to_support_email='', $reply_to_email='', $reply_to_name='', $subject='' ) {
+	public static function send_email( $message, $is_message_html, $to_support_email='', $reply_to_email='', $reply_to_name='', $subject='' ) {
 
 		// validate MESSAGE
 		if ( empty( $message ) || strlen( $message ) > 5000 ) {
 			EPKB_Logging::add_log( 'Invalid or too long email message', $message );
-			return __( 'Error occurred', 'echo-knowledge-base' ) . ' (0)';
+			return esc_html__( 'Error occurred', 'echo-knowledge-base' ) . ' (0)';
 		}
-		$message = sanitize_textarea_field( $message );
+
+		$message = wp_kses_post( $message );
 
 		// validate TO email
 		if ( empty( $to_support_email ) ) { // send to admin if empty
@@ -1831,11 +1842,11 @@ class EPKB_Utilities {
 
 		$to_support_email = sanitize_email( $to_support_email );
 		if ( empty( $to_support_email ) || strlen( $to_support_email) > 100 ) {
-			return __( 'Invalid email', 'echo-knowledge-base' ) . ' (1)';
+			return esc_html__( 'Invalid email', 'echo-knowledge-base' ) . ' (1)';
 		}
 
 		if ( ! is_email( $to_support_email ) ) {
-			return __( 'Invalid email', 'echo-knowledge-base' ) . ' (2)';
+			return esc_html__( 'Invalid email', 'echo-knowledge-base' ) . ' (2)';
 		}
 
 		// validate REPLY TO email/name
@@ -1845,15 +1856,15 @@ class EPKB_Utilities {
 
 		$reply_to_email = sanitize_email( $reply_to_email );
 		if ( empty( $reply_to_email ) || strlen( $reply_to_email ) > 100 ) {
-			return __( 'Invalid email', 'echo-knowledge-base' ) . ' (3)';
+			return esc_html__( 'Invalid email', 'echo-knowledge-base' ) . ' (3)';
 		}
 		
 		if ( ! is_email( $reply_to_email ) ) {
-			return __( 'Invalid email', 'echo-knowledge-base' ) . ' (4)';
+			return esc_html__( 'Invalid email', 'echo-knowledge-base' ) . ' (4)';
 		}
 		
 		if ( strlen( $reply_to_name ) > 100 ) {
-			return __( 'Error occurred', 'echo-knowledge-base' ) . ' (5)';
+			return esc_html__( 'Error occurred', 'echo-knowledge-base' ) . ' (5)';
 		}
 		
 		$reply_to_name = sanitize_text_field( $reply_to_name );
@@ -1865,11 +1876,11 @@ class EPKB_Utilities {
 		}
 
 		if ( strlen( $subject ) > 200 ) {
-			return __( 'Invalid subject', 'echo-knowledge-base' );
+			return esc_html__( 'Invalid subject', 'echo-knowledge-base' );
 		}
 
 		if ( strlen( $message ) > 10000 ) {
-			return __( 'Email message is too long', 'echo-knowledge-base' );
+			return esc_html__( 'Email message is too long', 'echo-knowledge-base' );
 		}
 
 		// setup Email header
@@ -1881,17 +1892,20 @@ class EPKB_Utilities {
 			"Content-Type: text/html; charset=utf-8\r\n",
 		);
 
-		// setup Email message
-		$message =
-			'<html>
-				<body>' . esc_html( $message ) .  '
-				</body>
-			</html>';
+		// setup Email message if not HTML
+		if ( ! $is_message_html ) {
+			$message = '
+				<html>
+					<body>' .
+						esc_html( $message ) . '
+					</body>
+				</html>';
 
-		// convert text to HTML - clickable links, turning line breaks into <p> and <br/> tags
-		//$message = wpautop( make_clickable( $message ), false );
-		$message = str_replace( '&#038;', '&amp;', $message );
-		$message = str_replace( [ "\r\n", '\r\n', "\n", '\n', "\r", '\r' ], '<br />', $message );
+			// convert text to HTML - clickable links, turning line breaks into <p> and <br/> tags
+			//$message = wpautop( make_clickable( $message ), false );
+			$message = str_replace( '&#038;', '&amp;', $message );
+			$message = str_replace( ["\r\n", '\r\n', "\n", '\n', "\r", '\r'], '<br />', $message );
+		}
 
 		global /** @var WP_Error $epkb_email_error - email error from WordPress wp_mail() function */
 		$epkb_email_error;
@@ -1910,7 +1924,7 @@ class EPKB_Utilities {
 		remove_action( 'wp_mail_failed', [ 'EPKB_Utilities', 'check_email_errors' ] );
 
 		// Log email errors if need
-		$error_message = __( 'Failed to send the email.', 'echo-knowledge-base' );
+		$error_message = esc_html__( 'Failed to send the email.', 'echo-knowledge-base' );
 
 		/** $epkb_email_error @ WP_Error */
 		if ( is_wp_error( $epkb_email_error ) ) {
@@ -2118,7 +2132,7 @@ class EPKB_Utilities {
 	}
 
 	/**
-	 * Return 'true' if the current user can view the given article
+	 * Private articles - return 'true' if the current user can view this private article
 	 *
 	 * @param $article_id
 	 *
@@ -2209,11 +2223,11 @@ class EPKB_Utilities {
 
 		// Standard
 		if ( $post_type_object->name == 'post' ) {
-			return __( 'Post' );
+			return esc_html__( 'Post' );
 		}
 
 		if ( $post_type_object->name == 'page' ) {
-			return __( 'Page' );
+			return esc_html__( 'Page' );
 		}
 
 		if ( in_array( $post_type_object->name, ['ip_lesson', 'ip_quiz', 'ip_question', 'ip_course'] ) ) {
@@ -2252,16 +2266,26 @@ class EPKB_Utilities {
 	}
 
 	/**
-	 * Return if the theme is block theme. Checks to see if they are using a compatible version of WP, or if not they have a compatible version of the Gutenberg plugin installed.
-	 *
-	 * @return boolean
+	 * Check if the current theme is a block theme.
+	 * @return bool
 	 */
 	public static function is_block_theme() {
 		if ( function_exists( 'wp_is_block_theme' ) ) {
 			return (bool) wp_is_block_theme();
 		}
+		if ( function_exists( 'gutenberg_is_fse_theme' ) ) {
+			return (bool) gutenberg_is_fse_theme();
+		}
 
 		return false;
+	}
+
+	public static function parse_blocks( $post ) {
+		$blocks = [];
+		if ( isset( $post->post_content ) && function_exists( 'parse_blocks' ) ) { // added  in wp 5.0
+			$blocks = parse_blocks( $post->post_content );
+		}
+		return $blocks;
 	}
 
 	/**
@@ -2320,25 +2344,5 @@ class EPKB_Utilities {
 		}
 
 		return $css;
-	}
-
-	/**
-	 * Handle PHP error
-	 */
-	public static function handle_fatal_error() {
-		global $eckb_setup_wizard_end;
-
-		if ( ! isset( $eckb_setup_wizard_end ) || $eckb_setup_wizard_end ) {
-			return;
-		}
-
-		$error = error_get_last();
-		if ( ! $error ) {
-			return;
-		}
-
-		$error_message = print_r( $error, true );
-
-		wp_die( 'epkb_php_error_start' . $error_message . 'epkb_php_error_end' );
 	}
 }

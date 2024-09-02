@@ -48,7 +48,7 @@ class EPKB_AI_Help_Sidebar_Ctrl {
 				$this->save_settings();
 				break;
 			default:
-				self::ajax_show_error_die( __( 'Unknown AI request', 'echo-knowledge-base' ) );
+				self::ajax_show_error_die( esc_html__( 'Unknown AI request', 'echo-knowledge-base' ) );
 		}
 	}
 
@@ -76,7 +76,7 @@ class EPKB_AI_Help_Sidebar_Ctrl {
 			if ( $openai_handler->is_openai_error ) {
 				self::ajax_show_error_die( $openai_handler->error_message );
 			} else {
-				self::ajax_show_error_die(  __( 'Error occurred', 'echo-knowledge-base' ) . ' (3355)' );
+				self::ajax_show_error_die(  esc_html__( 'Error occurred', 'echo-knowledge-base' ) . ' (3355)' );
 			}
 		}
 
@@ -86,14 +86,14 @@ class EPKB_AI_Help_Sidebar_Ctrl {
 		if ( $fixed_input_text == $input_text ) {
 			wp_die( wp_json_encode( array(
 				'status'            => 'success',
-				'message'           => __( 'No text change required.', 'echo-knowledge-base' ),
+				'message'           => esc_html__( 'No text change required.', 'echo-knowledge-base' ),
 				'tokens_used'       => $openai_handler->tokens_used,
 			) ) );
 		}
 
 		wp_die( wp_json_encode( array(
 			'status'            => 'success',
-			'message'           => __( 'AI Task Completed.', 'echo-knowledge-base' ),
+			'message'           => esc_html__( 'AI Task Completed.', 'echo-knowledge-base' ),
 			'fixed_input_text'  => $fixed_input_text,
 			'tokens_used'       => $openai_handler->tokens_used,
 		) ) );
@@ -122,7 +122,7 @@ class EPKB_AI_Help_Sidebar_Ctrl {
 			if ( $openai_handler->is_openai_error ) {
 				self::ajax_show_error_die( $openai_handler->error_message );
 			} else {
-				self::ajax_show_error_die(  __( 'Error occurred', 'echo-knowledge-base' ) . ' (2964)' );
+				self::ajax_show_error_die(  esc_html__( 'Error occurred', 'echo-knowledge-base' ) . ' (2964)' );
 			}
 		}
 
@@ -132,14 +132,14 @@ class EPKB_AI_Help_Sidebar_Ctrl {
 		if ( $fixed_input_text == $input_text ) {
 			wp_die( wp_json_encode( array(
 				'status'            => 'success',
-				'message'           => __( 'No text change required.', 'echo-knowledge-base' ),
+				'message'           => esc_html__( 'No text change required.', 'echo-knowledge-base' ),
 				'tokens_used'       => $openai_handler->tokens_used,
 			) ) );
 		}
 
 		wp_die( wp_json_encode( array(
 			'status'            => 'success',
-			'message'           => __( 'AI Task Completed.', 'echo-knowledge-base' ),
+			'message'           => esc_html__( 'AI Task Completed.', 'echo-knowledge-base' ),
 			'fixed_input_text'  => $fixed_input_text,
 			'tokens_used'       => $openai_handler->tokens_used,
 		) ) );
@@ -169,7 +169,7 @@ class EPKB_AI_Help_Sidebar_Ctrl {
 			if ( $openai_handler->is_openai_error ) {
 				self::ajax_show_error_die( $openai_handler->error_message );
 			} else {
-				self::ajax_show_error_die(  __( 'Error occurred', 'echo-knowledge-base' ) . ' (2934)' );
+				self::ajax_show_error_die(  esc_html__( 'Error occurred', 'echo-knowledge-base' ) . ' (2934)' );
 			}
 		}
 
@@ -179,14 +179,14 @@ class EPKB_AI_Help_Sidebar_Ctrl {
 		if ( $fixed_input_text == $input_text ) {
 			wp_die( wp_json_encode( array(
 				'status'            => 'success',
-				'message'           => __( 'No text change required.', 'echo-knowledge-base' ),
+				'message'           => esc_html__( 'No text change required.', 'echo-knowledge-base' ),
 				'tokens_used'       => $openai_handler->tokens_used,
 			) ) );
 		}
 
 		wp_die( wp_json_encode( array(
 			'status'            => 'success',
-			'message'           => __( 'AI Task Completed.', 'echo-knowledge-base' ),
+			'message'           => esc_html__( 'AI Task Completed.', 'echo-knowledge-base' ),
 			'fixed_input_text'  => $fixed_input_text,
 			'tokens_used'       => $openai_handler->tokens_used,
 		) ) );
@@ -216,7 +216,7 @@ class EPKB_AI_Help_Sidebar_Ctrl {
 
 		wp_die( wp_json_encode( array(
 			'status'            => 'success',
-			'message'           => __( 'Outline generated', 'echo-knowledge-base' ),
+			'message'           => esc_html__( 'Outline generated', 'echo-knowledge-base' ),
 			'result'            => $outline,
 			'tokens_used'       => $openai_handler->tokens_used,
 		) ) );
@@ -244,7 +244,7 @@ class EPKB_AI_Help_Sidebar_Ctrl {
 
 		wp_die( wp_json_encode( array(
 			'status'    => 'success',
-			'message'   => __( 'Settings saved', 'echo-knowledge-base' ),
+			'message'   => esc_html__( 'Settings saved', 'echo-knowledge-base' ),
 		) ) );
 	}
 
@@ -341,10 +341,8 @@ class EPKB_AI_Help_Sidebar_Ctrl {
 		$reason_input = EPKB_Utilities::post( 'feedback_text', '', 'text-area' );
 
 		if ( empty( $reason_input ) ) {
-			self::ajax_show_error_die( __( 'Please enter your feedback', 'echo-knowledge-base' ) );
+			self::ajax_show_error_die( esc_html__( 'Please enter your feedback', 'echo-knowledge-base' ) );
 		}
-
-		$first_version = get_option( 'epkb_version_first' );
 
 		// retrieve email
 		$contact_email = EPKB_Utilities::post( 'feedback_email', '', 'email' );
@@ -363,7 +361,7 @@ class EPKB_AI_Help_Sidebar_Ctrl {
 			'feedback_input'    => $reason_input,
 			'plugin_name'       => 'KB',
 			'plugin_version'    => class_exists('Echo_Knowledge_Base') ? Echo_Knowledge_Base::$version : 'N/A',
-			'first_version'     => empty($first_version) ? 'N/A' : $first_version,
+			'first_version'     => '',
 			'contact_user'      => $contact_email . ' - ' . $contact_user
 		);
 

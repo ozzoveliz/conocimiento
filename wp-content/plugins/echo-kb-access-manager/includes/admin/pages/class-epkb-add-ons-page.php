@@ -24,7 +24,7 @@ class EPKB_Add_Ons_Page {
 
 		$admin_page_views = self::get_regular_views_config();
 
-		EPKB_HTML_Admin::admin_page_css_missing_message();   ?>
+		EPKB_HTML_Admin::admin_page_header();   ?>
 
 		<!-- Admin Page Wrap -->
 		<div id="ekb-admin-page-wrap">
@@ -95,17 +95,17 @@ class EPKB_Add_Ons_Page {
 
 			self::add_on_product( array(
 				'id'                => 'epkb-add-on-bundle',
-				'title'             => __( 'Add-on Bundle', 'echo-knowledge-base' ),
-				'special_note'      => __( 'Save money with bundle discount', 'echo-knowledge-base' ),
+				'title'             => esc_html__( 'Add-on Bundle', 'echo-knowledge-base' ),
+				'special_note'      => esc_html__( 'Save money with bundle discount', 'echo-knowledge-base' ),
 				'img'               => 'https://www.echoknowledgebase.com/wp-content/uploads/2019/11/add-on-bundle-2.jpg',
-				'desc'              => __( 'Save up to 50% when buying multiple add-ons together.', 'echo-knowledge-base' ),
+				'desc'              => esc_html__( 'Save up to 50% when buying multiple add-ons together.', 'echo-knowledge-base' ),
 				'learn_more_url'    => 'https://www.echoknowledgebase.com/bundle-pricing/?utm_source=plugin&utm_medium=addons&utm_content=home&utm_campaign=bundle',
 			) );
 
 			self::add_on_product( array(
 				'id'                => '',
-				'title'             => __( 'Elegant Layouts', 'echo-knowledge-base' ),
-				'special_note'      => __( 'More ways to design your KB', 'echo-knowledge-base' ),
+				'title'             => esc_html__( 'Elegant Layouts', 'echo-knowledge-base' ),
+				'special_note'      => esc_html__( 'More ways to design your KB', 'echo-knowledge-base' ),
 				'img'               => 'https://www.echoknowledgebase.com/wp-content/uploads/2020/07/featured-image-EL'.'AY-1.1.jpg',
 				'desc'              => sprintf( esc_html__( 'Use %sGrid Layout%s or %sSidebar Layout%s for KB Main page or combine Basic, Tabs, Grid and Sidebar layouts in many cool ways.', 'echo-knowledge-base' ), '<strong>', '</strong>', '<strong>', '</strong>' ),
 				'learn_more_url'    => 'https://www.echoknowledgebase.com/wordpress-plugin/elegant-layouts/?utm_source=plugin&utm_medium=addons&utm_content=home&utm_campaign=elegant-layouts',
@@ -113,8 +113,8 @@ class EPKB_Add_Ons_Page {
 
 			self::add_on_product( array(
 				'id'                => '',
-				'title'             => __( 'Unlimited Knowledge Bases', 'echo-knowledge-base' ),
-				'special_note'      => __( 'Expand your documentation', 'echo-knowledge-base' ),
+				'title'             => esc_html__( 'Unlimited Knowledge Bases', 'echo-knowledge-base' ),
+				'special_note'      => esc_html__( 'Expand your documentation', 'echo-knowledge-base' ),
 				'img'               => 'https://www.echoknowledgebase.com/wp-content/uploads/2020/07/featured-image-MKB-1.jpg',
 				'desc'              => sprintf( esc_html__( 'Create a separate Knowledge Base for each %sproduct, service or team%s.', 'echo-knowledge-base' ), '<strong>', '</strong>' ),
 				'learn_more_url'    => 'https://www.echoknowledgebase.com/wordpress-plugin/multiple-knowledge-bases/?utm_source=plugin&utm_medium=addons&utm_content=home&utm_campaign=multiple-kbs'
@@ -122,26 +122,26 @@ class EPKB_Add_Ons_Page {
 
 			self::add_on_product( array(
 				'id'                => '',
-				'title'             => __( 'Advanced Search', 'echo-knowledge-base' ),
-				'special_note'      => __( 'Enhance and analyze user searches', 'echo-knowledge-base' ),
+				'title'             => esc_html__( 'Advanced Search', 'echo-knowledge-base' ),
+				'special_note'      => esc_html__( 'Enhance and analyze user searches', 'echo-knowledge-base' ),
 				'img'               => 'https://www.echoknowledgebase.com/wp-content/uploads/2020/07/featured-image-AS'.'EA-1.jpg',
-				'desc'              => __( "Enhance users' search experience and view search analytics, including popular searches and no results searches.", 'echo-knowledge-base' ),
+				'desc'              => esc_html__( "Enhance users' search experience and view search analytics, including popular searches and no results searches.", 'echo-knowledge-base' ),
 				'learn_more_url'    => 'https://www.echoknowledgebase.com/wordpress-plugin/advanced-search/?utm_source=plugin&utm_medium=addons&utm_content=home&utm_campaign=advanced-search'
 			) );
 
 			/** TODO self::add_on_product( array(
 			'id'                => '',
-			'title'             => __( 'Article Features', 'echo-knowledge-base' ),
-			'special_note'      => __( 'Includes article rating and article change notifications.', 'echo-knowledge-base' ),
+			'title'             => esc_html__( 'Article Features', 'echo-knowledge-base' ),
+			'special_note'      => esc_html__( 'Includes article rating and article change notifications.', 'echo-knowledge-base' ),
 			'img'               => 'https://www.echoknowledgebase.com/wp-content/uploads/2019/11/EP'.'RF-featured-image.jpg',
-			'desc'              => __( 'Current features: article rating with analytics, and email notifications for new or updated articles.', 'echo-knowledge-base' ),
+			'desc'              => esc_html__( 'Current features: article rating with analytics, and email notifications for new or updated articles.', 'echo-knowledge-base' ),
 			'learn_more_url'    => 'https://www.echoknowledgebase.com/wordpress-plugin/article-rating-and-feedback/?utm_source=plugin&utm_medium=addons&utm_content=home&utm_campaign=article-rating'
 			) ); */
 
 			self::add_on_product( array(
 				'id'                => '',
-				'title'             => __( 'Widgets', 'echo-knowledge-base' ),
-				'special_note'      => __( 'Shortcodes, Widgets, Sidebars', 'echo-knowledge-base' ),
+				'title'             => esc_html__( 'Widgets', 'echo-knowledge-base' ),
+				'special_note'      => esc_html__( 'Shortcodes, Widgets, Sidebars', 'echo-knowledge-base' ),
 				'img'               => 'https://www.echoknowledgebase.com/wp-content/uploads/2020/07/featured-image-WI'.'DG-2.jpg',
 				'desc'              => sprintf( esc_html__( 'Add KB Search, Most Recent Articles and other %sWidgets and shortcodes%s to your articles, sidebars and pages.',
 					'echo-knowledge-base' ), '<strong>', '</strong>' ),
@@ -150,8 +150,8 @@ class EPKB_Add_Ons_Page {
 
 			self::add_on_product( array(
 				'id'                => '',
-				'title'             => __( 'Links Editor for PDFs and More', 'echo-knowledge-base' ),
-				'special_note'      => __( 'Link to PDFs, posts and pages', 'echo-knowledge-base' ),
+				'title'             => esc_html__( 'Custom Links for PDFs and More', 'echo-knowledge-base' ),
+				'special_note'      => esc_html__( 'Link to PDFs, posts and pages', 'echo-knowledge-base' ),
 				'img'               => 'https://www.echoknowledgebase.com/wp-content/uploads/2020/07/featured-image-LINK-2.jpg',
 				'desc'              => sprintf( esc_html__( 'Set Articles to links to %sPDFs, pages, posts and websites%s. On KB Main Page, choose icons for your articles.', 'echo-knowledge-base' ), '<strong>', '</strong>' ),
 				'learn_more_url'    => 'https://www.echoknowledgebase.com/wordpress-plugin/links-editor-for-pdfs-and-more/?utm_source=plugin&utm_medium=addons&utm_content=home&utm_campaign=links-editor'
@@ -159,8 +159,8 @@ class EPKB_Add_Ons_Page {
 
 			self::add_on_product( array(
 				'id'                => '',
-				'title'             => __( 'Article Rating and Feedback', 'echo-knowledge-base' ),
-				'special_note'      => __( 'Let users rate your articles', 'echo-knowledge-base' ),
+				'title'             => esc_html__( 'Article Rating and Feedback', 'echo-knowledge-base' ),
+				'special_note'      => esc_html__( 'Let users rate your articles', 'echo-knowledge-base' ),
 				'img'               => 'https://www.echoknowledgebase.com/wp-content/uploads/2019/11/EP'.'RF-featured-image.jpg',
 				'desc'              => sprintf( esc_html__( 'Let your readers rate the quality of your articles and submit insightful feedback. Collect analytics on the most and least rated articles.', 'echo-knowledge-base' ), '<strong>', '</strong>' ),
 				'learn_more_url'    => 'https://www.echoknowledgebase.com/wordpress-plugin/article-rating-and-feedback/?utm_source=plugin&utm_medium=addons&utm_content=home&utm_campaign=article-rating'
@@ -168,8 +168,8 @@ class EPKB_Add_Ons_Page {
 
 			self::add_on_product( array(
 				'id'                => '',
-				'title'             => __( 'Access Manager', 'echo-knowledge-base' ),
-				'special_note'      => __( 'Protect your KB content', 'echo-knowledge-base' ),
+				'title'             => esc_html__( 'Access Manager', 'echo-knowledge-base' ),
+				'special_note'      => esc_html__( 'Protect your KB content', 'echo-knowledge-base' ),
 				'img'               => 'https://www.echoknowledgebase.com/wp-content/uploads/2020/07/featured-image-AM'.'GR-1.jpg',
 				'desc'              => sprintf( esc_html__( 'Restrict your Articles to certain %sGroups%s using KB Categories. Assign users to specific %sKB Roles%s within Groups.', 'echo-knowledge-base' ), '<strong>', '</strong>', '<strong>', '</strong>' ),
 				'learn_more_url'    => 'https://www.echoknowledgebase.com/wordpress-plugin/access-manager/?utm_source=plugin&utm_medium=addons&utm_content=home&utm_campaign=access-manager'
@@ -177,19 +177,19 @@ class EPKB_Add_Ons_Page {
 
 			self::add_on_product( array(
 				'id'                => '',
-				'title'             => __( 'Migrate, Copy, Import and Export', 'echo-knowledge-base' ),
-				'special_note'      => __( 'Import, export and copy Articles, images and more', 'echo-knowledge-base' ),
+				'title'             => esc_html__( 'Migrate, Copy, Import and Export', 'echo-knowledge-base' ),
+				'special_note'      => esc_html__( 'Import, export and copy Articles, images and more', 'echo-knowledge-base' ),
 				'img'               => 'https://www.echoknowledgebase.com/wp-content/uploads/edd/2022/01/KB-Import-Export-Banner-v2.jpg',
-				'desc'              => __( "Powerful import and export plugin to migrate, create and copy articles and images from your Knowledge Base. You can also import articles from CSV and other sources.", 'echo-knowledge-base' ),
+				'desc'              => esc_html__( "Powerful import and export plugin to migrate, create and copy articles and images from your Knowledge Base. You can also import articles from CSV and other sources.", 'echo-knowledge-base' ),
 				'learn_more_url'    => 'https://www.echoknowledgebase.com/wordpress-plugin/kb-import-export//?utm_source=plugin&utm_medium=addons&utm_content=home&utm_campaign=kb-import-export/',
 			) );
 
 			self::add_on_product( array(
 				'id'                => '',
-				'title'             => __( 'Help Dialog Chat', 'echo-knowledge-base' ),
-				'special_note'      => __( 'FAQs, Articles and Contact Form', 'echo-knowledge-base' ),
+				'title'             => esc_html__( 'Help Dialog Chat', 'echo-knowledge-base' ),
+				'special_note'      => esc_html__( 'FAQs, Articles and Contact Form', 'echo-knowledge-base' ),
 				'img'               => 'https://www.echoknowledgebase.com/wp-content/uploads/edd/2020/08/KB-Import-Export-Banner.jpg',
-				'desc'              => sprintf( __( '%s Engage %s your website visitors and %s gain new customers %s with page-specific %s FAQs %s and %s knowledge base articles %s. Help users communicate with you ' .
+				'desc'              => sprintf( esc_html__( '%s Engage %s your website visitors and %s gain new customers %s with page-specific %s FAQs %s and %s knowledge base articles %s. Help users communicate with you ' .
 										'%s without leaving the page %s by using a simple % scontact form %s shown with the Help Dialog Chat.', 'echo-knowledge-base' ),
 										'<strong>', '</strong>','<strong>', '</strong>','<strong>', '</strong>','<strong>', '</strong>','<strong>', '</strong>','<strong>', '</strong>' ),
 				'learn_more_url'    => 'https://wordpress.org/plugins/help-dialog/',
@@ -228,7 +228,7 @@ class EPKB_Add_Ons_Page {
 
 		// Box: Manage Licenses
 		$boxes[] =  array(
-			'title' => __( 'Manage Licenses', 'echo-knowledge-base' ),
+			'title' => esc_html__( 'Manage Licenses', 'echo-knowledge-base' ),
 			'class' => 'epkb-admin__boxes-list__box-manage-licenses',
 			'html'  => self::get_manage_licenses_box(),
 		);
@@ -239,7 +239,7 @@ class EPKB_Add_Ons_Page {
 			<div class="add_on_container">
 				<section id="ekcb-licenses">
 					<ul>  	<!-- Add-on name / License input / status  -->   <?php
-						echo $license_content;      ?>
+						echo wp_kses_post( $license_content );      ?>
 					</ul>
 				</section>
 			</div>      <?php
@@ -253,15 +253,15 @@ class EPKB_Add_Ons_Page {
 				'class' => 'epkb-admin__boxes-list__box-notification',
 				'html'  => EPKB_HTML_Forms::notification_box_middle( array(
 					'type'  => 'success',
-					'title' => __( 'New License', 'echo-knowledge-base' ),
-					'desc'  => __( 'Please enter your new license below to ensure you receive updates.', 'echo-knowledge-base' )
+					'title' => esc_html__( 'New License', 'echo-knowledge-base' ),
+					'desc'  => esc_html__( 'Please enter your new license below to ensure you receive updates.', 'echo-knowledge-base' )
 				), true ),
 			);
 		}
 
 		// Box: Licenses
 		$boxes[] =  array(
-			'title' => __( 'Licenses for add-ons', 'echo-knowledge-base' ),
+			'title' => esc_html__( 'Licenses for add-ons', 'echo-knowledge-base' ),
 			'html'  => $license_content,
 		);
 
@@ -322,6 +322,7 @@ class EPKB_Add_Ons_Page {
 			array( 'slug' => 'help-dialog' ),
 			array( 'slug' => 'creative-addons-for-elementor' ),
 			array( 'slug' => 'echo-show-ids' ),
+			array( 'slug' => 'scroll-down-arrow' ),
 		);
 
 		foreach( $args_list as $args ) {
@@ -391,15 +392,14 @@ class EPKB_Add_Ons_Page {
 		$title = wp_kses( $plugin['name'], $plugins_allowed_tags );
 
 		// remove any HTML from the description.
-		$description = empty( $plugin['short_description'] ) ? '' : strip_tags( $plugin['short_description'] );
 		$version = wp_kses( $plugin['version'], $plugins_allowed_tags );
 
-		$name = empty( $plugin['short_description'] ) ? '' : strip_tags( $title . ' ' . $version );
+		$name = empty( $plugin['short_description'] ) ? '' : esc_html( wp_strip_all_tags( $title . ' ' . $version ) );
 
 		$author = wp_kses( $plugin['author'], $plugins_allowed_tags );
 		if ( ! empty( $author ) ) {
 			/* translators: %s: Plugin author. */
-			$author = ' <cite>' . sprintf( __( 'By %s' ), $author ) . '</cite>';
+			$author = ' <cite>' . sprintf( esc_html__( 'By %s' ), $author ) . '</cite>';
 		}
 
 		$requires_php = isset( $plugin['requires_php'] ) ? $plugin['requires_php'] : null;
@@ -409,10 +409,10 @@ class EPKB_Add_Ons_Page {
 		$compatible_wp  = is_wp_version_compatible( $requires_wp );
 		$tested_wp = empty( $plugin['tested'] ) || version_compare( get_bloginfo( 'version' ), $plugin['tested'], '<=' );
 
-		$details_link = self_admin_url(
+		$details_link = esc_url( self_admin_url(
 			'plugin-install.php?tab=plugin-information&amp;plugin=' . $plugin['slug'] .
 			'&amp;TB_iframe=true&amp;width=600&amp;height=550'
-		);
+		) );
 
 		$action_links = self::get_our_free_plugin_action_links( $plugin, $name, $compatible_php, $compatible_wp );
 
@@ -420,7 +420,7 @@ class EPKB_Add_Ons_Page {
 			'<a href="%s" class="thickbox open-plugin-details-modal" aria-label="%s" data-title="%s">%s</a>',
 			esc_url( $details_link ),
 			/* translators: %s: Plugin name and version. */
-			esc_attr( sprintf( __( 'More information about %s' ), $name ) ),
+			esc_attr( sprintf( esc_html__( 'More information about %s' ), $name ) ),
 			esc_attr( $name ),
 			__( 'More Details' )
 		);
@@ -446,19 +446,19 @@ class EPKB_Add_Ons_Page {
 			<div class="plugin-card-top">
 				<div class="name column-name">
 					<h3>
-						<a href="<?php echo esc_url( $details_link ); ?>" class="thickbox open-plugin-details-modal">
-							<?php echo esc_attr( $title ); ?>
-							<img src="<?php echo esc_attr( $plugin_icon_url ); ?>" class="plugin-icon" alt="" />
+						<a href="<?php echo esc_url( $details_link ); ?>" class="thickbox open-plugin-details-modal">							<?php
+							echo esc_html( $title ); ?>
+							<img src="<?php echo esc_url( $plugin_icon_url ); ?>" class="plugin-icon" alt="" />
 						</a>
 					</h3>
 				</div>
 				<div class="action-links">  <?php
 					if ( $action_links ) {  ?>
-                        <ul class="plugin-action-buttons"><li><?php echo implode( '</li><li>', $action_links ); ?></li></ul>   <?php
+                        <ul class="plugin-action-buttons"><li><?php echo wp_kses_post( implode( '</li><li>', $action_links ) ); ?></li></ul>   <?php
                     }   ?>
 				</div>
 				<div class="desc column-description">
-					<p><?php echo esc_html( $description ); ?></p>
+					<p><?php echo ( empty( $plugin['short_description'] ) ? '' : esc_html( wp_strip_all_tags( $plugin['short_description'] ) ) ); ?></p>
 					<p class="authors"><?php echo wp_kses( $author, $plugins_allowed_tags ); ?></p>
 				</div>
 			</div>
@@ -472,12 +472,12 @@ class EPKB_Add_Ons_Page {
 							'number' => $plugin['num_ratings'],
 						)
 					);  ?>
-					<span class="num-ratings" aria-hidden="true">(<?php echo number_format_i18n( $plugin['num_ratings'] ); ?>)</span>
+					<span class="num-ratings" aria-hidden="true">(<?php echo esc_html( number_format_i18n( $plugin['num_ratings'] ) ); ?>)</span>
 				</div>
 				<div class="column-updated">
-					<strong><?php _e( 'Last Updated:' ); ?></strong>    <?php
+					<strong><?php esc_html_e( 'Last Updated:' ); ?></strong>    <?php
 					/* translators: %s: Human-readable time difference. */
-					printf( __( '%s ago' ), human_time_diff( $last_updated_timestamp ) );   ?>
+					printf( esc_html__( '%s ago' ), human_time_diff( $last_updated_timestamp ) ); //phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped   ?>
 				</div>
 				<div class="column-downloaded"> <?php
 					if ( $plugin['active_installs'] >= 1000000 ) {
@@ -493,15 +493,15 @@ class EPKB_Add_Ons_Page {
 						$active_installs_text = number_format_i18n( $plugin['active_installs'] ) . '+';
 					}
 					/* translators: %s: Number of installations. */
-					printf( __( '%s Active Installations' ), $active_installs_text );   ?>
+					printf( esc_html__( '%s Active Installations' ), esc_html( $active_installs_text ) );   ?>
 				</div>
 				<div class="column-compatibility">  <?php
 					if ( ! $tested_wp ) {   ?>
-						<span class="compatibility-untested"><?php _e( 'Untested with your version of WordPress' ); ?></span>   <?php
+						<span class="compatibility-untested"><?php esc_html_e( 'Untested with your version of WordPress' ); ?></span>   <?php
 					} elseif ( ! $compatible_wp ) { ?>
-						<span class="compatibility-incompatible"><?php _e( '<strong>Incompatible</strong> with your version of WordPress' ); ?></span>   <?php
+						<span class="compatibility-incompatible"><?php esc_html_e( 'Incompatible with your version of WordPress' ); ?></span>   <?php
 					} else {    ?>
-						<span class="compatibility-compatible"><?php _e( '<strong>Compatible</strong> with your version of WordPress' ); ?></span>   <?php
+						<span class="compatibility-compatible"><?php esc_html_e( 'Compatible with your version of WordPress' ); ?></span>   <?php
 					}   ?>
 				</div>
 			</div>
@@ -523,36 +523,36 @@ class EPKB_Add_Ons_Page {
 		<div class="notice inline notice-error notice-alt"><p>  <?php
 
 			if ( ! $compatible_php && ! $compatible_wp ) {
-				_e( 'This plugin doesn&#8217;t work with your versions of WordPress and PHP.' );
+				esc_html_e( 'This plugin doesn&#8217;t work with your versions of WordPress and PHP.' );
 				if ( current_user_can( 'update_core' ) && current_user_can( 'update_php' ) ) {
 					/* translators: 1: URL to WordPress Updates screen, 2: URL to Update PHP page. */
 					printf(
-						' ' . __( '<a href="%1$s">Please update WordPress</a>, and then <a href="%2$s">learn more about updating PHP</a>.' ),
-						self_admin_url( 'update-core.php' ),
+						' ' . esc_html__( '<a href="%1$s">Please update WordPress</a>, and then <a href="%2$s">learn more about updating PHP</a>.' ),
+						esc_url( self_admin_url( 'update-core.php' ) ),
 						esc_url( wp_get_update_php_url() )
 					);
 					wp_update_php_annotation( '</p><p><em>', '</em>' );
 				} elseif ( current_user_can( 'update_core' ) ) {
 					printf(
 					/* translators: %s: URL to WordPress Updates screen. */
-						' ' . __( '<a href="%s">Please update WordPress</a>.' ),
-						self_admin_url( 'update-core.php' )
+						' ' . esc_html__( '<a href="%s">Please update WordPress</a>.' ),
+						esc_url( self_admin_url( 'update-core.php' ) )
 					);
 				} elseif ( current_user_can( 'update_php' ) ) {
 					printf(
 					/* translators: %s: URL to Update PHP page. */
-						' ' . __( '<a href="%s">Learn more about updating PHP</a>.' ),
+						' ' . esc_html__( '<a href="%s">Learn more about updating PHP</a>.' ),
 						esc_url( wp_get_update_php_url() )
 					);
 					wp_update_php_annotation( '</p><p><em>', '</em>' );
 				}
 			} elseif ( ! $compatible_wp ) {
-				_e( 'This plugin doesn&#8217;t work with your version of WordPress.' );
+				esc_html_e( 'This plugin doesn&#8217;t work with your version of WordPress.' );
 				if ( current_user_can( 'update_core' ) ) {
 					printf(
 					/* translators: %s: URL to WordPress Updates screen. */
-						' ' . __( '<a href="%s">Please update WordPress</a>.' ),
-						self_admin_url( 'update-core.php' )
+						' ' . esc_html__( '<a href="%s">Please update WordPress</a>.' ),
+						esc_url( self_admin_url( 'update-core.php' ) )
 					);
 				}
 			} elseif ( ! $compatible_php ) {
@@ -560,7 +560,7 @@ class EPKB_Add_Ons_Page {
 				if ( current_user_can( 'update_php' ) ) {
 					printf(
 					/* translators: %s: URL to Update PHP page. */
-						' ' . __( '<a href="%s">Learn more about updating PHP</a>.' ),
+						' ' . esc_html__( '<a href="%s">Learn more about updating PHP</a>.' ),
 						esc_url( wp_get_update_php_url() )
 					);
 					wp_update_php_annotation( '</p><p><em>', '</em>' );
@@ -634,7 +634,7 @@ class EPKB_Add_Ons_Page {
 				);
 
 			} elseif ( current_user_can( 'activate_plugin', $status['file'] ) ) {
-				$button_text = __( 'Activate' );
+				$button_text = esc_html__( 'Activate' );
 				/* translators: %s: Plugin name. */
 				$button_label = _x( 'Activate %s', 'plugin' );
 				$activate_url = add_query_arg(
@@ -647,7 +647,7 @@ class EPKB_Add_Ons_Page {
 				);
 
 				if ( is_network_admin() ) {
-					$button_text = __( 'Network Activate' );
+					$button_text = esc_html__( 'Network Activate' );
 					/* translators: %s: Plugin name. */
 					$button_label = _x( 'Network Activate %s', 'plugin' );
 					$activate_url = add_query_arg( array( 'networkwide' => 1 ), $activate_url );
@@ -690,13 +690,13 @@ class EPKB_Add_Ons_Page {
 			'list_key' => 'add-ons',
 
 			// Top Panel Item
-			'label_text' => __( 'Add-ons', 'echo-knowledge-base' ),
+			'label_text' => esc_html__( 'Add-ons', 'echo-knowledge-base' ),
 			'icon_class' => 'epkbfa epkbfa-cubes',
 
 			// Boxes List
 			'boxes_list' => array(
 				array(
-					'title' => __( 'Go Further With Add-ons', 'echo-knowledge-base' ),
+					'title' => esc_html__( 'Go Further With Add-ons', 'echo-knowledge-base' ),
 					'html' => self::show_addons_box(),
 				)
 			),
@@ -711,7 +711,7 @@ class EPKB_Add_Ons_Page {
 			'list_key'   => 'our-free-plugins',
 
 			// Top Panel Item
-			'label_text' => __( 'Our Free Plugins', 'echo-knowledge-base' ),
+			'label_text' => esc_html__( 'Our Free Plugins', 'echo-knowledge-base' ),
 			'icon_class' => 'epkbfa epkbfa-download',
 
 			// Boxes List
@@ -729,7 +729,7 @@ class EPKB_Add_Ons_Page {
 				'list_key' => 'elementor-plugin',
 
 				// Top Panel Item
-				'label_text' => __( 'Elementor Plugin', 'echo-knowledge-base' ),
+				'label_text' => esc_html__( 'Elementor Plugin', 'echo-knowledge-base' ),
 				'icon_class' => 'epkbfa epkbfa-info-circle',
 
 				// Boxes List
@@ -737,8 +737,8 @@ class EPKB_Add_Ons_Page {
 
 					// Box: Create Amazing Articles
 					array(
-						'title' => __( 'Create Amazing Articles', 'echo-knowledge-base' ),
-						'description' => __( 'Create amazing documentation using our Elementor Widgets from our new plugin called Creative Add-ons', 'echo-knowledge-base' ),
+						'title' => esc_html__( 'Create Amazing Articles', 'echo-knowledge-base' ),
+						'description' => esc_html__( 'Create amazing documentation using our Elementor Widgets from our new plugin called Creative Add-ons', 'echo-knowledge-base' ),
 						'html' => self::show_elementor_plugin_box(),
 						'extra_tags' => ['iframe']
 					)
@@ -756,7 +756,7 @@ class EPKB_Add_Ons_Page {
 			'list_key' => 'new-features',
 
 			// Top Panel Item
-			'label_text' => __( 'New Features', 'echo-knowledge-base' ),
+			'label_text' => esc_html__( 'New Features', 'echo-knowledge-base' ),
 			'main_class' => '',
 			'label_class' => '',
 			'icon_class' => 'epkbfa epkbfa-rocket',
@@ -772,7 +772,7 @@ class EPKB_Add_Ons_Page {
 					'active' => true,
 
 					// Secondary Panel Item
-					'label_text' => __( 'Year 2024', 'echo-knowledge-base' ),
+					'label_text' => esc_html__( 'Year 2024', 'echo-knowledge-base' ),
 					'main_class' => '',
 					'label_class' => '',
 
@@ -793,7 +793,7 @@ class EPKB_Add_Ons_Page {
 					'list_key' => 'year-2023',
 
 					// Secondary Panel Item
-					'label_text' => __( 'Year 2023', 'echo-knowledge-base' ),
+					'label_text' => esc_html__( 'Year 2023', 'echo-knowledge-base' ),
 					'main_class' => '',
 					'label_class' => '',
 
@@ -814,7 +814,7 @@ class EPKB_Add_Ons_Page {
 					'list_key' => 'year-2022',
 
 					// Secondary Panel Item
-					'label_text' => __( 'Year 2022', 'echo-knowledge-base' ),
+					'label_text' => esc_html__( 'Year 2022', 'echo-knowledge-base' ),
 					'main_class' => '',
 					'label_class' => '',
 
@@ -835,7 +835,7 @@ class EPKB_Add_Ons_Page {
 					'list_key' => 'year-2021',
 
 					// Secondary Panel Item
-					'label_text' => __( 'Year 2021', 'echo-knowledge-base' ),
+					'label_text' => esc_html__( 'Year 2021', 'echo-knowledge-base' ),
 					'main_class' => '',
 					'label_class' => '',
 
@@ -856,7 +856,7 @@ class EPKB_Add_Ons_Page {
 					'list_key' => 'year-2020',
 
 					// Secondary Panel Item
-					'label_text' => __( 'Year 2020', 'echo-knowledge-base' ),
+					'label_text' => esc_html__( 'Year 2020', 'echo-knowledge-base' ),
 					'main_class' => '',
 					'label_class' => '',
 
@@ -877,7 +877,7 @@ class EPKB_Add_Ons_Page {
 					'list_key' => 'year-2019',
 
 					// Secondary Panel Item
-					'label_text' => __( 'Year 2019', 'echo-knowledge-base' ),
+					'label_text' => esc_html__( 'Year 2019', 'echo-knowledge-base' ),
 					'main_class' => '',
 					'label_class' => '',
 
@@ -898,7 +898,7 @@ class EPKB_Add_Ons_Page {
 		];
 
 		$license_content = '';
-		if ( current_user_can('manage_options') ) {
+		if ( current_user_can( 'manage_options' ) ) {
 			$license_content = apply_filters( 'epkb_license_fields', $license_content );
 		}
 
@@ -913,7 +913,7 @@ class EPKB_Add_Ons_Page {
 				'list_key'   => 'licenses',
 
 				// Top Panel Item
-				'label_text' => __( 'Licenses', 'echo-knowledge-base' ),
+				'label_text' => esc_html__( 'Licenses', 'echo-knowledge-base' ),
 				'icon_class' => 'epkbfa epkbfa-key',
 
 				// Boxes List

@@ -25,7 +25,7 @@ class AMGR_Access_Page_View_Categories {
 	public function ajax_update_tab_content( $kb_group_id ) {
 
 		if ( ! current_user_can('admin_eckb_access_manager_page') ) {
-			EPKB_Utilities::ajax_show_error_die( __( 'You do not have permission.', 'echo-knowledge-base' ) . ' (E46)' );
+			EPKB_Utilities::ajax_show_error_die( esc_html__( 'You do not have permission.', 'echo-knowledge-base' ) . ' (E46)' );
 		}
 
 		$kb_groups = epkb_get_instance()->db_kb_groups->get_groups( $this->kb_id );
@@ -94,34 +94,32 @@ class AMGR_Access_Page_View_Categories {
             <div class="amgr-category-controls">
 
                 <fieldset>
-                    <legend>1. Choose Access Level</legend>
+                    <legend><?php echo '1. ' . esc_html__( 'Choose Access Level', 'echo-knowledge-base'); ?></legend>
                     <!-- Edit Mode -->
                     <div class="amgr-edit-mode-container">
                         <ul>
                             <li class="amgr-edit-btn-no-access amgr-edit-active-no">
                                 <input type="radio" name="amgr-edit-mode" checked id="amgr-no-access" value="no">
-                                <label for="amgr-no-access">No Access</label>
+                                <label for="amgr-no-access"><?php echo ( AMGR_WP_ROLES::use_kb_groups() ? esc_html__( 'No Access', 'echo-knowledge-base' ) : esc_html__( 'Visible to Logged In Users', 'echo-knowledge-base' ) ); ?></label>
                             </li>
                             <li class="amgr-edit-btn-read-only-access">
                                 <input type="radio" name="amgr-edit-mode" id="amgr-ready-only" value="read">
-                                <label for="amgr-ready-only">Read Only</label>
+                                <label for="amgr-ready-only"><?php echo ( AMGR_WP_ROLES::use_kb_groups() ? esc_html__( 'Read Only', 'echo-knowledge-base' ) : esc_html__( 'Visible to Everyone', 'echo-knowledge-base' ) ); ?></label>
                             </li>  <?php
 	                        $is_group_public = epkb_get_instance()->db_kb_public_groups->is_public_group( $this->kb_id, $kb_group_id );
-
-
 
 	                        if ( AMGR_WP_ROLES::use_kb_groups() ) {
 		                        if ( ! $is_group_public ) {             ?>
 			                        <li class="amgr-edit-btn-full-access">
 				                        <input type="radio" name="amgr-edit-mode" id="amgr-full-access" value="full">
-				                        <label for="amgr-full-access">Full Access</label>
+				                        <label for="amgr-full-access"><?php esc_html_e( 'Full Access', 'echo-knowledge-base' ); ?></label>
 			                        </li>                            <?php
 		                        }
 	                        }       ?>
-                        </ul>
-	                    <?php
+                        </ul>	                    <?php
+
 	                    if ( $is_group_public ) {
-	                    	echo '<p class="amgr-group-access-message">Only KB Managers and WP Admin can control Public access to KB Categories and Articles. For more information click ' .
+	                    	echo '<p class="amgr-group-access-message">Only ' . ( AMGR_WP_ROLES::use_kb_groups() ? 'KB Managers and ' : '' ) . 'WP Admin can control Public access to KB Categories and Articles. For more information click ' .
 	                    	'<a target="_blank" class="thickbox" href="https://www.echoknowledgebase.com/documentation/2-2-public-vs-protected-access/">here.</a><p>';
 	                    } ?>
 
@@ -137,7 +135,7 @@ class AMGR_Access_Page_View_Categories {
 
         <input type="hidden" class="amgr_kb_group_id" name="amgr_kb_group_id" value="<?php echo esc_attr($kb_group_id); ?>" />   <?php
 
-		$this->html->submit_button_v2( __( 'Save', 'echo-knowledge-base' ), 'amgr_save_categories_access_ajax', 'epkb-btn-wrap--plain', '', true, '', 'amag-primary-btn' );
+		$this->html->submit_button_v2( esc_html__( 'Save', 'echo-knowledge-base' ), 'amgr_save_categories_access_ajax', 'epkb-btn-wrap--plain', '', true, '', 'amag-primary-btn' );
 
 		return $isSuccess;
 	}
@@ -172,7 +170,7 @@ class AMGR_Access_Page_View_Categories {
 		<div id="amgr-category-access-levels">
 			<span class="amgr-category-access-heading">
 				<span class="amgr-category-access-heading-title">
-				2. Update Category Access
+					<?php echo '2. ' . esc_html__( 'Update Category Access', 'echo-knowledge-base'); ?>
 				</span>
 				<span class="amgr-category-access-heading-legend">
 					<span class="amgr-public-access-icon">P</span> - categories accessible to general public.
@@ -192,7 +190,7 @@ class AMGR_Access_Page_View_Categories {
 					}       ?>
 
 					<!-- DISPLAY LEVEL 1 -->
-					<li id="<?php echo $l1_category_id; ?>" class="<?php echo $this->get_category_access_level( $l1_category_id ); ?>">                    <?php
+					<li id="<?php echo esc_attr( $l1_category_id ); ?>" class="<?php echo $this->get_category_access_level( $l1_category_id ); ?>">                    <?php
 
 						$this->display_category_level_info( 1, $l1_category, $l1_category_id );
 						foreach ( $categories as $l2_category ) {
@@ -206,7 +204,7 @@ class AMGR_Access_Page_View_Categories {
 							<!-- DISPLAY LEVEL 2 -->
 							<ul class="amgr-level-2">
 
-								<li id="<?php echo $l2_category_id; ?>"  class="<?php echo $this->get_category_access_level( $l2_category_id ); ?>">                                <?php
+								<li id="<?php echo esc_attr( $l2_category_id ); ?>"  class="<?php echo $this->get_category_access_level( $l2_category_id ); ?>">                                <?php
 									$this->display_category_level_info( 2, $l2_category , $l2_category_id , $l1_category_id );
 									foreach ( $categories as $l3_category ) {
 
@@ -218,7 +216,7 @@ class AMGR_Access_Page_View_Categories {
 
 										<!-- DISPLAY LEVEL 3 -->
 										<ul class="amgr-level-3">
-											<li id="<?php echo $l3_category_id; ?> " class="<?php echo $this->get_category_access_level( $l3_category_id ); ?>">	            <?php
+											<li id="<?php echo esc_attr( $l3_category_id ); ?> " class="<?php echo $this->get_category_access_level( $l3_category_id ); ?>">	            <?php
 												$this->display_category_level_info( 3, $l3_category, $l3_category_id, $l1_category_id, $l2_category_id ); 
 												foreach ( $categories as $l4_category ) {
 
@@ -230,7 +228,7 @@ class AMGR_Access_Page_View_Categories {
 
 													<!-- DISPLAY LEVEL 4 -->
 													<ul class="amgr-level-4">
-														<li id="<?php echo $l4_category_id; ?> " class="<?php echo $this->get_category_access_level( $l4_category_id ); ?>">	            <?php
+														<li id="<?php echo esc_attr( $l4_category_id ); ?> " class="<?php echo $this->get_category_access_level( $l4_category_id ); ?>">	            <?php
 															$this->display_category_level_info( 4, $l4_category, $l4_category_id, $l1_category_id, $l2_category_id, $l3_category_id ); 
 															
 															foreach ( $categories as $l5_category ) {
@@ -243,7 +241,7 @@ class AMGR_Access_Page_View_Categories {
 
 																<!-- DISPLAY LEVEL 5 -->
 																<ul class="amgr-level-5">
-																	<li id="<?php echo $l5_category_id; ?> " class="<?php echo $this->get_category_access_level( $l5_category_id ); ?>">	            <?php
+																	<li id="<?php echo esc_attr( $l5_category_id ); ?> " class="<?php echo $this->get_category_access_level( $l5_category_id ); ?>">	            <?php
 																		$this->display_category_level_info( 5, $l5_category, $l5_category_id, $l1_category_id, $l2_category_id, $l3_category_id, $l4_category_id ); ?>
 																	</li>
 																</ul>   <?php
@@ -271,23 +269,21 @@ class AMGR_Access_Page_View_Categories {
 
 	private function display_category_level_info( $level, $category, $kb_category_id, $parent_level_1='', $parent_level_2='', $parent_level_3='', $parent_level_4='' ) {
 
-		$data_parent_level_1 = $parent_level_1 ? 'data-amgr-parent-level-1="' . $parent_level_1 . '"' : '';
-		$data_parent_level_2 = $parent_level_2 ? 'data-amgr-parent-level-2="' . $parent_level_2 . '"' : '';
-		$data_parent_level_3 = $parent_level_3 ? 'data-amgr-parent-level-2="' . $parent_level_3 . '"' : '';
-		$data_parent_level_4 = $parent_level_4 ? 'data-amgr-parent-level-2="' . $parent_level_4 . '"' : '';
-		$public_category_indicator = AMGR_Access_Utilities::is_category_public( $this->kb_id, $kb_category_id ) ? ' <span class="amgr-public-access-icon">P</span> ' : '';         ?>
+		$data_parent_level_1_escaped = $parent_level_1 ? 'data-amgr-parent-level-1="' . esc_attr( $parent_level_1 ) . '"' : '';
+		$data_parent_level_2_escaped = $parent_level_2 ? 'data-amgr-parent-level-2="' . esc_attr( $parent_level_2 ) . '"' : '';
+		$data_parent_level_3_escaped = $parent_level_3 ? 'data-amgr-parent-level-2="' . esc_attr( $parent_level_3 ) . '"' : '';
+		$data_parent_level_4_escaped = $parent_level_4 ? 'data-amgr-parent-level-2="' . esc_attr( $parent_level_4 ) . '"' : '';
 
-        <div class="amgr-level-<?php echo $level; ?>-category">
+		$is_category_public = AMGR_Access_Utilities::is_category_public( $this->kb_id, $kb_category_id );         ?>
+
+        <div class="amgr-level-<?php echo esc_attr( $level ); ?>-category">
             <input type="hidden"
-                   value="<?php echo $kb_category_id; ?>"
-                   data-amgr-category-id="<?php echo $kb_category_id; ?>"
-                   data-amgr-category-access-level="<?php echo $this->get_category_access_level( $kb_category_id ); ?>"
-                   <?php echo $data_parent_level_1; ?>
-                   <?php echo $data_parent_level_2; ?>
-		           <?php echo $data_parent_level_3; ?>
-		           <?php echo $data_parent_level_4; ?>
+                   value="<?php echo esc_attr( $kb_category_id ); ?>"
+                   data-amgr-category-id="<?php echo esc_attr( $kb_category_id ); ?>"
+                   data-amgr-category-access-level="<?php echo $this->get_category_access_level( $kb_category_id ); ?>"                   <?php
+                   echo $data_parent_level_1_escaped . ' ' . $data_parent_level_2_escaped . ' ' . $data_parent_level_3_escaped . ' ' . $data_parent_level_4_escaped; ?>
             >
-            <div class="amgr-category-name amgr-level-<?php echo $level; ?>-name"><?php echo $public_category_indicator . sanitize_text_field( $category->name ); ?></div>
+            <div class="amgr-category-name amgr-level-<?php echo esc_attr( $level ); ?>-name"><?php echo ( $is_category_public ? ' <span class="amgr-public-access-icon">P</span> ' : '' ) . esc_html( $category->name ); ?></div>
         </div>    <?php
 	}
 

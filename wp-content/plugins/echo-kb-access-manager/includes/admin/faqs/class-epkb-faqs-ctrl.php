@@ -47,7 +47,7 @@ class EPKB_FAQs_Ctrl {
 		);
 		$faq_id = wp_insert_post( $faq_args, true );
 		if ( empty( $faq_id ) || is_wp_error( $faq_id ) ) {
-			EPKB_Utilities::ajax_show_error_die( EPKB_Utilities::report_generic_error( 701 ) );
+			EPKB_Utilities::ajax_show_error_die( EPKB_Utilities::report_generic_error( 701, $faq_id ) );
 		}
 
 		$faq = get_post( $faq_id );
@@ -85,7 +85,7 @@ class EPKB_FAQs_Ctrl {
 	public function get_faq() {
 
 		// wp_die if nonce invalid or user does not have admin permission
-		EPKB_Utilities::ajax_verify_nonce_and_admin_permission_or_error_die();
+		EPKB_Utilities::ajax_verify_nonce_and_admin_permission_or_error_die( 'admin_eckb_access_faqs_write' );
 
 		$faq_id = (int)EPKB_Utilities::post( 'faq_id', 0 );
 		if ( empty( $faq_id ) ) {
@@ -125,7 +125,7 @@ class EPKB_FAQs_Ctrl {
 
 		$result = wp_delete_post( $faq_id, true );
 		if ( empty( $result ) || is_wp_error( $result ) ) {
-			EPKB_Utilities::ajax_show_error_die( EPKB_Utilities::report_generic_error( 741 ) );
+			EPKB_Utilities::ajax_show_error_die( EPKB_Utilities::report_generic_error( 741, $result ) );
 		}
 
 		wp_die( wp_json_encode( array(
@@ -148,14 +148,14 @@ class EPKB_FAQs_Ctrl {
 		if ( empty( $faq_group_id ) ) {
 			$faq_group = wp_create_term( $faq_group_name, EPKB_FAQs_CPT_Setup::FAQ_CATEGORY );
 			if ( is_wp_error( $faq_group ) ) {
-				EPKB_Utilities::ajax_show_error_die( EPKB_Utilities::report_generic_error( 710 ) );
+				EPKB_Utilities::ajax_show_error_die( EPKB_Utilities::report_generic_error( 710, $faq_group ) );
 			}
 
 		// update FAQ Group
 		} else {
 			$faq_group = wp_update_term( $faq_group_id, EPKB_FAQs_CPT_Setup::FAQ_CATEGORY, [ 'name' => $faq_group_name ] );
 			if ( is_wp_error( $faq_group ) ) {
-				EPKB_Utilities::ajax_show_error_die( EPKB_Utilities::report_generic_error( 711 ) );
+				EPKB_Utilities::ajax_show_error_die( EPKB_Utilities::report_generic_error( 711, $faq_group ) );
 			}
 		}
 
@@ -199,7 +199,7 @@ class EPKB_FAQs_Ctrl {
 		// update FAQs sequence
 		$result = update_term_meta( $faq_group_id, 'faqs_order_sequence', $faqs_order_sequence );
 		if ( is_wp_error( $result ) ) {
-			EPKB_Utilities::ajax_show_error_die( EPKB_Utilities::report_generic_error( 713 ) );
+			EPKB_Utilities::ajax_show_error_die( EPKB_Utilities::report_generic_error( 713, $result ) );
 		}
 
 		$faq_group_html = EPKB_FAQs_Page::display_group_container( $faq_group_id, $faq_group_name, true );
@@ -227,7 +227,7 @@ class EPKB_FAQs_Ctrl {
 
 		$result = wp_delete_term( $faq_group_id, EPKB_FAQs_CPT_Setup::FAQ_CATEGORY );
 		if ( empty( $result ) || is_wp_error( $result ) ) {
-			EPKB_Utilities::ajax_show_error_die( EPKB_Utilities::report_generic_error( 720 ) );
+			EPKB_Utilities::ajax_show_error_die( EPKB_Utilities::report_generic_error( 720, $result ) );
 		}
 
 		wp_die( wp_json_encode( array(

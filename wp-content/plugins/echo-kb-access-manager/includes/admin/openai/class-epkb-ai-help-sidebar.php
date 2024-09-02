@@ -44,7 +44,7 @@ class EPKB_AI_Help_Sidebar {
 			return;
 		}
 
-		$wp_admin_bar->add_menu( array( 'id' => 'epkb-ai-help-sidebar-button', 'title' => __( 'AI Help', 'echo-knowledge-base' ), 'href' => '#' ) );
+		$wp_admin_bar->add_menu( array( 'id' => 'epkb-ai-help-sidebar-button', 'title' => esc_html__( 'AI Help', 'echo-knowledge-base' ), 'href' => '#' ) );
 	}
 
 	/**
@@ -151,8 +151,8 @@ class EPKB_AI_Help_Sidebar {
 			<div class="epkb-ai-help-sidebar__actions">
 				<div class="epkb-ai-help-sidebar__actions-left-col">
 					<div class="epkb-ai-help-sidebar__actions-title"><?php esc_html_e( 'Content Helper', 'echo-knowledge-base' ); ?><p><?php esc_html_e( 'How can AI help you to write your content?', 'echo-knowledge-base' ); ?></p></div>   <?php
-					EPKB_HTML_Elements::submit_button_v2( __( 'Improve Text', 'echo-knowledge-base' ), 'epkb_fix_spelling_and_grammar', 'epkb-ai-help-sidebar__action-wrap', '', false, false, 'epkb-ai__fix-improve-text-btn' );
-					EPKB_HTML_Elements::submit_button_v2( __( 'Generate Article Outline', 'echo-knowledge-base' ), 'epkb_ai_generate_article_outline', 'epkb-ai-help-sidebar__action-wrap', '', false, false, 'epkb-ai__generate-article-outline-btn' );							?>
+					EPKB_HTML_Elements::submit_button_v2( esc_html__( 'Improve Text', 'echo-knowledge-base' ), 'epkb_fix_spelling_and_grammar', 'epkb-ai-help-sidebar__action-wrap', '', false, false, 'epkb-ai__fix-improve-text-btn' );
+					EPKB_HTML_Elements::submit_button_v2( esc_html__( 'Generate Article Outline', 'echo-knowledge-base' ), 'epkb_ai_generate_article_outline', 'epkb-ai-help-sidebar__action-wrap', '', false, false, 'epkb-ai__generate-article-outline-btn' );							?>
 				</div>
 			</div>
 		</div><?php
@@ -176,10 +176,10 @@ class EPKB_AI_Help_Sidebar {
 
 				<div class="epkb-ai-help-sidebar__improve-text-selected-text-container">
 					<div class="epkb-ai-help-sidebar__improve-text-toolbar">    <?php
-						EPKB_HTML_Elements::submit_button_v2( __( 'Improve Readability', 'echo-knowledge-base' ), 'epkb_ai_improve_readability', 'epkbfa epkbfa-eye epkb-ai-help-sidebar__improve-readability-wrap', '', false );
-						EPKB_HTML_Elements::submit_button_v2( __( 'Re-phrase', 'echo-knowledge-base' ), 'epkb_airephrase', 'epkbfa epkbfa-refresh epkb-ai-help-sidebar__re-phrase-wrap', '', false );
-						EPKB_HTML_Elements::submit_button_v2( __( 'Fix Spelling / Grammar', 'echo-knowledge-base' ), 'epkb_ai_fix_spelling_and_grammar', 'epkbfa epkbfa-scissors epkb-ai-help-sidebar__fix-spelling-wrap', '', false );
-						EPKB_HTML_Elements::submit_button_v2( __( 'Copy', 'echo-knowledge-base' ), 'epkb_ai_copy', 'epkbfa epkbfa-file epkb-ai-help-sidebar__copy-wrap', '', false );  ?>
+						EPKB_HTML_Elements::submit_button_v2( esc_html__( 'Improve Readability', 'echo-knowledge-base' ), 'epkb_ai_improve_readability', 'epkbfa epkbfa-eye epkb-ai-help-sidebar__improve-readability-wrap', '', false );
+						EPKB_HTML_Elements::submit_button_v2( esc_html__( 'Re-phrase', 'echo-knowledge-base' ), 'epkb_airephrase', 'epkbfa epkbfa-refresh epkb-ai-help-sidebar__re-phrase-wrap', '', false );
+						EPKB_HTML_Elements::submit_button_v2( esc_html__( 'Fix Spelling / Grammar', 'echo-knowledge-base' ), 'epkb_ai_fix_spelling_and_grammar', 'epkbfa epkbfa-scissors epkb-ai-help-sidebar__fix-spelling-wrap', '', false );
+						EPKB_HTML_Elements::submit_button_v2( esc_html__( 'Copy', 'echo-knowledge-base' ), 'epkb_ai_copy', 'epkbfa epkbfa-file epkb-ai-help-sidebar__copy-wrap', '', false );  ?>
 					</div>
 					<div class="epkb-ai-help-sidebar__improve-text-input__textarea-wrap">
 						<div class="epkb-ai-help-sidebar__improve-text-input__textarea" contenteditable="true" placeholder="<?php esc_html_e( 'No text selected', 'echo-knowledge-base' ); ?>"></div>
@@ -206,7 +206,7 @@ class EPKB_AI_Help_Sidebar {
 				<div class="epkb-ai-help-sidebar__settings-form">
 					<div class="epkb-ai-help-sidebar__settings-group">  <?php
 						EPKB_HTML_Elements::text( [
-							'label'         => __( 'Article title', 'echo-knowledge-base' ),
+							'label'         => esc_html__( 'Article title', 'echo-knowledge-base' ),
 							'name'          => 'epkb_ai_article_title',
 							'max'           => '100',
 							'min'           => '0',
@@ -218,7 +218,7 @@ class EPKB_AI_Help_Sidebar {
 					</div>
 				</div>
 				<div class="epkb-ai-help-sidebar__article-outline-generate"><?php
-					EPKB_HTML_Elements::submit_button_v2( __( 'Generate Outline', 'echo-knowledge-base' ), 'epkb_ai_generate_article_outline_button', 'epkb-ai-help-sidebar__generate-outline-wrap', '', false ); ?>
+					EPKB_HTML_Elements::submit_button_v2( esc_html__( 'Generate Outline', 'echo-knowledge-base' ), 'epkb_ai_generate_article_outline_button', 'epkb-ai-help-sidebar__generate-outline-wrap', '', false ); ?>
 				</div>
 			</div>
 			<div class="epkb-ai-help-sidebar__article-outline-results-container">
@@ -278,7 +278,7 @@ class EPKB_AI_Help_Sidebar {
                 <!-- OpenAI API Key -->
                 <div class="epkb-ai-help-sidebar__settings-group">  <?php
 					EPKB_HTML_Elements::text( [
-						'label'         => __( 'OpenAI API Key', 'echo-knowledge-base' ),
+						'label'         => esc_html__( 'OpenAI API Key', 'echo-knowledge-base' ),
 						'name'          => 'openai_api_key',
 						'max'           => '100',
 						'min'           => '0',
@@ -294,7 +294,7 @@ class EPKB_AI_Help_Sidebar {
 					EPKB_HTML_Elements::checkbox_toggle( [
 						'id'            => 'disable_openai',
 						'name'          => 'disable_openai',
-						'text'          => __( 'Disable AI Help', 'echo-knowledge-base' ),
+						'text'          => esc_html__( 'Disable AI Help', 'echo-knowledge-base' ),
 						'textLoc'       => 'left',
 						'checked'       => EPKB_Core_Utilities::is_kb_flag_set( 'disable_openai' ),
 					] ) ?>
@@ -416,7 +416,7 @@ class EPKB_AI_Help_Sidebar {
 					<input class="epkb-ai-help-sidebar__feedback-input" type="email" value="" placeholder="" name="feedback_email">
 				</div>
 			</div><?php
-			EPKB_HTML_Elements::submit_button_v2( __( 'Submit', 'echo-knowledge-base' ), 'epkb_ai_feedback', 'epkb-ai-help-sidebar__action-wrap', '', false ); ?>
+			EPKB_HTML_Elements::submit_button_v2( esc_html__( 'Submit', 'echo-knowledge-base' ), 'epkb_ai_feedback', 'epkb-ai-help-sidebar__action-wrap', '', false ); ?>
 		</form>
 		</div><?php
 	}
@@ -445,7 +445,7 @@ class EPKB_AI_Help_Sidebar {
 			return;
 		}
 
-		add_meta_box( 'epkb_ai_help_meta_box', __( 'KB AI Help', 'echo-knowledge-base' ), array( $this, 'display_kb_ai_help_meta_box'), EPKB_KB_Handler::get_post_type( $kb_id ), 'side', 'high' );
+		add_meta_box( 'epkb_ai_help_meta_box', esc_html__( 'KB AI Help', 'echo-knowledge-base' ), array( $this, 'display_kb_ai_help_meta_box'), EPKB_KB_Handler::get_post_type( $kb_id ), 'side', 'high' );
 	}
 
 	/**
@@ -471,7 +471,26 @@ class EPKB_AI_Help_Sidebar {
 
 		if ( EPKB_Core_Utilities::is_kb_flag_set( 'ai_dismiss_main_intro' ) ) {
 			return;
-		}   ?>
+		}
+
+		EPKB_HTML_Forms::notification_box_middle(
+		    array(
+				'type' => 'warning',
+		        'title' => esc_html__( 'AI Disclaimer and Warnings', 'echo-knowledge-base' ),
+		        'desc' => sprintf(
+		            wp_kses(
+		                __( 'Please read the <a href="%s" target="_blank">AI Disclaimer and Warnings</a> before using the AI features.', 'echo-knowledge-base' ),
+		                array(
+		                    'a' => array(
+		                        'href' => array(),
+		                        'target' => array(),
+		                    ),
+		                )
+		            ),
+		            esc_url( 'https://www.echoknowledgebase.com/ai-disclaimer-and-warnings/' )
+		        ),
+		    )
+		);		?>
 
 		<div class="epkb-ai-help-sidebar__main-intro">
 			<div class="epkb-ai-help-sidebar__main-intro-left">
@@ -480,7 +499,7 @@ class EPKB_AI_Help_Sidebar {
 				<br>
 				<br>
                 <div>
-                    <?php echo  wp_kses( 'We are currently in the <strong>beta development stage</strong>, with a plethora of additional features in the pipeline. ' .
+                    <?php echo wp_kses( 'We are currently in the <strong>beta development stage</strong>, with a plethora of additional features in the pipeline. ' .
                                 'Your valuable feedback is highly appreciated and will enable us to incorporate your suggestions in our development roadmap. '.
                                 'Kindly <a href="" id="ai-help-feedback-link" data-target="feedback"> click here</a> to share your insights and help us enhance our product.', array(
                         'p' => array(),

@@ -17,7 +17,7 @@ class EPKB_Article_Count_Cntrl {
 
 		// check wpnonce
 		$wp_nonce = EPKB_Utilities::post( '_wpnonce_epkb_ajax_action' );
-		if ( empty( $wp_nonce ) || ! wp_verify_nonce( $wp_nonce, '_wpnonce_epkb_ajax_action' ) ) {
+		if ( empty( $wp_nonce ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $wp_nonce ) ), '_wpnonce_epkb_ajax_action' ) ) {
 			wp_die();
 		}
 

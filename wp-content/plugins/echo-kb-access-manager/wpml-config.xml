@@ -105,6 +105,8 @@
             <key name="next_navigation_text"/>
             <key name="prev_navigation_text"/>
             <key name="print_button_text"/>
+            <key name="archive_content_articles_list_title"/>
+            <key name="archive_category_name_prefix"/>
         </key>
         <key name="epkb_config_2">
             <key name="breadcrumb_description_text"/>
@@ -147,6 +149,8 @@
             <key name="next_navigation_text"/>
             <key name="prev_navigation_text"/>
             <key name="print_button_text"/>
+            <key name="archive_content_articles_list_title"/>
+            <key name="archive_category_name_prefix"/>
         </key>
         <key name="epkb_config_3">
             <key name="breadcrumb_description_text"/>
@@ -189,6 +193,8 @@
             <key name="next_navigation_text"/>
             <key name="prev_navigation_text"/>
             <key name="print_button_text"/>
+            <key name="archive_content_articles_list_title"/>
+            <key name="archive_category_name_prefix"/>
         </key>
         <key name="epkb_config_4">
             <key name="breadcrumb_description_text"/>
@@ -231,6 +237,8 @@
             <key name="next_navigation_text"/>
             <key name="prev_navigation_text"/>
             <key name="print_button_text"/>
+            <key name="archive_content_articles_list_title"/>
+            <key name="archive_category_name_prefix"/>
         </key>
         <key name="epkb_config_5">
             <key name="breadcrumb_description_text"/>
@@ -273,6 +281,8 @@
             <key name="next_navigation_text"/>
             <key name="prev_navigation_text"/>
             <key name="print_button_text"/>
+            <key name="archive_content_articles_list_title"/>
+            <key name="archive_category_name_prefix"/>
         </key>
         <key name="epkb_config_6">
             <key name="breadcrumb_description_text"/>
@@ -315,6 +325,8 @@
             <key name="next_navigation_text"/>
             <key name="prev_navigation_text"/>
             <key name="print_button_text"/>
+            <key name="archive_content_articles_list_title"/>
+            <key name="archive_category_name_prefix"/>
         </key>
         <key name="epkb_config_7">
             <key name="breadcrumb_description_text"/>
@@ -357,6 +369,8 @@
             <key name="next_navigation_text"/>
             <key name="prev_navigation_text"/>
             <key name="print_button_text"/>
+            <key name="archive_content_articles_list_title"/>
+            <key name="archive_category_name_prefix"/>
         </key>
         <key name="epkb_config_8">
             <key name="breadcrumb_description_text"/>
@@ -399,6 +413,8 @@
             <key name="next_navigation_text"/>
             <key name="prev_navigation_text"/>
             <key name="print_button_text"/>
+            <key name="archive_content_articles_list_title"/>
+            <key name="archive_category_name_prefix"/>
         </key>
         <key name="epkb_config_9">
             <key name="breadcrumb_description_text"/>
@@ -441,6 +457,8 @@
             <key name="next_navigation_text"/>
             <key name="prev_navigation_text"/>
             <key name="print_button_text"/>
+            <key name="archive_content_articles_list_title"/>
+            <key name="archive_category_name_prefix"/>
         </key>
         <key name="epkb_config_10">
             <key name="breadcrumb_description_text"/>
@@ -483,6 +501,8 @@
             <key name="next_navigation_text"/>
             <key name="prev_navigation_text"/>
             <key name="print_button_text"/>
+            <key name="archive_content_articles_list_title"/>
+            <key name="archive_category_name_prefix"/>
         </key>
         <key name="epkb_config_11">
             <key name="breadcrumb_description_text"/>
@@ -525,6 +545,8 @@
             <key name="next_navigation_text"/>
             <key name="prev_navigation_text"/>
             <key name="print_button_text"/>
+            <key name="archive_content_articles_list_title"/>
+            <key name="archive_category_name_prefix"/>
         </key>
         <key name="epkb_config_12">
             <key name="breadcrumb_description_text"/>
@@ -567,6 +589,8 @@
             <key name="next_navigation_text"/>
             <key name="prev_navigation_text"/>
             <key name="print_button_text"/>
+            <key name="archive_content_articles_list_title"/>
+            <key name="archive_category_name_prefix"/>
         </key>
         <key name="epkb_config_13">
             <key name="breadcrumb_description_text"/>
@@ -609,6 +633,8 @@
             <key name="next_navigation_text"/>
             <key name="prev_navigation_text"/>
             <key name="print_button_text"/>
+            <key name="archive_content_articles_list_title"/>
+            <key name="archive_category_name_prefix"/>
         </key>
         <key name="epkb_config_14">
             <key name="breadcrumb_description_text"/>
@@ -651,6 +677,8 @@
             <key name="next_navigation_text"/>
             <key name="prev_navigation_text"/>
             <key name="print_button_text"/>
+            <key name="archive_content_articles_list_title"/>
+            <key name="archive_category_name_prefix"/>
         </key>
         <key name="epkb_config_15">
             <key name="breadcrumb_description_text"/>
@@ -693,6 +721,8 @@
             <key name="next_navigation_text"/>
             <key name="prev_navigation_text"/>
             <key name="print_button_text"/>
+            <key name="archive_content_articles_list_title"/>
+            <key name="archive_category_name_prefix"/>
         </key>
         <key name="epkb_config_16">
             <key name="breadcrumb_description_text"/>
@@ -735,6 +765,8 @@
             <key name="next_navigation_text"/>
             <key name="prev_navigation_text"/>
             <key name="print_button_text"/>
+            <key name="archive_content_articles_list_title"/>
+            <key name="archive_category_name_prefix"/>
         </key>
         <key name="epkb_config_17">
             <key name="breadcrumb_description_text"/>
@@ -777,6 +809,8 @@
             <key name="next_navigation_text"/>
             <key name="prev_navigation_text"/>
             <key name="print_button_text"/>
+            <key name="archive_content_articles_list_title"/>
+            <key name="archive_category_name_prefix"/>
         </key>
         <key name="epkb_config_18">
             <key name="breadcrumb_description_text"/>
@@ -819,6 +853,8 @@
             <key name="next_navigation_text"/>
             <key name="prev_navigation_text"/>
             <key name="print_button_text"/>
+            <key name="archive_content_articles_list_title"/>
+            <key name="archive_category_name_prefix"/>
         </key>
         <key name="epkb_config_19">
             <key name="breadcrumb_description_text"/>
@@ -861,6 +897,8 @@
             <key name="next_navigation_text"/>
             <key name="prev_navigation_text"/>
             <key name="print_button_text"/>
+            <key name="archive_content_articles_list_title"/>
+            <key name="archive_category_name_prefix"/>
         </key>
         <key name="epkb_config_20">
             <key name="breadcrumb_description_text"/>
@@ -903,6 +941,8 @@
             <key name="next_navigation_text"/>
             <key name="prev_navigation_text"/>
             <key name="print_button_text"/>
+            <key name="archive_content_articles_list_title"/>
+            <key name="archive_category_name_prefix"/>
         </key>
     </admin-texts>
 </wpml-config>

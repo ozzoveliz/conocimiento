@@ -31,7 +31,7 @@ class EPKB_Export_Import {
 	public function download_export_file( $kb_id ) {
 
 		if ( ! current_user_can('manage_options') ) {
-			$this->message['error'] = __( 'Login or refresh this page to export KB configuration.', 'echo-knowledge-base' );
+			$this->message['error'] = esc_html__( 'Login or refresh this page to export KB configuration.', 'echo-knowledge-base' );
 			return $this->message;
 		}
 
@@ -64,7 +64,6 @@ class EPKB_Export_Import {
 	 * @return null
 	 */
 	private function export_kb_config( $kb_id ) {
-		global $wp_widget_factory;
 
 		$export_data = array();
 
@@ -89,7 +88,7 @@ class EPKB_Export_Import {
 				return null;
 			}
 			if ( ! is_array($add_on_config) ) {
-				$this->message['error'] = __( 'Found invalid data.', 'echo-knowledge-base' ) . ' (' . $add_on_prefix . ')';
+				$this->message['error'] = esc_html__( 'Found invalid data.', 'echo-knowledge-base' ) . ' (' . $add_on_prefix . ')';
 				return null;
 			}
 
@@ -108,50 +107,6 @@ class EPKB_Export_Import {
 			$this->message['error'] = 'E40'; // do not translate;
 			return null;
 		}
-		
-		// export WordPress widgets if it is available
-		if ( empty($wp_widget_factory) || empty($wp_widget_factory->widgets ) ) {
-			return $export_data;
-		}
-
-		// Check our sidebar for the widgets exists
-		/** TODO	$sidebars = get_option( 'sidebars_widgets' );
-		if ( empty( $sidebars['eckb_articles_sidebar'] ) ) {
-			return $export_data;
-		}
-		
-		// get names and indexes for widgets
-		$export_data['kb_widgets'] = array();
-		foreach ( $sidebars['eckb_articles_sidebar'] as $key => $widget_id ) {
-			$sidebar_widget_data = explode( '-', $widget_id );
-			$sidebar_widget_index = array_pop( $sidebar_widget_data );
-			$sidebar_widget_name = implode($sidebar_widget_data);
-			
-			if ( ! isset( $export_data['kb_widgets'][$sidebar_widget_name] ) ) {
-				$export_data['kb_widgets'][$sidebar_widget_name] = array();
-			}
-			
-			$export_data['kb_widgets'][$sidebar_widget_name][$sidebar_widget_index] =  array();
-		}
-
-		// check each widget option to know if it was added to the eckb widget panel
-		foreach ( $export_data['kb_widgets'] as $widget_name => $widget_data ) {
-
-			$widget_option = get_option( 'widget_' . $widget_name );
-			if ( empty( $widget_option ) ) {
-				continue;
-			}
-			
-			foreach ( $export_data['kb_widgets'][$widget_name] as $sidebar_widget_index => $data ) {
-				
-				if ( empty( $widget_option[$sidebar_widget_index] ) ) {
-					continue;
-				}
-				
-				$export_data['kb_widgets'][$widget_name][$sidebar_widget_index] = $widget_option[$sidebar_widget_index];
-			}
-			
-		} */
 
 		return $export_data;
 	}
@@ -165,39 +120,41 @@ class EPKB_Export_Import {
 	public function import_kb_config( $kb_id ) {
 
 		if ( ! current_user_can('manage_options') ) {
-			$this->message['error'] = __( 'You do not have permission.', 'echo-knowledge-base' );
+			$this->message['error'] = esc_html__( 'You do not have permission.', 'echo-knowledge-base' );
 			return $this->message;
 		}
 
+		//phpcs:ignore WordPress.Security.NonceVerification.Recommended -- nonce is verified in the calling function
 		$import_file_name = $_FILES['import_file']['tmp_name'];
-		if ( empty($import_file_name) ) {
-			$this->message['error'] = __( 'Import file format is not correct.', 'echo-knowledge-base' ) . ' (0)';
+		if ( empty( $import_file_name ) ) {
+			$this->message['error'] = esc_html__( 'Import file format is not correct.', 'echo-knowledge-base' ) . ' (0)';
 			return $this->message;
 		}
 
 		// check the file
 		if ( empty( is_uploaded_file( $import_file_name ) ) ) {
-			$this->message['error'] = __( 'Import file format is not correct.', 'echo-knowledge-base' ) . ' (3)';
+			$this->message['error'] = esc_html__( 'Import file format is not correct.', 'echo-knowledge-base' ) . ' (3)';
 			return $this->message;
 		}
 
 		// retrieve content of the imported file
-		$import_data_file = file_get_contents($import_file_name);
-		if ( empty($import_data_file) ) {
-			$this->message['error'] = __( 'Import file format is not correct.', 'echo-knowledge-base' ) . ' (1)';
+		//phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents
+		$import_data_file = file_get_contents( $import_file_name );
+		if ( empty( $import_data_file ) ) {
+			$this->message['error'] = esc_html__( 'Import file format is not correct.', 'echo-knowledge-base' ) . ' (1)';
 			return $this->message;
 		}
 
 		// validate imported data
-		$import_data = json_decode($import_data_file, true);
-		if ( empty($import_data) || ! is_array($import_data) ) {
-			$this->message['error'] = __( 'Import file format is not correct.', 'echo-knowledge-base' ) . ' (2)';
+		$import_data = json_decode( $import_data_file, true );
+		if ( empty( $import_data ) || ! is_array( $import_data ) ) {
+			$this->message['error'] = esc_html__( 'Import file format is not correct.', 'echo-knowledge-base' ) . ' (2)';
 			return $this->message;
 		}
 
 		// KB Core needs to be present
-		if ( ! isset($import_data['epkb']) ) {
-			$this->message['error'] = __( 'Knowledge Base data is missing', 'echo-knowledge-base' );
+		if ( ! isset( $import_data['epkb'] ) ) {
+			$this->message['error'] = esc_html__( 'Knowledge Base data is missing', 'echo-knowledge-base' );
 			return $this->message;
 		}
 
@@ -207,32 +164,32 @@ class EPKB_Export_Import {
 			$plugin_name = $this->get_plugin_name( $add_on_class );
 			
 			// add-on is installed but not active and no data is present in import for the add-on
-			if ( empty($import_data[$add_on_prefix]) && ! class_exists($add_on_class) ) {
+			if ( empty( $import_data[$add_on_prefix]) && ! class_exists( $add_on_class ) ) {
 				continue;
 			}
 			
 			// import data exists but plugin is not active
-			if ( isset($import_data[$add_on_prefix]) && ! class_exists($add_on_class) ) {
-				$this->message['error'] = __( 'Import failed because found import data for a plugin that is not active: ', 'echo-knowledge-base' ) . $plugin_name;
+			if ( isset( $import_data[$add_on_prefix] ) && ! class_exists( $add_on_class ) ) {
+				$this->message['error'] = esc_html__( 'Import failed because found import data for a plugin that is not active: ', 'echo-knowledge-base' ) . $plugin_name;
 				return $this->message;
 			}
 
-			// plugin is active but import data does not exist TODO - should be warning to user
-			if ( ! isset($import_data[$add_on_prefix]) && class_exists($add_on_class) ) {
-				/* OK to import less $this->message['error'] = __( 'Import failed because found a plugin that is active with no corresponding import data: ', 'echo-knowledge-base' ) . $plugin_name;
+			// plugin is active but import data does not exist
+			if ( ! isset( $import_data[$add_on_prefix] ) && class_exists( $add_on_class ) ) {
+				/* OK to import less $this->message['error'] = esc_html__( 'Import failed because found a plugin that is active with no corresponding import data: ', 'echo-knowledge-base' ) . $plugin_name;
 				return $this->message; */
 				continue;
 			}
 
 			// ensure imported data have correct format
-			if ( ! is_array($import_data[$add_on_prefix]) ) {
-				$this->message['error'] = __( 'Import failed because found invalid data.', 'echo-knowledge-base' ) . ' (' . $plugin_name . ')';
+			if ( ! is_array( $import_data[$add_on_prefix] ) ) {
+				$this->message['error'] = esc_html__( 'Import failed because found invalid data.', 'echo-knowledge-base' ) . ' (' . $plugin_name . ')';
 				return $this->message;
 			}
 
 			// verify most data is preset
 			$specs_class_name = strtoupper($add_on_prefix) . '_KB_Config_Specs';
-			if ( ! class_exists($specs_class_name) || ! method_exists( $specs_class_name, 'get_specs_item_names') ) {
+			if ( ! class_exists($specs_class_name) || ! method_exists( $specs_class_name, 'get_specs_item_names' ) ) {
 				$this->message['error'] = 'E34 (' . $plugin_name . ')'; // do not translate
 				return $this->message;
 			}
@@ -257,7 +214,7 @@ class EPKB_Export_Import {
 
 			// validate imported data
 			if ( $specs_found == 0 || $specs_not_found > $specs_found ) {
-				$this->message['error'] = __( "Found invalid data.", 'echo-knowledge-base' ) . ' (' . $plugin_name . ',' . $specs_found . ',' . $specs_not_found . ')';
+				$this->message['error'] = esc_html__( "Found invalid data.", 'echo-knowledge-base' ) . ' (' . $plugin_name . ',' . $specs_found . ',' . $specs_not_found . ')';
 				return $this->message;
 			}
 
@@ -265,13 +222,14 @@ class EPKB_Export_Import {
 			/** @var $plugin_instance Echo_Knowledge_Base */
 			$plugin_instance = $this->get_plugin_instance( $add_on_prefix );
 			if ( empty( $plugin_instance ) ) {
-				$this->message['error'] =  __( 'Import failed', 'echo-knowledge-base' );
+				$this->message['error'] =  esc_html__( 'Import failed', 'echo-knowledge-base' );
 				return $this->message;
 			}
 
 			// for KB Core, Main and Article Page could have Elegant layout, so we need it enabled
 			if ( $add_on_prefix == 'epkb' && in_array( $add_on_config['kb_main_page_layout'], [ EPKB_Layout::GRID_LAYOUT, EPKB_Layout::SIDEBAR_LAYOUT ] ) && ! EPKB_Utilities::is_elegant_layouts_enabled() ) {
-				$this->message['error'] = __( "Elegant Layouts needs to be active.", 'echo-knowledge-base' ) . ' (' . $add_on_config['kb_main_page_layout'] . ')';
+				$layout = sanitize_text_field( $add_on_config['kb_main_page_layout'] );
+				$this->message['error'] = esc_html__( "Elegant Layouts needs to be active.", 'echo-knowledge-base' ) . ' (' . esc_html( $layout ) . ')';
 				return $this->message;
 			}
 
@@ -297,50 +255,9 @@ class EPKB_Export_Import {
 				$this->message['error'] =  'E36 (' . $plugin_name . ')' . $add_on_config->get_error_message();  // do not translate
 				return $this->message;
 			}
-
-			//$this->operation_log[] = 'Import completed for plugin ' . $plugin_name;
 		}
 		
-		// import KB Widgets
-		/** TODO	$old_kb_widgets = get_option('sidebars_widgets');
-
-		// move old widgets to inactive panel to save user's settings
-		if ( ! empty($old_kb_widgets['eckb_articles_sidebar']) ) {
-			foreach ( $old_kb_widgets['eckb_articles_sidebar'] as $key => $widget_id ) {
-				$old_kb_widgets['wp_inactive_widgets'][] = $widget_id;
-			}
-		}
-		
-		$old_kb_widgets['eckb_articles_sidebar'] = array();
-		
-		// Import widgets 
-		if ( ! empty( $import_data['kb_widgets'] ) )  {
-			foreach ( $import_data['kb_widgets'] as $new_widget_name => $new_widgets ) {
-				
-				foreach ( $new_widgets as $new_widget ) {
-
-					$widget_option = get_option( 'widget_' . $new_widget_name );
-					if ( empty( $widget_option ) ) {
-						continue; // This means that widget is not installed on this WP instance
-					}
-					
-					$new_widget_index = 1;
-					while ( isset( $widget_option[$new_widget_index] ) and $new_widget_index < 100 ) {
-						$new_widget_index++;
-					}
-				
-					$widget_option[$new_widget_index] = $new_widget;
-					update_option( 'widget_' . $new_widget_name, $widget_option );
-					
-					$old_kb_widgets['eckb_articles_sidebar'][] = $new_widget_name . '-' . $new_widget_index;
-				}
-			}
-		}
-		
-		update_option( 'sidebars_widgets', $old_kb_widgets ); */
-		
-		//$this->operation_log[] = 'Import finished successfully';
-		$this->message['success'] =  __( 'Import finished successfully', 'echo-knowledge-base' );
+		$this->message['success'] =  esc_html__( 'Import finished successfully', 'echo-knowledge-base' );
 		
 		return $this->message;
 	}
@@ -410,7 +327,7 @@ class EPKB_Export_Import {
 		$plugin_name = array_flip($this->add_ons_info);
 		$plugin_name = isset($plugin_name[$prefix]) ? $this->get_plugin_name($plugin_name[$prefix]) : 'Unknown plugin';
 
-		$this->message['error'] = $plugin_name . ' - ' . __( 'is the plugin active?', 'echo-knowledge-base' );
+		$this->message['error'] = $plugin_name . ' - ' . esc_html__( 'is the plugin active?', 'echo-knowledge-base' );
 
 		return null;
 	}

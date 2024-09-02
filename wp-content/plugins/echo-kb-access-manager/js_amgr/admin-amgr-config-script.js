@@ -346,32 +346,6 @@ jQuery(document).ready(function($) {
 
 
 	/** ***********************************************************************************************
-     *
-     *          Other
-     *
-     * **********************************************************************************************/
-
-    // SAVE Access Manager configuration
-    $('#amgr-access-save-configuration-container').on( 'click', '#amgr_save_kb_config', function(e) {
-        e.preventDefault();
-
-        amgr_loading_saving_icon();
-
-        var postData = {
-            action: 'amgr_save_kb_config_changes',
-            amag_kb_id: $('#amag_kb_id').val(),
-            form: $('#amgr-access-configuration').serialize(),
-            _wpnonce_amgr_save_kb_config: $('#_wpnonce_amgr_save_kb_config').val()
-        };
-
-        amgr_send_ajax( postData, amgr_callback_config_saved );
-    });
-    function amgr_callback_config_saved( response ) {
-        $( '#amgr-user-tabs-section' ).html( response.message );
-    }
-
-
-	/** ***********************************************************************************************
 	 *
 	 *          AJAX calls
 	 *

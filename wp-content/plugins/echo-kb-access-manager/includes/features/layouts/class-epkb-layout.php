@@ -20,7 +20,6 @@ abstract class EPKB_Layout {
 	protected $kb_id;
 	protected $category_seq_data;
 	protected $articles_seq_data;
-	protected $is_builder_on = false;
 	protected $has_kb_categories = true;
 	protected $active_theme = 'unknown';
 	protected $displayed_article_ids = array();
@@ -29,19 +28,18 @@ abstract class EPKB_Layout {
 	 * Show the KB Main page with list of categories and articles
 	 *
 	 * @param $kb_config
-	 * @param bool $is_builder_on
+	 * @param bool $is_ordering_wizard_on
 	 * @param array $article_seq
 	 * @param array $categories_seq
 	 */
-	public function display_kb_main_page( $kb_config, $is_builder_on=false, $article_seq=array(), $categories_seq=array() ) {
+	public function display_non_modular_kb_main_page( $kb_config, $is_ordering_wizard_on=false, $article_seq=array(), $categories_seq=array() ) {
 
 		// set initial data
 		$this->kb_config = $kb_config;
 		$this->kb_id = $kb_config['id'];
-		$this->is_builder_on = $is_builder_on;
 
 		// set category and article sequence
-		if ( $is_builder_on && ! empty( $article_seq ) && ! empty( $categories_seq ) ) {
+		if ( $is_ordering_wizard_on && ! empty( $article_seq ) && ! empty( $categories_seq ) ) {
 			$this->articles_seq_data = $article_seq;
 			$this->category_seq_data = $categories_seq;
 		} else {
@@ -74,13 +72,13 @@ abstract class EPKB_Layout {
 		$this->articles_seq_data = $kb_groups_set['articles_seq_data'];
 		// AMGR - END
 
-		$this->generate_kb_main_page();
+		$this->generate_non_modular_kb_main_page();
 	}
 
 	/**
 	 * Generate content of the KB main page
 	 */
-	protected abstract function generate_kb_main_page();
+	protected abstract function generate_non_modular_kb_main_page();
 
 	/**
 	 * Display a link to a KB article.
@@ -195,7 +193,7 @@ abstract class EPKB_Layout {
 
 				EPKB_HTML_Forms::notification_box_middle( array(
 					'type'      => 'error',
-					'desc'      => __( 'No KB categories found. This ordering action must be performed for each language separately. ' .
+					'desc'      => esc_html__( 'No KB categories found. This ordering action must be performed for each language separately. ' .
 						'Only one language can be selected for this page in the top admin menu.', 'echo-knowledge-base' ),
 				) );
 				
@@ -213,9 +211,9 @@ abstract class EPKB_Layout {
 
 					EPKB_HTML_Forms::dialog_confirm_action( array(
 						'id'                => 'epkb-created-kb-content',
-						'title'             => __( 'Notice', 'echo-knowledge-base' ),
-						'body'              => __( 'Demo categories and articles were created. The page will reload.', 'echo-knowledge-base' ),
-						'accept_label'      => __( 'Ok', 'echo-knowledge-base' ),
+						'title'             => esc_html__( 'Notice', 'echo-knowledge-base' ),
+						'body'              => esc_html__( 'Demo categories and articles have been created. The page will reload.', 'echo-knowledge-base' ),
+						'accept_label'      => esc_html__( 'Ok', 'echo-knowledge-base' ),
 						'accept_type'       => 'primary',
 						'show_cancel_btn'   => 'no',
 						'show_close_btn'    => 'no',

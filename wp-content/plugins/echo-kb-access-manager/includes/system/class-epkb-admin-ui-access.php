@@ -354,7 +354,7 @@ class EPKB_Admin_UI_Access {
 		$boxes_config[] = $kb_id == EPKB_KB_Config_DB::DEFAULT_KB_ID ?
 			array(
 				'title' => $kb_config_specs['admin_eckb_access_faqs_write']['label'],
-				'description'   => __( 'The FAQs feature is not linked to any specific KB; instead, access to it is defined within the default KB.', 'echo-knowledge-base' ),
+				'description'   => esc_html__( 'The FAQs feature is not linked to any specific KB; instead, access to it is defined within the default KB.', 'echo-knowledge-base' ),
 				'html' => self::radio_buttons_vertical_access_control( array(
 					'name'          => 'admin_eckb_access_faqs_write',
 					'radio_class'   => 'epkb-admin__radio-button-wrap',
@@ -475,7 +475,7 @@ class EPKB_Admin_UI_Access {
 	}
 
 	private static function get_admins_distinct_box() {
-		return sprintf( __( '%sAdmins%s', 'echo-knowledge-base' ), '<span class="epkb-admin__distinct-box epkb-admin__distinct-box--high">', '</span>' );
+		return sprintf( esc_html__( '%sAdmins%s', 'echo-knowledge-base' ), '<span class="epkb-admin__distinct-box epkb-admin__distinct-box--high">', '</span>' );
 	}
 
 	// AMGR
@@ -485,18 +485,18 @@ class EPKB_Admin_UI_Access {
 
 	private static function get_editors_distinct_box() {
 		return AMGR_WP_Roles::use_kb_groups()
-			? sprintf( __( '%sKB Editors%s', 'echo-knowledge-base' ), '<span class="epkb-admin__distinct-box epkb-admin__distinct-box--middle">', '</span>' )
-			: sprintf( __( '%sEditors%s', 'echo-knowledge-base' ), '<span class="epkb-admin__distinct-box epkb-admin__distinct-box--middle">', '</span>' );
+			? sprintf( esc_html__( '%sKB Editors%s', 'echo-knowledge-base' ), '<span class="epkb-admin__distinct-box epkb-admin__distinct-box--middle">', '</span>' )
+			: sprintf( esc_html__( '%sEditors%s', 'echo-knowledge-base' ), '<span class="epkb-admin__distinct-box epkb-admin__distinct-box--middle">', '</span>' );
 	}
 
 	private static function get_authors_distinct_box() {
 		return AMGR_WP_Roles::use_kb_groups()
-			? sprintf( __( '%sKB Authors%s', 'echo-knowledge-base' ), '<span class="epkb-admin__distinct-box epkb-admin__distinct-box--low">', '</span>' )
-			: sprintf( __( '%sAuthors%s', 'echo-knowledge-base' ), '<span class="epkb-admin__distinct-box epkb-admin__distinct-box--low">', '</span>' );
+			? sprintf( esc_html__( '%sKB Authors%s', 'echo-knowledge-base' ), '<span class="epkb-admin__distinct-box epkb-admin__distinct-box--low">', '</span>' )
+			: sprintf( esc_html__( '%sAuthors%s', 'echo-knowledge-base' ), '<span class="epkb-admin__distinct-box epkb-admin__distinct-box--low">', '</span>' );
 	}
 
 	private static function get_users_with_capability_distinct_box( $capability ) {
-		return sprintf( __( '%susers with "%s" capability%s', 'echo-knowledge-base' ), '<span class="epkb-admin__distinct-box epkb-admin__distinct-box--lowest">', $capability, '</span>' );
+		return sprintf( esc_html__( '%susers with "%s" capability%s', 'echo-knowledge-base' ), '<span class="epkb-admin__distinct-box epkb-admin__distinct-box--lowest">', $capability, '</span>' );
 	}
 
 	/**
@@ -578,7 +578,7 @@ class EPKB_Admin_UI_Access {
 
 		ob_start();		?>
 
-		<div class="config-input-group <?php echo esc_attr( $args['input_group_class'] ); ?>" id="<?php echo $id; ?>_group">		<?php
+		<div class="config-input-group <?php echo esc_attr( $args['input_group_class'] ); ?>" id="<?php echo esc_attr( $id ); ?>_group">		<?php
 
 			if ( ! empty($args['data']['example_image']) ) {
 				echo '<div class="eckb-wizard-radio-btn-vertical-example__icon epkbfa epkbfa-eye"></div>';
@@ -590,11 +590,10 @@ class EPKB_Admin_UI_Access {
 				</span>            <?php
 			}                       ?>
 
-			<div class="radio-buttons-vertical <?php echo esc_attr( $args['input_class'] ); ?>" id="<?php echo $id; ?>">
+			<div class="radio-buttons-vertical <?php echo esc_attr( $args['input_class'] ); ?>" id="<?php echo esc_attr( $id ); ?>">
 				<ul>	                <?php
 
-					foreach( $args['options'] as $key => $label ) {
-						$checked = checked( $key, $args['value'], false );		                ?>
+					foreach( $args['options'] as $key => $label ) {         ?>
 
 						<li class="<?php echo esc_attr( $args['radio_class'] ); ?>">			                <?php
 
@@ -603,14 +602,14 @@ class EPKB_Admin_UI_Access {
 								$checked_class = 'checked-radio';
 							} ?>
 
-							<div class="input_container config-col-1 <?php echo $checked_class; ?>">
+							<div class="input_container config-col-1 <?php echo esc_attr( $checked_class ); ?>">
 								<input type="radio"
 								       name="<?php echo esc_attr( $args['name'] ); ?>"
-								       id="<?php echo $id . $ix; ?>"
+								       id="<?php echo esc_attr( $id . $ix ); ?>"
 								       value="<?php echo esc_attr( $key ); ?>"					                <?php
-								echo $data_escaped . ' ' . $checked; ?> />
+								echo $data_escaped . ' ' . checked( $key, $args['value'], false ); ?> />
 							</div>
-							<label class="<?php echo esc_attr( $args['label_class'] ); ?> config-col-10" for="<?php echo $id . $ix; ?>">
+							<label class="<?php echo esc_attr( $args['label_class'] ); ?> config-col-10" for="<?php echo esc_attr( $id . $ix ); ?>">
 								<?php echo wp_kses_post( $label ); ?>
 							</label>
 						</li>		                <?php

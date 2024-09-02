@@ -103,7 +103,6 @@ class AMGR_Access_Categories_Back {
 		// get term to check
 		$term = get_term($term_id);
 		if ( empty( $term ) || is_wp_error( $term ) ) {
-			AMGR_Logging::add_log("No term found.", $term_id, $term );
 			return false;
 		}
 
@@ -334,8 +333,10 @@ class AMGR_Access_Categories_Back {
 	public function list_orphan_categories( $taxonomy ) {
 
 		// get all terms
-		$terms = get_terms( $taxonomy, array('hide_empty' => false) );
-		if ( is_wp_error( $terms ) || empty($terms) || ! is_array($terms) ) {
+		$terms = get_terms( array(
+								'taxonomy'      => $taxonomy,
+								'hide_empty'    => false ) );
+		if ( is_wp_error( $terms ) || empty( $terms ) || ! is_array( $terms ) ) {
 			return;
 		}
 
@@ -369,37 +370,33 @@ class AMGR_Access_Categories_Back {
 
 		<div class="amgr-orphan-list-categories">
 
-			<div class="amgr-olc-title"><h2>Individual Categories<h2></div>
-			<div class="amgr-olc-description"><p>These Categories appear here because you have access to them but not their parent Categories. If you see them in the above list then you have access to the whole hierarchy.<p></div>
+			<div class="amgr-olc-title"><h2><?php esc_html_e( 'Access to Child Categories', 'echo-knowledge-base' ); ?></h2></div>
+			<div class="amgr-olc-description"><p><?php esc_html_e( 'You have access to the following child categories, even though you do not have access to their parent categories. ' .
+						'For example, in the category hierarchy Category A (parent) -> Category B (child), you would only have access to Category B.', 'echo-knowledge-base' ); ?><p></div>
+
 			<div class="amgr-olc-heading">
-				<div class="amgr-olc-col"><span>Name</span></div>
-				<div class="amgr-olc-col"><span>Description</span></div>
-				<div class="amgr-olc-col"><span>Slug</span></div>
+				<div class="amgr-olc-col"><span><?php esc_html_e( 'Name', 'echo-knowledge-base' ); ?></span></div>
+				<div class="amgr-olc-col"><span><?php esc_html_e( 'Slug', 'echo-knowledge-base' ); ?></span></div>
 			</div>
 
-			<div class="amgr-olc-list">
-				<ul>					<?php
-					foreach( $orphan_terms as $term ) {
+			<div class="amgr-olc-list"> <?php
+				foreach( $orphan_terms as $term ) {
 
-						if ( $first_orphan_term ) {
-							$first_orphan_term = false;
-						}
-						$edit_link = esc_url( get_edit_term_link( $term->term_id, $taxonomy, EPKB_KB_Handler::get_post_type( $kb_id ) ) );
+					if ( $first_orphan_term ) {
+						$first_orphan_term = false;
+					}
+					$edit_link = esc_url( get_edit_term_link( $term->term_id, $taxonomy, EPKB_KB_Handler::get_post_type( $kb_id ) ) );
 
-						echo '<li>
-							<div class="amgr-olc-col">
-								<span><strong>' . $term->name . '</strong></span>
-								<div class="amgr-olc-actions">
-									<span><a href="' . $edit_link . '" target="_blank">edit</a></span>
-									<span>Delete</span> 
-									<span>View </span> 
-								</div>
+					echo '
+						<div class="amgr-category">
+							<div class="amgr-category__name_action">
+								<div class="amgr-category__name">' . esc_html( $term->name ) . '</div>
+								<div class="amgr-category__action"><a href="' . esc_url( $edit_link ) . '" target="_blank">' . esc_html__( 'Edit', 'echo-knowledge-base' ) . '</a></div>
 							</div>
-							<div class="amgr-olc-col">N/A</div>    
-							<div class="amgr-olc-col">N/A</div>   
-						</li>';
-					}					?>
-				</ul>
+							<div class="amgr-category__slug">' . esc_html( $term->slug ) . '</div>
+						</div>';
+				}   ?>
+
 			</div>
 
 		</div>		<?php

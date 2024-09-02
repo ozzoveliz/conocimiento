@@ -8,6 +8,7 @@
 class EPKB_Upgrades {
 
 	const GRID_UPGRADE_DONE = 3;
+	const NOT_INITIALIZED = '12.30.99';
 
 	public function __construct() {
         // will run after plugin is updated but not always like front-end rendering
@@ -93,29 +94,43 @@ class EPKB_Upgrades {
 	 */
 	public static function update_plugin_version() {
 
-		$last_version = EPKB_Utilities::get_wp_option( 'epkb_version', null );      // TODO FUTURE use upgrade_plugin_version
+		// ensure the plugin version and configuration is set
+		$last_version = EPKB_Utilities::get_wp_option( 'epkb_version', null );
 		if ( empty( $last_version ) ) {
 			EPKB_Utilities::save_wp_option( 'epkb_version', Echo_Knowledge_Base::$version );
-			EPKB_Utilities::save_wp_option( 'epkb_version_first', Echo_Knowledge_Base::$version );
-			// update new first version
 			epkb_get_instance()->kb_config_obj->set_value( EPKB_KB_Config_DB::DEFAULT_KB_ID, 'first_plugin_version', Echo_Knowledge_Base::$version );
 			return;
 		}
 
+		$kb_config = epkb_get_instance()->kb_config_obj->get_kb_config( EPKB_KB_Config_DB::DEFAULT_KB_ID, true );
+		if ( is_wp_error( $kb_config ) ) {
+			// TODO report error in admin page
+			return;
+		}
+
+		// initialize plugin first version if empty or not initialized
+		if ( empty( $kb_config['first_plugin_version'] ) || $kb_config['first_plugin_version'] == self::NOT_INITIALIZED ) {
+			$first_plugin_version = EPKB_Utilities::get_wp_option( 'epkb_version_first', '' );
+			$first_plugin_version = empty( $first_plugin_version ) ? $last_version : $first_plugin_version;
+			epkb_get_instance()->kb_config_obj->set_value( EPKB_KB_Config_DB::DEFAULT_KB_ID, 'first_plugin_version', $first_plugin_version );
+		}
+
+		// initialize plugin upgraded version if empty or not initialized
+		$last_upgrade_version = $kb_config['upgrade_plugin_version'];
+		if ( empty( $last_upgrade_version ) || $last_upgrade_version == self::NOT_INITIALIZED ) {
+			$last_upgrade_version = $last_version;
+			epkb_get_instance()->kb_config_obj->set_value( EPKB_KB_Config_DB::DEFAULT_KB_ID, 'upgrade_plugin_version', $last_upgrade_version );
+		}
+
 		// if plugin is up-to-date then return
-		if ( version_compare( $last_version, Echo_Knowledge_Base::$version, '>=' ) ) {
+		if ( version_compare( $last_upgrade_version, Echo_Knowledge_Base::$version, '>=' ) ) {
 			return;
 		}
 
 		// upgrade the plugin
-		self::invoke_upgrades( $last_version );
+		self::invoke_upgrades( $last_upgrade_version );
 
-		// update the plugin version
-		$result = EPKB_Utilities::save_wp_option( 'epkb_version', Echo_Knowledge_Base::$version );  // TODO FUTURE remove
-		if ( is_wp_error( $result ) ) {
-			EPKB_Logging::add_log( 'Could not update plugin version', $result );
-			return;
-		}
+		EPKB_Utilities::save_wp_option( 'epkb_version', Echo_Knowledge_Base::$version );
 	}
 
 	/**
@@ -136,6 +151,9 @@ class EPKB_Upgrades {
 			// store the updated KB data
 			epkb_get_instance()->kb_config_obj->update_kb_configuration( $kb_config['id'], $kb_config );
 		}
+
+		// ensure default KB is updated
+		epkb_get_instance()->kb_config_obj->set_value( EPKB_KB_Config_DB::DEFAULT_KB_ID, 'upgrade_plugin_version', Echo_Knowledge_Base::$version );
 	}
 
 	public static function run_upgrade( &$kb_config, $last_version ) {
@@ -160,10 +178,6 @@ class EPKB_Upgrades {
 		    self::upgrade_to_v11_0_1( $kb_config );
 	    }
 
-		if ( version_compare( $last_version, '11.20.0', '<' ) ) {
-			self::upgrade_to_v11_20_0( $kb_config );
-		}
-
 		if ( version_compare( $last_version, '11.30.0', '<' ) ) {
 			self::upgrade_to_v11_30_0( $kb_config );
 		}
@@ -183,33 +197,58 @@ class EPKB_Upgrades {
 		if ( version_compare( $last_version, '11.41.0', '<' ) ) {
 			self::upgrade_to_v11_41_0( $kb_config );
 		}
-	}
 
-	public static function force_plugin_11_30_0_upgrade( &$kb_config ) {
-		self::upgrade_to_v11_30_0( $kb_config );
-	}
-
-	public static function force_plugin_11_40_0_upgrade( &$kb_config ) {
-		if ( empty( $kb_config ) || $kb_config['kb_main_page_layout'] != EPKB_Layout::GRID_LAYOUT || $kb_config['sidebar_article_list_spacing'] == self::GRID_UPGRADE_DONE ) {
-			return;
+		if ( version_compare( $last_version, '12.0.0', '<' ) ) {
+			self::upgrade_to_v12_0_0( $kb_config );
 		}
 
-		self::upgrade_to_v11_40_0( $kb_config );
-
-		if ( $kb_config['sidebar_article_list_spacing'] == self::GRID_UPGRADE_DONE ) {
-			// store the updated KB data
-			epkb_get_instance()->kb_config_obj->update_kb_configuration( $kb_config['id'], $kb_config );
+		if ( version_compare( $last_version, '12.11.0', '<' ) ) {
+			self::upgrade_to_v12_11_0( $kb_config );
 		}
+
+		if ( version_compare( $last_version, '12.21.0', '<' ) ) {
+			self::upgrade_to_v12_21_0( $kb_config );
+		}
+
+		if ( version_compare( $last_version, '12.30.0', '<' ) ) {
+			self::upgrade_to_v12_30_0( $kb_config );
+		}
+	}
+
+	private static function upgrade_to_v12_30_0( &$kb_config ) {
+		$kb_config['template_for_archive_page'] = $kb_config['templates_for_kb'];
+	}
+
+	private static function upgrade_to_v12_21_0( &$kb_config ) {
+		if ( EPKB_Utilities::is_advanced_search_enabled() && function_exists( 'asea_get_instance' ) && isset( asea_get_instance()->kb_config_obj ) ) {
+
+			$asea_config = asea_get_instance()->kb_config_obj->get_kb_config( $kb_config['id'] );
+			$asea_config_valid = !empty( $asea_config ) && is_array( $asea_config ) && !is_wp_error( $asea_config );
+
+			if ( $asea_config_valid ) {
+				$kb_config['search_box_hint'] = empty( $asea_config['advanced_search_mp_box_hint'] ) ? $kb_config['search_box_hint'] : $asea_config['advanced_search_mp_box_hint'];
+				$kb_config['article_search_box_hint'] = empty( $asea_config['advanced_search_ap_box_hint'] ) ? $kb_config['article_search_box_hint'] : $asea_config['advanced_search_ap_box_hint'];
+			}
+		}
+	}
+
+	private static function upgrade_to_v12_11_0( &$kb_config ) {
+		$kb_config['archive_content_articles_display_mode'] =  empty( $kb_config['archive_content_article_display_mode'] ) ? 'title' : $kb_config['archive_content_article_display_mode'];
+	}
+
+	private static function upgrade_to_v12_0_0( &$kb_config ) {
+		// starting from version 12.00.0 the Archive Page is V3 by default (the toggle is 'on' in specs); ensure it is set to 'off' for all previous KB versions during the upgrade
+		$kb_config['archive_page_v3_toggle'] = 'off';
 	}
 
 	private static function upgrade_to_v11_41_0( &$kb_config ) {
 
 		if ( empty( $kb_config['ml_faqs_title_text'] ) ) {
-			$kb_config['ml_faqs_title_text'] = __( 'Frequently Asked Questions', 'echo-knowledge-base' );
+			$kb_config['ml_faqs_title_text'] = esc_html__( 'Frequently Asked Questions', 'echo-knowledge-base' );
 			$kb_config['ml_faqs_title_location'] = 'none';
 		}
 		if ( empty( $kb_config['ml_articles_list_title_text'] ) ) {
-			$kb_config['ml_articles_list_title_text'] = __( 'Featured Articles', 'echo-knowledge-base' );
+			$kb_config['ml_articles_list_title_text'] = esc_html__( 'Featured Articles', 'echo-knowledge-base' );
 			$kb_config['ml_articles_list_title_location'] = 'none';
 		}
 
@@ -227,7 +266,7 @@ class EPKB_Upgrades {
 	private static function upgrade_to_v11_40_0( &$kb_config ) 	{
 
 		// switch to single font family
-		if ( ! EPKB_Utilities::is_new_user_3( $kb_config, '11.40.0' ) && ! empty( $kb_config['section_head_typography']['font-family'] ) ) {
+		if ( ! EPKB_Utilities::is_new_user( $kb_config, '11.40.0' ) && ! empty( $kb_config['section_head_typography']['font-family'] ) ) {
 			$kb_config['general_typography']['font-family'] = $kb_config['section_head_typography']['font-family'];
 		}
 
@@ -239,7 +278,7 @@ class EPKB_Upgrades {
 			$elay_config_valid = ! empty( $elay_config ) && is_array( $elay_config) && ! is_wp_error( $elay_config );
 
 			// switch to single font family
-			if ( $elay_config_valid && ! EPKB_Utilities::is_new_user_3( $kb_config, '11.40.0' ) ) {
+			if ( $elay_config_valid && ! EPKB_Utilities::is_new_user( $kb_config, '11.40.0' ) ) {
 				if ( $kb_config['kb_main_page_layout'] == EPKB_Layout::GRID_LAYOUT && ! empty( $elay_config['grid_section_typography']['font-family'] ) ) {
 					$kb_config['general_typography']['font-family'] = $elay_config['grid_section_typography']['font-family'];
 				} else if ( $kb_config['kb_main_page_layout'] == EPKB_Layout::SIDEBAR_LAYOUT && ! empty( $elay_config['sidebar_section_category_typography']['font-family'] ) ) {
@@ -260,7 +299,7 @@ class EPKB_Upgrades {
 				$kb_config['section_head_description_font_color'] = $elay_config['grid_section_head_description_font_color'];
 				$kb_config['category_empty_msg'] = $elay_config['grid_category_empty_msg'];
 
-				$kb_config['sidebar_article_list_spacing'] = self::GRID_UPGRADE_DONE;    // TODO REMOVE; temporary use old field to store upgrade status
+				$kb_config['sidebar_article_list_spacing'] = self::GRID_UPGRADE_DONE;
 			}
 		}
 
@@ -369,7 +408,7 @@ class EPKB_Upgrades {
 		}
 
 		// previously Article Page Search had the same layout as Main Page Search
-		$kb_config['ml_article_search_layout'] = $kb_config['ml_search_layout'];
+		$kb_config['ml_article_search_layout'] = isset( $kb_config['ml_search_layout'] ) ? $kb_config['ml_search_layout'] : 'classic';
 
 		// only new users have Article Page Search synced with Main Page Search by default
 		$kb_config['article_search_sync_toggle'] = 'off';
@@ -450,9 +489,12 @@ class EPKB_Upgrades {
 		}
 
 		// rename settings
-		$kb_config['ml_categories_articles_category_title_html_tag'] = isset( $kb_config['ml_categories_articles_title_html_tag'] ) ? $kb_config['ml_categories_articles_title_html_tag'] : $kb_config['ml_categories_articles_category_title_html_tag'];
-		$kb_config['ml_categories_articles_top_category_icon_bg_color_toggle'] = isset( $kb_config['ml_categories_articles_icon_background_color_toggle'] ) ? $kb_config['ml_categories_articles_icon_background_color_toggle'] : $kb_config['ml_categories_articles_top_category_icon_bg_color_toggle'];
-		$kb_config['ml_categories_articles_top_category_icon_bg_color'] = isset( $kb_config['ml_categories_articles_icon_background_color'] ) ? $kb_config['ml_categories_articles_icon_background_color'] : $kb_config['ml_categories_articles_top_category_icon_bg_color'];
+		$kb_config['ml_categories_articles_category_title_html_tag'] = isset( $kb_config['ml_categories_articles_title_html_tag'] ) ? $kb_config['ml_categories_articles_title_html_tag'] :
+			( isset( $kb_config['ml_categories_articles_category_title_html_tag'] ) ? $kb_config['ml_categories_articles_category_title_html_tag'] : 'h2' );
+		$kb_config['ml_categories_articles_top_category_icon_bg_color_toggle'] = isset( $kb_config['ml_categories_articles_icon_background_color_toggle'] ) ? $kb_config['ml_categories_articles_icon_background_color_toggle'] :
+			( isset( $kb_config['ml_categories_articles_top_category_icon_bg_color_toggle'] ) ? $kb_config['ml_categories_articles_top_category_icon_bg_color_toggle'] : 'on' );
+		$kb_config['ml_categories_articles_top_category_icon_bg_color'] = isset( $kb_config['ml_categories_articles_icon_background_color'] ) ? $kb_config['ml_categories_articles_icon_background_color'] :
+			( isset( $kb_config['ml_categories_articles_top_category_icon_bg_color'] ) ? $kb_config['ml_categories_articles_top_category_icon_bg_color'] : '#e9f6ff' );
 
 		// Copy search width to row settings
 		$row_number = 5;
@@ -471,13 +513,6 @@ class EPKB_Upgrades {
 			$row_number--;
 		}
 
-		$plugin_first_version = EPKB_Utilities::get_wp_option( 'epkb_version_first', '' );
-		if ( ! empty( $plugin_first_version ) ) {
-			$kb_config['first_plugin_version'] = $plugin_first_version;
-		}
-	}
-
-	private static function upgrade_to_v11_20_0( &$kb_config ) {
 		$plugin_first_version = EPKB_Utilities::get_wp_option( 'epkb_version_first', '' );
 		if ( ! empty( $plugin_first_version ) ) {
 			$kb_config['first_plugin_version'] = $plugin_first_version;

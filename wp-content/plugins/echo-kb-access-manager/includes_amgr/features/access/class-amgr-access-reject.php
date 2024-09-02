@@ -38,7 +38,7 @@ class AMGR_Access_Reject {
 				if ( headers_sent() || ! AMGR_Access_Utilities::is_logged_off() ) {
 					$request_uri = empty($_SERVER['REQUEST_URI']) ? '' : $_SERVER['REQUEST_URI'];
 					$url = wp_login_url( $request_uri );
-					echo '<span id="amgr-redirect-to-page" data-amgr-redirect-url="' . esc_url($url) . '" display="hidden"/>';
+					echo '<span id="amgr-redirect-to-page" data-amgr-redirect-url="' . esc_url( $url ) . '" display="hidden"/>';
 					return self::display_access_denied_message( $title, $message );
 				} else {
 					auth_redirect();

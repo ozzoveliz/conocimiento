@@ -27,20 +27,20 @@ class EPKB_Autoloader {
 
 				// SYSTEM
 				'epkb_logging'                      =>  'includes/system/class-epkb-logging.php',
-				'epkb_help_pointers'                =>  'includes/system/class-epkb-help-pointers.php',
 				'epkb_templates'                    =>  'includes/system/class-epkb-templates.php',
 				'epkb_upgrades'                     =>  'includes/system/class-epkb-upgrades.php',
 				'epkb_wpml'                         =>  'includes/system/class-epkb-wpml.php',
 				'epkb_pll'                          =>  'includes/system/class-epkb-pll.php',
-				'epkb_file_manager'                 =>  'includes/system/class-epkb-file-manager.php',
 				'epkb_delete_kb'                	=>  'includes/system/class-epkb-delete-kb.php',
 				'epkb_deactivate_feedback'          =>  'includes/system/class-epkb-deactivate-feedback.php',
 				'epkb_error_handler'                =>  'includes/system/class-epkb-error-handler.php',
 				'epkb_typography'                   =>  'includes/system/class-epkb-typography.php',
-				'epkb_db'                           =>  'includes/system/class-epkb-db.php',
 				'epkb_admin_ui_access'              =>  'includes/system/class-epkb-admin-ui-access.php',
 				'epkb_reset'                        =>  'includes/system/class-epkb-reset.php',
 				'epkb_controller'                   =>  'includes/system/class-epkb-controller.php',
+
+				// ACCESS MANAGER
+				'epkb_access_manager'               =>  'includes/access-manager/class-epkb-access-manager.php',
 
 				// ADMIN CORE
 				'epkb_admin_notices'                =>  'includes/admin/class-epkb-admin-notices.php',
@@ -62,7 +62,7 @@ class EPKB_Autoloader {
 				'epkb_convert'                      =>  'includes/admin/convert/class-epkb-convert.php',
 				'epkb_convert_ctrl'                 =>  'includes/admin/convert/class-epkb-convert-ctrl.php',
 
-				// KB Configuration
+				// KB CONFIGURATION
 				'epkb_kb_config_specs'              =>  'includes/admin/kb-configuration/class-epkb-kb-config-specs.php',
 				'epkb_kb_config_db'                 =>  'includes/admin/kb-configuration/class-epkb-kb-config-db.php',
 				'epkb_kb_config_layout_modular'     =>  'includes/admin/kb-configuration/class-epkb-kb-config-layout-modular.php',
@@ -119,12 +119,14 @@ class EPKB_Autoloader {
 
 				// FEATURES - KB
 				'epkb_kb_handler'                   =>  'includes/features/kbs/class-epkb-kb-handler.php',
+				'epkb_kb_demo_data'                 =>  'includes/features/kbs/class-epkb-kb-demo-data.php',
 				'epkb_kb_search'                    =>  'includes/features/kbs/class-epkb-kb-search.php',
 
 				// FEATURES - CATEGORIES
 				'epkb_categories_db'                =>  'includes/features/categories/class-epkb-categories-db.php',
 				'epkb_categories_admin'             =>  'includes/features/categories/class-epkb-categories-admin.php',
 				'epkb_categories_array'             =>  'includes/features/categories/class-epkb-categories-array.php',
+				'epkb_category_archive_setup'       =>  'includes/features/categories/class-epkb-category-archive-setup.php',
 
 				// FEATURES - ARTICLES
 				'epkb_articles_cpt_setup'           =>  'includes/features/articles/class-epkb-articles-cpt-setup.php',

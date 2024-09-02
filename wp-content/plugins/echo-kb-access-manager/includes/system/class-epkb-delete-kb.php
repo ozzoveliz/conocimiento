@@ -40,14 +40,14 @@ class EPKB_Delete_KB {
 				    'value' => '',
 				    'name'    => 'epkb_delete_text',
 			    ) );
-                EPKB_HTML_Elements::submit_button_v2( __( 'Delete All Plugin Data', 'echo-knowledge-base' ), 'epkb_delete_all_kb_data', '', '', false, '', 'epkb-error-btn' );  ?>
+                EPKB_HTML_Elements::submit_button_v2( esc_html__( 'Delete All Plugin Data', 'echo-knowledge-base' ), 'epkb_delete_all_kb_data', '', '', false, '', 'epkb-error-btn' );  ?>
             </form> <?php
 
 			EPKB_HTML_Forms::dialog_confirm_action( array(
 				'id'                => 'epkb-editor-delete-warning',
-				'title'             => __( 'Delete KB content', 'echo-knowledge-base' ),
-				'body'              => __( 'Are you sure you want to delete all data?', 'echo-knowledge-base' ),
-				'accept_label'      => __( 'Yes', 'echo-knowledge-base' ),
+				'title'             => esc_html__( 'Delete KB content', 'echo-knowledge-base' ),
+				'body'              => esc_html__( 'Are you sure you want to delete all data?', 'echo-knowledge-base' ),
+				'accept_label'      => esc_html__( 'Yes', 'echo-knowledge-base' ),
 				'accept_type'       => 'warning',
 				'show_cancel_btn' 	=> 'yes',
 			) );
@@ -68,7 +68,7 @@ class EPKB_Delete_KB {
 		// ensure user typed delete word
         $delete_text = EPKB_Utilities::post( 'delete_text' );
 		if ( $delete_text != 'delete' ) {
-			EPKB_Utilities::ajax_show_error_die( sprintf( __( 'Write "%s" in input box to delete ALL KB data', 'echo-knowledge-base' ), 'delete' ) );
+			EPKB_Utilities::ajax_show_error_die( sprintf( esc_html__( 'Write "%s" in input box to delete ALL KB data', 'echo-knowledge-base' ), 'delete' ) );
 		}
 
 		$db_kb_config = new EPKB_KB_Config_DB();

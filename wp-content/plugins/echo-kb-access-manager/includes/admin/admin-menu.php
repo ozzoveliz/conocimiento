@@ -14,29 +14,29 @@ function epkb_add_plugin_menus() {
 	$post_type_name = empty( $eckb_kb_id ) ? EPKB_KB_Handler::get_post_type( EPKB_KB_Config_DB::DEFAULT_KB_ID ) : EPKB_KB_Handler::get_post_type( $eckb_kb_id );
 
 	// KB Menu
-	add_submenu_page( 'edit.php?post_type=' . $post_type_name, __( 'Get Started - Echo Knowledge Base', 'echo-knowledge-base' ), __( 'Get Started', 'echo-knowledge-base' ),
+	add_submenu_page( 'edit.php?post_type=' . $post_type_name, esc_html__( 'Get Started - Echo Knowledge Base', 'echo-knowledge-base' ), esc_html__( 'Get Started', 'echo-knowledge-base' ),
 		EPKB_Admin_UI_Access::get_context_required_capability( ['admin_eckb_access_need_help_read', 'admin_eckb_access_frontend_editor_write'] ), 'epkb-kb-need-help', array(new EPKB_Need_Help_Page(), 'display_need_help_page') );
 
-	add_submenu_page( 'edit.php?post_type=' . $post_type_name, __( 'FAQs - Echo Knowledge Base', 'echo-knowledge-base' ), __( 'FAQs', 'echo-knowledge-base' ),
+	add_submenu_page( 'edit.php?post_type=' . $post_type_name, esc_html__( 'FAQs - Echo Knowledge Base', 'echo-knowledge-base' ), esc_html__( 'FAQs', 'echo-knowledge-base' ),
 		EPKB_Admin_UI_Access::get_context_required_capability( ['admin_eckb_access_faqs_write'] ), 'epkb-faqs', array( new EPKB_FAQs_Page(), 'display_faqs_page') );
 
-	add_submenu_page( 'edit.php?post_type=' . $post_type_name, __( 'Configuration - Echo Knowledge Base', 'echo-knowledge-base' ), __( 'Configuration', 'echo-knowledge-base' ),
+	add_submenu_page( 'edit.php?post_type=' . $post_type_name, esc_html__( 'Configuration - Echo Knowledge Base', 'echo-knowledge-base' ), esc_html__( 'Configuration', 'echo-knowledge-base' ),
 		EPKB_Admin_UI_Access::get_context_required_capability( ['admin_eckb_access_order_articles_write', 'admin_eckb_access_frontend_editor_write'] ), 'epkb-kb-configuration', array( new EPKB_Config_Page(), 'display_kb_config_page') );
 
 	do_action( 'eckb_add_kb_menu_item', $post_type_name );
 
-	add_submenu_page( 'edit.php?post_type=' . $post_type_name, __( 'Analytics - Echo Knowledge Base', 'echo-knowledge-base' ), __( 'Analytics', 'echo-knowledge-base' ),
+	add_submenu_page( 'edit.php?post_type=' . $post_type_name, esc_html__( 'Analytics - Echo Knowledge Base', 'echo-knowledge-base' ), esc_html__( 'Analytics', 'echo-knowledge-base' ),
 		EPKB_Admin_UI_Access::get_context_required_capability( ['admin_eckb_access_search_analytics_read'] ), 'epkb-plugin-analytics', array( new EPKB_Analytics_Page(), 'display_plugin_analytics_page' ) );
 
-	add_submenu_page( 'edit.php?post_type=' . $post_type_name, __( 'Add-ons / News - Echo Knowledge Base', 'echo-knowledge-base' ), EPKB_Add_Ons_Page::get_menu_item_title(),
+	add_submenu_page( 'edit.php?post_type=' . $post_type_name, esc_html__( 'Add-ons / News - Echo Knowledge Base', 'echo-knowledge-base' ), EPKB_Add_Ons_Page::get_menu_item_title(),
 		EPKB_Admin_UI_Access::get_context_required_capability( ['admin_eckb_access_addons_news_read'] ), 'epkb-add-ons', array( new EPKB_Add_Ons_Page(), 'display_add_ons_page') );
 
 	/** AMGR **/
 	if ( current_user_can( 'admin_eckb_access_manager_page' ) ) {
-		add_submenu_page( 'edit.php?post_type=' . $post_type_name, __( 'Access Manager - Echo Knowledge Base', 'echo-knowledge-base' ), __( 'Access Manager', 'echo-knowledge-base' ),
+		add_submenu_page( 'edit.php?post_type=' . $post_type_name, esc_html__( 'Access Manager - Echo Knowledge Base', 'echo-knowledge-base' ), esc_html__( 'Access Manager', 'echo-knowledge-base' ),
 			            'admin_eckb_access_manager_page', 'amag-access-mgr', array( new AMGR_Access_Page(), 'display_access_manager_page' ) );
 	} else if ( current_user_can( 'admin_eckb_access_crud_users' ) ) {
-		add_submenu_page( 'edit.php?post_type=' . $post_type_name, __( 'Access Manager - Echo Knowledge Base', 'echo-knowledge-base' ), __( 'Access Manager', 'echo-knowledge-base' ),
+		add_submenu_page( 'edit.php?post_type=' . $post_type_name, esc_html__( 'Access Manager - Echo Knowledge Base', 'echo-knowledge-base' ), esc_html__( 'Access Manager', 'echo-knowledge-base' ),
 			            'admin_eckb_access_crud_users', 'amag-access-mgr', array( new AMGR_Access_Page(), 'display_access_manager_page' ) );
 	}
 }
@@ -53,7 +53,7 @@ function epkb_set_top_level_admin_submenu_page(){
 	}
 
 	if ( ! empty( $plugin_page ) && $plugin_page == 'epkb-kb-need-help' ) {
-		$title = __( 'Get Started - Echo Knowledge Base', 'echo-knowledge-base' );
+		$title = esc_html__( 'Get Started - Echo Knowledge Base', 'echo-knowledge-base' );
 	}
 
 	// Add KB menu that belongs to the post type that is listed in the URL or use default one if none specified

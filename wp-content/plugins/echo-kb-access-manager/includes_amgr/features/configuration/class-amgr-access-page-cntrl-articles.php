@@ -1,4 +1,4 @@
-<?php
+<?php if ( ! defined( 'ABSPATH' ) ) exit;
 
 /**
  * Handle managing Articles access configuration
@@ -21,13 +21,13 @@ class AMGR_Access_Page_Cntrl_Articles extends AMGR_Access_Page_Controller {
 	public function display_access_tab() {
 
 		// verify that the request is authentic
-		if ( empty( $_REQUEST['_wpnonce_amar_access_content_action_ajax'] ) || ! wp_verify_nonce( $_REQUEST['_wpnonce_amar_access_content_action_ajax'], '_wpnonce_amar_access_content_action_ajax' ) ) {
+		if ( empty( $_REQUEST['_wpnonce_amar_access_content_action_ajax'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_REQUEST['_wpnonce_amar_access_content_action_ajax'] ) ), '_wpnonce_amar_access_content_action_ajax' ) ) {
 			EPKB_Utilities::ajax_show_error_die(__( 'Refresh your page', 'echo-knowledge-base' ));
 		}
 
 		// ensure user has correct permissions
 		if ( ! current_user_can('admin_eckb_access_manager_page') ) {
-			EPKB_Utilities::ajax_show_error_die( __( 'You do not have permission to change access', 'echo-knowledge-base' ) . ' (E87)' );
+			EPKB_Utilities::ajax_show_error_die( esc_html__( 'You do not have permission to change access', 'echo-knowledge-base' ) . ' (E87)' );
 		}
 
 		// retrieve KB ID

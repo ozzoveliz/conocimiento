@@ -12,12 +12,6 @@ class AMGR_Admin_Categories_Page {
 
 	public function __construct() {
 
-		// add hooks for KB taxonomy
-//		$kb_id = EPKB_KB_Handler::get_current_kb_id();
-//		if ( empty($kb_id) ) {
-//			return;
-//		}
-
 		// filter available categories for given KB Group
 		add_filter( 'get_terms', array( $this, 'get_kb_terms' ), 9999, 4 );
 	}

@@ -21,13 +21,13 @@ class AMGR_Access_Page_Cntrl_Categories extends AMGR_Access_Page_Controller {
 	public function display_access_tab() {
 
 		// verify that the request is authentic
-		if ( empty( $_REQUEST['_wpnonce_amar_access_content_action_ajax'] ) || ! wp_verify_nonce( $_REQUEST['_wpnonce_amar_access_content_action_ajax'], '_wpnonce_amar_access_content_action_ajax' ) ) {
+		if ( empty( $_REQUEST['_wpnonce_amar_access_content_action_ajax'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_REQUEST['_wpnonce_amar_access_content_action_ajax'] ) ), '_wpnonce_amar_access_content_action_ajax' ) ) {
 			EPKB_Utilities::ajax_show_error_die(__( 'Refresh your page', 'echo-knowledge-base' ));
 		}
 
 		// ensure user has correct permissions
 		if ( ! current_user_can('admin_eckb_access_manager_page') ) {
-			EPKB_Utilities::ajax_show_error_die( __( 'You do not have permission to change access', 'echo-knowledge-base' ) . ' (E95)' );
+			EPKB_Utilities::ajax_show_error_die( esc_html__( 'You do not have permission to change access', 'echo-knowledge-base' ) . ' (E95)' );
 		}
 
 		// retrieve KB ID
@@ -88,7 +88,7 @@ class AMGR_Access_Page_Cntrl_Categories extends AMGR_Access_Page_Controller {
 		$new_categories_access = $this->get_categories_access_data();
 		if ( empty( $new_categories_access ) ) {
 			//AMGR_Logging::add_log( "no categories" );
-			EPKB_Utilities::ajax_show_error_die( __( 'Your KB Group has no categories.', 'echo-knowledge-base' ) );
+			EPKB_Utilities::ajax_show_error_die( esc_html__( 'Your KB Group has no categories.', 'echo-knowledge-base' ) );
 		}
 
 		$new_full_access_categories_ids = $new_categories_access['full-access'];

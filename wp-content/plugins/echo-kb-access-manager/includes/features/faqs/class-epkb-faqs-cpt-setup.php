@@ -13,17 +13,17 @@ class EPKB_FAQs_CPT_Setup {
 
 		/** setup Groups taxonomy */
 		$labels = [
-			'name'              => __( 'KB FAQ Groups', 'echo-knowledge-base' ),
-			'singular_name'     => __( 'KB FAQ Group', 'echo-knowledge-base' ),
-			'search_items'      => __( 'Search FAQ Groups', 'echo-knowledge-base' ),
-			'all_items'         => __( 'FAQ Groups', 'echo-knowledge-base' ),
-			'parent_item'       => __( 'Parent FAQ Group', 'echo-knowledge-base' ),
-			'parent_item_colon' => __( 'Parent FAQ Group:', 'echo-knowledge-base' ),
-			'edit_item'         => __( 'Edit FAQ Group', 'echo-knowledge-base' ),
-			'update_item'       => __( 'Update FAQ Group', 'echo-knowledge-base' ),
-			'add_new_item'      => __( 'Add New FAQ Group', 'echo-knowledge-base' ),
-			'new_item_name'     => __( 'New FAQ Group Name', 'echo-knowledge-base' ),
-			'menu_name'         => __( 'FAQs', 'echo-knowledge-base' )
+			'name'              => esc_html__( 'KB FAQ Groups', 'echo-knowledge-base' ),
+			'singular_name'     => esc_html__( 'KB FAQ Group', 'echo-knowledge-base' ),
+			'search_items'      => esc_html__( 'Search FAQ Groups', 'echo-knowledge-base' ),
+			'all_items'         => esc_html__( 'FAQ Groups', 'echo-knowledge-base' ),
+			'parent_item'       => esc_html__( 'Parent FAQ Group', 'echo-knowledge-base' ),
+			'parent_item_colon' => esc_html__( 'Parent FAQ Group:', 'echo-knowledge-base' ),
+			'edit_item'         => esc_html__( 'Edit FAQ Group', 'echo-knowledge-base' ),
+			'update_item'       => esc_html__( 'Update FAQ Group', 'echo-knowledge-base' ),
+			'add_new_item'      => esc_html__( 'Add New FAQ Group', 'echo-knowledge-base' ),
+			'new_item_name'     => esc_html__( 'New FAQ Group Name', 'echo-knowledge-base' ),
+			'menu_name'         => esc_html__( 'FAQs', 'echo-knowledge-base' )
 		];
 		$args = [
 			'hierarchical'      => true,
@@ -38,7 +38,7 @@ class EPKB_FAQs_CPT_Setup {
 		];
 		register_taxonomy( self::FAQ_CATEGORY, self::FAQS_POST_TYPE, $args );
 
-		// FAQs Group status - draft or publish  TODO REMOVE
+		// FAQs Group status - draft or publish
 		register_term_meta( self::FAQ_CATEGORY, 'faq_group_status', [
 			'show_in_rest'  => true,
 			'type'          => 'string',
@@ -69,24 +69,24 @@ class EPKB_FAQs_CPT_Setup {
 
 		/** setup Custom Post Type */
 		$labels = [
-			'name'               => __( 'Knowledge Base FAQs', 'echo-knowledge-base' ),
-			'singular_name'      => __( 'Knowledge Base FAQ', 'echo-knowledge-base' ),
-			'menu_name'          => __( 'FAQs', 'echo-knowledge-base' ),
-			'name_admin_bar'     => __( 'FAQs', 'echo-knowledge-base' ),
-			'add_new'            => __( 'Add New', 'echo-knowledge-base' ),
-			'add_new_item'       => __( 'Add New FAQ', 'echo-knowledge-base' ),
-			'new_item'           => __( 'New FAQ', 'echo-knowledge-base' ),
-			'edit_item'          => __( 'Edit FAQ', 'echo-knowledge-base' ),
-			'all_items'          => __( 'All FAQs', 'echo-knowledge-base' ),
-			'view_item'          => __( 'View FAQ', 'echo-knowledge-base' ),
-			'search_items'       => __( 'Search FAQs', 'echo-knowledge-base' ),
-			'not_found'          => __( 'No FAQs found', 'echo-knowledge-base' ),
-			'not_found_in_trash' => __( 'No FAQs found in trash', 'echo-knowledge-base' ),
+			'name'               => esc_html__( 'Knowledge Base FAQs', 'echo-knowledge-base' ),
+			'singular_name'      => esc_html__( 'Knowledge Base FAQ', 'echo-knowledge-base' ),
+			'menu_name'          => esc_html__( 'FAQs', 'echo-knowledge-base' ),
+			'name_admin_bar'     => esc_html__( 'FAQs', 'echo-knowledge-base' ),
+			'add_new'            => esc_html__( 'Add New', 'echo-knowledge-base' ),
+			'add_new_item'       => esc_html__( 'Add New FAQ', 'echo-knowledge-base' ),
+			'new_item'           => esc_html__( 'New FAQ', 'echo-knowledge-base' ),
+			'edit_item'          => esc_html__( 'Edit FAQ', 'echo-knowledge-base' ),
+			'all_items'          => esc_html__( 'All FAQs', 'echo-knowledge-base' ),
+			'view_item'          => esc_html__( 'View FAQ', 'echo-knowledge-base' ),
+			'search_items'       => esc_html__( 'Search FAQs', 'echo-knowledge-base' ),
+			'not_found'          => esc_html__( 'No FAQs found', 'echo-knowledge-base' ),
+			'not_found_in_trash' => esc_html__( 'No FAQs found in trash', 'echo-knowledge-base' ),
 			'parent_item_colon'  => ''
 		];
 		$args = [
 			'labels'              => $labels,
-			'description'         => __( 'Add new FAQs', 'echo-knowledge-base' ),
+			'description'         => esc_html__( 'Add new FAQs', 'echo-knowledge-base' ),
 			'public'              => false,
 			'exclude_from_search' => false,
 			'show_ui'             => true,

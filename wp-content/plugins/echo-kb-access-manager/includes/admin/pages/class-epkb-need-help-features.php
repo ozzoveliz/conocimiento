@@ -35,7 +35,7 @@ class EPKB_Need_Help_Features {
 			'list_key' => 'features',
 
 			// Top Panel Item
-			'label_text' => __( 'Features', 'echo-knowledge-base' ),
+			'label_text' => esc_html__( 'Features', 'echo-knowledge-base' ),
 			'icon_class' => 'epkbfa epkbfa-puzzle-piece',
 			'main_class' => EPKB_Core_Utilities::is_kb_flag_set( 'features_tab_visited') ? 'epkb-admin__flag--visited' : '',
 
@@ -84,12 +84,13 @@ class EPKB_Need_Help_Features {
 				$icon = 'epkbfa epkbfa-clock-o';
 		}
 
-		ob_start();     ?>
+		ob_start();
+		$class_name = $feature['plugin'] != 'core' && $feature['plugin'] != 'crel' && $feature['plugin'] != 'ep'.'hd' && empty( $feature['active_status'] ) ? ' epkb-kbnh__feature-name--pro' : ''; ?>
 
 		<div class="epkb-kbnh__feature-container__col epkb-kbnh__feature__icon-col"><span class="<?php echo empty( $feature['icon'] ) ? esc_attr( $icon ) : esc_attr( $feature['icon'] ); ?>"></span></div>
 
 		<div class="epkb-kbnh__feature-container__col epkb-kbnh__feature__content-col">
-			<h3 class="epkb-kbnh__feature-name<?php echo $feature['plugin'] != 'core' && $feature['plugin'] != 'crel' && $feature['plugin'] != 'ep'.'hd' && empty( $feature['active_status'] ) ? ' epkb-kbnh__feature-name--pro' : ''; ?>"><?php echo esc_html( $feature['name'] ); ?> <?php
+			<h3 class="epkb-kbnh__feature-name<?php echo esc_attr( $class_name ); ?>"><?php echo esc_html( $feature['name'] ); ?> <?php
 
 			// Optional experimental label
 			if ( ! empty( $feature['experimental'] ) ) {   ?>
@@ -130,7 +131,7 @@ class EPKB_Need_Help_Features {
 
 				// if plugin is not enabled, then show Learn More
 				/* if ( ! EPKB_Utilities::is_plugin_enabled( $feature['plugin'] ) ) {  ?>
-					<a class="epkb-kbnh__feature-link" href="<?php echo EPKB_Core_Utilities::get_plugin_sales_page( $feature['plugin'] ); ?>" target="_blank"><span><?php _e( 'Learn More', 'echo-knowledge-base' ); ?></span></a>    <?php
+					<a class="epkb-kbnh__feature-link" href="<?php echo EPKB_Core_Utilities::get_plugin_sales_page( $feature['plugin'] ); ?>" target="_blank"><span><?php esc_html_e( 'Learn More', 'echo-knowledge-base' ); ?></span></a>    <?php
 				}*/				?>
 
 			</div>
@@ -151,7 +152,7 @@ class EPKB_Need_Help_Features {
 				} else if ( $feature['plugin'] == 'ep'.'hd' && empty( $feature['hide_install_btn'] ) ) {
 					echo '<a class="epkb-kbnh__feature-status epkb-kbnh__feature--disabled epkb-success-btn" href="https://wordpress.org/plugins/help-dialog/" target="_blank"><span>' . esc_html__( 'Install Now', 'echo-knowledge-base' ) . '</span></a>';
 				} else if ( empty( $feature['hide_install_btn'] ) ) {
-					echo '<a class="epkb-kbnh__feature-status epkb-kbnh__feature--disabled epkb-success-btn" href="' . EPKB_Core_Utilities::get_plugin_sales_page( $feature['plugin'] ) . '" target="_blank"><span>' . esc_html__( 'Upgrade', 'echo-knowledge-base' ) . '</span></a>';
+					echo '<a class="epkb-kbnh__feature-status epkb-kbnh__feature--disabled epkb-success-btn" href="' . esc_url( EPKB_Core_Utilities::get_plugin_sales_page( $feature['plugin'] ) ) . '" target="_blank"><span>' . esc_html__( 'Upgrade', 'echo-knowledge-base' ) . '</span></a>';
 				}
 			}   ?>
 
@@ -184,8 +185,8 @@ class EPKB_Need_Help_Features {
 				'plugin'    => 'core',
 				'category'  => 'article-features',
 				'icon'      => '',
-				'name'      => __( 'Ordering of Articles and Categories', 'echo-knowledge-base' ),
-				'desc'      => __( 'Order articles and categories by date or name, or use drag and drop for custom ordering.', 'echo-knowledge-base' ),
+				'name'      => esc_html__( 'Ordering of Articles and Categories', 'echo-knowledge-base' ),
+				'desc'      => esc_html__( 'Order articles and categories by date or name, or use drag and drop for custom ordering.', 'echo-knowledge-base' ),
 				'config'    => self::get_settings_link( $kb_id, 'ordering' ),
 				'docs'      => 'https://www.echoknowledgebase.com/documentation/order-articles-and-categories/',
 				'video'     => '',
@@ -195,8 +196,8 @@ class EPKB_Need_Help_Features {
 				'plugin'    => 'core',
 				'category'  => 'basic',
 				'icon'      => '',
-				'name'      => __( 'Five Levels of Documentation Hierarchy', 'echo-knowledge-base' ),
-				'desc'      => __( 'Use five levels of categories and sub-categories with either unfolded or collapsed articles.', 'echo-knowledge-base' ),
+				'name'      => esc_html__( 'Five Levels of Documentation Hierarchy', 'echo-knowledge-base' ),
+				'desc'      => esc_html__( 'Use five levels of categories and sub-categories with either unfolded or collapsed articles.', 'echo-knowledge-base' ),
 				'config'    => '/edit-tags.php?taxonomy=' . EPKB_KB_Handler::get_category_taxonomy_name( $kb_id ) . '&post_type=' . EPKB_KB_Handler::get_post_type( $kb_id ),
 				'docs'      => 'https://www.echoknowledgebase.com/documentation/categories-overview/',
 				'video'     => '',
@@ -206,10 +207,10 @@ class EPKB_Need_Help_Features {
 				'plugin'    => 'core',
 				'category'  => 'design',
 				'icon'      => '',
-				'name'      => __( 'Layouts: Basic, Tabs, Categories, Classic and Drill Down', 'echo-knowledge-base' ),
-				'desc'      => __( 'Basic layout shows categories and articles in groups. Tabs layout has top-level tabs. Categories layout shows main categories and count of articles it contains. Drill Down layout has greater flexibility.', 'echo-knowledge-base' ),
-				'config'    => self::get_editor_zone_link( 'main_page', 'layouts' ),
-				'docs'      => 'https://www.echoknowledgebase.com/documentation/changing-layouts/',
+				'name'      => esc_html__( 'Layouts: Basic, Tabs, Categories, Classic and Drill Down', 'echo-knowledge-base' ),
+				'desc'      => esc_html__( 'Basic layout shows categories and articles in groups. Tabs layout has top-level tabs. Categories layout shows main categories and count of articles it contains. Drill Down layout has greater flexibility.', 'echo-knowledge-base' ),
+				'config'    => self::get_settings_link( $kb_id, 'settings', 'main-page', 'module--categories_articles', 'main_page_layout' ),
+				'docs'      => 'https://www.echoknowledgebase.com/documentation/knowledge-base-layouts/',
 				'video'     => '',
 				'min_capability'   => EPKB_Admin_UI_Access::get_context_required_capability( 'admin_eckb_access_frontend_editor_write' ),
 				'hide_term' => 'month'
@@ -218,9 +219,9 @@ class EPKB_Need_Help_Features {
 				'plugin'    => 'elay',
 				'category'  => 'design',
 				'icon'      => '',
-				'name'      => __( 'Layouts: Grid and Sidebar', 'echo-knowledge-base' ),
-				'desc'      => __( 'The Grid Layout displays top-level categories in rows and columns. The Sidebar Layout shows categories in a sidebar.', 'echo-knowledge-base' ),
-				'config'    => self::get_editor_zone_link( 'main_page', 'layouts' ),
+				'name'      => esc_html__( 'Layouts: Grid and Sidebar', 'echo-knowledge-base' ),
+				'desc'      => esc_html__( 'The Grid Layout displays top-level categories in rows and columns. The Sidebar Layout shows categories in a sidebar.', 'echo-knowledge-base' ),
+				'config'    => self::get_settings_link( $kb_id, 'settings', 'main-page', 'module--categories_articles', 'main_page_layout' ),
 				'docs'      => 'https://www.echoknowledgebase.com/documentation/elegant-layouts-overview/',
 				'video'     => '',
 				'min_capability'   => EPKB_Admin_UI_Access::get_context_required_capability( 'admin_eckb_access_frontend_editor_write' ),
@@ -229,8 +230,8 @@ class EPKB_Need_Help_Features {
 				'plugin'    => 'core',
 				'category'  => 'design',
 				'icon'      => '',
-				'name'      => __( 'Categories: Font and Image Icons', 'echo-knowledge-base' ),
-				'desc'      => __( 'Categories can have custom images or any of the 500 font icons available.', 'echo-knowledge-base' ),
+				'name'      => esc_html__( 'Categories: Font and Image Icons', 'echo-knowledge-base' ),
+				'desc'      => esc_html__( 'Categories can have custom images or any of the 500 font icons available.', 'echo-knowledge-base' ),
 				'config'    => admin_url( '/edit-tags.php?taxonomy=' . EPKB_KB_Handler::get_category_taxonomy_name( $kb_id ) . '&post_type=' . EPKB_KB_Handler::get_post_type( $kb_id ) ),
 				'docs'      => 'https://www.echoknowledgebase.com/documentation/how-do-you-change-icons-for-the-categories/',
 				'video'     => '',
@@ -240,44 +241,8 @@ class EPKB_Need_Help_Features {
 				'plugin'    => 'core',
 				'category'  => 'design',
 				'icon'      => '',
-				'name'      => __( 'Visual Editor', 'echo-knowledge-base' ),
-				'desc'      => __( 'Easy and simple KB visual Editor helps you change colors, labels, fonts, and styles in no time.', 'echo-knowledge-base' ),
-				'config'    => '',
-				'custom'    => '<a class="epkb-kbnh__feature-link" href="' . esc_url( EPKB_Editor_Utilities::get_one_editor_url( 'main_page' ) ) . '" target="_blank"><span>' . esc_html__( 'Main Page', 'echo-knowledge-base' ) . '</span></a>' .
-				                '<a class="epkb-kbnh__feature-link" href="' . esc_url( EPKB_Editor_Utilities::get_one_editor_url( 'article_page' ) ) . '" target="_blank"><span>' . esc_html__( 'Articles', 'echo-knowledge-base' ) . '</span></a>' .
-								'<a class="epkb-kbnh__feature-link" href="' . esc_url( EPKB_Editor_Utilities::get_one_editor_url( 'archive_page' ) ) . '" target="_blank"><span>' . esc_html__( 'Category Archive', 'echo-knowledge-base' ) . '</span></a>',
-				'docs'      => 'https://www.echoknowledgebase.com/documentation/kb-visual-editor/',
-				'video'     => '',
-				'min_capability'   => EPKB_Admin_UI_Access::get_context_required_capability( 'admin_eckb_access_frontend_editor_write' ),
-			],
-			[
-				'plugin'    => 'core',
-				'category'  => 'design',
-				'icon'      => '',
-				'name'      => __( 'Pre-made Template Designs', 'echo-knowledge-base' ),
-				'desc'      => __( 'Choose from 26 pre-made designs with a variety of styles. You can further customize the design you choose.', 'echo-knowledge-base' ),
-				'config'    => self::get_editor_config_link( 'main_page', 'theme_presets' ),
-				'docs'      => 'https://www.echoknowledgebase.com/documentation/choose-initial-kb-design/',
-				'video'     => '',
-				'min_capability'   => EPKB_Admin_UI_Access::get_context_required_capability( 'admin_eckb_access_frontend_editor_write' ),
-			],
-			/* [
-				'plugin'    => 'core',
-				'category'  => 'design',
-				'icon'      => '',
-				'name'      => __( 'Responsive Design', 'echo-knowledge-base' ),
-				'desc'      => '',
-				'config'    => '',
-				'docs'      => 'https://www.echoknowledgebase.com/documentation/various/',
-				'video'     => '',
-				'min_capability'   => '',
-			], */
-			[
-				'plugin'    => 'core',
-				'category'  => 'design',
-				'icon'      => '',
-				'name'      => __( 'Typography', 'echo-knowledge-base' ),
-				'desc'      => __( 'Customize the font family, size and weight for article and category names, TOC, breadcrumbs, and more.', 'echo-knowledge-base' ),
+				'name'      => esc_html__( 'Typography', 'echo-knowledge-base' ),
+				'desc'      => esc_html__( 'Customize the font family, size and weight for article and category names, TOC, breadcrumbs, and more.', 'echo-knowledge-base' ),
 				'config'    => '',
 				'docs'      => 'https://www.echoknowledgebase.com/documentation/typography-font-family-size-weight/',
 				'video'     => '',
@@ -286,8 +251,8 @@ class EPKB_Need_Help_Features {
 				'plugin'    => 'core',
 				'category'  => 'design',
 				'icon'      => '',
-				'name'      => __( 'Theme Compatibility Mode', 'echo-knowledge-base' ),
-				'desc'      => __( 'Display KB Main Page, Article Pages and Category Archive Pages using either your current theme template or KB template.', 'echo-knowledge-base' ),
+				'name'      => esc_html__( 'Theme Compatibility Mode', 'echo-knowledge-base' ),
+				'desc'      => esc_html__( 'Display KB Main Page, Article Pages and Category Archive Pages using either your current theme template or KB template.', 'echo-knowledge-base' ),
 				'config'    => self::get_settings_link( $kb_id, 'settings', 'general' ),
 				'docs'      => 'https://www.echoknowledgebase.com/documentation/current-theme-template-vs-kb-template/',
 				'video'     => 'https://youtu.be/gPYwgZ8Ama8',
@@ -295,43 +260,11 @@ class EPKB_Need_Help_Features {
 			],
 
 			[
-				'plugin'      => 'ep'.'hd',
-				'category'    => 'compatibility',
-				'box-heading' => __( 'Help Dialog Chat Plugin', 'echo-knowledge-base' ),
-				'class'       => 'epkb-kbnh__feature-heading--column'
-			],
-			[
-				'plugin'      => 'crel',
-				'category'    => 'compatibility',
-				'box-heading' => __( 'Creative Add-ons Plugin ', 'echo-knowledge-base' ),
-				'class'       => 'epkb-kbnh__feature-heading--column'
-			],
-			[
 				'plugin'    => 'core',
 				'category'  => 'compatibility',
 				'icon'      => '',
-				'name'      => __( 'Help Dialog Chat', 'echo-knowledge-base' ),
-				'desc'      => __( 'Help Dialog Chat is a frontend dialog where users can easily search for answers, browse FAQs and submit contact form.', 'echo-knowledge-base' ),
-				'config'    => '',
-				'docs'      => 'https://www.echoknowledgebase.com/documentation/help-dialog/',
-				'video'     => '',
-			],
-			[
-				'plugin'    => 'core',
-				'category'  => 'compatibility',
-				'icon'      => '',
-				'name'      => __( 'Creative Addons for Elementor', 'echo-knowledge-base' ),
-				'desc'      => __( 'Creative Addons makes writing professional documents and articles easy.', 'echo-knowledge-base' ),
-				'config'    => '',
-				'docs'      => 'https://www.creative-addons.com/',
-				'video'     => '',
-			],
-			[
-				'plugin'    => 'core',
-				'category'  => 'compatibility',
-				'icon'      => '',
-				'name'      => __( 'Elementor Compatible', 'echo-knowledge-base' ),
-				'desc'      => __( 'Works with Elementor widgets, Elementor templates, and more.', 'echo-knowledge-base' ),
+				'name'      => esc_html__( 'Elementor Compatible', 'echo-knowledge-base' ),
+				'desc'      => esc_html__( 'Works with Elementor widgets, Elementor templates, and more.', 'echo-knowledge-base' ),
 				'config'    => '',
 				'docs'      => 'https://www.echoknowledgebase.com/documentation/elementor-plugin-setup/',
 				'video'     => '',
@@ -340,8 +273,8 @@ class EPKB_Need_Help_Features {
 				'plugin'    => 'core',
 				'category'  => 'compatibility',
 				'icon'      => '',
-				'name'      => __( 'Page Builders', 'echo-knowledge-base' ),
-				'desc'      => __( 'Works with Elementor and Templates, Beaver Builder, Divi, Visual Composer, and others.', 'echo-knowledge-base' ),
+				'name'      => esc_html__( 'Page Builders', 'echo-knowledge-base' ),
+				'desc'      => esc_html__( 'Works with Elementor and Templates, Beaver Builder, Divi, Visual Composer, and others.', 'echo-knowledge-base' ),
 				'config'    => '',
 				'docs'      => 'https://www.echoknowledgebase.com/documentation/using-page-builders-articles/',
 				'video'     => '',
@@ -350,8 +283,8 @@ class EPKB_Need_Help_Features {
 				'plugin'    => 'core',
 				'category'  => 'compatibility',
 				'icon'      => '',
-				'name'      => __( 'RTL (Right-To-Left) Styling', 'echo-knowledge-base' ),
-				'desc'      => __( 'This Knowledge Base fully supports RTL CSS files for both admin screens and frontend pages.', 'echo-knowledge-base' ),
+				'name'      => esc_html__( 'RTL (Right-To-Left) Styling', 'echo-knowledge-base' ),
+				'desc'      => esc_html__( 'This Knowledge Base fully supports RTL CSS files for both admin screens and frontend pages.', 'echo-knowledge-base' ),
 				'config'    => '',
 				'docs'      => 'https://www.echoknowledgebase.com/documentation/more-features-rtl-accessibility/',
 				'video'     => '',
@@ -360,8 +293,8 @@ class EPKB_Need_Help_Features {
 				'plugin'    => 'core',
 				'category'  => 'compatibility',
 				'icon'      => '',
-				'name'      => __( 'Multisite Compatible', 'echo-knowledge-base' ),
-				'desc'      => __( 'Echo Knowledge Base works with the WordPress multi-site feature.', 'echo-knowledge-base' ),
+				'name'      => esc_html__( 'Multisite Compatible', 'echo-knowledge-base' ),
+				'desc'      => esc_html__( 'Echo Knowledge Base works with the WordPress multi-site feature.', 'echo-knowledge-base' ),
 				'config'    => '',
 				'docs'      => 'https://www.echoknowledgebase.com/documentation/more-features-rtl-accessibility/#multisite',
 				'video'     => '',
@@ -370,7 +303,7 @@ class EPKB_Need_Help_Features {
 				'plugin'    => 'core',
 				'category'  => 'compatibility',
 				'icon'      => '',
-				'name'      => __( 'WPML and Polylang Compatible', 'echo-knowledge-base' ),
+				'name'      => esc_html__( 'WPML and Polylang Compatible', 'echo-knowledge-base' ),
 				'switch'    => 'wpml_is_enabled',
 				'desc'      => 'Supports use of WPML and Polylang plugins for multi-language sites.',
 				'config'    => self::get_settings_link( $kb_id, 'tools', 'other' ),
@@ -381,8 +314,8 @@ class EPKB_Need_Help_Features {
 				'plugin'    => 'core',
 				'category'  => 'compatibility',
 				'icon'      => '',
-				'name'      => __( 'Multi-language Support', 'echo-knowledge-base' ),
-				'desc'      => __( 'Change or translate any text label on the front-end using any of 12 translated languages.', 'echo-knowledge-base' ),
+				'name'      => esc_html__( 'Multi-language Support', 'echo-knowledge-base' ),
+				'desc'      => esc_html__( 'Change or translate any text label on the front-end using any of 12 translated languages.', 'echo-knowledge-base' ),
 				'config'    => '',
 				'docs'      => 'https://www.echoknowledgebase.com/documentation/set-multilingual-bilingual-site/',
 				'video'     => '',
@@ -391,8 +324,8 @@ class EPKB_Need_Help_Features {
 				'plugin'    => 'core',
 				'category'  => 'compatibility',
 				'icon'      => '',
-				'name'      => __( 'WCAG Accessibility', 'echo-knowledge-base' ),
-				'desc'      => __( 'Complies with basic WCAG accessibility for people with disabilities, including blindness.', 'echo-knowledge-base' ),
+				'name'      => esc_html__( 'WCAG Accessibility', 'echo-knowledge-base' ),
+				'desc'      => esc_html__( 'Complies with basic WCAG accessibility for people with disabilities, including blindness.', 'echo-knowledge-base' ),
 				'config'    => '',
 				'docs'      => 'https://www.echoknowledgebase.com/documentation/more-features-rtl-accessibility/',
 				'video'     => '',
@@ -401,8 +334,8 @@ class EPKB_Need_Help_Features {
 				'plugin'    => 'core',
 				'category'  => 'compatibility',
 				'icon'      => '',
-				'name'      => __( 'Developer hooks', 'echo-knowledge-base' ),
-				'desc'      => __( 'Control the article page with WordPress hooks.', 'echo-knowledge-base' ),
+				'name'      => esc_html__( 'Developer hooks', 'echo-knowledge-base' ),
+				'desc'      => esc_html__( 'Control the article page with WordPress hooks.', 'echo-knowledge-base' ),
 				'config'    => '',
 				'docs'      => 'https://www.echoknowledgebase.com/documentation/adding-custom-section-to-articles-using-hooks/',
 				'video'     => '',
@@ -411,8 +344,8 @@ class EPKB_Need_Help_Features {
 				'plugin'    => 'core',
 				'category'  => 'article-features',
 				'icon'      => '',
-				'name'      => __( 'Table of Contents (TOC)', 'echo-knowledge-base' ),
-				'desc'      => __( 'Generate a TOC based on article headings and let it float, or stick, beside the article.', 'echo-knowledge-base' ),
+				'name'      => esc_html__( 'Table of Contents (TOC)', 'echo-knowledge-base' ),
+				'desc'      => esc_html__( 'Generate a TOC based on article headings and let it float, or stick, beside the article.', 'echo-knowledge-base' ),
 				'switch'    => 'article_toc_enable',
 				'config'    => self::get_settings_link( $kb_id, 'settings', 'article-page', 'article-page-toc' ),
 				'docs'      => 'https://www.echoknowledgebase.com/documentation/table-of-content/',
@@ -423,10 +356,10 @@ class EPKB_Need_Help_Features {
 				'plugin'    => 'core',
 				'category'  => 'article-features',
 				'icon'      => '',
-				'name'      => __( 'Article Sidebars', 'echo-knowledge-base' ),
-				'desc'      => __( 'Choose to show left, right, or both sidebars containing navigation, TOC, and widgets.', 'echo-knowledge-base' ),
-				'custom'    => '<a class="epkb-kbnh__feature-link" href="' . esc_url( self::get_settings_link( $kb_id, 'settings', 'article-page', 'article-page-sidebar', 'left_sidebar' ) ) . '" target="_blank"><span>' . esc_html__( 'Left Sidebar', 'echo-knowledge-base' ) . '</span></a>' .
-				               '<a class="epkb-kbnh__feature-link" href="' . esc_url( self::get_settings_link( $kb_id, 'settings', 'article-page', 'article-page-sidebar', 'right_sidebar' ) ) . '" target="_blank"><span>' . esc_html__( 'Right Sidebar', 'echo-knowledge-base' ) . '</span></a>',
+				'name'      => esc_html__( 'Article Sidebars', 'echo-knowledge-base' ),
+				'desc'      => esc_html__( 'Choose to show left, right, or both sidebars containing navigation, TOC, and widgets.', 'echo-knowledge-base' ),
+				'custom'    => '<a class="epkb-kbnh__feature-link" href="' . esc_url( self::get_settings_link( $kb_id, 'settings', 'article-page', 'article-page-sidebar', ( is_rtl() ? 'right_sidebar' : 'left_sidebar' ) ) ) . '" target="_blank"><span>' . esc_html__( 'Left Sidebar', 'echo-knowledge-base' ) . '</span></a>' .
+				               '<a class="epkb-kbnh__feature-link" href="' . esc_url( self::get_settings_link( $kb_id, 'settings', 'article-page', 'article-page-sidebar', ( is_rtl() ? 'left_sidebar' : 'right_sidebar' ) ) ) . '" target="_blank"><span>' . esc_html__( 'Right Sidebar', 'echo-knowledge-base' ) . '</span></a>',
 				'docs'      => 'https://www.echoknowledgebase.com/documentation/article-sidebars/',
 				'video'     => '',
 				'min_capability'   => EPKB_Admin_UI_Access::get_context_required_capability( 'admin_eckb_access_frontend_editor_write' ),
@@ -435,7 +368,7 @@ class EPKB_Need_Help_Features {
 				'plugin'    => 'core',
 				'category'  => 'article-features',
 				'icon'      => '',
-				'name'      => __( 'Breadcrumbs', 'echo-knowledge-base' ),
+				'name'      => esc_html__( 'Breadcrumbs', 'echo-knowledge-base' ),
 				'desc'      => 'Show breadcrumbs on article pages.',
 				'switch'    => 'breadcrumb_enable',
 				'config'    => self::get_settings_link( $kb_id, 'settings', 'article-page', 'article-page-settings', 'breadcrumb' ),
@@ -447,8 +380,8 @@ class EPKB_Need_Help_Features {
 				'plugin'    => 'core',
 				'category'  => 'article-features',
 				'icon'      => '',
-				'name'      => __( 'Navigation Links Sidebar', 'echo-knowledge-base' ),
-				'desc'      => __( 'Article pages can have navigation links in the left sidebar or in the right sidebar.', 'echo-knowledge-base' ),
+				'name'      => esc_html__( 'Navigation Links Sidebar', 'echo-knowledge-base' ),
+				'desc'      => esc_html__( 'Article pages can have navigation links in the left sidebar or in the right sidebar.', 'echo-knowledge-base' ),
 				'config'    => self::get_settings_link( $kb_id, 'settings', 'article-page', 'article-page-sidebar' ),
 				'docs'      => 'https://www.echoknowledgebase.com/documentation/1-setup-knowledge-base/',
 				'video'     => '',
@@ -458,8 +391,8 @@ class EPKB_Need_Help_Features {
 				'plugin'    => 'core',
 				'category'  => 'article-features',
 				'icon'      => '',
-				'name'      => __( 'Print Button', 'echo-knowledge-base' ),
-				'desc'      => __( 'Users can print an article without a redundant site header and footer.', 'echo-knowledge-base' ),
+				'name'      => esc_html__( 'Print Button', 'echo-knowledge-base' ),
+				'desc'      => esc_html__( 'Users can print an article without a redundant site header and footer.', 'echo-knowledge-base' ),
 				'switch'    => 'print_button_enable',
 				'config'    => self::get_settings_link( $kb_id, 'settings', 'labels', '', 'print_button' ),
 				'docs'      => 'https://www.echoknowledgebase.com/documentation/print-button/',
@@ -470,8 +403,8 @@ class EPKB_Need_Help_Features {
 				'plugin'    => 'core',
 				'category'  => 'article-features',
 				'icon'      => '',
-				'name'      => __( 'Article Views Counter', 'echo-knowledge-base' ),
-				'desc'      => __( 'Track the number of times articles are viewed and display a view counter on article pages and in analytics. Show visitors the most popular articles using widgets and shortcodes (Widgets add-on required).', 'echo-knowledge-base' ),
+				'name'      => esc_html__( 'Article Views Counter', 'echo-knowledge-base' ),
+				'desc'      => esc_html__( 'Track the number of times articles are viewed and display a view counter on article pages and in analytics. Show visitors the most popular articles using widgets and shortcodes (Widgets add-on required).', 'echo-knowledge-base' ),
 				'switch'    => 'article_views_counter_enable',
 				'config'    => self::get_settings_link( $kb_id, 'settings', 'article-page', 'article-page-settings', 'article_views_counter' ),
 				'docs'      => 'https://www.echoknowledgebase.com/documentation/article-views-counter/',
@@ -482,8 +415,8 @@ class EPKB_Need_Help_Features {
 				'plugin'    => 'core',
 				'category'  => 'article-features',
 				'icon'      => '',
-				'name'      => __( 'Creation and Last Update Date, and Article Author', 'echo-knowledge-base' ),
-				'desc'      => __( 'Show the creation and modification dates and article author above or below each article.', 'echo-knowledge-base' ),
+				'name'      => esc_html__( 'Creation and Last Update Date, and Article Author', 'echo-knowledge-base' ),
+				'desc'      => esc_html__( 'Show the creation and modification dates and article author above or below each article.', 'echo-knowledge-base' ),
 				'config'    => self::get_settings_link( $kb_id, 'settings', 'article-page' ),
 				'custom'    => '<a class="epkb-kbnh__feature-link" href="' . esc_url( self::get_settings_link( $kb_id, 'settings', 'labels', '', 'created_date' ) ) . '" target="_blank"><span>' . esc_html__( 'Creation', 'echo-knowledge-base' ) . '</span></a>' .
 				               '<a class="epkb-kbnh__feature-link" href="' . esc_url( self::get_settings_link( $kb_id, 'settings', 'labels', '', 'updated_date' ) ) . '" target="_blank"><span>' . esc_html__( 'Last Update', 'echo-knowledge-base' ) . '</span></a>' .
@@ -496,8 +429,8 @@ class EPKB_Need_Help_Features {
 				'plugin'    => 'core',
 				'category'  => 'article-features',
 				'icon'      => '',
-				'name'      => __( 'Article Comments', 'echo-knowledge-base' ),
-				'desc'      => __( 'Choose to show or hide article comments.', 'echo-knowledge-base' ),
+				'name'      => esc_html__( 'Article Comments', 'echo-knowledge-base' ),
+				'desc'      => esc_html__( 'Choose to show or hide article comments.', 'echo-knowledge-base' ),
 				'config'    => self::get_settings_link( $kb_id, 'settings', 'article-page' ),
 				'docs'      => 'https://www.echoknowledgebase.com/documentation/wordpress-article-comments/',
 				'video'     => '',
@@ -507,8 +440,8 @@ class EPKB_Need_Help_Features {
 				'plugin'    => 'core',
 				'category'  => 'article-features',
 				'icon'      => '',
-				'name'      => __( 'Previous/Next Navigation', 'echo-knowledge-base' ),
-				'desc'      => __( 'Users can navigate to the next article or previous articles using the previous/next buttons.', 'echo-knowledge-base' ),
+				'name'      => esc_html__( 'Previous/Next Navigation', 'echo-knowledge-base' ),
+				'desc'      => esc_html__( 'Users can navigate to the next article or previous articles using the previous/next buttons.', 'echo-knowledge-base' ),
 				'switch'    => 'prev_next_navigation_enable',
 				'config'    => self::get_settings_link( $kb_id, 'settings', 'article-page', 'article-page-settings', 'prev_next_navigation' ),
 				'docs'      => 'https://www.echoknowledgebase.com/documentation/previous-next-page-navigation/',
@@ -519,8 +452,8 @@ class EPKB_Need_Help_Features {
 				'plugin'    => 'core',
 				'category'  => 'article-features',
 				'icon'      => '',
-				'name'      => __( 'Back Navigation', 'echo-knowledge-base' ),
-				'desc'      => __( 'Show back navigation above each article to bring the user back to the KB Main Page.', 'echo-knowledge-base' ),
+				'name'      => esc_html__( 'Back Navigation', 'echo-knowledge-base' ),
+				'desc'      => esc_html__( 'Show back navigation above each article to bring the user back to the KB Main Page.', 'echo-knowledge-base' ),
 				'switch'    => 'article_content_enable_back_navigation',
 				'config'    => self::get_settings_link( $kb_id, 'settings', 'article-page', 'article-page-settings', 'back_navigation' ),
 				'docs'      => 'https://www.echoknowledgebase.com/documentation/display-structure-overview/',
@@ -531,8 +464,8 @@ class EPKB_Need_Help_Features {
 				'plugin'    => 'kblk',
 				'category'  => 'article-features',
 				'icon'      => '',
-				'name'      => __( 'Links to PDF Files, Docs, Images, and Web Pages', 'echo-knowledge-base' ),
-				'desc'      => __( 'Replace articles with links to PDFs, documents, images, videos, pages, and more.', 'echo-knowledge-base' ),
+				'name'      => esc_html__( 'Links to PDF Files, Docs, Images, and Web Pages', 'echo-knowledge-base' ),
+				'desc'      => esc_html__( 'Replace articles with links to PDFs, documents, images, videos, pages, and more.', 'echo-knowledge-base' ),
 				'config'    => admin_url( '/post-new.php?post_type=' . EPKB_KB_Handler::get_post_type( $kb_id ) . '&linked-editor=yes' ),
 				'docs'      => 'https://www.echoknowledgebase.com/documentation/links-editor-overview/',
 				'video'     => '',
@@ -540,14 +473,14 @@ class EPKB_Need_Help_Features {
 			[
 				'plugin'      => 'eprf',
 				'category'    => 'article-features',
-				'box-heading' => __( 'Article Ratings and Feedback Add-on', 'echo-knowledge-base' ),
+				'box-heading' => esc_html__( 'Article Ratings and Feedback Add-on', 'echo-knowledge-base' ),
 			],
 			[
 				'plugin'    => 'eprf',
 				'category'  => 'article-features',
 				'icon'      => '',
-				'name'      => __( 'Article Feedback Form', 'echo-knowledge-base' ),
-				'desc'      => __( 'Readers can submit insightful feedback about your articles to help you improve them.', 'echo-knowledge-base' ),
+				'name'      => esc_html__( 'Article Feedback Form', 'echo-knowledge-base' ),
+				'desc'      => esc_html__( 'Readers can submit insightful feedback about your articles to help you improve them.', 'echo-knowledge-base' ),
 				'config'    => self::get_settings_link( $kb_id, 'settings', 'article-page', 'article-page-ratings' ),
 				'docs'      => 'https://www.echoknowledgebase.com/documentation/article-rating-feedback-overview/#feedback-form/',
 				'video'     => '',
@@ -557,8 +490,8 @@ class EPKB_Need_Help_Features {
 				'plugin'    => 'eprf',
 				'category'  => 'article-features',
 				'icon'      => '',
-				'name'      => __( 'Article Rating', 'echo-knowledge-base' ),
-				'desc'      => __( 'Users can rate articles.', 'echo-knowledge-base' ),
+				'name'      => esc_html__( 'Article Rating', 'echo-knowledge-base' ),
+				'desc'      => esc_html__( 'Users can rate articles.', 'echo-knowledge-base' ),
 				'switch'    => 'article_content_enable_rating_element',
 				'config'    => self::get_settings_link( $kb_id, 'settings', 'article-page', 'article-page-ratings' ),
 				'docs'      => 'https://www.echoknowledgebase.com/documentation/article-rating-feedback-overview/',
@@ -569,8 +502,8 @@ class EPKB_Need_Help_Features {
 				'plugin'    => 'eprf',
 				'category'  => 'article-features',
 				'icon'      => '',
-				'name'      => __( 'Article Rating Analytics', 'echo-knowledge-base' ),
-				'desc'      => __( 'Learn about the most and least rated articles.', 'echo-knowledge-base' ),
+				'name'      => esc_html__( 'Article Rating Analytics', 'echo-knowledge-base' ),
+				'desc'      => esc_html__( 'Learn about the most and least rated articles.', 'echo-knowledge-base' ),
 				'config'    => admin_url( '/edit.php?post_type=' . EPKB_KB_Handler::get_post_type( $kb_id ) . '&page=epkb-plugin-analytics#rating-data' ),
 				'docs'      => 'https://www.echoknowledgebase.com/documentation/article-rating-feedback-overview/#configure-stats/',
 				'video'     => '',
@@ -580,8 +513,8 @@ class EPKB_Need_Help_Features {
 				'plugin'    => 'core',
 				'category'  => 'search',
 				'icon'      => '',
-				'name'      => __( 'Search Box on KB Main Page', 'echo-knowledge-base' ),
-				'desc'      => __( 'Fast search bar on KB Main Page with listed results.', 'echo-knowledge-base' ),
+				'name'      => esc_html__( 'Search Box on KB Main Page', 'echo-knowledge-base' ),
+				'desc'      => esc_html__( 'Fast search bar on KB Main Page with listed results.', 'echo-knowledge-base' ),
 				'config'    => self::get_settings_link( $kb_id, 'settings', 'main-page', 'module--search', 'advanced_search_mp' ),
 				'docs'      => '',
 				'video'     => '',
@@ -591,8 +524,8 @@ class EPKB_Need_Help_Features {
 				'plugin'    => 'core',
 				'category'  => 'search',
 				'icon'      => '',
-				'name'      => __( 'Search Box on KB Article Pages', 'echo-knowledge-base' ),
-				'desc'      => __( 'Fast search bar on KB Article Pages with listed results.', 'echo-knowledge-base' ),
+				'name'      => esc_html__( 'Search Box on KB Article Pages', 'echo-knowledge-base' ),
+				'desc'      => esc_html__( 'Fast search bar on KB Article Pages with listed results.', 'echo-knowledge-base' ),
 				'config'    => self::get_settings_link( $kb_id, 'settings', 'article-page', 'article-page-search-box', 'advanced_search_ap' ),
 				'docs'      => '',
 				'video'     => '',
@@ -602,8 +535,8 @@ class EPKB_Need_Help_Features {
 				'plugin'    => 'core',
 				'category'  => 'search',
 				'icon'      => '',
-				'name'      => __( 'Basic Analytics for Search', 'echo-knowledge-base' ),
-				'desc'      => __( 'This shows the basic search count for articles found and those with no results.', 'echo-knowledge-base' ),
+				'name'      => esc_html__( 'Basic Analytics for Search', 'echo-knowledge-base' ),
+				'desc'      => esc_html__( 'This shows the basic search count for articles found and those with no results.', 'echo-knowledge-base' ),
 				'config'    => admin_url( '/edit.php?post_type=' . EPKB_KB_Handler::get_post_type( $kb_id ) . '&page=epkb-plugin-analytics#search-data' ),
 				'docs'      => 'https://www.echoknowledgebase.com/documentation/advanced-search-analytics/',
 				'video'     => '',
@@ -611,14 +544,14 @@ class EPKB_Need_Help_Features {
 			[
 				'plugin'      => 'asea',
 				'category'    => 'search',
-				'box-heading' => __( 'Advanced Search Add-on', 'echo-knowledge-base' ),
+				'box-heading' => esc_html__( 'Advanced Search Add-on', 'echo-knowledge-base' ),
 			],
 			[
 				'plugin'    => 'asea',
 				'category'  => 'search',
 				'icon'      => '',
-				'name'      => __( 'Pre-Made Search Box Designs', 'echo-knowledge-base' ),
-				'desc'      => __( 'Choose from five pre-made designs to show different looks and styles for the search box.', 'echo-knowledge-base' ),
+				'name'      => esc_html__( 'Pre-Made Search Box Designs', 'echo-knowledge-base' ),
+				'desc'      => esc_html__( 'Choose from five pre-made designs to show different looks and styles for the search box.', 'echo-knowledge-base' ),
 				'config'    => add_query_arg( array( 'action' => 'epkb_load_editor', 'preopen_zone' => 'search_box_zone' ), EPKB_KB_Handler::get_first_kb_main_page_url( $kb_config ) ),
 				'docs'      => '',
 				'video'     => '',
@@ -628,8 +561,8 @@ class EPKB_Need_Help_Features {
 				'plugin'    => 'asea',
 				'category'  => 'search',
 				'icon'      => '',
-				'name'      => __( 'Search', 'echo-knowledge-base' ) . ' ' . __( 'Shortcode', 'echo-knowledge-base' ),
-				'desc'      => __( 'Add a KB search to any page such as Home and Contact Us. Users can search across multiple KBs.', 'echo-knowledge-base' ),
+				'name'      => esc_html__( 'Search', 'echo-knowledge-base' ) . ' ' . esc_html__( 'Shortcode', 'echo-knowledge-base' ),
+				'desc'      => esc_html__( 'Add a KB search to any page such as Home and Contact Us. Users can search across multiple KBs.', 'echo-knowledge-base' ),
 				'config'    => '',
 				'docs'      => 'https://www.echoknowledgebase.com/documentation/advanced-search-shortcode/',
 				'video'     => '',
@@ -638,8 +571,8 @@ class EPKB_Need_Help_Features {
 				'plugin'    => 'asea',
 				'category'  => 'search',
 				'icon'      => '',
-				'name'      => __( 'Category Search Filter', 'echo-knowledge-base' ),
-				'desc'      => __( 'Users can narrow their results by searching within certain categories.', 'echo-knowledge-base' ),
+				'name'      => esc_html__( 'Category Search Filter', 'echo-knowledge-base' ),
+				'desc'      => esc_html__( 'Users can narrow their results by searching within certain categories.', 'echo-knowledge-base' ),
 				'config'    => self::get_settings_link( $kb_id, 'settings', 'main-page', 'module--search', 'advanced_search_mp' ),
 				'docs'      => 'https://www.echoknowledgebase.com/documentation/search-category-filters/',
 				'video'     => '',
@@ -649,8 +582,8 @@ class EPKB_Need_Help_Features {
 				'plugin'    => 'asea',
 				'category'  => 'search',
 				'icon'      => '',
-				'name'      => __( 'Search Analytics for No Results Searches', 'echo-knowledge-base' ),
-				'desc'      => __( 'Analytics will show searched-for keywords with no articles found. Add missing articles.', 'echo-knowledge-base' ),
+				'name'      => esc_html__( 'Search Analytics for No Results Searches', 'echo-knowledge-base' ),
+				'desc'      => esc_html__( 'Analytics will show searched-for keywords with no articles found. Add missing articles.', 'echo-knowledge-base' ),
 				'config'    => admin_url( '/edit.php?post_type=' . EPKB_KB_Handler::get_post_type( $kb_id ) . '&page=epkb-plugin-analytics#search-data' ),
 				'docs'      => 'https://www.echoknowledgebase.com/documentation/advanced-search-analytics/',
 				'video'     => '',
@@ -660,8 +593,8 @@ class EPKB_Need_Help_Features {
 				'plugin'    => 'asea',
 				'category'  => 'search',
 				'icon'      => '',
-				'name'      => __( 'Search by Tags', 'echo-knowledge-base' ),
-				'desc'      => __( 'Enable a search to match specific search keywords and article tags to find relevant articles.', 'echo-knowledge-base' ),
+				'name'      => esc_html__( 'Search by Tags', 'echo-knowledge-base' ),
+				'desc'      => esc_html__( 'Enable a search to match specific search keywords and article tags to find relevant articles.', 'echo-knowledge-base' ),
 				'config'    => admin_url( '/edit-tags.php?taxonomy=' . EPKB_KB_Handler::get_tag_taxonomy_name( $kb_id ) . '&post_type=' . EPKB_KB_Handler::get_post_type( $kb_id ) ),
 				'docs'      => 'https://www.echoknowledgebase.com/documentation/advanced-search-overview/',
 				'video'     => '',
@@ -671,8 +604,8 @@ class EPKB_Need_Help_Features {
 				'plugin'    => 'asea',
 				'category'  => 'search',
 				'icon'      => '',
-				'name'      => __( 'Search Analytics for The Most Popular Searches', 'echo-knowledge-base' ),
-				'desc'      => __( 'Analytics will show the most popular articles to help the editor make improvements.', 'echo-knowledge-base' ),
+				'name'      => esc_html__( 'Search Analytics for The Most Popular Searches', 'echo-knowledge-base' ),
+				'desc'      => esc_html__( 'Analytics will show the most popular articles to help the editor make improvements.', 'echo-knowledge-base' ),
 				'config'    => admin_url( '/edit.php?post_type=' . EPKB_KB_Handler::get_post_type( $kb_id ) . '&page=epkb-plugin-analytics#search-data' ),
 				'docs'      => 'https://www.echoknowledgebase.com/documentation/advanced-search-analytics/',
 				'video'     => '',
@@ -682,8 +615,8 @@ class EPKB_Need_Help_Features {
 				'plugin'    => 'asea',
 				'category'  => 'search',
 				'icon'      => '',
-				'name'      => __( 'Search Results Pages', 'echo-knowledge-base' ),
-				'desc'      => __( 'Users can browse pages with search results if a large number of matching articles are found.', 'echo-knowledge-base' ),
+				'name'      => esc_html__( 'Search Results Pages', 'echo-knowledge-base' ),
+				'desc'      => esc_html__( 'Users can browse pages with search results if a large number of matching articles are found.', 'echo-knowledge-base' ),
 				'config'    => self::get_settings_link( $kb_id, 'settings', 'main-page', 'module--search', 'advanced_search_results_page' ),
 				'docs'      => '',
 				'video'     => '',
@@ -693,8 +626,8 @@ class EPKB_Need_Help_Features {
 				'plugin'    => 'asea',
 				'category'  => 'search',
 				'icon'      => '',
-				'name'      => __( 'Search Box with Image and Links', 'echo-knowledge-base' ),
-				'desc'      => __( 'Add a background image, sub-title, and links to pages like the support form and more.', 'echo-knowledge-base' ),
+				'name'      => esc_html__( 'Search Box with Image and Links', 'echo-knowledge-base' ),
+				'desc'      => esc_html__( 'Add a background image, sub-title, and links to pages like the support form and more.', 'echo-knowledge-base' ),
 				'config'    => self::get_settings_link( $kb_id, 'settings', 'main-page', 'module--search' ),
 				'docs'      => 'https://www.echoknowledgebase.com/documentation/advanced-search-overview/',
 				'video'     => '',
@@ -704,42 +637,50 @@ class EPKB_Need_Help_Features {
 				'plugin'       => 'core',
 				'category'     => 'shortcodes',
 				'icon'         => 'epkbfa epkbfa-list-alt',
-				'name'         => __( 'FAQs', 'echo-knowledge-base' ),
-				'desc'         => __( 'Show Frequently Asked Questions.', 'echo-knowledge-base' ) .
-				                  EPKB_Shortcodes::get_copy_custom_box( 'epkb-faqs', [ 'group_ids' => implode( ',', $group_ids ) ], __( 'Shortcode example:', 'echo-knowledge-base' ) ),
-				'docs'         => 'https://www.echoknowledgebase.com/documentation/faqs-shortcode/',
-				'experimental' => 'This feature is being tested and can change how it functions in the meantime.'
+				'name'         => esc_html__( 'Knowledge Base Shortcode', 'echo-knowledge-base' ),
+				'desc'         => esc_html__( 'Display Echo Knowledge Base on a page.', 'echo-knowledge-base' ) .
+									EPKB_Shortcodes::get_copy_custom_box( EPKB_KB_Handler::KB_MAIN_PAGE_SHORTCODE_NAME, [ 'id' => $kb_id ], esc_html__( 'Shortcode:', 'echo-knowledge-base' ), false ),
+				'docs'         => 'https://www.echoknowledgebase.com/documentation/knowledge-base-shortcode/',
 			],
 			[
 				'plugin'       => 'core',
 				'category'     => 'shortcodes',
 				'icon'         => 'epkbfa epkbfa-list-alt',
-				'name'         => __( 'Articles Index Directory', 'echo-knowledge-base' ),
-				'desc'         => __( 'Show alphabetical list of articles grouped by letter in a three-column format.', 'echo-knowledge-base' ) .
-				                  EPKB_Shortcodes::get_copy_box( 'epkb-articles-index-directory', $kb_id, __( 'Shortcode:', 'echo-knowledge-base' ) ),
+				'name'         => esc_html__( 'FAQs', 'echo-knowledge-base' ),
+				'desc'         => esc_html__( 'Show Frequently Asked Questions.', 'echo-knowledge-base' ) .
+				                  EPKB_Shortcodes::get_copy_custom_box( 'epkb-faqs', [ 'group_ids' => implode( ',', $group_ids ) ], esc_html__( 'Shortcode example:', 'echo-knowledge-base' ) ),
+				'docs'         => 'https://www.echoknowledgebase.com/documentation/faqs-shortcode/',
+			],
+			[
+				'plugin'       => 'core',
+				'category'     => 'shortcodes',
+				'icon'         => 'epkbfa epkbfa-list-alt',
+				'name'         => esc_html__( 'Articles Index Directory', 'echo-knowledge-base' ),
+				'desc'         => esc_html__( 'Show alphabetical list of articles grouped by letter in a three-column format.', 'echo-knowledge-base' ) .
+				                  EPKB_Shortcodes::get_copy_box( 'epkb-articles-index-directory', $kb_id, esc_html__( 'Shortcode:', 'echo-knowledge-base' ) ),
 				'docs'         => 'https://www.echoknowledgebase.com/documentation/shortcode-articles-index-directory/',
 			],
 			[
 				'plugin'       => 'asea',
 				'category'     => 'shortcodes',
 				'icon'         => 'epkbfa epkbfa-list-alt',
-				'name'         => __( 'Search One or More KBs', 'echo-knowledge-base' ),
-				'desc'         => __( 'Search one or more Knowledge Bases on any page.', 'echo-knowledge-base' ) .
-									EPKB_Shortcodes::get_copy_box( 'eckb-advanced-search', $kb_id, __( 'Shortcode:', 'echo-knowledge-base' ) ),
+				'name'         => esc_html__( 'Search One or More KBs', 'echo-knowledge-base' ),
+				'desc'         => esc_html__( 'Search one or more Knowledge Bases on any page.', 'echo-knowledge-base' ) .
+									EPKB_Shortcodes::get_copy_box( 'eckb-advanced-search', $kb_id, esc_html__( 'Shortcode:', 'echo-knowledge-base' ) ),
 				'docs'         => 'https://www.echoknowledgebase.com/documentation/advanced-search-shortcode/',
 			],
 			[
 			   'plugin'      => 'widg',
 			   'category'    => 'shortcodes',
-			   'box-heading' => __( 'Widgets Add-on', 'echo-knowledge-base' ),
+			   'box-heading' => esc_html__( 'Widgets Add-on', 'echo-knowledge-base' ),
 			],
 			[
 				'plugin'       => 'widg',
 				'category'     => 'shortcodes',
 				'icon'         => 'epkbfa epkbfa-list-alt',
-				'name'         => __( 'Recent Articles', 'echo-knowledge-base' ),
-				'desc'         => __( 'Show either recently created or recently modified KB Articles.', 'echo-knowledge-base' ) .
-				                  EPKB_Shortcodes::get_copy_box( 'widg-recent-articles', $kb_id, __( 'Shortcode:', 'echo-knowledge-base' ) ),
+				'name'         => esc_html__( 'Recent Articles', 'echo-knowledge-base' ),
+				'desc'         => esc_html__( 'Show either recently created or recently modified KB Articles.', 'echo-knowledge-base' ) .
+				                  EPKB_Shortcodes::get_copy_box( 'widg-recent-articles', $kb_id, esc_html__( 'Shortcode:', 'echo-knowledge-base' ) ),
 				'docs'         => 'https://www.echoknowledgebase.com/documentation/recent-articles-shortcode/',
 				'video'        => '',
 			],
@@ -747,9 +688,9 @@ class EPKB_Need_Help_Features {
 				'plugin'       => 'widg',
 				'category'     => 'shortcodes',
 				'icon'         => 'epkbfa epkbfa-list-alt',
-				'name'         => __( 'Popular Articles', 'echo-knowledge-base' ),
-				'desc'         => __( 'Show a list of the most popular articles based on article views.', 'echo-knowledge-base' ) .
-				                  EPKB_Shortcodes::get_copy_box( 'widg-popular-articles', $kb_id, __( 'Shortcode:', 'echo-knowledge-base' ) ),
+				'name'         => esc_html__( 'Popular Articles', 'echo-knowledge-base' ),
+				'desc'         => esc_html__( 'Show a list of the most popular articles based on article views.', 'echo-knowledge-base' ) .
+				                  EPKB_Shortcodes::get_copy_box( 'widg-popular-articles', $kb_id, esc_html__( 'Shortcode:', 'echo-knowledge-base' ) ),
 				'docs'         => 'https://www.echoknowledgebase.com/documentation/popular-articles-widget/',
 				'video'        => '',
 			],
@@ -757,9 +698,9 @@ class EPKB_Need_Help_Features {
 				'plugin'       => 'widg',
 				'category'     => 'shortcodes',
 				'icon'         => 'epkbfa epkbfa-list-alt',
-				'name'         => __( 'KB Search', 'echo-knowledge-base' ),
-				'desc'         => __( 'Add a search box on your Home page, Contact Us page, and others.', 'echo-knowledge-base' ) .
-				                  EPKB_Shortcodes::get_copy_box( 'widg-search-articles', $kb_id, __( 'Shortcode:', 'echo-knowledge-base' ) ),
+				'name'         => esc_html__( 'KB Search', 'echo-knowledge-base' ),
+				'desc'         => esc_html__( 'Add a search box on your Home page, Contact Us page, and others.', 'echo-knowledge-base' ) .
+				                  EPKB_Shortcodes::get_copy_box( 'widg-search-articles', $kb_id, esc_html__( 'Shortcode:', 'echo-knowledge-base' ) ),
 				'docs'         => 'https://www.echoknowledgebase.com/documentation/search-shortcode/',
 				'video'        => '',
 			],
@@ -767,9 +708,9 @@ class EPKB_Need_Help_Features {
 				'plugin'       => 'widg',
 				'category'     => 'shortcodes',
 				'icon'         => 'epkbfa epkbfa-list-alt',
-				'name'         => __( 'KB Categories', 'echo-knowledge-base' ),
-				'desc'         => __( 'List your KB Categories for easy reference, which are typically displayed in sidebars.', 'echo-knowledge-base' ) .
-				                  EPKB_Shortcodes::get_copy_box( 'widg-categories-list', $kb_id, __( 'Shortcode:', 'echo-knowledge-base' ) ),
+				'name'         => esc_html__( 'KB Categories', 'echo-knowledge-base' ),
+				'desc'         => esc_html__( 'List your KB Categories for easy reference, which are typically displayed in sidebars.', 'echo-knowledge-base' ) .
+				                  EPKB_Shortcodes::get_copy_box( 'widg-categories-list', $kb_id, esc_html__( 'Shortcode:', 'echo-knowledge-base' ) ),
 				'docs'         => 'https://www.echoknowledgebase.com/documentation/categories-list-shortcode/',
 				'video'        => '',
 			],
@@ -777,9 +718,9 @@ class EPKB_Need_Help_Features {
 				'plugin'       => 'widg',
 				'category'     => 'shortcodes',
 				'icon'         => 'epkbfa epkbfa-list-alt',
-				'name'         => __( 'List of Category Articles', 'echo-knowledge-base' ),
-				'desc'         => __( 'Display a list of articles for a given category.', 'echo-knowledge-base' ) .
-				                  EPKB_Shortcodes::get_copy_box( 'widg-category-articles', $kb_id, __( 'Shortcode:', 'echo-knowledge-base' ) ),
+				'name'         => esc_html__( 'List of Category Articles', 'echo-knowledge-base' ),
+				'desc'         => esc_html__( 'Display a list of articles for a given category.', 'echo-knowledge-base' ) .
+				                  EPKB_Shortcodes::get_copy_box( 'widg-category-articles', $kb_id, esc_html__( 'Shortcode:', 'echo-knowledge-base' ) ),
 				'docs'         => 'https://www.echoknowledgebase.com/documentation/category-articles-shortcode/',
 				'video'        => '',
 			],
@@ -787,9 +728,9 @@ class EPKB_Need_Help_Features {
 				'plugin'       => 'widg',
 				'category'     => 'shortcodes',
 				'icon'         => 'epkbfa epkbfa-list-alt',
-				'name'         => __( 'KB Tags', 'echo-knowledge-base' ),
-				'desc'         => __( 'Display current KB tags ordered alphabetically.', 'echo-knowledge-base' ) .
-				                  EPKB_Shortcodes::get_copy_box( 'widg-tags-list', $kb_id, __( 'Shortcode:', 'echo-knowledge-base' ) ),
+				'name'         => esc_html__( 'KB Tags', 'echo-knowledge-base' ),
+				'desc'         => esc_html__( 'Display current KB tags ordered alphabetically.', 'echo-knowledge-base' ) .
+				                  EPKB_Shortcodes::get_copy_box( 'widg-tags-list', $kb_id, esc_html__( 'Shortcode:', 'echo-knowledge-base' ) ),
 				'docs'         => 'https://www.echoknowledgebase.com/documentation/tags-list-shortcode/',
 				'video'        => '',
 			],
@@ -797,9 +738,9 @@ class EPKB_Need_Help_Features {
 				'plugin'       => 'widg',
 				'category'     => 'shortcodes',
 				'icon'         => 'epkbfa epkbfa-list-alt',
-				'name'         => __( 'List of Tagged Articles', 'echo-knowledge-base' ),
-				'desc'         => __( 'Display a list of articles that have a given tag.', 'echo-knowledge-base' ) .
-				                  EPKB_Shortcodes::get_copy_box( 'widg-tag-articles', $kb_id, __( 'Shortcode:', 'echo-knowledge-base' ) ),
+				'name'         => esc_html__( 'List of Tagged Articles', 'echo-knowledge-base' ),
+				'desc'         => esc_html__( 'Display a list of articles that have a given tag.', 'echo-knowledge-base' ) .
+				                  EPKB_Shortcodes::get_copy_box( 'widg-tag-articles', $kb_id, esc_html__( 'Shortcode:', 'echo-knowledge-base' ) ),
 				'docs'         => 'https://www.echoknowledgebase.com/documentation/tagged-articles-shortcode/',
 				'video'        => '',
 			],
@@ -807,21 +748,21 @@ class EPKB_Need_Help_Features {
 				'plugin'       => 'core',
 				'category'     => 'widgets',
 				'icon'         => 'epkbfa epkbfa-list-alt',
-				'name'         => __( 'Widgets for Elementor', 'echo-knowledge-base' ),
-				'desc'         => __( 'Our Elementor widgets are designed for writers. We make it easy to write great instructions, step-by-step guides, manuals and detailed documentation.', 'echo-knowledge-base' ),
+				'name'         => esc_html__( 'Widgets for Elementor', 'echo-knowledge-base' ),
+				'desc'         => esc_html__( 'Our Elementor widgets are designed for writers. We make it easy to write great instructions, step-by-step guides, manuals and detailed documentation.', 'echo-knowledge-base' ),
 				'docs'         => 'https://www.echoknowledgebase.com/documentation/elementor-widgets-for-documentation/',
 			],
 			[
 				'plugin'      => 'widg',
 				'category'    => 'widgets',
-				'box-heading' => __( 'Widgets Add-on', 'echo-knowledge-base' ),
+				'box-heading' => esc_html__( 'Widgets Add-on', 'echo-knowledge-base' ),
 			],
 			[
 				'plugin'       => 'widg',
 				'category'     => 'widgets',
 				'icon'         => 'epkbfa epkbfa-list-alt',
-				'name'         => __( 'Recent Articles', 'echo-knowledge-base' ),
-				'desc'         => __( 'Show either recently created or recently modified KB Articles.', 'echo-knowledge-base' ),
+				'name'         => esc_html__( 'Recent Articles', 'echo-knowledge-base' ),
+				'desc'         => esc_html__( 'Show either recently created or recently modified KB Articles.', 'echo-knowledge-base' ),
 				'config'       => admin_url( '/widgets.php' ),
 				'docs'         => 'https://www.echoknowledgebase.com/documentation/recent-articles-widget/',
 				'video'        => '',
@@ -830,8 +771,8 @@ class EPKB_Need_Help_Features {
 				'plugin'       => 'widg',
 				'category'     => 'widgets',
 				'icon'         => 'epkbfa epkbfa-list-alt',
-				'name'         => __( 'Popular Articles', 'echo-knowledge-base' ),
-				'desc'         => __( 'Show a list of the most popular articles based on article views.', 'echo-knowledge-base' ),
+				'name'         => esc_html__( 'Popular Articles', 'echo-knowledge-base' ),
+				'desc'         => esc_html__( 'Show a list of the most popular articles based on article views.', 'echo-knowledge-base' ),
 				'config'       => admin_url( '/widgets.php' ),
 				'docs'         => 'https://www.echoknowledgebase.com/documentation/popular-articles-widget/',
 				'video'        => '',
@@ -840,8 +781,8 @@ class EPKB_Need_Help_Features {
 				'plugin'       => 'widg',
 				'category'     => 'widgets',
 				'icon'         => 'epkbfa epkbfa-list-alt',
-				'name'         => __( 'KB Sidebar', 'echo-knowledge-base' ),
-				'desc'         => __( 'A dedicated KB Sidebar will be shown only on the left side or right side of your KB articles.', 'echo-knowledge-base' ),
+				'name'         => esc_html__( 'KB Sidebar', 'echo-knowledge-base' ),
+				'desc'         => esc_html__( 'A dedicated KB Sidebar will be shown only on the left side or right side of your KB articles.', 'echo-knowledge-base' ),
 				'config'       => admin_url( '/widgets.php' ),
 				'docs'         => 'https://www.echoknowledgebase.com/documentation/kb-sidebar/',
 				'video'        => '',
@@ -850,8 +791,8 @@ class EPKB_Need_Help_Features {
 				'plugin'       => 'widg',
 				'category'     => 'widgets',
 				'icon'         => 'epkbfa epkbfa-list-alt',
-				'name'         => __( 'KB Search', 'echo-knowledge-base' ),
-				'desc'         => __( 'Add a search box on your Home page, Contact Us page, and others.', 'echo-knowledge-base' ),
+				'name'         => esc_html__( 'KB Search', 'echo-knowledge-base' ),
+				'desc'         => esc_html__( 'Add a search box on your Home page, Contact Us page, and others.', 'echo-knowledge-base' ),
 				'config'       => admin_url( '/widgets.php' ),
 				'docs'         => 'https://www.echoknowledgebase.com/documentation/search-widget/',
 				'video'        => '',
@@ -860,8 +801,8 @@ class EPKB_Need_Help_Features {
 				'plugin'       => 'widg',
 				'category'     => 'widgets',
 				'icon'         => 'epkbfa epkbfa-list-alt',
-				'name'         => __( 'KB Categories', 'echo-knowledge-base' ),
-				'desc'         => __( 'List your KB Categories for easy reference, which are typically displayed in sidebars.', 'echo-knowledge-base' ),
+				'name'         => esc_html__( 'KB Categories', 'echo-knowledge-base' ),
+				'desc'         => esc_html__( 'List your KB Categories for easy reference, which are typically displayed in sidebars.', 'echo-knowledge-base' ),
 				'config'       => admin_url( '/widgets.php' ),
 				'docs'         => 'https://www.echoknowledgebase.com/documentation/categories-list-widget/',
 				'video'        => '',
@@ -870,8 +811,8 @@ class EPKB_Need_Help_Features {
 				'plugin'       => 'widg',
 				'category'     => 'widgets',
 				'icon'         => 'epkbfa epkbfa-list-alt',
-				'name'         => __( 'List of Category Articles', 'echo-knowledge-base' ),
-				'desc'         => __( 'Display a list of articles for a given category.', 'echo-knowledge-base' ),
+				'name'         => esc_html__( 'List of Category Articles', 'echo-knowledge-base' ),
+				'desc'         => esc_html__( 'Display a list of articles for a given category.', 'echo-knowledge-base' ),
 				'config'       => admin_url( '/widgets.php' ),
 				'docs'         => 'https://www.echoknowledgebase.com/documentation/category-articles-widget/',
 				'video'        => '',
@@ -880,8 +821,8 @@ class EPKB_Need_Help_Features {
 				'plugin'       => 'widg',
 				'category'     => 'widgets',
 				'icon'         => 'epkbfa epkbfa-list-alt',
-				'name'         => __( 'KB Tags', 'echo-knowledge-base' ),
-				'desc'         => __( 'Display current KB tags ordered alphabetically.', 'echo-knowledge-base' ),
+				'name'         => esc_html__( 'KB Tags', 'echo-knowledge-base' ),
+				'desc'         => esc_html__( 'Display current KB tags ordered alphabetically.', 'echo-knowledge-base' ),
 				'config'       => admin_url( '/widgets.php' ),
 				'docs'         => 'https://www.echoknowledgebase.com/documentation/tags-list-widget/',
 				'video'        => '',
@@ -890,8 +831,8 @@ class EPKB_Need_Help_Features {
 				'plugin'       => 'widg',
 				'category'     => 'widgets',
 				'icon'         => 'epkbfa epkbfa-list-alt',
-				'name'         => __( 'List of Tagged Articles', 'echo-knowledge-base' ),
-				'desc'         => __( 'Display a list of articles that have a given tag.', 'echo-knowledge-base' ),
+				'name'         => esc_html__( 'List of Tagged Articles', 'echo-knowledge-base' ),
+				'desc'         => esc_html__( 'Display a list of articles that have a given tag.', 'echo-knowledge-base' ),
 				'config'       => admin_url( '/widgets.php' ),
 				'docs'         => 'https://www.echoknowledgebase.com/documentation/tagged-articles-widget/',
 				'video'        => '',
@@ -900,8 +841,8 @@ class EPKB_Need_Help_Features {
 				'plugin'    => 'core',
 				'category'  => 'advanced',
 				'icon'      => '',
-				'name'      => __( 'Convert Posts and CPTs into Articles', 'echo-knowledge-base' ),
-				'desc'      => __( 'Convert your blog and other posts as well as Custom Post Types into KB Articles.', 'echo-knowledge-base' ),
+				'name'      => esc_html__( 'Convert Posts and CPTs into Articles', 'echo-knowledge-base' ),
+				'desc'      => esc_html__( 'Convert your blog and other posts as well as Custom Post Types into KB Articles.', 'echo-knowledge-base' ),
 				'config'    => self::get_settings_link( $kb_id, 'tools', 'convert' ),
 				'docs'      => 'https://www.echoknowledgebase.com/documentation/convert-posts-cpts-to-articles/',
 				'video'     => '',
@@ -910,8 +851,8 @@ class EPKB_Need_Help_Features {
 				'plugin'    => 'core',
 				'category'  => 'advanced',
 				'icon'      => '',
-				'name'      => __( 'Category Archive Pages', 'echo-knowledge-base' ),
-				'desc'      => __( 'Select from five pre-made designs for the Category Archive Page with more options coming soon.', 'echo-knowledge-base' ),
+				'name'      => esc_html__( 'Category Archive Pages', 'echo-knowledge-base' ),
+				'desc'      => esc_html__( 'Select from five pre-made designs for the Category Archive Page with more options coming soon.', 'echo-knowledge-base' ),
 				'config'    => self::get_settings_link( $kb_id, 'settings', 'archive-page' ),
 				'docs'      => 'https://www.echoknowledgebase.com/documentation/category-archive-page/',
 				'video'     => '',
@@ -921,8 +862,8 @@ class EPKB_Need_Help_Features {
 				'plugin'    => 'core',
 				'category'  => 'advanced',
 				'icon'      => '',
-				'name'      => __( 'Knowledge Base URL', 'echo-knowledge-base' ),
-				'desc'      => __( 'Include or exclude category in articles URL and customize your Knowledge Base URL.', 'echo-knowledge-base' ),
+				'name'      => esc_html__( 'Knowledge Base URL', 'echo-knowledge-base' ),
+				'desc'      => esc_html__( 'Include or exclude category in articles URL and customize your Knowledge Base URL.', 'echo-knowledge-base' ),
 				'config'    => self::get_settings_link( $kb_id, 'settings' ),
 				'docs'      => 'https://www.echoknowledgebase.com/documentation/changing-permalinks-urls-and-slugs/',
 				'video'     => '',
@@ -932,46 +873,63 @@ class EPKB_Need_Help_Features {
 				'plugin'    => 'emkb',
 				'category'  => 'advanced',
 				'icon'      => '',
-				'name'      => __( 'Unlimited Knowledge Bases', 'echo-knowledge-base' ),
-				'desc'      => __( 'Each KB has separate articles and URLs to help organize docs based on your topics, products, services, and more.', 'echo-knowledge-base' ),
+				'name'      => esc_html__( 'Unlimited Knowledge Bases', 'echo-knowledge-base' ),
+				'desc'      => esc_html__( 'Each KB has separate articles and URLs to help organize docs based on your topics, products, services, and more.', 'echo-knowledge-base' ),
 				'docs'      => 'https://www.echoknowledgebase.com/documentation/multiple-kbs-overview/',
+				'video'     => '',
+			],
+			[
+				'plugin'      => 'crel',
+				'category'    => 'advanced',
+				'box-heading' => esc_html__( 'Creative Add-ons Plugin ', 'echo-knowledge-base' ),
+			],
+			[
+				'plugin'    => 'core',
+				'category'  => 'advanced',
+				'icon'      => '',
+				'name'      => esc_html__( 'Creative Addons for Elementor', 'echo-knowledge-base' ),
+				'desc'      => esc_html__( 'Creative Addons makes writing professional documents and articles easy.', 'echo-knowledge-base' ),
+				'config'    => '',
+				'docs'      => 'https://www.creative-addons.com/',
 				'video'     => '',
 			],
 			[
 				'plugin'      => 'ep'.'hd',
 				'category'    => 'advanced',
-				'box-heading' => __( 'Help Dialog Chat Plugin', 'echo-knowledge-base' ),
+				'box-heading' => esc_html__( 'Help Dialog Chat Plugin', 'echo-knowledge-base' ),
 			],
 			[
 				'plugin'       => 'ep'.'hd',
 				'category'     => 'advanced',
 				'icon'         => 'epkbfa epkbfa-list-alt',
-				'name'         => __( 'Help Dialog Chat', 'echo-knowledge-base' ),
-				'desc'         => __( 'Help Dialog Chat is a frontend dialog where users can easily search for answers, browse FAQs and submit contact form.', 'echo-knowledge-base' ),
+				'name'         => esc_html__( 'Help Dialog Chat', 'echo-knowledge-base' ),
+				'desc'         => esc_html__( 'Help Dialog Chat is a frontend dialog where users can easily search for answers, browse FAQs and submit contact form.', 'echo-knowledge-base' ),
 				'docs'         => 'https://www.helpdialog.com/documentation/',
 				'video'        => '',
 			],
 			[
 				'plugin'      => 'amgr',
 				'category'    => 'advanced',
-				'box-heading' => __( 'Access Control Add-ons', 'echo-knowledge-base' ),
+				'box-heading' => esc_html__( 'Access Control Add-ons', 'echo-knowledge-base' ),
 			],
 			[
 				'plugin'    => 'amgr',
 				'category'  => 'advanced',
 				'icon'      => '',
-				'name'      => __( 'Restrict Access to Articles and Categories', 'echo-knowledge-base' ),
-				'desc'      => __( 'Control access to private a Knowledge Base utilizing WordPress user accounts.', 'echo-knowledge-base' ),
+				'name'      => esc_html__( 'Restrict Access to Articles and Categories', 'echo-knowledge-base' ),
+				'desc'      => esc_html__( 'Control access to private a Knowledge Base utilizing WordPress user accounts.', 'echo-knowledge-base' ),
 				'config'    => '',
 				'docs'      => 'https://www.echoknowledgebase.com/documentation/restrict-access-permission-privacy-scenarios-use-cases/',
+				'custom'    => '<a class="epkb-kbnh__feature-link" href="https://www.echoknowledgebase.com/documentation/access-manager-and-add-ons/" target="_blank"><strong>' .
+								esc_html__( 'Try Access Manager Demo', 'echo-knowledge-base' ) . '</strong></a>',
 				'video'     => '',
 			],
 			[
 				'plugin'    => 'amgp',
 				'category'  => 'advanced',
 				'icon'      => '',
-				'name'      => __( 'Access Control Groups', 'echo-knowledge-base' ),
-				'desc'      => __( 'Organize your users into KB Groups, separating their access based on the level of access each group needs.', 'echo-knowledge-base' ),
+				'name'      => esc_html__( 'Access Control Groups', 'echo-knowledge-base' ),
+				'desc'      => esc_html__( 'Organize your users into KB Groups, separating their access based on the level of access each group needs.', 'echo-knowledge-base' ),
 				'config'    => '',
 				'docs'      => 'https://www.echoknowledgebase.com/documentation/groups-initial-setup/',
 				'video'     => '',
@@ -981,8 +939,8 @@ class EPKB_Need_Help_Features {
 				'plugin'    => 'amcr',
 				'category'  => 'advanced',
 				'icon'      => '',
-				'name'      => __( 'Custom Roles', 'echo-knowledge-base' ),
-				'desc'      => __( 'Map any custom WP Role to KB Roles such as KB Subscriber, Author, Editor, and Manager.', 'echo-knowledge-base' ),
+				'name'      => esc_html__( 'Custom Roles', 'echo-knowledge-base' ),
+				'desc'      => esc_html__( 'Map any custom WP Role to KB Roles such as KB Subscriber, Author, Editor, and Manager.', 'echo-knowledge-base' ),
 				'config'    => '',
 				'docs'      => 'https://www.echoknowledgebase.com/documentation/overview-custom-roles-add-on/',
 				'video'     => '',
@@ -991,14 +949,14 @@ class EPKB_Need_Help_Features {
 			[
 				'plugin'      => 'epie',
 				'category'    => 'advanced',
-				'box-heading' => __( 'Import and Export Add-on', 'echo-knowledge-base' ),
+				'box-heading' => esc_html__( 'Import and Export Add-on', 'echo-knowledge-base' ),
 			],
 			[
 				'plugin'    => 'epie',
 				'category'  => 'advanced',
 				'icon'      => '',
-				'name'      => __( 'Articles Migration, Copy, and Export', 'echo-knowledge-base' ),
-				'desc'      => __( 'Export configuration, articles, categories, and tags from your Knowledge Base.', 'echo-knowledge-base' ),
+				'name'      => esc_html__( 'Articles Migration, Copy, and Export', 'echo-knowledge-base' ),
+				'desc'      => esc_html__( 'Export configuration, articles, categories, and tags from your Knowledge Base.', 'echo-knowledge-base' ),
 				'config'    => self::get_settings_link( $kb_id, 'tools', 'export' ),
 				'docs'      => 'https://www.echoknowledgebase.com/documentation/import-export-overview/',
 				'video'     => '',
@@ -1007,8 +965,8 @@ class EPKB_Need_Help_Features {
 				'plugin'    => 'epie',
 				'category'  => 'advanced',
 				'icon'      => '',
-				'name'      => __( 'Articles CSV and XML Import', 'echo-knowledge-base' ),
-				'desc'      => __( 'Import configuration, articles, categories, and tags into your Knowledge Base using a CSV or XML file.', 'echo-knowledge-base' ),
+				'name'      => esc_html__( 'Articles CSV and XML Import', 'echo-knowledge-base' ),
+				'desc'      => esc_html__( 'Import configuration, articles, categories, and tags into your Knowledge Base using a CSV or XML file.', 'echo-knowledge-base' ),
 				'config'    => self::get_settings_link( $kb_id, 'tools', 'import' ),
 				'docs'      => 'https://www.echoknowledgebase.com/documentation/import-export-overview/',
 				'video'     => '',
@@ -1052,42 +1010,42 @@ class EPKB_Need_Help_Features {
 		return [
 			/* [
 				'name'  => 'basic',
-				'title' => __( 'Basic', 'echo-knowledge-base' ),
+				'title' => esc_html__( 'Basic', 'echo-knowledge-base' ),
 				'icon'  => '',
 			], */
 			[
 				'name'  => 'design',
-				'title' => __( 'KB Design', 'echo-knowledge-base' ),
+				'title' => esc_html__( 'KB Design', 'echo-knowledge-base' ),
 				'icon'  => 'epkbfa epkbfa-paint-brush',
 			],
 			[
 				'name'  => 'article-features',
-				'title' => __( 'Articles', 'echo-knowledge-base' ),
+				'title' => esc_html__( 'Articles', 'echo-knowledge-base' ),
 				'icon'  => 'epkbfa epkbfa-newspaper-o',
 			],
 			[
 				'name'  => 'search',
-				'title' => __( 'Search', 'echo-knowledge-base' ),
+				'title' => esc_html__( 'Search', 'echo-knowledge-base' ),
 				'icon'  => 'epkbfa epkbfa-search',
 			],
 			[
 				'name'  => 'shortcodes',
-				'title' => __( 'Shortcodes' ),
+				'title' => esc_html__( 'Shortcodes' ),
 				'icon'  => 'epkbfa epkbfa-list-alt',
 			],
 			[
 				'name'  => 'widgets',
-				'title' => __( 'Widgets', 'echo-knowledge-base' ),
+				'title' => esc_html__( 'Widgets', 'echo-knowledge-base' ),
 				'icon'  => 'epkbfa epkbfa-list-alt',
 			],
 			[
 				'name'  => 'compatibility',
-				'title' => __( 'Compatibility', 'echo-knowledge-base' ),
+				'title' => esc_html__( 'Compatibility', 'echo-knowledge-base' ),
 				'icon'  => 'epkbfa epkbfa-handshake-o',
 			],
 			[
 				'name'  => 'advanced',
-				'title' => __( 'Advanced', 'echo-knowledge-base' ),
+				'title' => esc_html__( 'Advanced', 'echo-knowledge-base' ),
 				'icon'  => 'epkbfa epkbfa-rocket',
 			],
 		];
@@ -1112,7 +1070,7 @@ class EPKB_Need_Help_Features {
 			'active' => true,
 
 			// Secondary Panel Item
-			'label_text' => __( 'All Features', 'echo-knowledge-base' ),
+			'label_text' => esc_html__( 'All Features', 'echo-knowledge-base' ),
 
 			// Secondary Boxes List
 			'boxes_list' => self::features_tab_all( $features_list ),
@@ -1125,7 +1083,7 @@ class EPKB_Need_Help_Features {
 			'list_key' => 'most-popular',
 
 			// Secondary Panel Item
-			'label_text' => __( 'Most Popular', 'echo-knowledge-base' ),
+			'label_text' => esc_html__( 'Most Popular', 'echo-knowledge-base' ),
 
 			// Secondary Boxes List
 			'boxes_list' => self::features_tab_most_popular( $features_list ),
@@ -1283,7 +1241,7 @@ class EPKB_Need_Help_Features {
 		} else if ( $box['plugin'] == 'ep'.'hd' ) { ?>
             <a class="epkb-kbnh__feature-status epkb-kbnh__feature--disabled epkb-success-btn" href="<?php echo esc_url( admin_url( 'edit.php?post_type=' . EPKB_KB_Handler::get_post_type( EPKB_KB_Handler::get_current_kb_id() ) . '&page=epkb-add-ons#our-free-plugins' ) ); ?>" target="_blank"><span><?php esc_html_e( 'Free Install', 'echo-knowledge-base' ) ?></span></a>   <?php
 		} else {    ?>
-            <a class="epkb-kbnh__feature-status epkb-kbnh__feature--disabled epkb-success-btn" href="<?php echo EPKB_Core_Utilities::get_plugin_sales_page( $box['plugin'] ) ?>" target="_blank"><span><?php echo esc_html__( 'Upgrade', 'echo-knowledge-base' ); ?></span></a> <?php
+            <a class="epkb-kbnh__feature-status epkb-kbnh__feature--disabled epkb-success-btn" href="<?php echo esc_url( EPKB_Core_Utilities::get_plugin_sales_page( $box['plugin'] ) ); ?>" target="_blank"><span><?php echo esc_html__( 'Upgrade', 'echo-knowledge-base' ); ?></span></a> <?php
 		}
 
 		return ob_get_clean();
@@ -1295,7 +1253,6 @@ class EPKB_Need_Help_Features {
 	 * @return false|string
 	 */
 	private static function features_tab_footer() {
-
 		ob_start();     ?>
 
 		<span><?php esc_html_e( 'Cannot find a feature?', 'echo-knowledge-base' ); ?></span>
@@ -1304,19 +1261,7 @@ class EPKB_Need_Help_Features {
 		return ob_get_clean();
 	}
 
-	private static function get_editor_zone_link( $page_type, $zone ) {
-		global $first_main_page_url, $first_article_page_url;
-		$page_url = $page_type == 'main_page' ? $first_main_page_url : $first_article_page_url;
-		return empty( $first_main_page_url ) ? '' : add_query_arg( array('action' => 'epkb_load_editor', 'preopen_zone' => $zone), $page_url );
-	}
-
-	private static function get_editor_config_link( $page_type, $setting ) {
-		global $first_main_page_url, $first_article_page_url;
-		$page_url = $page_type == 'main_page' ? $first_main_page_url : $first_article_page_url;
-		return empty( $first_main_page_url ) ? '' : add_query_arg( array('action' => 'epkb_load_editor', 'preopen_setting' => $setting), $page_url );
-	}
-
-	private static function get_settings_link( $kb_id, $config_page='', $config_tab='', $config_sub_tab='', $config_box='' ) {
+	public static function get_settings_link( $kb_id, $config_page='', $config_tab='', $config_sub_tab='', $config_box='' ) {
         $url = '/edit.php?post_type=' . EPKB_KB_Handler::get_post_type( $kb_id ) . '&page=epkb-kb-configuration#' . $config_page;
 		$url .= empty( $config_tab ) ? '__' : '__' . $config_tab;
 		$url .= empty( $config_sub_tab ) ? '__' : '__' . $config_sub_tab;

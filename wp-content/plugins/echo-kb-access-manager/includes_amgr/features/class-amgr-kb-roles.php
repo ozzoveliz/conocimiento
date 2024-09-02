@@ -168,6 +168,7 @@ class AMGR_KB_Roles {
 			AMGR_KB_Role::KB_ROLE_MANAGER . "admin_eckb_access_frontend_editor_write",
 			AMGR_KB_Role::KB_ROLE_MANAGER . "admin_eckb_access_search_analytics_read",
 			AMGR_KB_Role::KB_ROLE_MANAGER . "admin_eckb_access_addons_news_read",
+			AMGR_KB_Role::KB_ROLE_MANAGER . "admin_eckb_access_faqs_write",
 			AMGR_KB_Role::KB_ROLE_MANAGER . "admin_eckb_access_manager_page",
 			AMGR_KB_Role::KB_ROLE_MANAGER . "admin_eckb_access_crud_users",
 			AMGR_KB_Role::KB_ROLE_MANAGER . "admin_eckb_access_crud_groups"

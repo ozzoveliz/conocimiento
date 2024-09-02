@@ -23,7 +23,7 @@ class EPKB_Need_Help_Contact_Us {
 			'list_key' => 'contact-us',
 
 			// Top Panel Item
-			'label_text' => __( 'Contact Us', 'echo-knowledge-base' ),
+			'label_text' => esc_html__( 'Contact Us', 'echo-knowledge-base' ),
 			'icon_class' => 'epkbfa epkbfa-envelope-o',
 
 			// Boxes List
@@ -60,9 +60,9 @@ class EPKB_Need_Help_Contact_Us {
 						'container_class'   => '',
 						'style' => 'style-2',
 						'icon_class'    => 'epkbfa-rocket',
-						'title'         => __( 'Cannot Find a Feature?', 'echo-knowledge-base' ),
-						'content'       => '<p>' . __( 'We can help you find it or add it to our road map if it is missing.', 'echo-knowledge-base' ) . '</p>',
-						'btn_text'      => __( 'Ask About a Feature', 'echo-knowledge-base' ),
+						'title'         => esc_html__( 'Cannot Find a Feature?', 'echo-knowledge-base' ),
+						'content'       => '<p>' . esc_html__( 'We can help you find it or add it to our road map if it is missing.', 'echo-knowledge-base' ) . '</p>',
+						'btn_text'      => esc_html__( 'Ask About a Feature', 'echo-knowledge-base' ),
 						'btn_url'       => 'https://www.echoknowledgebase.com/feature-request/',
 						'btn_target'    => '__blank',
 					) );
@@ -71,10 +71,10 @@ class EPKB_Need_Help_Contact_Us {
 						'container_class'   => '',
 						'style' => 'style-2',
 						'icon_class'    => 'epkbfa-life-ring',
-						'title'         => __( 'Submit an Issue', 'echo-knowledge-base' ),
-						'content'       => '<p>' . __( 'Submit a technical support question for something that is not working correctly.', 'echo-knowledge-base' ) . '</p>
-										<p>' . __( 'We usually reply within an hour.', 'echo-knowledge-base' ) . '</p>',
-						'btn_text'      => __( 'Contact Our Support', 'echo-knowledge-base' ),
+						'title'         => esc_html__( 'Submit an Issue', 'echo-knowledge-base' ),
+						'content'       => '<p>' . esc_html__( 'Submit a technical support question for something that is not working correctly.', 'echo-knowledge-base' ) . '</p>
+										<p>' . esc_html__( 'We usually reply within an hour.', 'echo-knowledge-base' ) . '</p>',
+						'btn_text'      => esc_html__( 'Contact Our Support', 'echo-knowledge-base' ),
 						'btn_url'       => 'https://www.echoknowledgebase.com/technical-support/',
 						'btn_target'    => '__blank',
 					) );
@@ -83,9 +83,9 @@ class EPKB_Need_Help_Contact_Us {
 						'container_class'   => '',
 						'style' => 'style-2',
 						'icon_class'    => 'epkbfa-comments-o',
-						'title'         => __( 'General and Pre-Sale Questions', 'echo-knowledge-base' ),
-						'content'       => '<p>' . __( 'Do you have a pre-sale question, and do you need some clarification?', 'echo-knowledge-base' ) . '</p>',
-						'btn_text'      => __( 'Ask a Question', 'echo-knowledge-base' ),
+						'title'         => esc_html__( 'General and Pre-Sale Questions', 'echo-knowledge-base' ),
+						'content'       => '<p>' . esc_html__( 'Do you have a pre-sale question, and do you need some clarification?', 'echo-knowledge-base' ) . '</p>',
+						'btn_text'      => esc_html__( 'Ask a Question', 'echo-knowledge-base' ),
 						'btn_url'       => 'https://www.echoknowledgebase.com/pre-sale-question/',
 						'btn_target'    => '__blank',
 					) );		?>

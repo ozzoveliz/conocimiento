@@ -259,6 +259,27 @@
     opacity: 0; } }
 .amag-private-admin .subsubsub .count {
   display: none; }
+.amag-private-admin .amgr-orphan-list-categories {
+  border: solid 1px #ddd;
+  padding: 5px 10px;
+  margin-top: 50px; }
+  .amag-private-admin .amgr-orphan-list-categories .amgr-olc-heading {
+    display: flex;
+    width: 100%;
+    margin-bottom: 10px;
+    font-weight: bold; }
+    .amag-private-admin .amgr-orphan-list-categories .amgr-olc-heading .amgr-olc-col {
+      min-width: 400px; }
+  .amag-private-admin .amgr-orphan-list-categories .amgr-olc-list .amgr-category {
+    display: flex;
+    width: 100%;
+    border-top: solid 1px #ddd;
+    padding: 10px 0;
+    margin-bottom: 6px; }
+    .amag-private-admin .amgr-orphan-list-categories .amgr-olc-list .amgr-category .amgr-category__name_action {
+      min-width: 400px; }
+    .amag-private-admin .amgr-orphan-list-categories .amgr-olc-list .amgr-category .amgr-category__slug {
+      min-width: 400px; }
 .amag-private-admin #amag-access-manager-container {
   content: "";
   display: block;
@@ -736,6 +757,8 @@
       border: solid 1px #666; }
     .amag-private-admin #amag-access-manager-container .amag-notification-box.amag-collapse .amag-body-checkboxes {
       display: none; }
+      .amag-private-admin #amag-access-manager-container .amag-notification-box.amag-collapse .amag-body-checkboxes li {
+        list-style-type: none; }
     .amag-private-admin #amag-access-manager-container .amag-notification-box.amag-collapse .amag-footer {
       display: none; }
     .amag-private-admin #amag-access-manager-container .amag-notification-box .amag-error .amag-header {
@@ -818,6 +841,8 @@
     margin-left: -316.5px;
     /* Negative half of width. */
     z-index: 9999; }
+    .amag-private-admin #amag-access-manager-container .amag-notification-box.amag-popup li {
+      list-style-type: none; }
   .amag-private-admin #amag-access-manager-container .kb-info-section {
     float: left;
     width: 100%;
@@ -1594,9 +1619,9 @@
       border-radius: 5px;
       margin: 0 2px 0 0;
       color: #fff;
-      background-color: #F0BC71; }
+      background-color: #70bc48; }
       .amag-private-admin #amag-access-manager-container #amgr-articles-content .amgr-public-access-icon + span {
-        color: #b57313; }
+        color: #2e4e1d; }
     .amag-private-admin #amag-access-manager-container #amgr-articles-content .amgr-content-articles li {
       height: 33px !important; }
   .amag-private-admin #amag-access-manager-container #amgr-categories-content {
@@ -1624,7 +1649,8 @@
           border: solid 1px #666;
           padding: 10px;
           font-weight: bold;
-          text-transform: uppercase; }
+          text-transform: uppercase;
+          min-height: inherit; }
           .amag-private-admin #amag-access-manager-container #amgr-categories-content .amgr-content-categories .amgr-category-controls fieldset legend {
             padding: 10px;
             margin-left: 20px;
@@ -1634,14 +1660,15 @@
           display: block;
           float: left; }
           .amag-private-admin #amag-access-manager-container #amgr-categories-content .amgr-content-categories .amgr-category-controls .amgr-edit-mode-container ul {
+            display: flex;
             padding: 0;
             margin: 0; }
             .amag-private-admin #amag-access-manager-container #amgr-categories-content .amgr-content-categories .amgr-category-controls .amgr-edit-mode-container ul li {
-              float: left;
-              display: block;
-              padding: 10px 0;
+              display: flex;
+              gap: 10px;
+              padding: 10px 10px;
               margin: 10px;
-              width: 150px;
+              width: 280px;
               text-align: center; }
               .amag-private-admin #amag-access-manager-container #amgr-categories-content .amgr-content-categories .amgr-category-controls .amgr-edit-mode-container ul li input:checked + label {
                 font-weight: bold; }
@@ -1725,12 +1752,16 @@
           font-weight: bold;
           text-transform: uppercase;
           border: solid 1px #666;
-          background-color: #fff; }
+          background-color: #fff;
+          display: flex;
+          flex-direction: column;
+          text-align: left; }
           .amag-private-admin #amag-access-manager-container #amgr-categories-content .amgr-content-categories #amgr-category-access-levels .amgr-category-access-heading .amgr-category-access-heading-title {
-            display: block; }
+            display: block;
+            margin-bottom: 14px; }
           .amag-private-admin #amag-access-manager-container #amgr-categories-content .amgr-content-categories #amgr-category-access-levels .amgr-category-access-heading .amgr-category-access-heading-legend {
             display: block;
-            font-size: 12px; }
+            font-size: 11px; }
         .amag-private-admin #amag-access-manager-container #amgr-categories-content .amgr-content-categories #amgr-category-access-levels .amgr-no-access {
           background: #ff5522;
           background: linear-gradient(to right, #ff8065 0%, #ff4d24 100%);
@@ -1880,7 +1911,11 @@
       border-radius: 5px;
       margin: 0 2px 0 0;
       color: #fff;
-      background-color: #e5921f; }
+      background-color: #70bc48; }
+  .amag-private-admin #amag-access-manager-container #epkb-access-config .amgr-access-config-inner h3 {
+    font-size: 20px !important; }
+  .amag-private-admin #amag-access-manager-container #epkb-access-config .amgr-access-config-inner #amgr-enable-private-config {
+    margin-bottom: 30px; }
   .amag-private-admin #amag-access-manager-container #epkb-access-config .amgr-access-config-inner .epkb-amgr-form-field .input_group {
     list-style: none; }
     .amag-private-admin #amag-access-manager-container #epkb-access-config .amgr-access-config-inner .epkb-amgr-form-field .input_group .radio-buttons-vertical ul {

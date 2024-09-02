@@ -81,7 +81,6 @@ class EPKB_Logging {
 		$kb_id = EPKB_Utilities::is_multiple_kbs_enabled() ? $kb_id : EPKB_KB_Config_DB::DEFAULT_KB_ID;
 
 		// add new error log entry but remove oldest one if more than max
-		// FUTURE TODO log current user
 		$error_log[] = array( 'plugin' => 'EPKB', 'kb' => $kb_id, 'date' => date("Y-m-d H:i:s"), 'message' => $error_message, 'trace' => $stack_trace );
 
 		if ( count($error_log) > self::MAX_NOF_LOGS_STORED ) {
@@ -138,11 +137,10 @@ class EPKB_Logging {
 	}
 	
 	public static function to_string( $error, $details=true ) {
-		$kb_id_text = defined('EM'.'KB_PLUGIN_NAME') && ! empty($error['kb']) ? 'KB ID: ' . $error['kb'] . ', ' : '';
-		$error_msg = empty($error['message']) ? '' : $error['message'];
-		$error_trace = empty($error['trace']) ? '' : $error['trace'];
-		$output = $kb_id_text . '<br>' . $error_msg . '<br>' . ( $details ? $error_trace : '' );
-		return $output;
+		$kb_id_text = defined( 'EM'.'KB_PLUGIN_NAME' ) && ! empty( $error['kb'] ) ? 'KB ID: ' . $error['kb'] . ', ' : '';
+		$error_msg = empty( $error['message'] ) ? '' : $error['message'];
+		$error_trace = empty( $error['trace'] ) ? '' : $error['trace'];
+		return esc_html( $kb_id_text ) . '<br>' . wp_kses_post( $error_msg ) . '<br>' . ( $details ? wp_kses_post( $error_trace ) : '' );
 	}
 
 	public static function disable_logging() {

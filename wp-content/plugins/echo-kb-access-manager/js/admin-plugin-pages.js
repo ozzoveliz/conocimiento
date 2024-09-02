@@ -190,6 +190,36 @@ jQuery(document).ready(function($) {
 		window.location.hash = '#' + list_key;
 	});
 
+	// Open iframe with editor
+	$( document ).on('click', '.epkb-main-page-editor-link a, .epkb-article-page-editor-link a, .epkb-archive-page-editor-link a, .epkb-search-page-editor-link a', function( e ){
+		if ( $('[name=editor_backend_mode]:checked').length == 0 || $('[name=editor_backend_mode]:checked').val() == 0 ) {
+			return true;
+		}
+
+		let link_href = $( this ).prop( 'href' );
+		$( 'body' ).append(`
+			<div class="epkb-editor-popup" id="epkb-editor-popup">
+				<iframe src="${link_href}" ></iframe>
+			</div>
+		`);
+
+		e.stopPropagation();
+		return false;
+	} );
+
+	// Do not close Editor backend mode when click inside it
+	$( 'body' ).on('click', '.epkb-editor-popup', function(e){
+		e.stopPropagation();
+	} );
+
+	// Let tabs open via triggering their click events before initialize close event for Editor backend mode
+	setTimeout( function () {
+		// Close Editor backend mode when click outside it
+		$( 'body' ).on( 'click', function() {
+			$( '.epkb-editor-popup' ).remove();
+		} );
+	}, 3000 );
+
 	// Set correct active tab after the page reloading
 	(function(){
 		let url_parts = window.location.href.split( '#' );
@@ -246,6 +276,12 @@ jQuery(document).ready(function($) {
 					$target_box.addClass( 'epkb-highlighted_config_box' );
 				}, 200 );
 			}
+
+			// Trigger target link if defined
+			if ( target_keys.length > 4 ) {
+				$( '.epkb-' + target_keys[4] + '-link a' ).trigger( 'click' );
+			}
+
 			return;
 		}
 
@@ -1015,6 +1051,11 @@ jQuery(document).ready(function($) {
 			content: '',
 		};
 
+
+		// set value to empty
+		$( '#epkb-faq-wp-editor__faq-title' ).val( '' );
+		$( '#epkb-faq-question-wp-editor' ).val( '' );
+
 		// New question
 		if ( typeof faq_id == 'undefined' || ! faq_id ) {
 			$( '#epkb-faq-question-wp-editor-popup' ).addClass( 'epkb-faq-question-wp-editor-popup--active' );
@@ -1064,10 +1105,10 @@ jQuery(document).ready(function($) {
 		if ( editor && $( '.wp-editor-wrap' ).hasClass( 'tmce-active' ) ) {
 			editor.setContent( faq_question_form.content );
 		} else {
-			$( '#ephd-fp__wp-editor' ).val( faq_question_form.content );
+			$( '#epkb-faq-question-wp-editor' ).val( faq_question_form.content );
 		}
 
-		$( '.ephd-characters_left-counter' ).text( faq_question_form.content.length + '' );
+		$( '.epkb-characters_left-counter' ).text( faq_question_form.content.length + '' );
 	}
 
 	// Check visibility of no FAQs message
@@ -1660,29 +1701,6 @@ jQuery(document).ready(function($) {
 	}
 	clear_message_after_set_time();
 
-	// open iframe with editor
-	$(document).on('click', '.epkb-main-page-editor-link a, .epkb-article-page-editor-link a, .epkb-archive-page-editor-link a, .epkb-search-page-editor-link a', function(){
-		if ( $('[name=editor_backend_mode]:checked').length == 0 || $('[name=editor_backend_mode]:checked').val() == 0 ) {
-			return true;
-		}
-
-		$('body').append(`
-			<div class="epkb-editor-popup" id="epkb-editor-popup">
-				<iframe src="${$(this).prop('href')}" ></iframe>
-			</div>
-		`);
-
-		return false;
-	});
-
-	$('body').on('click', '.epkb-editor-popup', function(e){
-		e.stopPropagation()
-	});
-
-	$('body').on('click', function(){
-		$('.epkb-editor-popup').remove();
-	});
-
 	$( document ).on( 'click', '#eckb-kb-create-demo-data', function( e ) {
 		e.preventDefault();
 
@@ -1832,6 +1850,19 @@ jQuery(document).ready(function($) {
 		return false;
 	});
 
+	// Link to Settings tab inside admin notices when the same page is currently open
+	$( document ).on( 'click', '.epkb-notification-box-top__body__desc a', function( e ) {
+		let location_parts = $( this ).attr( 'href' ).split( '#' );
+		if ( location_parts.length > 1 ) {
+			let target_top_tab = $( '.epkb-admin__top-panel__item--' + location_parts[1] );
+			if ( target_top_tab.length ) {
+				e.preventDefault();
+				target_top_tab.trigger( 'click' );
+				return false;
+			}
+		}
+	});
+
 	$('.epkb-admin__color-field input').wpColorPicker({
 		change: function( colorEvent, ui) {
 			setTimeout( function() {
@@ -1860,6 +1891,13 @@ jQuery(document).ready(function($) {
 		}
 
 		$wrap.find('input, select, textarea').each(function(){
+
+			// ignore inputs with empty name and pro feature fields (an ad field)
+			if ( ! $( this ).attr( 'name' ) || ! $( this ).attr( 'name' ).length
+				|| $( this ).closest( '.epkb-input-group' ).find( '.epkb__option-pro-tag' ).length
+				|| $( this ).closest( '.epkb-input-group' ).find( '.epkb__option-pro-tag-container' ).length ) {
+				return true;
+			}
 
 			if ( $(this).attr('type') === 'checkbox' ) {
 
@@ -1963,9 +2001,8 @@ jQuery(document).ready(function($) {
 		// AND LOGIC: Find content that is dependent to the current input
 		let and_dependent_targets = $( '.eckb-condition-depend-and__' + current_input.attr( 'name' ) );
 
-		// Hide all dependent fields if the current input is not visible
+		// Hide all dependent fields if the current input is not visible - only for AND logic, because OR logic can be satisfied with any of dependency
 		if ( $( this ).css( 'display' ) === 'none' ) {
-			$( or_dependent_targets ).hide();
 			$( and_dependent_targets ).hide();
 			return;
 		}
@@ -1989,6 +2026,8 @@ jQuery(document).ready(function($) {
 
 			// First hide the dependent content, and then show it if any of its currently visible dependencies has corresponding value
 			$( this ).hide();
+			$( this ).closest( '.epkb-input-group-combined-units').find( '.epkb-input-desc' ).hide();
+
 			for ( let i = 0; i < all_dependency_fields.length; i++ ) {
 
 				// Find dependency field
@@ -2016,6 +2055,7 @@ jQuery(document).ready(function($) {
 				// Show dependent content if value of the dependency input in dependency values list
 				if ( all_dependency_values.indexOf( dependency_input.val() ) >= 0 ) {
 					$( this ).show();
+					$( this ).closest( '.epkb-input-group-combined-units').find( '.epkb-input-desc' ).show();
 					trigger_conditional_field_click( current_field_id );
 					return;
 				}
@@ -2102,14 +2142,20 @@ jQuery(document).ready(function($) {
 
 	// Allow only one active sidebar
 	$( '.epkb-input[name="article_nav_sidebar_type_left"]' ).change( function() {
+		if ( $( this ).closest( '.epkb-admin__select-field' ).css( 'display' ) === 'none' ) {
+			return;
+		}
 		if ( $( this ).val() !== 'eckb-nav-sidebar-none' ) {
-			$( '#article_nav_sidebar_type_right2' ).parent().click();
+			$( '[name="article_nav_sidebar_type_right"][value="eckb-nav-sidebar-none"]' ).parent().find( '.epkb-label' ).click();
 			$( this ).click();
 		}
 	});
 	$( '.epkb-input[name="article_nav_sidebar_type_right"]' ).change( function() {
+		if ( $( this ).closest( '.epkb-admin__select-field' ).css( 'display' ) === 'none' ) {
+			return;
+		}
 		if ( $( this ).val() !== 'eckb-nav-sidebar-none' ) {
-			$( '#article_nav_sidebar_type_left2' ).parent().click();
+			$( '[name="article_nav_sidebar_type_left"][value="eckb-nav-sidebar-none"]' ).parent().find( '.epkb-label' ).click();
 			$( this ).click();
 		}
 	});
@@ -2211,16 +2257,32 @@ jQuery(document).ready(function($) {
 
 		// Select default location
 		if ( $( this ).prop( 'checked' ) ) {
-			$( '#toc_left' ).val( '1' ).trigger( 'change' );
-			// $( '#toc_right, #toc_content' ).val( '0' ).trigger( 'change' );
-			$( '#toc_locations0' ).prop( 'checked', true );
-			$( '#toc_locations1, #toc_locations2' ).prop( 'checked', false );
+
+			// Case 1: set to first available position on Left Sidebar
+			if ( set_toc_to_article_sidebar_position( 'left' ) ) {
+				return;
+			}
+
+			// Case 2: if all positions of Left Sidebar have components, then try set to Right Sidebar
+			if ( set_toc_to_article_sidebar_position( 'right' ) ) {
+				return;
+			}
+
+			// Case 3: if all positions of both Sidebars have components, then set to Content
+			$( '#toc_content' ).val( '1' ).trigger( 'change' );
+			$( '#toc_locations1' ).prop( 'checked', true );
+			$( '#toc_locations0, #toc_locations2' ).prop( 'checked', false );
 			return;
 		}
 
 		// Unselect all locations
-		$( '#toc_left, #toc_content, #toc_right' ).val( '0' ).trigger( 'change' );
-		$( '#toc_locations input, #toc_locations0').prop( 'checked', false );
+		$( '#toc_content' ).val( '0' ).trigger( 'change' );
+		$( '#toc_locations input' ).prop( 'checked', false );
+
+		// Unselect from Sidebar positions
+		unselect_toc_in_article_sidebar_positions();
+
+		$( this ).trigger( 'check_toggler' );
 	} );
 	$( document ).on( 'check_toggler', '#toc_toggler input', function() {
 		let state = false;
@@ -2232,15 +2294,49 @@ jQuery(document).ready(function($) {
 		$( this ).prop( 'checked', state );
 	} );
 
-	// TOC Location - update icons and set corresponding Position (left 1, or left 2, or right 1, etc)
+	// TOC Location - update icons and set corresponding Position
 	$( document ).on( 'click', '#toc_locations input', function() {
-		let current_location_input = $( this );
-		let target_position_input = $( '#' + current_location_input.prop( 'value' ) );
+		let current_location = $( this ).prop( 'value' );
+		let input_checked = $( this ).prop( 'checked' );
+		let is_toc_set = false;
+
+		switch ( current_location ) {
+
+			case 'toc_left':
+				unselect_toc_in_article_sidebar_positions();
+				$( '#toc_content' ).val( '0' ).trigger( 'change' );
+				if ( input_checked ) {
+					is_toc_set = set_toc_to_article_sidebar_position( 'left' );
+				}
+				break;
+
+			case 'toc_content':
+				unselect_toc_in_article_sidebar_positions();
+				$( '#toc_content' ).val( '0' ).trigger( 'change' );
+				if ( input_checked ) {
+					$( '#toc_locations1' ).prop( 'checked', true );
+					$( '#toc_locations0, #toc_locations2' ).prop( 'checked', false );
+					$( '#toc_content' ).val( '1' ).trigger( 'change' );
+					is_toc_set = true;
+				}
+				break;
+
+			case 'toc_right':
+				unselect_toc_in_article_sidebar_positions();
+				$( '#toc_content' ).val( '0' ).trigger( 'change' );
+				if ( input_checked ) {
+					is_toc_set = set_toc_to_article_sidebar_position( 'right' );
+				}
+				break;
+
+			default:
+				break;
+		}
 
 		$( '#toc_locations input' ).each( function() {
 
-			// Skip current Location input
-			if ( $( this ).prop( 'value' ) === current_location_input.prop( 'value' ) ) {
+			// Skip current Location input (unset current location if failed to set toc position to the current location)
+			if ( $( this ).prop( 'value' ) === current_location && is_toc_set ) {
 				return true;
 			}
 
@@ -2248,36 +2344,57 @@ jQuery(document).ready(function($) {
 			$( this ).prop( 'checked', false );
 		} );
 
-		// Set corresponding value in target Position input
-		if ( current_location_input.prop( 'checked' ) ) {
-			target_position_input.val( '1' ).trigger( 'change' );
-		} else {
-			target_position_input.val( '0' ).trigger( 'change' );
-		}
-
 		// Refresh toggler
 		$( '#toc_toggler input' ).trigger( 'check_toggler' );
 	} );
-
-	// TOC Position - allow to select only one Position; update Locations input and visibility toggle
-	$( document ).on( 'change', '.epkb-admin__input-field--toc-positions select', function() {
-		let position_input_value = Number( $( this ).val() );
-		let position_input_id = $( this ).attr( 'id' );
-
-		if ( position_input_value ) {
-			// Unselect other TOC Position inputs if current Position input has not empty value
-			$( '.epkb-admin__input-field--toc-positions select:not(#' + position_input_id + ')' ).val( '0' ).trigger( 'change' );
-
-			// Select TOC Location
-			$( '#toc_locations input[value="' + position_input_id + '"]' ).prop( 'checked', true );
-
-		} else {
-			// Unselect TOC Location
-			$( '#toc_locations input[value="' + position_input_id + '"]' ).prop( 'checked', false );
+	function unselect_toc_in_article_sidebar_positions() {
+		$( '#toc_left, #toc_right' ).each( function() {
+			if ( parseInt( $( this ).val() ) > 0 ) {
+				$( this ).val( '0' ).trigger( 'change' );
+			}
+		} );
+	}
+	function set_toc_to_article_sidebar_position( sidebar_suffix ) {
+		let is_toc_set = false;
+		if ( parseInt( $( '#toc_' + sidebar_suffix ).val() ) === 0 ) {
+			$( '#toc_' + sidebar_suffix ).val( '3' ).trigger( 'change' );
+			is_toc_set = true;
 		}
+		return is_toc_set;
+	}
 
-		// Refresh toggler
-		$( '#toc_toggler input' ).trigger( 'check_toggler' );
+	// Article Sidebar Position - update TOC Location setting on TOC selection
+	$( document ).on( 'change', '#toc_left', function( event, is_triggered_for_update ) {
+		if ( parseInt( $( this ).val() ) > 0 ) {
+			$( '#toc_locations0' ).prop( 'checked', true );
+			$( '#toc_locations1, #toc_locations2' ).prop( 'checked', false );
+			$( '#toc_content' ).val( '0' ).trigger( 'change' );
+			$( '#toc_toggler input' ).trigger( 'check_toggler' );
+			$( this ).data( 'prev-value', '3' );
+		} else if ( parseInt( $( this ).data( 'prev-value' ) ) > 0 ) {
+			$( this ).data( 'prev-value', $( this ).val() );
+			if ( ! is_triggered_for_update ) {
+				$( '#toc_locations0, #toc_locations1, #toc_locations2' ).prop( 'checked', false );
+				$( '#toc_content' ).val( '0' ).trigger( 'change' );
+				$( '#toc_toggler input' ).trigger( 'check_toggler' );
+			}
+		}
+	} );
+	$( document ).on( 'change', '#toc_right', function( event, is_triggered_for_update ) {
+		if ( parseInt( $( this ).val() ) > 0 ) {
+			$( '#toc_locations2' ).prop( 'checked', true );
+			$( '#toc_locations0, #toc_locations1' ).prop( 'checked', false );
+			$( '#toc_content' ).val( '0' ).trigger( 'change' );
+			$( '#toc_toggler input' ).trigger( 'check_toggler' );
+			$( this ).data( 'prev-value', '3' );
+		} else if ( parseInt( $( this ).data( 'prev-value' ) ) > 0 ) {
+			$( this ).data( 'prev-value', $( this ).val() );
+			if ( ! is_triggered_for_update ) {
+				$( '#toc_locations0, #toc_locations1, #toc_locations2' ).prop( 'checked', false );
+				$( '#toc_content' ).val( '0' ).trigger( 'change' );
+				$( '#toc_toggler input' ).trigger( 'check_toggler' );
+			}
+		}
 	} );
 
 	// Toggler to disable related inputs
@@ -2553,28 +2670,70 @@ jQuery(document).ready(function($) {
 		// Handle change of value
 		let new_value = $( this ).data( 'value' );
 		let input_container = $( this ).closest( '.input_container' );
-		$( input_container ).find( '.epkb-input-custom-dropdown__option' ).removeClass( 'epkb-input-custom-dropdown__option--selected' );
+		input_container.find( '.epkb-input-custom-dropdown__option' ).removeClass( 'epkb-input-custom-dropdown__option--selected' );
 		$( this ).addClass( 'epkb-input-custom-dropdown__option--selected' );
+		let prev_value = input_container.find( 'select' ).val();
 
 		// Hide list of options
-		$( input_container ).find( '.epkb-input-custom-dropdown__options-list' ).hide();
+		input_container.find( '.epkb-input-custom-dropdown__options-list' ).hide();
 
 		// Change value for the hidden select (to have it filled on form submission)
-		$( input_container ).find( 'select' ).val( new_value ).trigger( 'change' );
+		input_container.find( 'select' ).val( new_value ).trigger( 'change' );
 
 		// Update label text of the custom dropdown
-		let value_label = $( input_container ).find( 'select option[value="' + new_value + '"]' ).html();
-		$( input_container ).find( '.epkb-input-custom-dropdown__input span' ).html( value_label );
+		let value_label = input_container.find( 'select option[value="' + new_value + '"]' ).html();
+		input_container.find( '.epkb-input-custom-dropdown__input span' ).html( value_label );
+
+		let current_input_name = input_container.find( 'select' ).attr( 'name' );
 
 		// Unset current value in other dropdowns of the current unselection group
-		let current_input_name = $( input_container ).find( 'select' ).attr( 'name' );
 		let current_unselection_group = $( this ).closest( '[data-custom-unselection-group]' ).data( 'custom-unselection-group' );
 		$( '[data-custom-unselection-group="' + current_unselection_group + '"] select' ).each( function() {
 			if ( current_input_name !== $( this ).attr( 'name' ) && $( this ).val() === new_value ) {
-				$( this ).val( 'none' ).trigger( 'change' ); // trigger 'change' to have the updated appearance of select element in browser
+				$( this ).val( 'none' ).trigger( 'change', true ); // trigger 'change' to have the updated appearance of select element in browser
 				$( this ).closest( '.eckb-conditional-setting-input' ).trigger( 'click' ); // trigger dependent fields
 			}
 		} );
+
+		// Unset other dropdowns of the current unselection group if any of them has non-zero value
+		let current_nonzero_unselection_group = $( this ).closest( '[data-custom-nonzero-unselection-group]' ).data( 'custom-nonzero-unselection-group' );
+		$( '[data-custom-nonzero-unselection-group="' + current_nonzero_unselection_group + '"] select' ).each( function() {
+			if ( parseInt( new_value ) > 0 && current_input_name !== $( this ).attr( 'name' ) && parseInt( $( this ).val() ) > 0 ) {
+				$( this ).val( '0' ).trigger( 'change', true ); // trigger 'change' to have the updated appearance of select element in browser
+				$( this ).closest( '.eckb-conditional-setting-input' ).trigger( 'click' ); // trigger dependent fields
+			}
+		} );
+
+		// When user adds a new row with a Module, use the width from the row above if any
+		if ( current_unselection_group === 'ml-row' && prev_value === 'none' && new_value !== 'none' ) {
+
+			// If row above has no module, then use prev ++, until either row above with module found or all rows above checked
+			let current_row = $( this ).closest( '.epkb-admin__form-sub-tab-wrap' );
+			let rows_above = current_row.prevAll( '.epkb-admin__form-sub-tab-wrap' );
+			rows_above.each( function() {
+
+				// Continue only if row above has module
+				let source_row_module_selector = $( this ).find( '[data-custom-selection-group="ml-row"] select' );
+				if ( source_row_module_selector.length && source_row_module_selector.val() !== 'none' ) {
+
+					let source_row_module_selector_name = source_row_module_selector.attr( 'name' );
+					let source_row_width_name = source_row_module_selector_name.replace( '_module', '_desktop_width' );
+					let source_row_width_units_name = source_row_module_selector_name.replace( '_module', '_desktop_width_units' );
+
+					let current_row_width_name = current_input_name.replace( '_module', '_desktop_width' );
+					let current_row_width_units_name = current_input_name.replace( '_module', '_desktop_width_units' );
+
+					// Set width value from row above
+					let row_width_value = $( '[name="' + source_row_width_name + '"]' ).val();
+					let row_width_units = $( '[name="' + source_row_width_units_name + '"]:checked' ).val();
+					$( '[name="' + current_row_width_name + '"]' ).val( row_width_value ).trigger( 'change' );
+					$( '[name="' + current_row_width_units_name + '"][value="' + row_width_units + '"]' ).trigger( 'click' );
+
+					// Row above with module found, then stop loop
+					return false;
+				}
+			} );
+		}
 	} );
 
 	// Update Custom Dropdown when value of its select element was programmatically changed
@@ -2621,24 +2780,6 @@ jQuery(document).ready(function($) {
 		// Show categories for selected KB
 		$( '.epkb-ml-faqs-kb-categories--' + $( this ).val() ).removeClass( 'epkb-hide-elem' );
 	} );
-
-	// SHow/Hide article counter settings based on counting active/disable
-	$( document ).on( 'change', '[name="article_views_counter_enable"]', check_article_views_options );
-	check_article_views_options();
-
-	function check_article_views_options() {
-		let checkbox = $( '[name="article_views_counter_enable"]' );
-
-		if ( checkbox.length === 0 ) {
-			return;
-		}
-
-		if ( checkbox.prop( 'checked' ) ) {
-			$( '#article_content_enable_views_counter, #article_views_counter_footer_toggle' ).show();
-		} else {
-			$( '#article_content_enable_views_counter, #article_views_counter_footer_toggle' ).hide();
-		}
-	}
 
 	// Image Icon selection
 	$( document ).on( 'click', '.epkb-admin__icon-font-selection .epkb-icon-pack__icon', function( e ) {
@@ -2805,11 +2946,31 @@ jQuery(document).ready(function($) {
 		$( '#' + popup_id ).addClass( 'epkb-dialog-pro-feature-ad--active' );
 	});
 
-	$( document ).on( 'click', function (e){
-		let target = $( e.target );
-		if ( ! target.closest( '.epkb__option-pro-tag-pro-feature-ad' ).length && ! target.closest( '.epkb-dialog-pro-feature-ad' ).length ) {
-			$( '.epkb-dialog-pro-feature-ad' ).removeClass( 'epkb-dialog-pro-feature-ad--active' );
+	$(document).on('click', function (e) {
+		let target = $(e.target);
+		if (!target.closest('.epkb__option-pro-tag-pro-feature-ad').length &&
+			!target.closest('.epkb-dialog-pro-feature-ad').length &&
+			!target.closest('.epkb-dialog-pro-feature-ad2').length) {
+			$('.epkb-dialog-pro-feature-ad, .epkb-dialog-pro-feature-ad2').removeClass('epkb-dialog-pro-feature-ad--active');
 		}
+	});
+
+	// If user clicks on the next or previous icon for php function: pro_feature_ad_box_with_images
+	let featureContainers = $( '.epkb-feature-container' );
+	let currentIndex = 0;
+
+	function showFeature( index ) {
+		featureContainers.removeClass( 'epkb-feature--active' ).eq( index ).addClass( 'epkb-feature--active' );
+	}
+
+	$( '.epkb-feature-next' ).on('click', function() {
+		currentIndex = ( currentIndex + 1 ) % featureContainers.length;
+		showFeature( currentIndex );
+	});
+
+	$( '.epkb-feature-previous' ).on('click', function() {
+		currentIndex = ( currentIndex - 1 + featureContainers.length ) % featureContainers.length;
+		showFeature( currentIndex );
 	});
 
 	// Hide PRO Setting Tooltip if click outside the tooltip
@@ -2878,39 +3039,58 @@ jQuery(document).ready(function($) {
 		$confirmation_dialog.removeClass( 'epkb-kb-article-search--active' );
 	} );
 
-	// Advanced Search presets
+	// ADVANCED SEARCH PRESETS - active dialog
 	$( document ).on( 'change', '#advanced_search_mp_presets input, #advanced_search_ap_presets input', function() {
 		$confirmation_dialog.addClass( 'epkb-dialog-box-form--active epkb-asea-presets-selection--active' );
 		$( '#epkb-admin-page-reload-confirmation .epkb-dbf__body' ).html( epkb_vars.on_asea_presets_selection );
 		return false;
 	} );
 
-	// Initialize confirmation button for Advanced Search presets
+	// ADVANCED SEARCH PRESETS - save settings
 	$( document ).on( 'click', '#epkb-admin-page-reload-confirmation.epkb-asea-presets-selection--active .epkb-dbf__footer__accept__btn', function() {
 		$confirmation_dialog.removeClass( 'epkb-dialog-box-form--active epkb-asea-presets-selection--active' );
 		save_config_tab_settings( false, true );
 	} );
 
-	// Deactivate confirmation box for Advanced Search presets
+	// ADVANCED SEARCH PRESETS - deactivate dialog
 	$( document ).on( 'click', '#epkb-admin-page-reload-confirmation.epkb-asea-presets-selection--active .epkb-dbf__footer__cancel__btn', function() {
 		$( '#advanced_search_mp_presets input[value="current"], #advanced_search_ap_presets input[value="current"]' ).prop( 'checked', true );
 		$confirmation_dialog.removeClass( 'epkb-asea-presets-selection--active' );
 	} );
 
-	// FAQs module presets
+	// CATEGORY ARCHIVE PAGE PRESETS - active dialog
+	$( document ).on( 'change', '#archive_content_sub_categories_display_mode input', function() {
+		$confirmation_dialog.addClass( 'epkb-dialog-box-form--active epkb-archive-presets-selection--active' );
+		$( '#epkb-admin-page-reload-confirmation .epkb-dbf__body' ).html( epkb_vars.on_archive_presets_selection );
+		return false;
+	} );
+
+	// CATEGORY ARCHIVE PAGE PRESETS - save settings
+	$( document ).on( 'click', '#epkb-admin-page-reload-confirmation.epkb-archive-presets-selection--active .epkb-dbf__footer__accept__btn', function() {
+		$confirmation_dialog.removeClass( 'epkb-dialog-box-form--active epkb-archive-presets-selection--active' );
+		save_config_tab_settings( false, true );
+	} );
+
+	// // CATEGORY ARCHIVE PAGE PRESETS - deactivate dialog
+	$( document ).on( 'click', '#epkb-admin-page-reload-confirmation.epkb-archive-presets-selection--active .epkb-dbf__footer__cancel__btn', function() {
+		$( '#archive_content_sub_categories_display_mode input[value="current"]' ).prop( 'checked', true );
+		$confirmation_dialog.removeClass( 'epkb-archive-presets-selection--active' );
+	} );
+
+	// FAQs MODULE PRESETS - active dialog
 	$( document ).on( 'change', '#faq_preset_name input', function() {
 		$confirmation_dialog.addClass( 'epkb-dialog-box-form--active epkb-faqs-module-presets-selection--active' );
 		$( '#epkb-admin-page-reload-confirmation .epkb-dbf__body' ).html( epkb_vars.on_faqs_presets_selection );
 		return false;
 	} );
 
-	// Initialize confirmation button for FAQs module presets
+	// FAQS MODULE PRESETS - save settings
 	$( document ).on( 'click', '#epkb-admin-page-reload-confirmation.epkb-faqs-module-presets-selection--active .epkb-dbf__footer__accept__btn', function() {
 		$confirmation_dialog.removeClass( 'epkb-dialog-box-form--active epkb-faqs-module-presets-selection--active' );
 		save_config_tab_settings( false, true );
 	} );
 
-	// Deactivate confirmation box for FAQs module presets
+	// FAQS MODULE PRESETS - deactivate dialog
 	$( document ).on( 'click', '#epkb-admin-page-reload-confirmation.epkb-faqs-module-presets-selection--active .epkb-dbf__footer__cancel__btn', function() {
 		$( '#faq_preset_name input[value="current"]' ).prop( 'checked', true );
 		$confirmation_dialog.removeClass( 'epkb-faqs-module-presets-selection--active' );
@@ -2947,5 +3127,29 @@ jQuery(document).ready(function($) {
 			loader.closest( '.epkb-general_typography-loader-wrap' ).replaceWith( response.data );
 			$( '#general_typography_font_family' ).trigger( 'change' );
 		} );
+	} );
+
+	// Switch Archive Page V3 toggle
+	$( document ).on( 'click', '#archive_page_v3_toggle .epkb-settings-control-toggle', function() {
+		$confirmation_dialog.addClass( 'epkb-dialog-box-form--active epkb-kb-archive-page--active' );
+		$( '#epkb-admin-page-reload-confirmation .epkb-dbf__body' ).html( epkb_vars.on_archive_page_v3_toggle );
+		return false;
+	});
+
+	// Initialize confirmation button for Archive Page V3 toggle
+	$( document ).on( 'click', '#epkb-admin-page-reload-confirmation.epkb-kb-archive-page--active .epkb-dbf__footer__accept__btn', function() {
+
+		// Apply changes for Archive Page
+		let archive_page_v3_toggle = $( 'input[name="archive_page_v3_toggle"]' );
+		archive_page_v3_toggle.prop( 'checked', ! archive_page_v3_toggle.prop( 'checked' ) );
+
+		// Hide confirmation dialog and save settings with page reload
+		$confirmation_dialog.removeClass( 'epkb-dialog-box-form--active epkb-kb-archive-page--active' );
+		save_config_tab_settings( false, true );
+	} );
+
+	// Deactivate confirmation box for Archive Page
+	$( document ).on( 'click', '#epkb-admin-page-reload-confirmation.epkb-kb-archive-page--active .epkb-dbf__footer__cancel__btn', function() {
+		$confirmation_dialog.removeClass( 'epkb-kb-archive-page--active' );
 	} );
 });

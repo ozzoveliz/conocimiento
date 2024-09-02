@@ -25,7 +25,7 @@ class EPKB_Layout_Drill_Down extends EPKB_Layout {
 			return;
 		}
 
-		$colClass = 'epkb-ml-top-categories-button--' . $this->get_nof_columns_int() . '-col' ;
+		$col_class = 'epkb-ml-top-categories-button--' . $this->get_nof_columns_int() . '-col' ;
 
 		$categories_icons = $this->get_category_icons();				?>
 
@@ -35,7 +35,7 @@ class EPKB_Layout_Drill_Down extends EPKB_Layout {
 			<div class="epkb-ml-drill-down-layout-categories-container">
 
 				<!-- Top Level Categories Button -->
-				<div class="epkb-ml-top-categories-button-container <?php echo esc_html( $colClass ); ?>">                    <?php
+				<div class="epkb-ml-top-categories-button-container <?php echo esc_html( $col_class ); ?>">                    <?php
 					foreach ( $this->category_seq_data as $category_id => $level_2_categories ) {
 
 						$category_name = isset( $this->articles_seq_data[ $category_id ][0] ) ? $this->articles_seq_data[ $category_id ][0] : '';
@@ -76,18 +76,18 @@ class EPKB_Layout_Drill_Down extends EPKB_Layout {
 	private function display_drill_down_category_button_lvl_1( $category_id, $categories_icons, $category_name ) {
 
 		$category_icon = EPKB_KB_Config_Category::get_category_icon( $category_id, $categories_icons );
-		$category_title_tag = empty( $this->kb_config['ml_categories_articles_category_title_html_tag'] ) ? 'div' : $this->kb_config['ml_categories_articles_category_title_html_tag'];
+		$category_title_tag_escaped = EPKB_Utilities::sanitize_html_tag( $this->kb_config['ml_categories_articles_category_title_html_tag'] );
 
 		switch ( $this->kb_config['section_head_category_icon_location'] ) {
 			case 'no_icons':            ?>
 				<section id="epkb-1-lvl-id-<?php echo esc_attr( $category_id ); ?>" data-cat-level="1" data-cat-id="<?php echo esc_attr( $category_id ); ?>" class="epkb-ml-top__cat-container epkb-ml-top__cat-container--none-location">					<?php
-					echo '<' . esc_html( $category_title_tag ) . ' ' . 'class="epkb-ml-top__cat-title"' . '>' . esc_html( $category_name ) . '</' . esc_html( $category_title_tag ) . '>'; ?>
+					echo '<' . esc_html( $category_title_tag_escaped ) . ' ' . 'class="epkb-ml-top__cat-title"' . '>' . esc_html( $category_name ) . '</' . esc_html( $category_title_tag_escaped ) . '>'; ?>
 				</section>				<?php
 				break;
 
 			case 'top':
 			case 'left':                ?>
-				<section id="epkb-1-lvl-id-<?php echo esc_attr( $category_id ); ?>" data-cat-level="1" data-cat-id="<?php echo esc_attr( $category_id ); ?>" class="epkb-ml-top__cat-container epkb-ml-top__cat-container--<?php echo $this->kb_config['section_head_category_icon_location']; ?>-location">
+				<section id="epkb-1-lvl-id-<?php echo esc_attr( $category_id ); ?>" data-cat-level="1" data-cat-id="<?php echo esc_attr( $category_id ); ?>" class="epkb-ml-top__cat-container epkb-ml-top__cat-container--<?php echo esc_attr( $this->kb_config['section_head_category_icon_location'] ); ?>-location">
 
 					<!-- Icon / Image -->					<?php
 					if ( $category_icon['type'] == 'image' ) { ?>
@@ -97,7 +97,7 @@ class EPKB_Layout_Drill_Down extends EPKB_Layout {
 					} ?>
 
 					<!-- Category Name -->					<?php
-					echo '<' . esc_html( $category_title_tag ) . ' ' . 'class="epkb-ml-top__cat-title"' . '>' . esc_html( $category_name ) . '</' . esc_html( $category_title_tag ) . '>'; ?>
+					echo '<' . esc_html( $category_title_tag_escaped ) . ' ' . 'class="epkb-ml-top__cat-title"' . '>' . esc_html( $category_name ) . '</' . esc_html( $category_title_tag_escaped ) . '>'; ?>
 
 				</section>				<?php
 				break;
@@ -106,7 +106,7 @@ class EPKB_Layout_Drill_Down extends EPKB_Layout {
 				<section id="epkb-1-lvl-id-<?php echo esc_attr( $category_id ); ?>" data-cat-level="1" data-cat-id="<?php echo esc_attr( $category_id ); ?>" class="epkb-ml-top__cat-container epkb-ml-top__cat-container--right-location">
 
 					<!-- Category Name -->					<?php
-					echo '<' . esc_html( $category_title_tag ) . ' ' . 'class="epkb-ml-top__cat-title"' . '>' . esc_html( $category_name ) . '</' . esc_html( $category_title_tag ) . '>'; ?>
+					echo '<' . esc_html( $category_title_tag_escaped ) . ' ' . 'class="epkb-ml-top__cat-title"' . '>' . esc_html( $category_name ) . '</' . esc_html( $category_title_tag_escaped ) . '>'; ?>
 
 					<!-- Icon / Image -->					<?php
 					if ( $category_icon['type'] == 'image' ) { ?>
@@ -210,7 +210,7 @@ class EPKB_Layout_Drill_Down extends EPKB_Layout {
 				<div class="epkb-ml-<?php echo esc_attr( $category_lvl ); ?>-lvl-desc-articles <?php echo esc_attr( $desc_articles_no_articles_class . ' ' . $desc_articles_no_desc_class ); ?>">    <?php
 
 					if ( ! empty( $category_desc ) ) {   ?>
-						<div class="epkb-ml-<?php echo esc_attr( $category_lvl ); ?>-lvl__desc"><?php echo esc_html( $category_desc ); ?></div> <?php
+						<div class="epkb-ml-<?php echo esc_attr( $category_lvl ); ?>-lvl__desc"><?php echo wp_kses_post( $category_desc ); ?></div> <?php
 					}
 
 					if ( ! empty( $articles_list ) ) {  ?>
@@ -263,12 +263,14 @@ class EPKB_Layout_Drill_Down extends EPKB_Layout {
 
 					$sub_category_icon = EPKB_KB_Config_Category::get_category_icon( $sub_category_id, $categories_icons ); ?>
 
-					<section id="epkb-ml-<?php echo esc_attr( $sub_category_lvl ); ?>-lvl-<?php echo $sub_category_id; ?>" class="epkb-ml__cat-container epkb-ml-<?php echo esc_attr( $sub_category_lvl ); ?>-lvl__cat-container" data-cat-level="<?php echo esc_attr( $sub_category_lvl ); ?>" data-cat-id="<?php echo esc_attr( $sub_category_id ); ?>" data-parent-cat-id="<?php echo esc_attr( $category_id ); ?>">  <?php
+					<section id="epkb-ml-<?php echo esc_attr( $sub_category_lvl ); ?>-lvl-<?php echo esc_attr( $sub_category_id ); ?>" class="epkb-ml__cat-container epkb-ml-<?php echo esc_attr( $sub_category_lvl ); ?>-lvl__cat-container"
+					         data-cat-level="<?php echo esc_attr( $sub_category_lvl ); ?>" data-cat-id="<?php echo esc_attr( $sub_category_id ); ?>" data-parent-cat-id="<?php echo esc_attr( $category_id ); ?>">  <?php
 						if ( $sub_category_icon['type'] == 'image' ) { ?>
 							<img class="epkb-ml-<?php echo esc_attr( $sub_category_lvl ); ?>-lvl__cat-icon epkb-ml-<?php echo esc_attr( $sub_category_lvl ); ?>-lvl__cat-icon--image"
 							     src="<?php echo esc_url( $sub_category_icon['image_thumbnail_url'] ); ?>" alt="<?php echo esc_attr( $sub_category_icon['image_alt'] ); ?>">  <?php
 						} else { ?>
-							<div class="epkb-ml-<?php echo esc_attr( $sub_category_lvl ); ?>-lvl__cat-icon epkb-ml-<?php echo esc_attr( $sub_category_lvl ); ?>-lvl__cat-icon--font epkbfa <?php echo esc_attr( $sub_category_icon['name'] ); ?>" data-kb-category-icon="<?php echo esc_attr( $sub_category_icon['name'] ); ?>"></div>    <?php
+							<div class="epkb-ml-<?php echo esc_attr( $sub_category_lvl ); ?>-lvl__cat-icon epkb-ml-<?php echo esc_attr( $sub_category_lvl ); ?>-lvl__cat-icon--font epkbfa <?php echo esc_attr( $sub_category_icon['name'] ); ?>"
+							     data-kb-category-icon="<?php echo esc_attr( $sub_category_icon['name'] ); ?>"></div>    <?php
 						} ?>
 						<div class="epkb-ml-<?php echo esc_attr( $sub_category_lvl ); ?>-lvl__cat-title"><?php echo esc_html( $sub_category_name ); ?></div>
 					</section>  <?php
@@ -414,7 +416,7 @@ class EPKB_Layout_Drill_Down extends EPKB_Layout {
 		return $output;
 	}
 
-	public function generate_kb_main_page() {
+	public function generate_non_modular_kb_main_page() {
 		// for compatibility reasons
 	}
 }

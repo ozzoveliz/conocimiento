@@ -21,7 +21,7 @@ class EPKB_Analytics_Page {
 
 		$admin_page_views = $this->get_regular_views_config();
 
-		EPKB_HTML_Admin::admin_page_css_missing_message( false, true );   ?>
+		EPKB_HTML_Admin::admin_page_header();   ?>
 
 		<!-- Admin Page Wrap -->
 		<div id="ekb-admin-page-wrap">
@@ -71,7 +71,7 @@ class EPKB_Analytics_Page {
 		<div class="overview-info-widget">
 			<div class="widget-header"><h4><?php esc_html_e( 'Categories', 'echo-knowledge-base' ); ?></h4></div>
 			<div class="widget-content">
-				<div class="widget-count"><?php echo EPKB_Utilities::sanitize_int( $nof_kb_categories ); ?></div>
+				<div class="widget-count"><?php echo esc_html( $nof_kb_categories ); ?></div>
 				<div class="widget-desc"><?php esc_html_e( 'Categories help you to organize articles into groups and hierarchies.', 'echo-knowledge-base' ); ?></div>
 			</div>
 			<div class="widget-toggle"><?php
@@ -83,7 +83,7 @@ class EPKB_Analytics_Page {
 		<div class="overview-info-widget">
 			<div class="widget-header"><h4><?php esc_html_e( 'Articles', 'echo-knowledge-base' ); ?></h4></div>
 			<div class="widget-content">
-				<div class="widget-count"><?php echo EPKB_Utilities::sanitize_int( $nof_kb_articles ); ?></div>
+				<div class="widget-count"><?php echo esc_html( $nof_kb_articles ); ?></div>
 				<div class="widget-desc"><?php esc_html_e( 'Article belongs to one or more categories or sub-categories.', 'echo-knowledge-base' ); ?></div>
 			</div>
 			<div class="widget-toggle">
@@ -99,9 +99,12 @@ class EPKB_Analytics_Page {
 	 */
 	private function display_article_views_analytics( $kb_id ) {
 
+		$good_post_status = EPKB_Utilities::is_amag_on() ? 'private' :'publish';
+
 		// MOST RATED ARTICLES
 		$most_rated_articles = get_posts( [
 			'post_type'      => EPKB_KB_Handler::get_post_type( $kb_id ),
+			'post_status'    => $good_post_status,
 			'posts_per_page' => 100,
 			'orderby'        => 'meta_value_num',
 			'meta_key'       => 'epkb-article-views',
@@ -111,7 +114,7 @@ class EPKB_Analytics_Page {
 		$most_rated_articles_data = array();
 		foreach ( $most_rated_articles as $post ) {
 
-			if ( $post->post_status != 'publish' ) {
+			if ( $post->post_status != $good_post_status ) {
 				continue;
 			}
 
@@ -119,7 +122,7 @@ class EPKB_Analytics_Page {
 			$link = get_permalink( $post->ID );
 			$link = empty( $link ) || is_wp_error( $link ) ? '' : $link;
 
-			$most_rated_articles_data[] = array( '<a href="' . esc_url( $link ) . '" target="_blank">' . $post_title . '</a>', EPKB_Utilities::get_postmeta( $post->ID, 'epkb-article-views', 0 ) );
+			$most_rated_articles_data[] = array( '<a href="' . esc_url( $link ) . '" target="_blank">' . esc_html( $post_title ) . '</a>', EPKB_Utilities::get_postmeta( $post->ID, 'epkb-article-views', 0 ) );
 		}
 
 		// LEAST RATED ARTICLES
@@ -142,7 +145,7 @@ class EPKB_Analytics_Page {
 			$link = get_permalink( $post->ID );
 			$link = empty( $link ) || is_wp_error( $link ) ? '' : $link;
 
-			$least_rated_articles_data[] = array( '<a href="' . esc_url( $link ) . '" target="_blank">' . $post_title . '</a>', EPKB_Utilities::get_postmeta( $post->ID, 'epkb-article-views', 0 ) );
+			$least_rated_articles_data[] = array( '<a href="' . esc_url( $link ) . '" target="_blank">' . esc_html( $post_title ) . '</a>', EPKB_Utilities::get_postmeta( $post->ID, 'epkb-article-views', 0 ) );
 		}
 
 		$this->pie_chart_data_box( 'Most Frequently Viewed Articles', $most_rated_articles_data, 'epkb-popular-articles', 'No articles were viewed.' );
@@ -251,20 +254,20 @@ class EPKB_Analytics_Page {
 
 		return EPKB_HTML_Forms::advertisement_ad_box( array(
 			'icon'              => 'epkbfa-linode',
-			'title'             => __( 'Advanced Search Add-on', 'echo-knowledge-base' ),
+			'title'             => esc_html__( 'Advanced Search Add-on', 'echo-knowledge-base' ),
 			'img_url'           => 'https://www.echoknowledgebase.com/wp-content/uploads/2020/10/advanced-search-analytics-example.jpg',
-			'desc'              => __( "Enhance users' search experience and view search analytics, including popular searches and no results searches.", 'echo-knowledge-base' ),
+			'desc'              => esc_html__( "Enhance users' search experience and view search analytics, including popular searches and no results searches.", 'echo-knowledge-base' ),
 			'list'              => array(
 				__( 'Access analytics for the most popular searches', 'echo-knowledge-base' ),
 				__( 'Discover analytics for no results searches', 'echo-knowledge-base' ),
 				__( 'Write articles for topics that are not covered', 'echo-knowledge-base' ),
 				__( 'Add missing search keywords to existing articles', 'echo-knowledge-base' )
 			),
-			'btn_text'          => __( 'Buy Now', 'echo-knowledge-base' ),
+			'btn_text'          => esc_html__( 'Buy Now', 'echo-knowledge-base' ),
 			'btn_url'           => 'https://www.echoknowledgebase.com/wordpress-plugin/advanced-search/',
 			'btn_color'         => 'green',
 
-			'more_info_text'    => __( 'More Information', 'echo-knowledge-base' ),
+			'more_info_text'    => esc_html__( 'More Information', 'echo-knowledge-base' ),
 			'more_info_url'     => 'https://www.echoknowledgebase.com/documentation/advanced-search-overview/',
 			'more_info_color'   => 'orange',
 			'box_type'			=> 'new-feature',
@@ -294,7 +297,7 @@ class EPKB_Analytics_Page {
 				'list_key'                    => 'kb-article-views',
 
 				// Top Panel Item
-				'label_text'                  => __( 'KB Article Views', 'echo-knowledge-base' ),
+				'label_text'                  => esc_html__( 'KB Article Views', 'echo-knowledge-base' ),
 				'icon_class'                  => 'epkbfa epkbfa-signal',
 
 				// Boxes List
@@ -320,7 +323,7 @@ class EPKB_Analytics_Page {
 				'list_key' => 'search-data',
 
 				// Top Panel Item
-				'label_text' => __( 'Search Data', 'echo-knowledge-base' ),
+				'label_text' => esc_html__( 'Search Data', 'echo-knowledge-base' ),
 				'icon_class' => 'epkbfa epkbfa-search',
 
 				// Boxes List
@@ -395,7 +398,7 @@ class EPKB_Analytics_Page {
 			'list_key' => 'kb-stats',
 
 			// Top Panel Item
-			'label_text' => __( 'KB Stats', 'echo-knowledge-base' ),
+			'label_text' => esc_html__( 'KB Stats', 'echo-knowledge-base' ),
 			'icon_class' => 'ep_font_icon_data_report',
 
 			// Boxes List
@@ -422,10 +425,10 @@ class EPKB_Analytics_Page {
 	 */
 	private function pie_chart_data_box( $title, $data, $id, $empty_message='' ) {   ?>
 
-		<section class="epkb-pie-chart-container" id="<?php echo $id; ?>">
+		<section class="epkb-pie-chart-container" id="<?php echo esc_attr( $id ); ?>">
 			<!-- Header ------------------->
 			<div class="epkb-pie-chart-header">
-				<h4><?php echo $title; ?></h4>
+				<h4><?php echo esc_html( $title ); ?></h4>
 			</div>
 
 			<!-- Body ------------------->
@@ -434,12 +437,12 @@ class EPKB_Analytics_Page {
 					<ul class="epkb-pie-data-list">			<?php
 						$item_count = 0;
 						if ( empty( $data ) ) {
-							echo $empty_message;
+							echo esc_html( $empty_message );
 						} else {
 							foreach ( $data as $word ) {    ?>
 								<li class="<?php echo ++$item_count <= 10 ? 'epkb-first-10' : 'epkb-after-10'; ?>">
 									<span class="epkb-circle epkbfa epkbfa-circle"></span>
-									<span class="epkb-pie-chart-word"><?php echo stripslashes( $word[0] ); ?></span>
+									<span class="epkb-pie-chart-word"><?php echo wp_kses_post( stripslashes( $word[0] ) ); ?></span>
 									<span class="epkb-pie-chart-count"><?php echo esc_html( $word[1] ); ?></span>
 								</li>                <?php
 							}
@@ -456,11 +459,10 @@ class EPKB_Analytics_Page {
 				</div>
 				<div class="epkb-pie-chart-right-col">
 					<div id="epkb-pie-chart" style="height: 225px">
-						<canvas id="<?php echo $id; ?>-chart"></canvas>
+						<canvas id="<?php echo esc_attr( $id ); ?>-chart"></canvas>
 					</div>
 				</div>
 			</div>
 		</section>	<?php
 	}
-
 }

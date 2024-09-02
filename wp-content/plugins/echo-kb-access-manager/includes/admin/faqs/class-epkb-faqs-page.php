@@ -15,7 +15,7 @@ class EPKB_FAQs_Page {
 
 		$admin_page_views = self::get_regular_views_config();
 
-		EPKB_HTML_Admin::admin_page_css_missing_message();   ?>
+		EPKB_HTML_Admin::admin_page_header();   ?>
 
 		<!-- Admin Page Wrap -->
 		<div id="ekb-admin-page-wrap">
@@ -85,10 +85,6 @@ class EPKB_FAQs_Page {
 				<span class="epkb-btn-icon epkbfa epkbfa-comments"></span>
 				<span class="epkb-btn-text"><?php esc_html_e( 'Create FAQs Group', 'echo-knowledge-base' ); ?></span>
 			</button>
-			<button id="epkb-faq-create-question" class="epkb-btn epkb-success-btn">
-				<span class="epkb-btn-icon epkbfa epkbfa-question-circle-o"></span>
-				<span class="epkb-btn-text"><?php esc_html_e( 'Create Question', 'echo-knowledge-base' ); ?></span>
-			</button>
 		</div>
 
 		<!-- FAQ Groups -->
@@ -109,7 +105,7 @@ class EPKB_FAQs_Page {
 					EPKB_HTML_Elements::text( array(
 						'name'          => 'faq-group-name',
 						'label'         => 'Name',
-						'placeholder'   => __( 'Group Name', 'echo-knowledge-base' )
+						'placeholder'   => esc_html__( 'Group Name', 'echo-knowledge-base' )
 					) );
 					/* EPKB_HTML_Elements::checkbox_toggle( array(
 						'name'          => 'faq-group-status',
@@ -181,6 +177,14 @@ class EPKB_FAQs_Page {
 
 		ob_start(); ?>
 
+		<!-- Buttons -->
+		<div id='epkb-faq-top-buttons-container'>
+			<button id="epkb-faq-create-question" class="epkb-btn epkb-success-btn">
+				<span class="epkb-btn-icon epkbfa epkbfa-question-circle-o"></span>
+				<span class="epkb-btn-text"><?php esc_html_e( 'Create Question', 'echo-knowledge-base' ); ?></span>
+			</button>
+		</div>
+
 		<!-- All Questions -->
 		<div id="epkb-all-faqs-container">
 			<div class="epkb-all-faqs-head">
@@ -245,7 +249,7 @@ class EPKB_FAQs_Page {
 																						'Arrange them in the order you want them to be displayed.', 'echo-knowledge-base' ); ?></div>
 				</div>
 				<div class="epkb-shortcode-example-body">					<?php
-					echo EPKB_HTML_Elements::get_copy_to_clipboard_box( '[epkb-faqs group_ids="' . implode( ",", $group_ids) . '"]' );					?>
+					EPKB_HTML_Elements::get_copy_to_clipboard_box( '[epkb-faqs group_ids="' . implode( ",", $group_ids ) . '"]', '', false );					?>
 				</div>
 			</div>
 
@@ -308,7 +312,7 @@ class EPKB_FAQs_Page {
 			'list_key' => 'faqs-groups',
 
 			// Top Panel Item
-			'label_text' => __( 'FAQ Groups', 'echo-knowledge-base' ),
+			'label_text' => esc_html__( 'FAQ Groups', 'echo-knowledge-base' ),
 			'icon_class' => 'epkbfa epkbfa-comments',
 
 			// Boxes List
@@ -329,7 +333,7 @@ class EPKB_FAQs_Page {
 			'list_key' => 'faqs-questions',
 
 			// Top Panel Item
-			'label_text' => __( 'Questions', 'echo-knowledge-base' ),
+			'label_text' => esc_html__( 'Questions', 'echo-knowledge-base' ),
 			'icon_class' => 'epkbfa epkbfa-question-circle-o',
 
 			// Boxes List
@@ -350,7 +354,7 @@ class EPKB_FAQs_Page {
 			'list_key'   => 'faq-shortcodes',
 
 			// Top Panel Item
-			'label_text' => __( 'FAQ Shortcodes', 'echo-knowledge-base' ),
+			'label_text' => esc_html__( 'FAQ Shortcodes', 'echo-knowledge-base' ),
 			'icon_class' => 'epkbfa epkbfa-list-alt',
 
 			// Boxes List
@@ -371,7 +375,7 @@ class EPKB_FAQs_Page {
 			'list_key'   => 'faq-setting',
 
 			// Top Panel Item
-			'label_text' => __( 'Settings', 'echo-knowledge-base' ),
+			'label_text' => esc_html__( 'Settings', 'echo-knowledge-base' ),
 			'icon_class' => 'epkbfa epkbfa-gears',
 
 			// Boxes List
@@ -473,7 +477,7 @@ class EPKB_FAQs_Page {
 			<!-- WP Editor Form -->
 			<form id="epkb-faq-question-wp--form">
 				<input type="hidden" id="epkb-faq-editor-id" name="faq-id" value="">   <?php
-				//EPKB_HTML_Elements::submit_button_v2( __( 'AI Help', 'echo-knowledge-base' ), '', 'epkb__wp_editor__open-ai-help-sidebar', '', '', '', 'epkb__wp_editor__ai-help-sidebar-btn-open' );   ?>
+				//EPKB_HTML_Elements::submit_button_v2( esc_html__( 'AI Help', 'echo-knowledge-base' ), '', 'epkb__wp_editor__open-ai-help-sidebar', '', '', '', 'epkb__wp_editor__ai-help-sidebar-btn-open' );   ?>
 				<div class="epkb-faq-question-wp-editor__question">
 					<h4><?php esc_html_e( 'Question', 'echo-knowledge-base' ); ?></h4>
 					<div class="epkb-faq-question-wp-editor__question__input-container">
@@ -486,10 +490,10 @@ class EPKB_FAQs_Page {
 					wp_editor( '', 'epkb-faq-question-wp-editor', array( 'media_buttons' => false ) ); ?>
 				</div>
 				<div class="epkb-faq-question-wp-editor__buttons">				<?php
-					EPKB_HTML_Elements::submit_button_v2( __( 'Save', 'echo-knowledge-base' ), 'epkb_save_faq', 'epkb-faq-question-wp-editor__action__save', '', true, '', 'epkb-success-btn' );
-					EPKB_HTML_Elements::submit_button_v2( __( 'Cancel', 'echo-knowledge-base' ), '', 'epkb__help_editor__action__cancel', '', '', '', 'epkb-primary-btn' );
-					EPKB_HTML_Elements::submit_button_v2( __( 'Remove from Group', 'echo-knowledge-base' ), '', 'epkb__help_editor__action__remove-from-group', '', '', '', 'epkb-primary-btn' );
-					EPKB_HTML_Elements::submit_button_v2( __( 'Delete Permanently', 'echo-knowledge-base' ), 'epkb_delete_faq', 'epkb-faq-question-wp-editor__action__delete', '', true, '', 'epkb-error-btn' );    ?>
+					EPKB_HTML_Elements::submit_button_v2( esc_html__( 'Save', 'echo-knowledge-base' ), 'epkb_save_faq', 'epkb-faq-question-wp-editor__action__save', '', true, '', 'epkb-success-btn' );
+					EPKB_HTML_Elements::submit_button_v2( esc_html__( 'Cancel', 'echo-knowledge-base' ), '', 'epkb__help_editor__action__cancel', '', '', '', 'epkb-primary-btn' );
+					EPKB_HTML_Elements::submit_button_v2( esc_html__( 'Remove from Group', 'echo-knowledge-base' ), '', 'epkb__help_editor__action__remove-from-group', '', '', '', 'epkb-primary-btn' );
+					EPKB_HTML_Elements::submit_button_v2( esc_html__( 'Delete Permanently', 'echo-knowledge-base' ), 'epkb_delete_faq', 'epkb-faq-question-wp-editor__action__delete', '', true, '', 'epkb-error-btn' );    ?>
 				</div>
 			</form> <?php
 

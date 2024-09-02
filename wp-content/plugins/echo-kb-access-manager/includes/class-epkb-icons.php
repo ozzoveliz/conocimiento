@@ -2279,7 +2279,7 @@ class EPKB_Icons {
 		return $all_icons;
 	}
 
-	public static function format_font_awesome_icon_name( $value ){
+	private static function format_font_awesome_icon_name( $value ) {
 
 		// if icon name starts with 'fa-' then create its name
 		if (strpos( $value, 'fa-') === 0) {
@@ -2290,7 +2290,7 @@ class EPKB_Icons {
 			$value = ucwords( str_replace( array('epkbfa-','-'), " ", $value ) );
 		}
 
-		return esc_html( $value );
+		return $value;
 	}
 
 	/**
@@ -2309,31 +2309,20 @@ class EPKB_Icons {
 			foreach ( $all_icons as $key => $label ) { ?>
 				<div class="epkb-icon-pack__icon <?php echo ( $checked == $key ) ? 'epkb-icon-pack__icon--checked' : ''; ?>" 
 					data-key="<?php echo esc_attr( $key ); ?>"
-					data-label="<?php echo self::format_font_awesome_icon_name( $label );        ?>"
+					data-label="<?php echo esc_html( self::format_font_awesome_icon_name( $label ) );        ?>"
 				>
 					<i class="epkbfa <?php echo esc_html( $key );  ?>"></i>
 				</div><?php 
 			} ?>
 		</div> <?php 
 		
-		$html = ob_get_clean();
+		$html_escaped = ob_get_clean();
 		
 		if ( $display ) {
-			echo $html;
+			echo $html_escaped;
 		}
 		
-		return $html;
-	}
-
-	/**
-	 * Show demo icons for Visual Editor preview and Setup Wizard based on selected theme
-	 *
-	 * @param $kb_config
-	 * @param $theme_name
-	 * @return array
-	 */
-	public static function get_demo_category_icons( $kb_config, $theme_name ) {         // TODO remove 2025
-		return [];
+		return $html_escaped;
 	}
 
 	/**
@@ -2345,14 +2334,27 @@ class EPKB_Icons {
 	public static function is_theme_with_image_icons( $kb_config ) {
 		return ! empty( $kb_config['theme_name'] ) && in_array( $kb_config['theme_name'], array(
 				'modern',
+				'modern_tabs',
 				'image',
-				'basic',
+				'image_tabs',
+				'office',
+				'office_tabs',
+				'office_categories',
 				'elegant',
-				'organized_2',
+				'elegant_tabs',
+				'creative',
+				'creative_tabs',
+				'creative_categories',
+				'creative_classic',
+				'creative_drill_down',
+				'bright',
+				'formal',
+				'formal_tabs',
+				'formal_categories',
+				'standard_classic',
+				'standard_drill_down',
 				'grid_basic',
-				'ml_articles_list_classic_layout',
-				'ml_classic_layout_articles_list',
-				'ml_articles_list_drill_down_layout_faqs',
+				'grid_demo_9'
 			) );
 	}
 
@@ -2365,7 +2367,7 @@ class EPKB_Icons {
 	public static function is_theme_with_photo_icons( $theme_name ) {
 		return ! empty( $theme_name ) && in_array( $theme_name, array(
 				'image',
-				'basic',
+				'image_tabs',
 			) );
 	}
 
@@ -2378,13 +2380,21 @@ class EPKB_Icons {
 	public static function get_theme_image_icons( $theme_name ) {
 
 		$theme_icons = array(
-			'default' => array(
-				'image_1'                               => 'img/demo-icons/icons/getting-started.png',
-				'image_2'                               => 'img/demo-icons/icons/reports-and-analytics.png',
-				'image_3'                               => 'img/demo-icons/icons/info-icon.png',
-				'image_4'                               => 'img/demo-icons/icons/FAQs.png',
-				'image_5'                               => 'img/demo-icons/icons/operations.png',
-				'image_6'                               => 'img/demo-icons/icons/users.png',
+			'default' => array( // used for modern, office, elegant, grid_basic, standard_classic
+				'image_1'                               => 'img/demo-icons/icons/pink-kb-icon-laptop-100.png',
+				'image_2'                               => 'img/demo-icons/icons/pink-kb-icon-bar-chart-100.png',
+				'image_3'                               => 'img/demo-icons/icons/pink-kb-icon-notepad-100.png',
+				'image_4'                               => 'img/demo-icons/icons/pink-kb-icon-lightbulb-100.png',
+				'image_5'                               => 'img/demo-icons/icons/pink-kb-icon-briefcase-100.png',
+				'image_6'                               => 'img/demo-icons/icons/pink-kb-icon-handshake-100.png',
+			),
+			'standard_drill_down' => array(
+				'image_1'                               => 'img/demo-icons/icons/pink-kb-icon-laptop-100.png',
+				'image_2'                               => 'img/demo-icons/icons/pink-kb-icon-bar-chart-100.png',
+				'image_3'                               => 'img/demo-icons/icons/pink-kb-icon-notepad-100.png',
+				'image_4'                               => 'img/demo-icons/icons/pink-kb-icon-lightbulb-100.png',
+				'image_5'                               => 'img/demo-icons/icons/pink-kb-icon-briefcase-100.png',
+				'image_6'                               => 'img/demo-icons/icons/pink-kb-icon-handshake-100.png',
 			),
 			'image' => array(
 				'image_1'                               => 'https://www.echoknowledgebase.com/wp-content/uploads/2021/02/faqs-2-example.jpg',
@@ -2394,30 +2404,55 @@ class EPKB_Icons {
 				'image_5'                               => 'https://www.echoknowledgebase.com/wp-content/uploads/2021/02/reports-and-analytics-example.jpg',
 				'image_6'                               => 'https://www.echoknowledgebase.com/wp-content/uploads/2021/02/tutorials-and-tips-example.jpg'
 			),
-			'basic' => array(
-				'image_1'                               => 'https://www.echoknowledgebase.com/wp-content/uploads/2021/02/users-circle-example.png',
-				'image_2'                               => 'https://www.echoknowledgebase.com/wp-content/uploads/2021/02/faqs-circle-example.png',
-				'image_3'                               => 'https://www.echoknowledgebase.com/wp-content/uploads/2021/02/getting-started-circle-example.png',
-				'image_4'                               => 'https://www.echoknowledgebase.com/wp-content/uploads/2021/02/operations-circle-example.png',
-				'image_5'                               => 'https://www.echoknowledgebase.com/wp-content/uploads/2021/02/reports-analytics-circle-example.png',
-				'image_6'                               => 'https://www.echoknowledgebase.com/wp-content/uploads/2021/02/tutorials-and-tips-circle-example.png'
+			'creative' => array(
+				'image_1'                               => 'img/demo-icons/icons/blue-background-book.jpg',
+				'image_2'                               => 'img/demo-icons/icons/blue-background-bulb-laptop.jpg',
+				'image_3'                               => 'img/demo-icons/icons/blue-background-laptop.jpg',
+				'image_4'                               => 'img/demo-icons/icons/blue-background-rocket.jpg',
+				'image_5'                               => 'img/demo-icons/icons/blue-background-big-bulb.jpg',
+				'image_6'                               => 'img/demo-icons/icons/blue-background-chemical.jpg',
 			),
-			'ml_articles_list_classic_layout' => array(
-				'image_1'                               => 'img/demo-icons/icons/FAQs2.png',
-				'image_2'                               => 'img/demo-icons/icons/tool-icons.png',
-				'image_3'                               => 'img/demo-icons/icons/reports-and-analytics.png',
+			'creative_classic' => array(
+				'image_1'                               => 'img/demo-icons/icons/square-book.jpg',
+				'image_2'                               => 'img/demo-icons/icons/square-bulb-laptop.jpg',
+				'image_3'                               => 'img/demo-icons/icons/square-laptop.jpg',
+				'image_4'                               => 'img/demo-icons/icons/square-rocket.jpg',
+				'image_5'                               => 'img/demo-icons/icons/square-big-bulb.jpg',
+				'image_6'                               => 'img/demo-icons/icons/square-chemical.jpg',
 			),
-			'ml_classic_layout_articles_list' => array(
-				'image_1'                               => 'img/demo-icons/icons/FAQs2.png',
-				'image_2'                               => 'img/demo-icons/icons/tool-icons.png',
-				'image_3'                               => 'img/demo-icons/icons/reports-and-analytics.png',
+			'bright' => array(
+				'image_1'                               => 'img/demo-icons/icons/yellow-background-briefcase.jpg',
+				'image_2'                               => 'img/demo-icons/icons/yellow-background-calculator.jpg',
+				'image_3'                               => 'img/demo-icons/icons/yellow-background-coffee.jpg',
+				'image_4'                               => 'img/demo-icons/icons/yellow-background-laptop.jpg',
+				'image_5'                               => 'img/demo-icons/icons/yellow-background-notepad.jpg',
+				'image_6'                               => 'img/demo-icons/icons/yellow-background-printer.jpg',
 			),
-			'ml_articles_list_drill_down_layout_faqs' => array(
-				'image_1'                               => 'img/demo-icons/icons/FAQs2.png',
-				'image_2'                               => 'img/demo-icons/icons/tool-icons.png',
-				'image_3'                               => 'img/demo-icons/icons/reports-and-analytics.png',
+			'formal' => array(
+				'image_1'                               => 'img/demo-icons/icons/red-icon-calculator.png',
+				'image_2'                               => 'img/demo-icons/icons/red-icon-cell.png',
+				'image_3'                               => 'img/demo-icons/icons/red-icon-info.png',
+				'image_4'                               => 'img/demo-icons/icons/red-icon-laptop.png',
+				'image_5'                               => 'img/demo-icons/icons/red-icon-lock.png',
+				'image_6'                               => 'img/demo-icons/icons/red-icon-notebook.png',
+			),
+			'grid_demo_9' => array(
+				'image_1'                               => 'img/demo-icons/icons/yellow-background-briefcase-square.jpg',
+				'image_2'                               => 'img/demo-icons/icons/yellow-background-calculator-square.jpg',
+				'image_3'                               => 'img/demo-icons/icons/yellow-background-coffee-square.jpg',
+				'image_4'                               => 'img/demo-icons/icons/yellow-background-laptop-square.jpg',
+				'image_5'                               => 'img/demo-icons/icons/yellow-background-notepad-square.jpg',
+				'image_6'                               => 'img/demo-icons/icons/yellow-background-printer-square.jpg',
 			),
 		);
+
+		// made duplicates of the following:
+		$theme_icons['image_tabs'] = $theme_icons['image'];
+		$theme_icons['creative_drill_down'] = $theme_icons['creative_classic'];
+		$theme_icons['creative_tabs'] = $theme_icons['creative'];
+		$theme_icons['creative_categories'] = $theme_icons['creative'];
+		$theme_icons['formal_tabs'] = $theme_icons['formal'];
+		$theme_icons['formal_categories'] = $theme_icons['formal'];
 
 		return isset( $theme_icons[$theme_name] ) ? $theme_icons[$theme_name] : $theme_icons['default'];
 	}
