@@ -80,8 +80,8 @@ class AMGR_Upgrades {
 	}
 
 	private static function upgrade_to_v6_11_0( &$amgr_config ) {
-		if ( $amgr_config['no_access_text'] == __( 'You do not have permission to access this content. You will be forwarded to a login screen.', 'echo-knowledge-base' ) ) {
-			$amgr_config['no_access_text_logged'] = __( 'You do not have permission to access this content.', 'echo-knowledge-base' );
+		if ( $amgr_config['no_access_text'] == esc_html__( 'You do not have permission to access this content. You will be forwarded to a login screen.', 'echo-knowledge-base' ) ) {
+			$amgr_config['no_access_text_logged'] = esc_html__( 'You do not have permission to access this content.', 'echo-knowledge-base' );
 		} else {
 			$amgr_config['no_access_text_logged'] = $amgr_config['no_access_text'];
 		}
@@ -97,7 +97,7 @@ class AMGR_Upgrades {
 
 		if ( EPKB_Utilities::get_wp_option( 'amgr_show_upgrade_message', false ) ) {
 
-			$plugin_name = '<strong>' . __('Access Manager', 'echo-knowledge-base') . '</strong>';
+			$plugin_name = '<strong>' . esc_html__('Access Manager', 'echo-knowledge-base') . '</strong>';
 			$output .= '<p>' . $plugin_name . ' ' . sprintf( esc_html( _x( 'add-on was updated to version %s.',
 									' ', 'echo-knowledge-base' ) ),
 									Echo_Knowledge_Base::$amag_version ,'') . '</p>';

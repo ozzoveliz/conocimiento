@@ -86,12 +86,12 @@
         font-weight: inherit;
         font-size: inherit; }
     #asea-doc-search-container #asea-section-1 #asea_search_form {
-      width: 80%;
+      width: 90%;
       margin: 0 auto;
       position: relative; }
       @media only screen and (max-width: 1100px) {
         #asea-doc-search-container #asea-section-1 #asea_search_form {
-          width: 80% !important;
+          width: 90% !important;
           padding: 10px; } }
       #asea-doc-search-container #asea-section-1 #asea_search_form .asea-search-box {
         position: relative;
@@ -102,7 +102,7 @@
         border-style: solid; }
         @media only screen and (max-width: 700px) {
           #asea-doc-search-container #asea-section-1 #asea_search_form .asea-search-box {
-            width: 90% !important;
+            width: 100% !important;
             margin: 0 !important; } }
         #asea-doc-search-container #asea-section-1 #asea_search_form .asea-search-box input[type=text], #asea-doc-search-container #asea-section-1 #asea_search_form .asea-search-box input[type=search] {
           width: 100%;
@@ -133,38 +133,16 @@
           #asea-doc-search-container #asea-section-1 #asea_search_form .asea-search-box input[type=text]:-moz-placeholder, #asea-doc-search-container #asea-section-1 #asea_search_form .asea-search-box input[type=search]:-moz-placeholder {
             /* Firefox 18- */
             color: #C9C7C7; }
-        #asea-doc-search-container #asea-section-1 #asea_search_form .asea-search-box button {
-          color: #fff;
-          text-shadow: 0 -1px 1px rgba(0, 0, 0, 0.4);
-          text-align: center;
-          line-height: 22px;
-          font-size: 18px;
-          padding: 10px 5% !important;
-          border-style: solid !important;
-          height: 50px;
-          display: inline-block;
-          -webkit-box-sizing: border-box;
-          /* Safari/Chrome, other WebKit */
-          -moz-box-sizing: border-box;
-          /* Firefox, other Gecko */
-          box-sizing: border-box;
-          /* Opera/IE 8+ */ }
-          @media only screen and (max-width: 1100px) {
-            #asea-doc-search-container #asea-section-1 #asea_search_form .asea-search-box button {
-              display: inline-block !important;
-              width: 80%;
-              position: relative;
-              box-sizing: border-box;
-              margin-top: 24px; } }
-          #asea-doc-search-container #asea-section-1 #asea_search_form .asea-search-box button:hover {
-            cursor: pointer;
-            color: #fff; }
         #asea-doc-search-container #asea-section-1 #asea_search_form .asea-search-box .asea-search-box__icons-wrap {
           display: flex;
           align-items: center;
           position: relative;
           line-height: 1.5;
-          vertical-align: baseline; }
+          vertical-align: baseline;
+          padding: 0;
+          background-color: transparent; }
+          #asea-doc-search-container #asea-section-1 #asea_search_form .asea-search-box .asea-search-box__icons-wrap:hover {
+            background-color: transparent; }
         #asea-doc-search-container #asea-section-1 #asea_search_form .asea-search-box .asea-search-box__loading-icon__wrap {
           display: inline-block;
           position: relative;
@@ -496,23 +474,6 @@
       z-index: 1; }
     #asea-doc-search-container #asea-section-1 .asea-search-form-1 input[type=text] {
       border-radius: 5px !important; }
-    #asea-doc-search-container #asea-section-1 .asea-search-form-1 button {
-      border-radius: 0 5px 5px 0;
-      position: absolute;
-      top: 0;
-      right: -1px;
-      margin: 0; }
-      @media only screen and (min-width: 1100px) {
-        #asea-doc-search-container #asea-section-1 .asea-search-form-1 button {
-          border-left: none !important; } }
-      @media only screen and (max-width: 1100px) {
-        #asea-doc-search-container #asea-section-1 .asea-search-form-1 button {
-          display: inline-block !important;
-          width: 80%;
-          border-radius: 5px;
-          position: relative;
-          box-sizing: border-box;
-          margin-top: 24px; } }
     #asea-doc-search-container #asea-section-1 #asea-search-background-image-1 {
       position: absolute;
       width: 100%;
@@ -575,9 +536,9 @@
     content: "";
     display: block;
     clear: both; }
-  @media only screen and (max-width: 1200px) {
+  @media only screen and (max-width: 981px) {
     #asea-search-results-container {
-      padding: 20px 70px; } }
+      padding: 20px 20px; } }
   #asea-search-results-container .asea-search-results-inner {
     padding: 0 20px 10px 20px; }
   #asea-search-results-container .asea-search-results-reset h1, #asea-search-results-container .asea-search-results-reset h2, #asea-search-results-container .asea-search-results-reset h3, #asea-search-results-container .asea-search-results-reset h4, #asea-search-results-container .asea-search-results-reset h5, #asea-search-results-container .asea-search-results-reset h6, #asea-search-results-container .asea-search-results-reset p, #asea-search-results-container .asea-search-results-reset a, #asea-search-results-container .asea-search-results-reset div, #asea-search-results-container .asea-search-results-reset span, #asea-search-results-container .asea-search-results-reset strong, #asea-search-results-container .asea-search-results-reset b, #asea-search-results-container .asea-search-results-reset i, #asea-search-results-container .asea-search-results-reset ol, #asea-search-results-container .asea-search-results-reset ul, #asea-search-results-container .asea-search-results-reset li, #asea-search-results-container .asea-search-results-reset section, #asea-search-results-container .asea-search-results-reset nav, #asea-search-results-container .asea-search-results-reset menu, #asea-search-results-container .asea-search-results-reset header, #asea-search-results-container .asea-search-results-reset form, #asea-search-results-container .asea-search-results-reset input, #asea-search-results-container .asea-search-results-reset button, #asea-search-results-container .asea-search-results-reset img {

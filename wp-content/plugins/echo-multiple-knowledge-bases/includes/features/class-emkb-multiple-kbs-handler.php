@@ -44,11 +44,11 @@ class EMKB_Multiple_KBs_Handler {
 
 		// create new KB with default configuration
 		$all_kb_ids = EMKB_KB_Core::get_kb_ids();
-		$new_kb_id = empty($all_kb_ids) ? EMKB_KB_Core::DEFAULT_KB_ID : max($all_kb_ids) + 1;
+		$new_kb_id = empty( $all_kb_ids ) ? EMKB_KB_Core::DEFAULT_KB_ID : max( $all_kb_ids ) + 1;
 		$new_kb_main_page_title = __( 'Knowledge Base', 'echo-multiple-knowledge-bases' ) . ' ' . $new_kb_id;
 
 		$kb_config = EMKB_KB_Core::add_new_knowledge_base( $new_kb_id, $new_kb_main_page_title, '' );
-		if ( is_wp_error($kb_config) ) {
+		if ( is_wp_error( $kb_config ) ) {
 			EMKB_Logging::add_log("Could not create a new knowledge base (add option failed)", $kb_config);
 			EMKB_Core_Utilities::show_top_level_admin_msg_and_redirect('kb_add_error');
 		}
@@ -59,11 +59,7 @@ class EMKB_Multiple_KBs_Handler {
 
 		$kb_post_type = EMKB_KB_Handler::get_post_type( $new_kb_id );
 
-		if ( class_exists('Echo_Knowledge_Base') && version_compare(Echo_Knowledge_Base::$version, '7.0.0', '>=') ) {
-			$redirect_url = "edit.php?post_type={$kb_post_type}&page=" . EMKB_KB_Core::EMKB_KB_CONFIGURATION_PAGE . "&setup-wizard-on";
-		} else {
-			$redirect_url = "edit.php?post_type={$kb_post_type}&page=" . EMKB_KB_Core::EMKB_KB_CONFIGURATION_PAGE . "&wizard-on";
-		}
+		$redirect_url = "edit.php?post_type={$kb_post_type}&page=" . EMKB_KB_Core::EMKB_KB_CONFIGURATION_PAGE . "&setup-wizard-on";
 
 		EMKB_Core_Utilities::show_top_level_admin_msg_and_redirect( 'kb_add_success', $redirect_url );
 	}

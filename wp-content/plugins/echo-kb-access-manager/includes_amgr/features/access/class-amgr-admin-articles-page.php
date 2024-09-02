@@ -48,7 +48,7 @@ class AMGR_Admin_Articles_Page {
 			return;
 		}
 
-		add_meta_box( 'amgr-group-article-access', __( 'Assign Article Categories', 'echo-knowledge-base' ), array( $this, 'amgr_display_kb_categories_list'),
+		add_meta_box( 'amgr-group-article-access', esc_html__( 'Assign Article Categories', 'echo-knowledge-base' ), array( $this, 'amgr_display_kb_categories_list'),
 						EPKB_KB_Handler::get_post_type( $kb_id ), 'side', 'default' );
 	}
 
@@ -148,9 +148,9 @@ class AMGR_Admin_Articles_Page {
 					<li>    <?php
 						echo str_repeat("&nbsp;&nbsp;&nbsp;", $category_level); ?>
 						<input type="checkbox" id="<?php echo $escaped_tag; ?>" name="<?php echo $escaped_tag; ?>"
-						       value="<?php echo $escaped_tag; ?>" <?php echo $isChecked ? 'checked' : ''; ?>>
-						<label for="<?php echo $escaped_tag; ?>"><?php _e( $esc_kb_category_name, 'group_access' ); ?></label>
-						<div class="amgr-group-icon-placeholder-container"><?php echo $category_groups_icons; ?></div>
+						       value="<?php echo $escaped_tag; ?>" <?php echo ( $isChecked ? 'checked' : '' ); ?>>
+						<label for="<?php echo $escaped_tag; ?>"><?php esc_html_e( $esc_kb_category_name, 'group_access' ); ?></label>
+						<div class="amgr-group-icon-placeholder-container"><?php echo esc_html( $category_groups_icons ); ?></div>
 					</li>                    <?php
 
 				}       ?>
@@ -167,8 +167,8 @@ class AMGR_Admin_Articles_Page {
 
 	public function add_column_heading( $columns ) {
 		return array_merge( $columns, array(
-			'amgr_access_level'	=> __( 'Access', 'echo-knowledge-base' )
-		// TODO	'amgr_groups'   	=> __( 'KB Groups', 'echo-knowledge-base' )
+			'amgr_access_level'	=> esc_html__( 'Access', 'echo-knowledge-base' )
+		// TODO	'amgr_groups'   	=> esc_html__( 'KB Groups', 'echo-knowledge-base' )
 		) );
 	}
 

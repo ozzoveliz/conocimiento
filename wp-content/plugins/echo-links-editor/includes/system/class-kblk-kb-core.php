@@ -175,14 +175,13 @@ class KBLK_KB_Core {
 	 */
 	private static function get_result( $class_name, $method, $default ) {
 
-		// instantiate certain classes
 		$class = $class_name;
-		if ( in_array($class_name, array('EPKB_KB_Config_DB')) ) {
+		if ( in_array( $class_name, array( 'EPKB_KB_Config_DB' ) ) ) {
 			$class = new $class_name();
 		}
 
-		if ( ! is_callable( array($class, $method) ) ) {
-			KBLK_Logging::add_log("Cannot invoke class $class with method $method.");
+		if ( ! is_callable( array( $class, $method ) ) ) {
+			KBLK_Logging::add_log( "Cannot invoke class $class_name with method $method." );
 			return $default;
 		}
 
@@ -200,14 +199,13 @@ class KBLK_KB_Core {
 	 */
 	private static function get_param_result( $class_name, $method, $params, $default ) {
 
-		// instantiate certain classes
 		$class = $class_name;
-		if ( in_array($class_name, array('EPKB_KB_Config_DB')) ) {
+		if ( in_array( $class_name, array( 'EPKB_KB_Config_DB', 'AMGR_Access_Articles_Front' ) ) ) {
 			$class = new $class_name();
 		}
 
 		if ( ! is_callable( array( $class, $method ) ) ) {
-			KBLK_Logging::add_log("Cannot invoke class $class with method $method.");
+			KBLK_Logging::add_log( "Cannot invoke class $class_name with method $method." );
 			return $default;
 		}
 

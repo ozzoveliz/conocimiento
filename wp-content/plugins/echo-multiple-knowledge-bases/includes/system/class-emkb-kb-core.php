@@ -93,7 +93,7 @@ class EMKB_KB_Core {
 	 * Get all KB Configuration
 	 *
 	 * @param boolean $skip_check
-	 * @return array|string with value or $default value if this settings not found
+	 * @return array|WP_Error with value or $default value if this settings not found
 	 *
 	 */
 	public static function get_kb_configs( $skip_check=false ) {
@@ -147,12 +147,12 @@ class EMKB_KB_Core {
 
 		// instantiate certain classes
 		$class = $class_name;
-		if ( in_array($class_name, array('EPKB_KB_Config_DB')) ) {
+		if ( in_array( $class_name, array( 'EPKB_KB_Config_DB' ) ) ) {
 			$class = new $class_name();
 		}
 
-		if ( ! is_callable( array($class, $method) ) ) {
-			EMKB_Logging::add_log("Cannot invoke class $class with method $method.");
+		if ( ! is_callable( array( $class, $method ) ) ) {
+			EMKB_Logging::add_log( "Cannot invoke class $class_name with method $method." );
 			return $default;
 		}
 
@@ -172,12 +172,12 @@ class EMKB_KB_Core {
 
 		// instantiate certain classes
 		$class = $class_name;
-		if ( in_array($class_name, array('EPKB_KB_Config_DB')) ) {
+		if ( in_array( $class_name, array( 'EPKB_KB_Config_DB', 'EPKB_Admin_UI_Access' ) ) ) {
 			$class = new $class_name();
 		}
 
-		if ( ! is_callable( array($class, $method ) ) ) {
-			EMKB_Logging::add_log("Cannot invoke class $class with method $method.");
+		if ( ! is_callable( array( $class, $method ) ) ) {
+			EMKB_Logging::add_log( "Cannot invoke class $class_name with method $method." );
 			return $default;
 		}
 

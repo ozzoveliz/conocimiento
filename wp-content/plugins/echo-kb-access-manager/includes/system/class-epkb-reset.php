@@ -122,9 +122,9 @@ class EPKB_Reset {
 	 */
 	public static function get_reset_sequence_box_config() {
 		return array(
-			'title' => __( 'Refresh Articles and Categories sequence', 'echo-knowledge-base' ),
-			'html'  => EPKB_HTML_Elements::submit_button_v2( __( 'Reset Sequence', 'echo-knowledge-base' ), 'epkb_reset_sequence', 'epkb_reset_sequence', '', true, true, 'epkb-primary-btn' ) .
-			           EPKB_HTML_Elements::submit_button_v2( __( 'Show Sequence', 'echo-knowledge-base' ), 'epkb_show_sequence', 'epkb_show_sequence', '', true, true, 'epkb-primary-btn' ) . '
+			'title' => esc_html__( 'Refresh Articles and Categories sequence', 'echo-knowledge-base' ),
+			'html'  => EPKB_HTML_Elements::submit_button_v2( esc_html__( 'Reset Sequence', 'echo-knowledge-base' ), 'epkb_reset_sequence', 'epkb_reset_sequence', '', true, true, 'epkb-primary-btn' ) .
+			           EPKB_HTML_Elements::submit_button_v2( esc_html__( 'Show Sequence', 'echo-knowledge-base' ), 'epkb_show_sequence', 'epkb_show_sequence', '', true, true, 'epkb-primary-btn' ) . '
 						<div class="epkb-show-sequence-wrap"></div>'
 		);
 	}
@@ -172,10 +172,10 @@ class EPKB_Reset {
 		foreach( $category_seq_data as $category_id => $cat ) {
 			$category = $article_sequence[$category_id]; ?>
 
-			<div class="epkb-show-sequence-item epkb-show-sequence-item--depth-<?php echo $depth; ?>">
-				<div class="epkb-show-sequence-category_name"  style="border-left-width: <?php echo $depth * 10; ?>px;">
-					<a href="<?php echo get_term_link( $category_id ); ?>" target="_blank"><?php echo $category[0]; ?></a>
-					<div class="epkb-show-sequence-category_description"><?php echo $category[1]; ?></div>
+			<div class="epkb-show-sequence-item epkb-show-sequence-item--depth-<?php echo esc_attr( $depth ); ?>">
+				<div class="epkb-show-sequence-category_name"  style="border-left-width: <?php echo esc_attr( $depth * 10 ); ?>px;">
+					<a href="<?php echo esc_url( get_term_link( $category_id ) ); ?>" target="_blank"><?php echo esc_html( $category[0] ); ?></a>
+					<div class="epkb-show-sequence-category_description"><?php echo esc_html( $category[1] ); ?></div>
 				</div>
 
 				<ul class="epkb-show-sequence-category_articles"><?php
@@ -189,7 +189,7 @@ class EPKB_Reset {
 							continue;
 						} ?>
 
-						<li><a href="<?php echo get_the_permalink( $article_id ); ?>" target="_blank"><?php echo $article_title; ?></a></li><?php
+						<li><a href="<?php echo esc_url( get_the_permalink( $article_id ) ); ?>" target="_blank"><?php echo esc_html( $article_title ); ?></a></li><?php
 					} ?>
 				</ul>
 			</div> <?php

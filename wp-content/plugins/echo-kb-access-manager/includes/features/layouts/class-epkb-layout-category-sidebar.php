@@ -88,7 +88,7 @@ class EPKB_Layout_Category_Sidebar {
 
 		<div class="eckb-article-cat-layout-list eckb-article-cat-layout-list-reset">
 			<div class="eckb-article-cat-layout-list__inner">
-				<div class="eckb-acll__title"><?php echo $kb_config['category_focused_menu_heading_text']; ?></div>
+				<div class="eckb-acll__title"><?php echo esc_html( $kb_config['category_focused_menu_heading_text'] ); ?></div>
 				<ul>						<?php
 
 					// display each category in a list
@@ -98,16 +98,16 @@ class EPKB_Layout_Category_Sidebar {
 						$active = ! empty( $active_id ) && $active_id == $top_category_id;
 						$count = EPKB_Categories_DB::get_category_count( $kb_id, $top_category_id ); ?>
 
-						<li class="eckb--acll__cat-item <?php echo $active ? 'eckb--acll__cat-item--active' : ''; ?>">
-							<a href="<?php echo $term_link; ?>">
+						<li class="eckb--acll__cat-item <?php echo ( $active ? 'eckb--acll__cat-item--active' : '' ); ?>">
+							<a href="<?php echo esc_url( $term_link ); ?>">
 								<div>
 									<span class="eckb-acll__cat-item__name">
-										<?php echo $top_category_name; ?>
+										<?php echo esc_html( $top_category_name ); ?>
 									</span>
 								</div>
 								<div>
 									<span class="eckb-acll__cat-item__count">
-										<?php echo $count; ?>
+										<?php echo esc_html( $count ); ?>
 									</span>
 								</div>
 							</a>
@@ -127,24 +127,23 @@ class EPKB_Layout_Category_Sidebar {
 
 		<style>
 			.eckb-acll__title {
-				color:<?php echo $kb_config['category_box_title_text_color']; ?>;
+				color:<?php echo esc_attr( $kb_config['category_box_title_text_color'] ); ?>;
 			}
 			.eckb-article-cat-layout-list {
-				background-color:<?php echo $kb_config['category_box_container_background_color']; ?>;
-				<?php echo $categories_box_typography_styles; ?>
-
+				background-color:<?php echo esc_attr( $kb_config['category_box_container_background_color'] ); ?>;
+				<?php echo esc_attr( $categories_box_typography_styles ); ?>
 			}
 			.eckb-article-cat-layout-list a {
-				<?php echo $categories_box_typography_styles; ?>
+				<?php echo esc_attr( $categories_box_typography_styles ); ?>
 			}
 			body .eckb-acll__cat-item__name {
-				color:<?php echo $kb_config['category_box_category_text_color']; ?>;
-				<?php echo $categories_box_typography_styles; ?>
+				color:<?php echo esc_attr( $kb_config['category_box_category_text_color'] ); ?>;
+				<?php echo esc_attr( $categories_box_typography_styles ); ?>
 			}
 			.eckb-acll__cat-item__count {
-				color:<?php echo $kb_config['category_box_count_text_color']; ?>;
-				background-color:<?php echo $kb_config['category_box_count_background_color']; ?>;
-				border:solid 1px <?php echo $kb_config['category_box_count_border_color']; ?>;
+				color:<?php echo esc_attr( $kb_config['category_box_count_text_color'] ); ?>;
+				background-color:<?php echo esc_attr( $kb_config['category_box_count_background_color'] ); ?>;
+				border:solid 1px <?php echo esc_attr( $kb_config['category_box_count_border_color'] ); ?>!important;
 			}
 		</style>    <?php
 	}

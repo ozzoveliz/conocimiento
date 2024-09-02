@@ -62,7 +62,6 @@ class EPRF_Rating_Comments  {
 	 * @param $types
 	 * @return mixed
 	 */
-
 	function comment_types_dropdown_filter( $types ) {
 		$types['eprf-article'] = __('Rating Feedback', 'echo-article-rating-and-feedback');
 		return $types;
@@ -71,13 +70,13 @@ class EPRF_Rating_Comments  {
 	/**
 	 * Filter comments so response of the eprf comment will be eprf comment too
 	 */
-	function comment_post_action( $comment_ID, $comment_approved, $commentdata ) {
+	function comment_post_action( $comment_ID, $comment_approved, $comment_data ) {
 		// not response
-		if ( $commentdata['comment_parent'] == 0 || $commentdata['comment_type'] == 'eprf-article' ) {
+		if ( $comment_data['comment_parent'] == 0 || $comment_data['comment_type'] == 'eprf-article' ) {
 			return;
 		}
 
-		$parent_comment = get_comment( $commentdata['comment_parent'] );
+		$parent_comment = get_comment( $comment_data['comment_parent'] );
 		if ( empty( $parent_comment ) ) {
 			return;
 		}

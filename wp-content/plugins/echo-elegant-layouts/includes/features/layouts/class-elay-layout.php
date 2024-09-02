@@ -11,6 +11,8 @@ abstract class ELAY_Layout {
 	const BASIC_LAYOUT = 'Basic';
 	const TABS_LAYOUT = 'Tabs';
 	const CATEGORIES_LAYOUT = 'Categories';
+	const CLASSIC_LAYOUT = 'Classic';
+	const DRILL_DOWN_LAYOUT = 'Drill-Down';
 	const SIDEBAR_LAYOUT = 'Sidebar';
 	const GRID_LAYOUT = 'Grid';
 
@@ -18,7 +20,7 @@ abstract class ELAY_Layout {
 	protected $kb_id;
 	protected $category_seq_data;
 	protected $articles_seq_data;
-	protected $is_builder_on = false;
+	protected $is_ordering_wizard_on = false;
 	protected $has_kb_categories = true;
 	protected $active_theme = 'unknown';
 	protected $sidebar_loaded = false;
@@ -27,11 +29,11 @@ abstract class ELAY_Layout {
 	 * Show the KB Main page with list of categories and articles
 	 *
 	 * @param $kb_config
-	 * @param bool $is_builder_on
+	 * @param bool $is_ordering_wizard_on
 	 * @param array $article_seq
 	 * @param array $categories_seq
 	 */
-	public function display_kb_main_page( $kb_config, $is_builder_on=false, $article_seq=array(), $categories_seq=array() ) {
+	public function display_kb_main_page( $kb_config, $is_ordering_wizard_on=false, $article_seq=array(), $categories_seq=array() ) {
 
 		// add configuration that is specific to Elegant Layouts
 		$add_on_config = elay_get_instance()->kb_config_obj->get_kb_config_or_default( $kb_config['id'] );
@@ -39,10 +41,10 @@ abstract class ELAY_Layout {
 
 		$this->kb_config = $kb_config;
 		$this->kb_id = $kb_config['id'];
-		$this->is_builder_on = $is_builder_on;
+		$this->is_ordering_wizard_on = $is_ordering_wizard_on;
 
 		// set category and article sequence
-		if ( $is_builder_on && ! empty( $article_seq ) && ! empty( $categories_seq ) ) {
+		if ( $is_ordering_wizard_on && ! empty( $article_seq ) && ! empty( $categories_seq ) ) {
 			$this->articles_seq_data = $article_seq;
 			$this->category_seq_data = $categories_seq;
 		} else {
@@ -70,40 +72,64 @@ abstract class ELAY_Layout {
 	 *
 	 * @param $title
 	 * @param $article_id
-	 * @param string $link_other
-	 * @param string $prefix
 	 * @param string $seq_no
 	 */
-	protected function single_article_link( $title , $article_id, $link_other='', $prefix='', $seq_no='' ) {
+	protected function single_article_link( $title , $article_id, $seq_no='' ) {
 
-		if ( empty($article_id) ) {
+		if ( empty( $article_id ) ) {
 			return;
 		}
 
-		$class1 = $this->get_css_class( 'elay-article-title' .
+		$outer_span = $this->get_css_class( 'elay-article-title' .
 										( $this->kb_config['sidebar_article_underline'] == 'on' ? ', article_underline_effect' : '' ) .
 										( $this->kb_config['sidebar_article_active_bold'] == 'on' ? ', article_active_bold' : '' )
 		);
-		$article_color = $this->get_inline_style( 'color:: ' . $prefix . 'article_font_color' );
-		$icon_color = $this->get_inline_style( 'color:: ' . $prefix . 'article_icon_color' );
+		$article_color_escaped = $this->get_inline_style( 'color:: ' . 'sidebar_article_font_color' );
+		$icon_color_escaped = $this->get_inline_style( 'color:: ' . 'sidebar_article_icon_color' );
+
+		$icon_class = 'elay-article-title__icon ep_font_icon_document';
 
 		// handle any add-on content
+		$title_attr_escaped = '';
+		$new_tab = '';
+		$link = '';
 		if ( has_filter( 'eckb_single_article_filter' ) ) {
-			$result = apply_filters('eckb_single_article_filter', $article_id, array( $this->kb_id, $title, $class1, $article_color, $icon_color ) );
+
+			$result = apply_filters('eckb_single_article_filter', $article_id, array( $this->kb_id, $title, $outer_span, $article_color_escaped, $icon_color_escaped ) );
+
+			// keep for old compatibility for links to output separately
 			if ( ! empty( $result ) && $result === true ) {
 				return;
 			}
+
+			if ( is_array( $result) && isset( $result['url_value'] ) ) {
+				$link = $result['url_value'];
+				$title_attr_escaped = 'title="' . esc_attr( $result['title_attr_value'] ) . '"';
+				$new_tab = $result['new_tab'];
+				$icon_class = 'elay-article-title__icon epkbfa epkbfa-' . $result['icon'];
+			}
 		}
 
-		$link = get_permalink( $article_id );
-		if ( ! has_filter( 'article_with_seq_no_in_url_enable' ) ) {
-			$link = empty( $seq_no ) || $seq_no < 2 ? $link : add_query_arg( 'seq_no', $seq_no, $link );
-			$link = empty( $link ) || is_wp_error( $link ) ? '' : $link;
-		}  ?>
+		// if not linked article
+		if ( empty( $link ) ) {
+			$link = get_permalink( $article_id );
+			if ( ! has_filter('article_with_seq_no_in_url_enable') ) {
+				$link = empty( $seq_no ) || $seq_no < 2 ? $link : add_query_arg('seq_no', $seq_no, $link);
+				$link = empty( $link ) || is_wp_error( $link ) ? '' : $link;
+			}
 
-		<a href="<?php echo esc_url( $link ); ?>" <?php echo $link_other; ?>>
-			<span <?php echo $class1; ?> >
-				<span class="elay-article-title__icon ep_font_icon_document" <?php echo $icon_color; ?> aria-hidden="true"></span>
+			$icon_class = 'elay-article-title__icon ' . ( str_contains( $this->kb_config['elay_sidebar_article_icon'], 'ep_font_' ) ? '' : 'epkbfa epkbfa-' ) . $this->kb_config['elay_sidebar_article_icon'];
+		}
+
+		$icon_toggle_class = '';
+		if ( isset( $this->kb_config['sidebar_article_icon_toggle'] ) && $this->kb_config['sidebar_article_icon_toggle'] == 'off' ) {
+			$icon_class = '';
+			$icon_toggle_class = 'elay-article--no-icon';
+		}   ?>
+
+		<a href="<?php echo esc_url( $link ); ?>" <?php echo $title_attr_escaped; ?> class="elay-sidebar-article <?php echo  esc_attr( $icon_toggle_class ); ?>" data-kb-article-id='<?php echo $article_id; ?>' <?php echo ( empty( $new_tab ) ? '' : 'target="_blank"' ); ?>>
+			<span <?php echo $outer_span; ?> >
+				<span class="<?php echo esc_attr( $icon_class ); ?>" <?php echo $icon_color_escaped; ?> aria-hidden="true"></span>
 				<span class="elay-article-title__text"><?php echo esc_html( $title ); ?></span>
 			</span>
 		</a> <?php
@@ -212,7 +238,7 @@ abstract class ELAY_Layout {
 					ELAY_HTML_Forms::dialog_confirm_action( array(
 						'id'                => 'epkb-created-kb-content',
 						'title'             => __( 'Notice', 'echo-knowledge-base' ),
-						'body'              => __( 'Demo categories and articles were created. The page will reload.', 'echo-knowledge-base' ),
+						'body'              => __( 'Demo categories and articles have been created. The page will reload.', 'echo-knowledge-base' ),
 						'accept_label'      => __( 'Ok', 'echo-knowledge-base' ),
 						'accept_type'       => 'primary',
 						'show_cancel_btn'   => 'no',

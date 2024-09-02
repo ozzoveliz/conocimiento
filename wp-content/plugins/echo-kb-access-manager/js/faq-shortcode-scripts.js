@@ -5,7 +5,11 @@ jQuery(document).ready(function($) {
     	 ********************************************************************/
 
 	// Accordion mode
-	$('.epkb-faqs-accordion-mode .epkb-faqs__item__question').on('click', function(){
+	// click triggered only if data-faqs-type is 'faqs'
+
+	$('.epkb-faqs-accordion-mode .epkb-faqs__item__question').filter(function() {
+		return $(this).data('faq-type') == 'faqs';
+	}).on('click', function(){
 
 		var container = $(this).closest('.epkb-faqs__item-container').eq(0);
 
@@ -17,7 +21,9 @@ jQuery(document).ready(function($) {
 		container.toggleClass('epkb-faqs__item-container--active');
 	});
 	// Toggle Mode
-	$('.epkb-faqs-toggle-mode .epkb-faqs__item__question').on('click', function(){
+	$('.epkb-faqs-toggle-mode .epkb-faqs__item__question').filter(function() {
+		return $(this).data('faq-type') == 'faqs';
+	}).on('click', function(){
 		var container = $(this).closest('.epkb-faqs__item-container').eq(0);
 
 		// Close other opened items

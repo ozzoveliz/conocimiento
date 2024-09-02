@@ -332,6 +332,8 @@
 
 .ast-container .eckb-kb-template {
   width: 100%; }
+.ast-container #eckb-archive-page-container {
+  width: 100% !important; }
 
 .epkb-editor-preview .site-content {
   z-index: 9999999;
@@ -2386,7 +2388,8 @@
   border-style: solid; }
   #epkb-sidebar-container-v2 .epkb-sidebar__cat__top-cat__heading-container .epkb-sidebar__heading__inner__name .epkb-sidebar__heading__inner__cat-name {
     font-size: 1.3em;
-    display: inline-block; }
+    display: inline-block;
+    font-family: inherit !important; }
   #epkb-sidebar-container-v2 h3, #epkb-sidebar-container-v2 h4, #epkb-sidebar-container-v2 h5, #epkb-sidebar-container-v2 h6 {
     display: inline-block;
     font-size: inherit;
@@ -2445,6 +2448,8 @@
       align-items: center; }
   #epkb-sidebar-container-v2.epkb-sidebar--TopCat-on .epkb-sidebar__cat__top-cat__body-container {
     display: none; }
+  #epkb-sidebar-container-v2 .epkb-sidebar__cat__top-cat__body-container .epkb-articles-coming-soon {
+    font-weight: inherit !important; }
   #epkb-sidebar-container-v2 .epkb-sidebar__cat-container {
     margin: 0;
     padding: 0; }
@@ -2513,22 +2518,27 @@
       line-height: 1.3em;
       font-family: inherit;
       font-weight: inherit; }
-  #epkb-sidebar-container-v2 .epkb-article-title {
+  #epkb-sidebar-container-v2 .epkb-article-title,
+  #epkb-sidebar-container-v2 .eckb-article-title {
     position: relative;
     font-size: 1em;
     display: block;
     font-family: inherit;
     font-weight: inherit; }
-    #epkb-sidebar-container-v2 .epkb-article-title .eckb-article-title__icon {
+    #epkb-sidebar-container-v2 .epkb-article-title .eckb-article-title__icon,
+    #epkb-sidebar-container-v2 .eckb-article-title .eckb-article-title__icon {
       position: absolute;
       top: 2px;
       left: 0; }
-    #epkb-sidebar-container-v2 .epkb-article-title .eckb-article-title__text {
+    #epkb-sidebar-container-v2 .epkb-article-title .eckb-article-title__text,
+    #epkb-sidebar-container-v2 .eckb-article-title .eckb-article-title__text {
       margin-left: 1.5em;
       display: block;
       line-height: 1.3em;
       font-family: inherit;
-      font-weight: inherit; }
+      font-weight: inherit !important; }
+  #epkb-sidebar-container-v2 .epkb-article--no-icon .eckb-article-title__text {
+    margin-left: 0 !important; }
 
 .epkb-sidebar--reset h1, .epkb-sidebar--reset h2, .epkb-sidebar--reset h3, .epkb-sidebar--reset h4, .epkb-sidebar--reset h5, .epkb-sidebar--reset h6, .epkb-sidebar--reset p, .epkb-sidebar--reset a, .epkb-sidebar--reset div, .epkb-sidebar--reset span, .epkb-sidebar--reset strong, .epkb-sidebar--reset b, .epkb-sidebar--reset i, .epkb-sidebar--reset ol, .epkb-sidebar--reset ul, .epkb-sidebar--reset li, .epkb-sidebar--reset section, .epkb-sidebar--reset nav, .epkb-sidebar--reset menu, .epkb-sidebar--reset header, .epkb-sidebar--reset form, .epkb-sidebar--reset input, .epkb-sidebar--reset button, .epkb-sidebar--reset img, .epkb-sidebar--reset legend, .epkb-sidebar--reset label, .epkb-sidebar--reset fieldset {
   margin: 0;

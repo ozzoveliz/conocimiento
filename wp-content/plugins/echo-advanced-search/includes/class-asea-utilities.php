@@ -25,7 +25,7 @@ class ASEA_Utilities {
 								'private' => __( 'Private' ),
 								'trash'   => __( 'Trash' ));
 
-		if ( empty($post_status) || ! in_array($post_status, array_keys($post_statuses)) ) {
+		if ( empty( $post_status ) || ! in_array( $post_status, array_keys( $post_statuses ) ) ) {
 			return $post_status;
 		}
 
@@ -35,6 +35,11 @@ class ASEA_Utilities {
 	public static function get_eckb_kb_id( $default=1 ) {
 		global $eckb_kb_id;
 		return empty( $eckb_kb_id ) ? $default : $eckb_kb_id;
+	}
+
+	public static function get_current_category() {
+		$term = get_queried_object();
+		return empty( $term ) || ! $term instanceof WP_Term ? null : $term;
 	}
 
 
@@ -55,8 +60,8 @@ class ASEA_Utilities {
 	 * @return string
 	 */
 	public static function substr( $string, $start, $length=null ) {
-		$result = substr($string, $start, $length);
-		return empty($result) ? '' : $result;
+		$result = substr( $string, $start, $length );
+		return empty( $result ) ? '' : $result;
 	}
 
 	/**************************************************************************************************************************
@@ -67,19 +72,19 @@ class ASEA_Utilities {
 
 	/**
 	 * Determine if value is positive integer ( > 0 )
-	 * @param int $number is check
+	 * @param int $number is checked
 	 * @return bool
 	 */
 	public static function is_positive_int( $number ) {
 
 		// no invalid format
-		if ( empty($number) || ! is_numeric($number) ) {
+		if ( empty( $number ) || ! is_numeric( $number ) ) {
 			return false;
 		}
 
 		// no non-digit characters
 		$numbers_only = preg_replace('/\D/', "", $number );
-		if ( empty($numbers_only) || $numbers_only != $number ) {
+		if ( empty( $numbers_only ) || $numbers_only != $number ) {
 			return false;
 		}
 
@@ -252,13 +257,41 @@ class ASEA_Utilities {
 	 *************************************************************************************************************************/
 
 	/**
+	 * wp_die with an error message if nonce invalid or user does not have correct permission
+	 *
+	 * @param string $wpnonce_name
+	 * @param string $context - leave empty if only admin can access this
+	 */
+	public static function ajax_verify_nonce_and_admin_permission_or_error_die( $wpnonce_name='_wpnonce_asea_ajax_action', $context='' ) {
+
+		// check wpnonce
+		$wp_nonce = self::post( $wpnonce_name );
+		if ( empty( $wp_nonce ) || ! wp_verify_nonce( $wp_nonce, $wpnonce_name ) ) {
+			self::ajax_show_error_die( __( 'Login or refresh this page to edit this knowledge base', 'echo-knowledge-base' ) . ' (E01)'  );
+		}
+
+		// without context only admins can make changes
+		if ( empty( $context ) ) {
+			if ( ! current_user_can( 'manage_options' ) ) {
+				self::ajax_show_error_die( __( 'Login or refresh this page to edit this knowledge base', 'echo-knowledge-base' ) . ' (E02)'  );
+			}
+			return;
+		}
+
+		// ensure user has correct permission
+		if ( ! ASEA_KB_Core::is_user_access_to_context_allowed( $context ) ) {
+			self::ajax_show_error_die(__( 'You do not have permission to edit this knowledge base', 'echo-knowledge-base' ) . ' (E02)');
+		}
+	}
+
+	/**
 	 * AJAX: Used on response back to JS. will call wp_die()
 	 *
 	 * @param string $message
 	 * @param string $title
 	 * @param string $type
 	 */
-	public static function ajax_show_info_die( $message, $title='', $type='success' ) {
+	public static function ajax_show_info_die( $message='', $title='', $type='success' ) {
 		if ( defined('DOING_AJAX') ) {
 			wp_die( wp_json_encode( array( 'message' => ASEA_HTML_Forms::notification_box_bottom( $message, $title, $type ) ) ) );
 		}
@@ -295,11 +328,11 @@ class ASEA_Utilities {
 		}
 
 		$user = wp_get_current_user();
-		if ( empty( $user ) || empty ( $user->roles ) ) {
+		if ( empty( $user ) || empty( $user->roles ) ) {
 			return '';
 		}
 
-		if ( ! in_array( 'administrator', $user->roles ) && ! in_array( 'administrator', $user->roles ) ) {
+		if ( ! in_array( 'administrator', $user->roles ) ) {
 			return '';
 		}
 
@@ -447,6 +480,12 @@ class ASEA_Utilities {
         return $sanitized_array;
     }
 
+	public static function sanitize_html_tag( $tag, $default='div' ) {
+		$tag = trim( $tag );
+		$tag = substr( $tag, 0, 4);
+		return in_array( $tag, ['h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'div', 'span', 'p'] ) ? $tag : $default;
+	}
+
 	/**
 	 * Decode and sanitize form fields.
 	 *
@@ -455,13 +494,13 @@ class ASEA_Utilities {
 	 * @return array
 	 */
 	public static function retrieve_and_sanitize_form( $form, $all_fields_specs ) {
-		if ( empty($form) ) {
+		if ( empty( $form ) ) {
 			return array();
 		}
 
 		// first urldecode()
-		if (is_string($form)) {
-			parse_str($form, $submitted_fields);
+		if ( is_string( $form ) ) {
+			parse_str( $form, $submitted_fields );
 		} else {
 			$submitted_fields = $form;
 		}
@@ -500,13 +539,13 @@ class ASEA_Utilities {
 	 */
 	public static function sanitize_comma_separated_ints( $text, $default='' ) {
 
-		if ( empty($text) || ! is_string($text) ) {
+		if ( empty( $text ) || ! is_string( $text ) ) {
 			return $default;
 		}
 
-		$text = preg_replace('/[^0-9 \,_]/', '', $text);
+		$text = preg_replace( '/[^0-9 \,_]/', '', $text );
 
-		return empty($text) ? $default : $text;
+		return empty( $text ) ? $default : $text;
 	}
 
 	/**
@@ -518,6 +557,8 @@ class ASEA_Utilities {
 	 * @param int $max_length
 	 * @return array|string - empty if not found
 	 */
+	// phpcs:disable WordPress.Security.NonceVerification.Recommended -- Verified elsewhere.
+	// phpcs:disable WordPress.Security.NonceVerification.Missing -- Verified elsewhere.
 	public static function post( $key, $default = '', $value_type = 'text', $max_length = 0 ) {
 
 		if ( isset( $_POST[$key] ) ) {
@@ -540,6 +581,8 @@ class ASEA_Utilities {
 	 * @param int $max_length
 	 * @return array|string - empty if not found
 	 */
+	// phpcs:disable WordPress.Security.NonceVerification.Recommended -- Verified elsewhere.
+	// phpcs:disable WordPress.Security.NonceVerification.Missing -- Verified elsewhere.
 	private static function post_sanitize( $key, $default = '', $value_type = 'text', $max_length = 0 ) {
 
 		if ( $_POST[$key] === null || is_object( $_POST[$key] )  ) {
@@ -551,18 +594,14 @@ class ASEA_Utilities {
 			return $_POST[$key];
 		}
 
-		if ( is_array( $_POST[$key] ) ) {
-			return self::sanitize_array( $_POST[$key] );
+		// config is sanitizing with its own specs separately
+		if ( $value_type == 'db-config-json' ) {
+			$decoded_value = json_decode( stripcslashes( $_POST[$key] ), true );
+			return empty( $decoded_value ) ? $default : $decoded_value;
 		}
 
-		// jquery serialized form. sanitize values in array
-		if ( $value_type == 'form' ) {
-			$result = is_array( $default ) ? $default : [];
-			wp_parse_str( stripslashes( $_POST[$key] ), $decoded_form );
-			foreach ( $decoded_form as $field => $val ) {
-				$result[$field] = wp_kses_post( $val );
-			}
-			return $result;
+		if ( is_array( $_POST[$key] ) ) {
+			return self::sanitize_array( $_POST[$key] );
 		}
 
 		if ( $value_type == 'text-area' ) {
@@ -577,17 +616,18 @@ class ASEA_Utilities {
 			$value = sanitize_text_field( stripslashes( $_POST[$key] ) );
 		}
 
-		// optionally limit value by length
+		// optionally limit the value by length
 		if ( ! empty( $max_length ) ) {
-			$value = substr( $value, 0, $max_length );
+			$value = self::substr( $value, 0, $max_length );
 		}
 
 		return $value;
 	}
 
+	// phpcs:disable WordPress.Security.NonceVerification.Recommended -- Verified elsewhere.
 	public static function request_key( $key, $default = '' ) {
 
-		if ( is_string( $_REQUEST[$key] ) ) {
+		if ( isset( $_REQUEST[$key] ) && is_string( $_REQUEST[$key] ) ) {
 			return sanitize_key( $_REQUEST[$key] );
 		}
 
@@ -603,6 +643,7 @@ class ASEA_Utilities {
 	 * @param int $max_length
 	 * @return array|string - empty if not found
 	 */
+	// phpcs:disable WordPress.Security.NonceVerification.Recommended -- Verified elsewhere.
 	public static function get( $key, $default = '', $value_type = 'text', $max_length = 0 ) {
 
 		if ( isset( $_GET[$key] ) ) {
@@ -625,6 +666,7 @@ class ASEA_Utilities {
 	 * @param int $max_length
 	 * @return array|string - empty if not found
 	 */
+	// phpcs:disable WordPress.Security.NonceVerification.Recommended -- Verified elsewhere.
 	private static function get_sanitize( $key, $default = '', $value_type = 'text', $max_length = 0 ) {
 
 		if ( $_GET[$key] === null || is_object( $_GET[$key] )  ) {
@@ -636,18 +678,14 @@ class ASEA_Utilities {
 			return $_GET[$key];
 		}
 
-		if ( is_array( $_GET[$key] ) ) {
-			return self::sanitize_array( $_GET[$key] );
+		// config is sanitizing with its own specs separately
+		if ( $value_type == 'db-config-json' ) {
+			$decoded_value = json_decode( stripcslashes( $_GET[$key] ), true );
+			return empty( $decoded_value ) ? $default : $decoded_value;
 		}
 
-		// jquery serialized form. sanitize values in array
-		if ( $value_type == 'form' ) {
-			$result = is_array( $default ) ? $default : [];
-			wp_parse_str( stripslashes( $_GET[$key] ), $decoded_form );
-			foreach ( $decoded_form as $field => $val ) {
-				$result[$field] = wp_kses_post( $val );
-			}
-			return $result;
+		if ( is_array( $_GET[$key] ) ) {
+			return self::sanitize_array( $_GET[$key] );
 		}
 
 		if ( $value_type == 'text-area' ) {
@@ -664,7 +702,7 @@ class ASEA_Utilities {
 
 		// optionally limit value by length
 		if ( ! empty( $max_length ) ) {
-			$value = substr( $value, 0, $max_length );
+			$value = self::substr( $value, 0, $max_length );
 		}
 
 		return $value;
@@ -691,34 +729,6 @@ class ASEA_Utilities {
 		}
 
 		return $result;
-	}
-
-	/**
-	 * wp_die with an error message if nonce invalid or user does not have correct permission
-	 *
-	 * @param string $wpnonce_name
-	 * @param string $context - leave empty if only admin can access this
-	 */
-	public static function ajax_verify_nonce_and_admin_permission_or_error_die( $wpnonce_name='_wpnonce_asea_ajax_action', $context='' ) {
-
-		// check wpnonce
-		$wp_nonce = self::post( $wpnonce_name );
-		if ( empty( $wp_nonce ) || ! wp_verify_nonce( $wp_nonce, $wpnonce_name ) ) {
-			self::ajax_show_error_die( __( 'Login or refresh this page to edit this knowledge base', 'echo-knowledge-base' ) . ' (E01)'  );
-		}
-
-		// without context only admins can make changes
-		if ( empty( $context ) ) {
-			if ( ! current_user_can( 'manage_options' ) ) {
-				self::ajax_show_error_die( __( 'Login or refresh this page to edit this knowledge base', 'echo-knowledge-base' ) . ' (E02)'  );
-			}
-			return;
-		}
-
-		// ensure user has correct permission
-		if ( ! ASEA_KB_Core::is_user_access_to_context_allowed( $context ) ) {
-			self::ajax_show_error_die(__( 'You do not have permission to edit this knowledge base', 'echo-knowledge-base' ) . ' (E02)');
-		}
 	}
 
 
@@ -764,7 +774,7 @@ class ASEA_Utilities {
 		}
 
 		// retrieve specific WP option
-		$option = $wpdb->get_var( $wpdb->prepare( "SELECT option_value FROM $wpdb->options WHERE option_name = %s", $option_name ) );
+		$option = $wpdb->get_var( $wpdb->prepare("SELECT option_value FROM $wpdb->options WHERE option_name = %s", $option_name ) );
 		if ( $option !== null ) {
 			$option = maybe_unserialize( $option );
 		}
@@ -858,9 +868,9 @@ class ASEA_Utilities {
 	 * @param $meta_key
 	 * @param $default
 	 * @param bool|false $is_array
-	 * @param bool $return_error
+	 * @param bool|WP_Error $return_error
 	 *
-	 * @return array|string or default or error if $return_error is true
+	 * @return array|string|WP_Error or default or error if $return_error is true
 	 */
 	public static function get_postmeta( $post_id, $meta_key, $default, $is_array=false, $return_error=false ) {
 		/** @var $wpdb Wpdb */
@@ -875,7 +885,7 @@ class ASEA_Utilities {
 		}
 
 		// retrieve specific option
-		$option = $wpdb->get_var( $wpdb->prepare("SELECT meta_value FROM $wpdb->postmeta WHERE post_id = %d and meta_key = '%s'", $post_id, $meta_key ) );
+		$option = $wpdb->get_var( $wpdb->prepare( "SELECT meta_value FROM $wpdb->postmeta WHERE post_id = %d and meta_key = %s", $post_id, $meta_key ) );
 		if ($option !== null ) {
 			$option = maybe_unserialize( $option );
 		}
@@ -933,7 +943,7 @@ class ASEA_Utilities {
 		}
 
 		// check if the meta field already exists before doing 'upsert'
-		$result = $wpdb->get_row( $wpdb->prepare( "SELECT meta_value FROM $wpdb->postmeta WHERE meta_key = '%s' AND post_id = %d", $meta_key, $post_id ) );
+		$result = $wpdb->get_row( $wpdb->prepare( "SELECT meta_value FROM $wpdb->postmeta WHERE meta_key = %s AND post_id = %d", $meta_key, $post_id ) );
 		if ( $result === null && ! empty($wpdb->last_error) ) {
 			$wpdb_last_error = $wpdb->last_error;   // add_log changes last_error so store it first
 			ASEA_Logging::add_log( "DB failure: " . $wpdb_last_error );
@@ -947,7 +957,7 @@ class ASEA_Utilities {
 				return new WP_Error( '33', __( 'Error occurred', 'echo-knowledge-base' ) );
 			}
 		} else {
-			if ( false === $wpdb->query( $wpdb->prepare( "UPDATE $wpdb->postmeta SET meta_value = %s WHERE meta_key = '%s' AND post_id = %d", $serialized_value, $meta_key, $post_id ) ) ) {
+			if ( false === $wpdb->query( $wpdb->prepare( "UPDATE $wpdb->postmeta SET meta_value = %s WHERE meta_key = %s AND post_id = %d", $serialized_value, $meta_key, $post_id ) ) ) {
 				ASEA_Logging::add_log("Failed to update meta data. ", $meta_key);
 				return new WP_Error( '33', __( 'Error occurred', 'echo-knowledge-base' ) );
 			}
@@ -980,7 +990,7 @@ class ASEA_Utilities {
 		}
 
 		// delete specific option
-		if ( false === $wpdb->query( $wpdb->prepare( "DELETE FROM $wpdb->postmeta WHERE post_id = %d and meta_key = '%s'", $post_id, $meta_key ) ) ) {
+		if ( false === $wpdb->query( $wpdb->prepare( "DELETE FROM $wpdb->postmeta WHERE post_id = %d and meta_key = %s", $post_id, $meta_key ) ) ) {
 			ASEA_Logging::add_log("Could not delete post '" . self::get_variable_string($meta_key) . "'' metadata: ", $post_id);
 			return false;
 		}
@@ -1127,6 +1137,28 @@ class ASEA_Utilities {
 		return function_exists( 'mb_strtolower' ) ? mb_strtolower( $string ) : strtolower( $string );
 	}
 
+	public static function is_logged_on() {
+		$user = self::get_current_user();
+		return ! empty( $user );
+	}
+
+	/**
+	 * Determine if current user is WP administrator WITHOUT calling current_user_can()
+	 *
+	 * @param null $user
+	 * @return bool
+	 */
+	public static function is_user_admin( $user=null ) {
+
+		// get current user
+		$user = empty( $user ) ? self::get_current_user() : $user;
+		if ( empty( $user ) || empty( $user->roles ) || empty( $user->allcaps ) ) {
+			return false;
+		}
+
+		return in_array( 'administrator', $user->roles ) || array_key_exists( 'manage_options', $user->allcaps );
+	}
+
 	/**
 	 * Get current user.
 	 *
@@ -1145,34 +1177,6 @@ class ASEA_Utilities {
 		}
 
 		return $user;
-	}
-
-	/**
-	 * Determine if current user is WP administrator WITHOUT calling current_user_can()
-	 *
-	 * @param null $user
-	 * @return bool
-	 */
-	public static function is_user_admin( $user=null ) {
-
-		// get current user
-        $user = empty( $user ) ? self::get_current_user() : $user;
-		if ( empty( $user ) || empty( $user->roles ) ) {
-			return false;
-		}
-
-		return in_array('administrator', $user->roles) || array_key_exists('manage_options', $user->allcaps);
-	}
-
-
-	/**
-	 * Check first installed version. Return true if $version less or equal than first installed version. Also return true if epkb_version_first was removed. Use to apply some functions only to new users
-	 * @param $version
-	 * @return bool
-	 */
-	public static function is_new_user( $version ) {
-		$plugin_first_version = self::get_wp_option( 'epkb_version_first', $version );
-		return ! version_compare( $plugin_first_version, $version, '<' );
 	}
 
 	/**
@@ -1379,9 +1383,9 @@ class ASEA_Utilities {
 		}
 
 		$table = $wpdb->prefix . 'am'.'gr_kb_groups';
-		$result = $wpdb->get_var( "SHOW TABLES LIKE '" . $table ."'" );
+		$result = $wpdb->get_var( $wpdb->prepare( "SHOW TABLES LIKE %s", $table ) );
 
-		return ( ! empty($result) && ( $table == $result ) );
+		return ( ! empty( $result ) && ( $table == $result ) );
 	}
 	
 	/**
@@ -1429,7 +1433,7 @@ class ASEA_Utilities {
 	 * @return bool
 	 */
 	public static function is_wpml_plugin_active() {
-		return defined('ICL_SITEPRESS_VERSION');
+		return defined( 'ICL_SITEPRESS_VERSION' );
 	}
 
 	public static function is_advanced_search_enabled( $kb_config=array() ) {
@@ -1569,7 +1573,7 @@ class ASEA_Utilities {
 
 	public static function is_kb_main_page() {
 		global $eckb_is_kb_main_page;
-		return ( isset( $eckb_is_kb_main_page ) && $eckb_is_kb_main_page ) || ASEA_Utilities::get( 'is_kb_main_page' ) == 1;
+		return isset( $eckb_is_kb_main_page ) && $eckb_is_kb_main_page;
 	}
 
 	/**
@@ -1661,6 +1665,12 @@ class ASEA_Utilities {
 		$message = str_replace( '&#038;', '&amp;', $message );
 		$message = str_replace( [ "\r\n", '\r\n', "\n", '\n', "\r", '\r' ], '<br />', $message );
 
+		global /** @var WP_Error $epkb_email_error - email error from WordPress wp_mail() function */
+		$epkb_email_error;
+
+		$epkb_email_error = false;
+		add_action( 'wp_mail_failed', [ 'ASEA_Utilities', 'check_email_errors' ] );
+
 		// we to add filter to allow HTML in the email content to make sure the content type was not changed by third-party code
 		add_filter( 'wp_mail_content_type', array( 'ASEA_Utilities', 'set_html_content_type' ), 999 );
 
@@ -1669,8 +1679,27 @@ class ASEA_Utilities {
 
 		// remove filter that allows HTML in the email content
 		remove_filter( 'wp_mail_content_type', array( 'ASEA_Utilities', 'set_html_content_type' ), 999 );
+		remove_action( 'wp_mail_failed', [ 'ASEA_Utilities', 'check_email_errors' ] );
 
-		return $result == false ? __( 'Failed to send the email.', 'echo-knowledge-base' ) : '';
+		// Log email errors if need
+		$error_message = __( 'Failed to send the email.', 'echo-knowledge-base' );
+
+		/** $epkb_email_error @ WP_Error */
+		if ( is_wp_error( $epkb_email_error ) ) {
+			ASEA_Logging::add_log( 'Email error: ' . $epkb_email_error->get_error_message() );
+			$error_message = $epkb_email_error->get_error_message();
+		}
+
+		return $result ? '' : $error_message;
+	}
+
+	/**
+	 * Called by WordPress to store Error when submitting email to the Mail Server
+	 * @param WP_Error$error
+	 */
+	public static function check_email_errors( $error ) {
+		global $epkb_email_error;
+		$epkb_email_error = $error;
 	}
 
 	public static function set_html_content_type( $content_type ) {
@@ -1722,7 +1751,8 @@ class ASEA_Utilities {
 				'source' => [
 					'src' => true,
 					'type' => true
-				]
+				],
+				'iframe' => self::get_admin_ui_extended_html_attributes()
 			];
 		}
 
@@ -1732,18 +1762,26 @@ class ASEA_Utilities {
 	/**
 	 * Return allowed HTML tags and attributes for ADMIN UI
 	 *
+	 * @param $extra_tags
 	 * @return array
 	 */
-	public static function get_admin_ui_extended_html_tags() {
+	public static function get_admin_ui_extended_html_tags( $extra_tags=[] ) {
 
 		$extended_post_tags = [
 			'input'     => self::get_admin_ui_extended_html_attributes(),
 			'select'    => self::get_admin_ui_extended_html_attributes(),
 			'option'    => self::get_admin_ui_extended_html_attributes(),
-			'form'      => self::get_admin_ui_extended_html_attributes(),
+			'form'      => self::get_admin_ui_extended_html_attributes()
 		];
 
-		return array_merge( wp_kses_allowed_html( 'post' ), $extended_post_tags );
+		foreach( $extra_tags as $extra_tag ) {
+			$extended_post_tags += [ $extra_tag => self::get_admin_ui_extended_html_attributes() ];
+		}
+
+		global $allowedposttags;
+		$allowed_post_tags = empty( $allowedposttags ) ? wp_kses_allowed_html( 'post' ) : $allowedposttags;
+
+		return array_merge( $allowed_post_tags, $extended_post_tags );
 	}
 
 	/**
@@ -1753,16 +1791,28 @@ class ASEA_Utilities {
 	 */
 	private static function get_admin_ui_extended_html_attributes() {
 		return [
-			'name'      => true,
-			'type'      => true,
-			'value'     => true,
-			'class'     => true,
-			'style'     => true,
-			'data-*'    => true,
-			'id'        => true,
-			'checked'   => true,
-			'selected'  => true,
-			'target'    => true,
+			'name'              => true,
+			'type'              => true,
+			'value'             => true,
+			'class'             => true,
+			'style'             => true,
+			'data-*'            => true,
+			'id'                => true,
+			'checked'           => true,
+			'selected'          => true,
+			'method'            => true,
+			'src'               => true,
+			'width'             => true,
+			'height'            => true,
+			'title'             => true,
+			'frameborder'       => true,
+			'allow'             => true,
+			'allowfullscreen'   => true,
+			'enctype' 			=> true,
+			'autocomplete'      => true,
+			'action'            => true,
+			'required'          => true,
+			'placeholder'       => true
 		];
 	}
 
@@ -1782,14 +1832,15 @@ class ASEA_Utilities {
 	 * Wrapper for WordPress 'wp_kses' to use for HTML filtering in admin UI
 	 *
 	 * @param $html
+	 * @param array $extra_tags
 	 * @return string
 	 */
-	public static function admin_ui_wp_kses( $html ) {
+	public static function admin_ui_wp_kses( $html, $extra_tags=[] ) {
 
 		// allow specific CSS styles that are disabled by default in WordPress core
 		add_filter( 'safe_style_css', array( 'ASEA_Utilities', 'admin_ui_safe_style_css' ) );
 
-		$sanitized_html = wp_kses( $html, self::get_admin_ui_extended_html_tags() );
+		$sanitized_html = wp_kses( $html, self::get_admin_ui_extended_html_tags( $extra_tags ) );
 
 		// disallow specific CSS styles
 		remove_filter( 'safe_style_css', array( 'ASEA_Utilities', 'admin_ui_safe_style_css' ) );
@@ -1839,7 +1890,7 @@ class ASEA_Utilities {
 	}
 
 	/**
-	 * Return 'true' if the current user can view the given article
+	 * Return 'true' if the current user can view the given article  TODO rename to is_private_article_allowed_for_current_user
 	 *
 	 * @param $article_id
 	 *

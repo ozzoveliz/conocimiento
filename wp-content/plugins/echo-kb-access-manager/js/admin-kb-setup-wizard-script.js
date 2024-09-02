@@ -28,11 +28,6 @@ jQuery(document).ready(function($) {
 			layout_name = '';
 		}
 
-		let theme_name = $('input[name="epkp-theme"]:checked').val();
-		if ( typeof theme_name == 'undefined' ) {
-			theme_name = 'current';
-		}
-
 		if ( $('.epkb-menu-checkbox input[type=checkbox]:checked').length ) {
 			$('.epkb-menu-checkbox input[type=checkbox]:checked').each(function(){
 				menu_ids.push($(this).prop('name').split('epkb_menu_')[1]);
@@ -59,20 +54,17 @@ jQuery(document).ready(function($) {
 		if ( typeof categories_articles_preset_name == 'undefined' ) {
 			categories_articles_preset_name = '';
 		}
+
+		// Set preset value to 'current' only if user did not select any preset
 		if ( categories_articles_preset_name.length && ! wizard.hasClass( 'epkb-config-setup-wizard-modular--first-setup' ) ) {
 			let apply_preset_toggle = $( '[name="epkb-setup-wizard-theme-content-show-option__toggle"]' );
-			let ignore_layouts_list = apply_preset_toggle.closest( '.epkb-setup-wizard-theme-content-show-option' ).data( 'ignore_layouts' );
-
-			// Set preset value to 'current' only if:
-			// - user did not select any preset
-			// - OR if user selected preset-ignored layout
-			if ( ! apply_preset_toggle.prop( 'checked' ) || ignore_layouts_list.indexOf( layout_name ) !== -1 ) {
+			let current_layout = apply_preset_toggle.closest( '.epkb-setup-wizard-theme-content-show-option' ).data( 'current-layout' );
+			if ( ! apply_preset_toggle.prop( 'checked' ) && current_layout === layout_name ) {
 				categories_articles_preset_name = 'current';
 			}
 		}
 
 		postData.layout_name = layout_name;
-		postData.theme_name = theme_name;
 		postData.kb_name = $('.epkb-wizard-name input').val();
 		postData.kb_slug = $('.epkb-wizard-slug input').val();
 		postData.menu_ids = menu_ids;
@@ -117,12 +109,7 @@ jQuery(document).ready(function($) {
 		$( '.epkb-wc-step-header' ).removeClass( 'epkb-wc-step-header--active' );
 		$( '.epkb-wc-step-header--' + nextStep ).addClass( 'epkb-wc-step-header--active' );
 
-		// Use separate logic to switch steps for modular version of Setup Wizard
-		if ( $( '#epkb-config-wizard-content' ).hasClass( 'epkb-config-setup-wizard-modular' ) ) {
-			modular_setup_wizard_switch_step( nextStep );
-		} else {
-			old_setup_wizard_switch_step( nextStep );
-		}
+		modular_setup_wizard_switch_step( nextStep );
 
 		// Presets Content Show Option
 		const content_show_option = $('.epkb-config-setup-wizard-modular .epkb-setup-wizard-theme-content-show-option');
@@ -133,18 +120,11 @@ jQuery(document).ready(function($) {
 				selected_layout = '';
 			}
 			const wizard_content = $('.epkb-config-setup-wizard-modular .epkb-wizard-content .eckb-wizard-step-4');
-			const ignore_layouts = content_show_option.data('ignore_layouts').replace(/\s/g, '').split(',');
-
-			if ( ignore_layouts.includes( selected_layout.replace(/\s/g, '') ) ) {
-				content_show_option.hide();
+			content_show_option.show();
+			if ( $( '.epkb-config-setup-wizard-modular input[name=epkb-setup-wizard-theme-content-show-option__toggle]' ).prop('checked') ) {
 				wizard_content.addClass('epkb-wc-step-panel--active');
 			} else {
-				content_show_option.show();
-				if ( $( '.epkb-config-setup-wizard-modular input[name=epkb-setup-wizard-theme-content-show-option__toggle]' ).prop('checked') ) {
-					wizard_content.addClass('epkb-wc-step-panel--active');
-				} else {
-					wizard_content.removeClass('epkb-wc-step-panel--active');
-				}
+				wizard_content.removeClass('epkb-wc-step-panel--active');
 			}
 		}
 
@@ -165,11 +145,13 @@ jQuery(document).ready(function($) {
 	function updateWizardSidebar() {
 		const navigation = $('.epkb-setup-wizard-sidebar input[name=article_navigation]:checked').val();
 		const location = $('.epkb-setup-wizard-sidebar input[name=article_location]:checked').val();
-		let value = 5;
+		let value = 7;
 		if (navigation === 'categories_articles') {
 			value = location === 'left' ? 1 : 2;
 		} else if (navigation === 'top_categories') {
 			value = location === 'left' ? 3 : 4;
+		} else if (navigation === 'current_category_articles') {
+			value = location === 'left' ? 5 : 6;
 		}
 		$('.epkb-setup-wizard-sidebar .epkb-setup-wizard__featured-img-container').removeClass('epkb-setup-wizard__featured-img-container--active');
 		$(`.epkb-setup-wizard-sidebar .epkb-setup-wizard__featured-img-container[data-value=${value}]`).addClass('epkb-setup-wizard__featured-img-container--active');
@@ -177,34 +159,6 @@ jQuery(document).ready(function($) {
 
 	$(document).on('change', '.epkb-setup-wizard-sidebar input[name=article_navigation]', updateWizardSidebar);
 	$(document).on('change', '.epkb-setup-wizard-sidebar input[name=article_location]', updateWizardSidebar);
-	/**
-	 * Switch steps for old version of Setup Wizard
-	 */
-	function old_setup_wizard_switch_step( nextStep ){
-
-		// Remove all Active Step classes in Step Status Bar.
-		$( '.epkb-wsb-step' ).removeClass( 'epkb-wsb-step--active' );
-
-		// Add Active class to next Step in Status Bar.
-		$( '#epkb-wsb-step-' + nextStep ).addClass( 'epkb-wsb-step--active' );
-
-		// Remove all active class from panels.
-		$( '.epkb-wc-step-panel' ).removeClass( 'epkb-wc-step-panel--active' );
-		$( '.epkb-wc-step-panel-button' ).removeClass( 'epkb-wc-step-panel-button--active' );
-
-		// Add Active class to next panel in the steps.
-		$( '#epkb-wsb-step-' + nextStep + '-panel' ).addClass( 'epkb-wc-step-panel--active' );
-		$( '.epkb-wsb-step-' + nextStep + '-panel-button' ).addClass( 'epkb-wc-step-panel-button--active' );
-		$( '.epkb-wizard-top-bar' ).show();
-
-		// Check if we have different headers to the steps
-		if ( $('.epkb-setup-wizard-theme-header__info__title[data-title-id]').length ) {
-			$('.epkb-setup-wizard-theme-header__info__title[data-title-id]').addClass('hidden');
-			$('.epkb-setup-wizard-theme-header__info__title[data-title-id=' + nextStep + ']').removeClass('hidden');
-		}
-
-		setup_wizard_status_bar_highlight_completed_steps( nextStep );
-	}
 
 	/**
 	 * Switch steps for Modular version of Setup Wizard
@@ -499,11 +453,6 @@ jQuery(document).ready(function($) {
 
 	function update_article_navigation( layout_name ) {
 
-		// Support for old Setup Wizard
-		if ( ! layout_name ) {
-			return;
-		}
-
 		// Hide 'none' choice of Article Navigation if Sidebar layout is active
 		let article_navigation_input = wizard.find( '.epkb-setup-wizard-option__navigation-selector' );
 		let hide_none_on_layout = article_navigation_input.data( 'hide-none-on-layout' );
@@ -602,11 +551,15 @@ jQuery(document).ready(function($) {
 	}
 
 	// generic AJAX call handler
-	function epkb_send_ajax( postData, refreshCallback, reload, loaderMessage, silent_mode = false ) {
+	function epkb_send_ajax( postData ) {
 
 		let errorMsg;
 		let theResponse;
-		refreshCallback = (typeof refreshCallback === 'undefined') ? 'epkb_callback_noop' : refreshCallback;
+
+		// Show message about creating demo KB if Setup Wizard run first time for default KB
+		let loading_dialog_message = wizard.hasClass( 'epkb-config-setup-wizard-modular--first-setup' ) && parseInt( $( '#epkb_wizard_kb_id' ).val() ) === 1
+			? epkb_vars.creating_demo_data
+			: epkb_vars.saving_changes;
 
 		$.ajax({
 			type: 'POST',
@@ -615,72 +568,43 @@ jQuery(document).ready(function($) {
 			url: ajaxurl,
 			beforeSend: function (xhr)
 			{
-				if ( ! silent_mode ) {
-					epkb_loading_Dialog( 'show', loaderMessage );
-				}
+				epkb_loading_Dialog( 'show', loading_dialog_message );
 			}
-		}).done(function (response)        {
+		}).done( function( response ) {
 			theResponse = ( response ? response : '' );
+
+			epkb_loading_Dialog( 'remove', '' );
 
 			// Error in response
 			if ( theResponse.error || typeof theResponse.message === 'undefined' ) {
 				//noinspection JSUnresolvedVariable,JSUnusedAssignment
 				errorMsg = theResponse.message ? theResponse.message : epkb_admin_notification('', epkb_vars.reload_try_again, 'error');
+				$(admin_report_error_form).find('.epkb-admin__error-form__title').text(epkb_vars.setup_wizard_error_title);
+				$(admin_report_error_form).find('.epkb-admin__error-form__desc').text(epkb_vars.setup_wizard_error_desc);
+				$(admin_report_error_form).find('#epkb-admin__error-form__message').val('Setup Wizard: ' + $(errorMsg).text().trim());
+				$(admin_report_error_form).css('display', 'block', 'important');
+				return;
+			}
 
-				// Success in response - redirect to 'Need Help?' page
-			} else if ( theResponse.redirect_to_url && theResponse.redirect_to_url.length > 0 ) {
+			// Success in response - redirect to 'Need Help?' page
+			if ( theResponse.redirect_to_url && theResponse.redirect_to_url.length > 0 ) {
 				$('#epkb-wizard-success-message').addClass('epkb-dialog-box-form--active');
 				$('#epkb-wizard-success-message .epkb-accept-button').on('click', function () {
 					window.location = theResponse.redirect_to_url;
 				});
 			}
 
-		}).fail( function ( response, textStatus, error )        {
-			//noinspection JSUnresolvedVariable
-			errorMsg = ( error ? ' [' + error + ']' : epkb_vars.unknown_error );
+		} ).fail( function() {
+			epkb_loading_Dialog( 'remove', '' );
 
-			// Try to extract handled PHP error message if present in the echoed response
-			if ( response && typeof response.responseText !== 'undefined' && response.responseText.length ) {
-				let error_message_start_flag = 'epkb_php_error_start';
-				let error_message_end_flag = 'epkb_php_error_end';
-				let start_index = response.responseText.lastIndexOf( error_message_start_flag );
-				let end_index = response.responseText.lastIndexOf( error_message_end_flag );
-				if ( start_index > -1 && end_index > -1 ) {
-					let handled_php_error_message = response.responseText.substring(
-						start_index + error_message_start_flag.length,
-						end_index
-					);
-					if ( handled_php_error_message && handled_php_error_message.length ) {
-						errorMsg += ' ' + '[' + handled_php_error_message + ']';
-					}
-				}
-			}
-
-			//noinspection JSUnresolvedVariable
-			errorMsg = epkb_admin_notification(epkb_vars.error_occurred + '. ' + epkb_vars.msg_try_again, errorMsg, 'error');
-
-		}).always(function ()        {
-			if ( ! silent_mode ) {
-				epkb_loading_Dialog( 'remove', '' );
-			}
-
-			if ( errorMsg ) {
-				$( admin_report_error_form ).find( '.epkb-admin__error-form__title' ).text( epkb_vars.setup_wizard_error_title );
-				$( admin_report_error_form ).find( '.epkb-admin__error-form__desc' ).text( epkb_vars.setup_wizard_error_desc );
-				$( admin_report_error_form ).find( '#epkb-admin__error-form__message' ).val( $( errorMsg ).text().trim() );
-				$( admin_report_error_form ).css( 'display', 'block', 'important' );
-
-			} else {
-				if ( typeof refreshCallback === "function" ) {
-					theResponse = (typeof theResponse === 'undefined') ? '' : theResponse;
-					refreshCallback(theResponse);
-				} else {
-					if ( reload ) {
-						location.reload();
-					}
-				}
-			}
-		});
+			// On internal server error assume the error is outside Setup Wizard - force finish the Setup Wizard like on success
+			let current_url = window.location.href;
+			let success_url = current_url.replace( '&page=epkb-kb-configuration&setup-wizard-on', '&page=epkb-kb-need-help&epkb_after_kb_setup' );
+			$('#epkb-wizard-success-message').addClass('epkb-dialog-box-form--active');
+			$('#epkb-wizard-success-message .epkb-accept-button').on('click', function () {
+				window.location = success_url;
+			});
+		} );
 	}
 
 	// PREVIEW POPUP

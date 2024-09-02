@@ -22,7 +22,20 @@ class EPKB_Config_Page {
 	 */
 	public function display_kb_config_page() {
 
-		// ensure KB config is there
+		// ensure that KB plugin is not activated in network-wide mode
+		if ( function_exists( 'is_multisite' ) && is_multisite() ) {
+			if ( ! function_exists( 'is_plugin_active_for_network' ) ) {
+				require_once ABSPATH . '/wp-admin/includes/plugin.php';
+			}
+
+			if ( is_plugin_active_for_network( plugin_basename( Echo_Knowledge_Base::$plugin_file ) ) ) {
+				$message = esc_html__( 'The Knowledge Base plugin cannot be activated network-wide. Please activate it on individual sites.', 'echo-knowledge-base' );
+				self::display_config_error_page( $message );
+				return;
+			}
+		}
+
+		// ensure KB config exists
 		$kb_id = EPKB_KB_Handler::get_current_kb_id();
 		$this->kb_config = epkb_get_instance()->kb_config_obj->get_kb_config( $kb_id, true );
 		if ( is_wp_error( $this->kb_config ) || empty( $this->kb_config ) || ! is_array( $this->kb_config ) || count( $this->kb_config ) < 100 ) {
@@ -31,21 +44,7 @@ class EPKB_Config_Page {
 			return;
 		}
 
-		// ensure user KB has first KB version
-		$kb_first_version = EPKB_Utilities::get_wp_option( 'epkb_version_first', null );
-		if ( empty( $kb_first_version ) ) {
-			EPKB_Utilities::save_wp_option( 'epkb_version_first', Echo_Knowledge_Base::$version );
-		}
-
-		// get current add-ons configuration
-		$wizard_kb_config = $this->kb_config;
-		$wizard_kb_config = apply_filters( 'epkb_all_wizards_get_current_config', $wizard_kb_config, $kb_id );
-		if ( is_wp_error( $wizard_kb_config ) || empty( $wizard_kb_config ) || ! is_array( $wizard_kb_config ) || count( $wizard_kb_config ) < 100 ) {
-			self::display_config_error_page();
-			return;
-		}
-
-		EPKB_HTML_Admin::admin_page_css_missing_message();
+		EPKB_HTML_Admin::admin_page_header();
 
 		// regenerate KB sequence for Categories and Articles if missing
 		EPKB_KB_Handler::get_refreshed_kb_categories( $kb_id );
@@ -53,9 +52,12 @@ class EPKB_Config_Page {
 		//-------------------------------- SETUP WIZARD --------------------------------
 
 		// should we display Setup Wizard or KB Configuration?
-		if ( isset( $_GET['setup-wizard-on'] ) && EPKB_Admin_UI_Access::is_user_access_to_context_allowed( 'admin_eckb_access_frontend_editor_write' ) ) {
-			$handler = new EPKB_KB_Wizard_Setup( $wizard_kb_config );
-			$handler->display_kb_setup_wizard();
+		if ( isset( $_GET['setup-wizard-on'] ) && $this->kb_config['modular_main_page_toggle'] == 'on' && EPKB_Admin_UI_Access::is_user_access_to_context_allowed( 'admin_eckb_access_frontend_editor_write' ) ) {
+			$add_ons_kb_config = $this->get_add_ons_config( $kb_id );
+			if ( ! empty( $add_ons_kb_config) ) {
+				$handler = new EPKB_KB_Wizard_Setup( $add_ons_kb_config );
+				$handler->display_kb_setup_wizard();
+			}
 			return;
 		}
 
@@ -70,10 +72,16 @@ class EPKB_Config_Page {
 		 */
 		if ( isset( $_GET['archived-kbs'] ) ) {
 			$admin_page_views = self::get_archived_kbs_views_config();
+
+		} else if ( EPKB_Core_Utilities::is_run_setup_wizard_first_time() && $this->kb_config['modular_main_page_toggle'] == 'on' ) {
+			$admin_page_views = self::get_run_setup_first_views_config();
+
 		} else {
-			$admin_page_views = EPKB_Core_Utilities::is_run_setup_wizard_first_time()
-				? self::get_run_setup_first_views_config()
-				: $this->get_regular_views_config( $wizard_kb_config );
+			$add_ons_kb_config = $this->get_add_ons_config( $kb_id );
+			if ( empty( $add_ons_kb_config) ) {
+				return;
+			}
+			$admin_page_views = $this->get_regular_views_config( $add_ons_kb_config );
 		}   ?>
 
 		<!-- Admin Page Wrap -->
@@ -104,8 +112,8 @@ class EPKB_Config_Page {
 				// generic confirmation box to reload page
 				EPKB_HTML_Forms::dialog_confirm_action( array(
 					'id'                => 'epkb-admin-page-reload-confirmation',
-					'title'             => __( 'Changing Core Setting', 'echo-knowledge-base' ),
-					'accept_label'      => __( 'Ok', 'echo-knowledge-base' ),
+					'title'             => esc_html__( 'Changing Core Setting', 'echo-knowledge-base' ),
+					'accept_label'      => esc_html__( 'Ok', 'echo-knowledge-base' ),
 					'accept_type'       => 'primary',
 					'show_cancel_btn'   => 'yes',
 					'show_close_btn'    => 'no',
@@ -119,8 +127,21 @@ class EPKB_Config_Page {
 		 * Show any notifications
 		 */
 		foreach ( $this->message as $class => $message ) {
-			echo  EPKB_HTML_Forms::notification_box_bottom( $message, '', $class );
+			//phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+			echo EPKB_HTML_Forms::notification_box_bottom( $message, '', $class );
 		}
+	}
+
+	private function get_add_ons_config( $kb_id ) {
+		// get current add-ons configuration
+		$add_ons_kb_config = $this->kb_config;
+		$add_ons_kb_config = apply_filters( 'epkb_all_wizards_get_current_config', $add_ons_kb_config, $kb_id );
+		if ( is_wp_error( $add_ons_kb_config ) || empty( $add_ons_kb_config ) || ! is_array( $add_ons_kb_config ) || count( $add_ons_kb_config ) < 100 ) {
+			self::display_config_error_page();
+			return [];
+		}
+
+		return $add_ons_kb_config;
 	}
 
 	/**
@@ -142,7 +163,7 @@ class EPKB_Config_Page {
 			'list_key' => 'settings',
 
 			// Top Panel Item
-			'label_text' => __( 'Settings', 'echo-knowledge-base' ),
+			'label_text' => esc_html__( 'Settings', 'echo-knowledge-base' ),
 			'icon_class' => 'epkbfa epkbfa-cogs',
 			'vertical_tabs' => $settings_tab_handler->get_vertical_tabs_config()
 		);
@@ -159,7 +180,7 @@ class EPKB_Config_Page {
 			'kb_config_id' => $this->kb_config['id'],
 
 			// Top Panel Item
-			'label_text' => __( 'Order Articles and Categories', 'echo-knowledge-base' ),
+			'label_text' => esc_html__( 'Order Articles and Categories', 'echo-knowledge-base' ),
 			'icon_class' => 'epkbfa epkbfa-cubes',
 
 			// Boxes List
@@ -167,7 +188,7 @@ class EPKB_Config_Page {
 
 				array(
 					'class' => 'epkb-admin__boxes-list__box__ordering',
-					'title' => __( 'Ordering Settings', 'echo-knowledge-base' ),
+					'title' => esc_html__( 'Ordering Settings', 'echo-knowledge-base' ),
 					'description' => '',
 					'html' => $wizard_ordering->show_article_ordering( $wizard_kb_config ),
 				),
@@ -185,7 +206,7 @@ class EPKB_Config_Page {
 			'kb_config_id' => $this->kb_config['id'],
 
 			// Top Panel Item
-			'label_text' => __( 'KB URLs', 'echo-knowledge-base' ),
+			'label_text' => esc_html__( 'KB URLs', 'echo-knowledge-base' ),
 			'icon_class' => 'epkbfa epkbfa-link',
 
 			// Boxes List
@@ -204,7 +225,7 @@ class EPKB_Config_Page {
 			'kb_config_id' => $this->kb_config['id'],
 
 			// Top Panel Item
-			'label_text' => __( 'Shortcodes' ) . ' / ' . __( 'Widgets', 'echo-knowledge-base' ),
+			'label_text' => esc_html__( 'Shortcodes' ) . ' / ' . esc_html__( 'Widgets', 'echo-knowledge-base' ),
 			'icon_class' => 'epkbfa epkbfa-list-alt',
 
 			// Secondary Panel Items
@@ -218,7 +239,7 @@ class EPKB_Config_Page {
 					'active'     => true,
 
 					// Secondary Panel Item
-					'label_text' => __( 'Shortcodes', 'echo-knowledge-base' ),
+					'label_text' => esc_html__( 'Shortcodes', 'echo-knowledge-base' ),
 
 					// Secondary Boxes List
 					'boxes_list' => self::get_widgets_boxes( $this->get_shortcodes_boxes_config() )
@@ -231,7 +252,7 @@ class EPKB_Config_Page {
 					'list_key'   => 'widgets',
 
 					// Secondary Panel Item
-					'label_text' => __( 'Widgets', 'echo-knowledge-base' ),
+					'label_text' => esc_html__( 'Widgets', 'echo-knowledge-base' ),
 
 					// Secondary Boxes List
 					'boxes_list' => self::get_widgets_boxes( self::get_widgets_boxes_config() )
@@ -291,7 +312,7 @@ class EPKB_Config_Page {
 
 		// Box: Help box with Docs link for URL changing
 		$kb_url_boxes[] = array(
-			'title' => __( 'How To Change KB URLs', 'echo-knowledge-base' ),
+			'title' => esc_html__( 'How To Change KB URLs', 'echo-knowledge-base' ),
 			'html' => EPKB_HTML_Forms::notification_box_middle( array(
 					'type'  => 'info',
 					'title' => esc_html__( 'Need to change KB URLs?', 'echo-knowledge-base' ),
@@ -302,7 +323,7 @@ class EPKB_Config_Page {
 
 		if ( empty( $this->kb_main_pages ) ) {
 			$kb_url_boxes[] = array(
-				'title' => __( 'Your Knowledge Base URL', 'echo-knowledge-base' ),
+				'title' => esc_html__( 'Your Knowledge Base URL', 'echo-knowledge-base' ),
 				'html' => $this->display_no_shortcode_warning( $this->kb_config, true ),
 				'class' => 'epkb-admin__warning-box',
 			);
@@ -311,16 +332,16 @@ class EPKB_Config_Page {
 
 			// Box: Category Name in KB URL
 			$kb_url_boxes[] = array(
-				'title' => __( 'Category Name in KB URL', 'echo-knowledge-base' ),
+				'title' => esc_html__( 'Category Name in KB URL', 'echo-knowledge-base' ),
 				'html' => EPKB_HTML_Elements::checkbox_toggle( array(
 					'id'            => 'categories_in_url_enabled__toggle',
 					'textLoc'       => 'right',
 					'data'          => 'on',
-					'toggleOnText'  => __( 'yes', 'echo-knowledge-base' ),
-					'toggleOffText' => __( 'no', 'echo-knowledge-base' ),
+					'toggleOnText'  => esc_html__( 'yes', 'echo-knowledge-base' ),
+					'toggleOffText' => esc_html__( 'no', 'echo-knowledge-base' ),
 					'checked'       => $this->kb_config['categories_in_url_enabled'] == 'on',
 					'return_html'   => true,
-					'topDesc'       => __( 'Should article URLs contain the slug of their categories?', 'echo-knowledge-base' ),
+					'topDesc'       => esc_html__( 'Should article URLs contain the slug of their categories?', 'echo-knowledge-base' ),
 				) ),
 				'class' => 'epkb-admin__toggle-box',
 			);
@@ -328,7 +349,7 @@ class EPKB_Config_Page {
 			// Box: KB Location
 			$kb_url_boxes[] = array(
 				'class' => 'epkb-admin__boxes-list__box__kb-location',
-				'title' => __( 'KB Location', 'echo-knowledge-base' ),
+				'title' => esc_html__( 'Knowledge Base Location', 'echo-knowledge-base' ),
 				'description' => '',
 				'html' => $this->get_kb_location_box(),
 			);
@@ -337,7 +358,7 @@ class EPKB_Config_Page {
 			$wizard_global = new EPKB_KB_Wizard_Global( $wizard_kb_config );
 
 			$kb_url_boxes[] = array(
-				'title' => __( 'Knowledge Base URL', 'echo-knowledge-base' ),
+				'title' => esc_html__( 'Knowledge Base URL', 'echo-knowledge-base' ),
 				'html' => $wizard_global->show_kb_urls_global_wizard(),
 				'class' => 'epkb-admin__wizard-box',
 			);
@@ -365,13 +386,18 @@ class EPKB_Config_Page {
 			$kb_main_page_url = EPKB_KB_Handler::get_first_kb_main_page_url( $this->kb_config );
 			$kb_page_id = EPKB_KB_Handler::get_first_kb_main_page_id( $this->kb_config );     ?>
 
-			<div class="epkb-admin__chapter"><?php esc_html_e( 'Your knowledge base will be displayed on the page with KB shortcode: ', 'echo-knowledge-base' ); ?><strong>[epkb-knowledge-base id=<?php echo esc_attr( $this->kb_config['id'] ); ?>]</strong></div>
+			<div class="epkb-admin__chapter epkb-shortcode-info">
+				<p> <?php
+					esc_html_e( 'Your knowledge base will be displayed on the page with KB shortcode: ', 'echo-knowledge-base' ); ?>
+				</p> <?php
+				echo EPKB_Shortcodes::get_copy_custom_box( EPKB_KB_Handler::KB_MAIN_PAGE_SHORTCODE_NAME, [ 'id' => $this->kb_config['id'] ], '', false ); //phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
+			</div>
 			<table class="epkb-admin__chapter__wrap">
 				<tbody>
 				<tr class="epkb-admin__chapter__content">
 					<td><span><?php esc_html_e( 'Page Title: ', 'echo-knowledge-base' ); ?></span></td>
 					<td><span><?php echo esc_html( $this->kb_config['kb_main_pages'][$kb_page_id] ); ?></span></td>
-					<td><a class="epkb-primary-btn" href="<?php echo esc_url( get_edit_post_link( $kb_page_id ) ); ?>" target="_blank"><?php esc_html_e( 'Change Title', 'echo-knowledge-base' ); ?></a></td>
+					<td><a class="epkb-primary-btn" href="<?php echo esc_url( get_edit_post_link( $kb_page_id ) ); ?>" target="_blank"><?php esc_html_e( 'Change Title or URL', 'echo-knowledge-base' ); ?></a></td>
 				</tr>
 				<tr class="epkb-admin__chapter__content">
 					<td><span><?php esc_html_e( 'Page / KB URL: ', 'echo-knowledge-base' ); ?></span></td>
@@ -405,7 +431,7 @@ class EPKB_Config_Page {
 				</ul>                <?php
 				$HTML::notification_box_middle( array(
 					'type' => 'error-no-icon',
-					'desc' => __( "It's best to remove KB shortcode from these pages unless you have a very specific reason for having them.", 'echo-knowledge-base' ),
+					'desc' => esc_html__( "It's best to remove KB shortcode from these pages unless you have a very specific reason for having them.", 'echo-knowledge-base' ),
 					'' => '',
 				));
 			}
@@ -459,31 +485,31 @@ class EPKB_Config_Page {
 			[
 				'plugin'    => 'core',
 				'icon'      => 'epkbfa epkbfa-list-alt',
-				'title'     => __( 'Widgets for Elementor', 'echo-knowledge-base' ),
-				'desc'      => __( 'Our Elementor widgets are designed for writers. We make it easy to write great instructions, step-by-step guides, manuals and detailed documentation.', 'echo-knowledge-base' ),
+				'title'     => esc_html__( 'Widgets for Elementor', 'echo-knowledge-base' ),
+				'desc'      => esc_html__( 'Our Elementor widgets are designed for writers. We make it easy to write great instructions, step-by-step guides, manuals and detailed documentation.', 'echo-knowledge-base' ),
 				'docs'      => 'https://www.echoknowledgebase.com/documentation/elementor-widgets-for-documentation/',
 			],
 			[
 				'plugin'      => 'ep'.'hd',
-				'box-heading' => __( 'Help Dialog Plugin', 'echo-knowledge-base' ),
+				'box-heading' => esc_html__( 'Help Dialog Plugin', 'echo-knowledge-base' ),
 			],
 			[
 				'plugin'    => 'ep'.'hd',
 				'icon'      => 'epkbfa epkbfa-list-alt',
-				'title'     => __( 'Help Dialog', 'echo-knowledge-base' ),
-				'desc'      => __( 'Help Dialog is a frontend dialog where users can easily search for answers, browse FAQs and submit contact form.', 'echo-knowledge-base' ),
+				'title'     => esc_html__( 'Help Dialog', 'echo-knowledge-base' ),
+				'desc'      => esc_html__( 'Help Dialog is a frontend dialog where users can easily search for answers, browse FAQs and submit contact form.', 'echo-knowledge-base' ),
 				'docs'      => 'https://www.helpdialog.com/documentation/',
 				'video'     => '',
 			],
 			[
 				'plugin'      => 'widg',
-				'box-heading' => __( 'Widgets Add-on', 'echo-knowledge-base' ),
+				'box-heading' => esc_html__( 'Widgets Add-on', 'echo-knowledge-base' ),
 			],
 			[
 				'plugin'    => 'widg',
 				'icon'      => 'epkbfa epkbfa-list-alt',
-				'title'     => __( 'Recent Articles', 'echo-knowledge-base' ),
-				'desc'      => __( 'Show either recently created or recently modified KB Articles.', 'echo-knowledge-base' ),
+				'title'     => esc_html__( 'Recent Articles', 'echo-knowledge-base' ),
+				'desc'      => esc_html__( 'Show either recently created or recently modified KB Articles.', 'echo-knowledge-base' ),
 				'config'    => admin_url( '/widgets.php' ),
 				'docs'      => 'https://www.echoknowledgebase.com/documentation/recent-articles-widget/',
 				'video'     => '',
@@ -491,8 +517,8 @@ class EPKB_Config_Page {
 			[
 				'plugin'    => 'widg',
 				'icon'      => 'epkbfa epkbfa-list-alt',
-				'title'     => __( 'Popular Articles', 'echo-knowledge-base' ),
-				'desc'      => __( 'Show a list of the most popular articles based on article views.', 'echo-knowledge-base' ),
+				'title'     => esc_html__( 'Popular Articles', 'echo-knowledge-base' ),
+				'desc'      => esc_html__( 'Show a list of the most popular articles based on article views.', 'echo-knowledge-base' ),
 				'config'    => admin_url( '/widgets.php' ),
 				'docs'      => 'https://www.echoknowledgebase.com/documentation/popular-articles-widget/',
 				'video'     => '',
@@ -500,8 +526,8 @@ class EPKB_Config_Page {
 			[
 				'plugin'    => 'widg',
 				'icon'      => 'epkbfa epkbfa-list-alt',
-				'title'     => __( 'KB Sidebar', 'echo-knowledge-base' ),
-				'desc'      => __( 'A dedicated KB Sidebar will be shown only on the left side or right side of your KB articles.', 'echo-knowledge-base' ),
+				'title'     => esc_html__( 'KB Sidebar', 'echo-knowledge-base' ),
+				'desc'      => esc_html__( 'A dedicated KB Sidebar will be shown only on the left side or right side of your KB articles.', 'echo-knowledge-base' ),
 				'config'    => admin_url( '/widgets.php' ),
 				'docs'      => 'https://www.echoknowledgebase.com/documentation/kb-sidebar/',
 				'video'     => '',
@@ -509,8 +535,8 @@ class EPKB_Config_Page {
 			[
 				'plugin'    => 'widg',
 				'icon'      => 'epkbfa epkbfa-list-alt',
-				'title'     => __( 'KB Search', 'echo-knowledge-base' ),
-				'desc'      => __( 'Add a search box on your Home page, Contact Us page, and others.', 'echo-knowledge-base' ),
+				'title'     => esc_html__( 'KB Search', 'echo-knowledge-base' ),
+				'desc'      => esc_html__( 'Add a search box on your Home page, Contact Us page, and others.', 'echo-knowledge-base' ),
 				'config'    => admin_url( '/widgets.php' ),
 				'docs'      => 'https://www.echoknowledgebase.com/documentation/search-widget/',
 				'video'     => '',
@@ -518,8 +544,8 @@ class EPKB_Config_Page {
 			[
 				'plugin'    => 'widg',
 				'icon'      => 'epkbfa epkbfa-list-alt',
-				'title'     => __( 'KB Categories', 'echo-knowledge-base' ),
-				'desc'      => __( 'List your KB Categories for easy reference, which are typically displayed in sidebars.', 'echo-knowledge-base' ),
+				'title'     => esc_html__( 'KB Categories', 'echo-knowledge-base' ),
+				'desc'      => esc_html__( 'List your KB Categories for easy reference, which are typically displayed in sidebars.', 'echo-knowledge-base' ),
 				'config'    => admin_url( '/widgets.php' ),
 				'docs'      => 'https://www.echoknowledgebase.com/documentation/categories-list-widget/',
 				'video'     => '',
@@ -527,8 +553,8 @@ class EPKB_Config_Page {
 			[
 				'plugin'    => 'widg',
 				'icon'      => 'epkbfa epkbfa-list-alt',
-				'title'     => __( 'List of Category Articles', 'echo-knowledge-base' ),
-				'desc'      => __( 'Display a list of articles for a given category.', 'echo-knowledge-base' ),
+				'title'     => esc_html__( 'List of Category Articles', 'echo-knowledge-base' ),
+				'desc'      => esc_html__( 'Display a list of articles for a given category.', 'echo-knowledge-base' ),
 				'config'    => admin_url( '/widgets.php' ),
 				'docs'      => 'https://www.echoknowledgebase.com/documentation/category-articles-widget/',
 				'video'     => '',
@@ -536,8 +562,8 @@ class EPKB_Config_Page {
 			[
 				'plugin'    => 'widg',
 				'icon'      => 'epkbfa epkbfa-list-alt',
-				'title'     => __( 'KB Tags', 'echo-knowledge-base' ),
-				'desc'      => __( 'Display current KB tags ordered alphabetically.', 'echo-knowledge-base' ),
+				'title'     => esc_html__( 'KB Tags', 'echo-knowledge-base' ),
+				'desc'      => esc_html__( 'Display current KB tags ordered alphabetically.', 'echo-knowledge-base' ),
 				'config'    => admin_url( '/widgets.php' ),
 				'docs'      => 'https://www.echoknowledgebase.com/documentation/tags-list-widget/',
 				'video'     => '',
@@ -545,8 +571,8 @@ class EPKB_Config_Page {
 			[
 				'plugin'    => 'widg',
 				'icon'      => 'epkbfa epkbfa-list-alt',
-				'title'     => __( 'List of Tagged Articles', 'echo-knowledge-base' ),
-				'desc'      => __( 'Display a list of articles that have a given tag.', 'echo-knowledge-base' ),
+				'title'     => esc_html__( 'List of Tagged Articles', 'echo-knowledge-base' ),
+				'desc'      => esc_html__( 'Display a list of articles that have a given tag.', 'echo-knowledge-base' ),
 				'config'    => admin_url( '/widgets.php' ),
 				'docs'      => 'https://www.echoknowledgebase.com/documentation/tagged-articles-widget/',
 				'video'     => '',
@@ -574,9 +600,11 @@ class EPKB_Config_Page {
             </span>    <?php
         // Plugin is not enabled
 	    } else if ( $box['plugin'] == 'ep'.'hd' ) { ?>
-		    <a class="epkb-kbnh__feature-status epkb-kbnh__feature--disabled epkb-success-btn" href="https://wordpress.org/plugins/help-dialog/" target="_blank"><span><?php esc_html_e( 'Upgrade', 'echo-knowledge-base' ) ?></span></a>   <?php
+		    <a class="epkb-kbnh__feature-status epkb-kbnh__feature--disabled epkb-success-btn" href="https://wordpress.org/plugins/help-dialog/" target="_blank">
+			    <span><?php esc_html_e( 'Upgrade', 'echo-knowledge-base' ); ?></span></a>   <?php
 	    } else {    ?>
-		    <a class="epkb-kbnh__feature-status epkb-kbnh__feature--disabled epkb-success-btn" href="<?php echo EPKB_Core_Utilities::get_plugin_sales_page( $box['plugin'] ) ?>" target="_blank"><span><?php echo esc_html__( 'Upgrade', 'echo-knowledge-base' ); ?></span></a> <?php
+		    <a class="epkb-kbnh__feature-status epkb-kbnh__feature--disabled epkb-success-btn" href="<?php echo esc_url( EPKB_Core_Utilities::get_plugin_sales_page( $box['plugin'] ) ); ?>" target="_blank">
+			    <span><?php echo esc_html__( 'Upgrade', 'echo-knowledge-base' ); ?></span></a> <?php
 	    }
 
 	    return ob_get_clean();
@@ -598,93 +626,100 @@ class EPKB_Config_Page {
 			[
 				'plugin'       => 'core',
 				'icon'         => 'epkbfa epkbfa-list-alt',
-				'title'        => __( 'FAQs', 'echo-knowledge-base' ),
-				'desc'         => __( 'Show Frequently Asked Questions.', 'echo-knowledge-base' ),
-				'desc_escaped' => EPKB_Shortcodes::get_copy_custom_box( 'epkb-faqs', [ 'group_ids' => implode( ',', $group_ids ) ],
-																		__( 'Shortcode example:', 'echo-knowledge-base' ) ),
-				'docs'         => 'https://www.echoknowledgebase.com/documentation/faqs-shortcode/',
-				//'experimental' => 'This feature is being tested and can change how it functions in the meantime.' Leaving this here for future examples to use elsewhere.
+				'title'        => esc_html__( 'Knowledge Base Shortcode', 'echo-knowledge-base' ),
+				'desc'         => esc_html__( 'Display Echo Knowledge Base on a page.', 'echo-knowledge-base' ),
+				'desc_escaped' => EPKB_Shortcodes::get_copy_custom_box( EPKB_KB_Handler::KB_MAIN_PAGE_SHORTCODE_NAME, [ 'id' => $kb_id ], __( 'Shortcode:', 'echo-knowledge-base' ), false ),
+				'docs'         => 'https://www.echoknowledgebase.com/documentation/knowledge-base-shortcode/',
 			],
 			[
 				'plugin'       => 'core',
 				'icon'         => 'epkbfa epkbfa-list-alt',
-				'title'        => __( 'Articles Index Directory', 'echo-knowledge-base' ),
-				'desc'         => __( 'Show alphabetical list of articles grouped by letter in a three-column format.', 'echo-knowledge-base' ),
-				'desc_escaped' => EPKB_Shortcodes::get_copy_box( 'epkb-articles-index-directory', $kb_id, __( 'Shortcode:', 'echo-knowledge-base' ) ),
+				'title'        => esc_html__( 'FAQs', 'echo-knowledge-base' ),
+				'desc'         => esc_html__( 'Show Frequently Asked Questions.', 'echo-knowledge-base' ),
+				'desc_escaped' => EPKB_Shortcodes::get_copy_custom_box( 'epkb-faqs', [ 'group_ids' => implode( ',', $group_ids ) ],
+																		__( 'Shortcode example:', 'echo-knowledge-base' ) ),
+				'docs'         => 'https://www.echoknowledgebase.com/documentation/faqs-shortcode/',
+			],
+			[
+				'plugin'       => 'core',
+				'icon'         => 'epkbfa epkbfa-list-alt',
+				'title'        => esc_html__( 'Articles Index Directory', 'echo-knowledge-base' ),
+				'desc'         => esc_html__( 'Show alphabetical list of articles grouped by letter in a three-column format.', 'echo-knowledge-base' ),
+				'desc_escaped' => EPKB_Shortcodes::get_copy_box( 'epkb-articles-index-directory', $kb_id, esc_html__( 'Shortcode:', 'echo-knowledge-base' ) ),
 				'docs'         => 'https://www.echoknowledgebase.com/documentation/shortcode-articles-index-directory/',
 			],
 			[
 				'plugin'       => 'asea',
 				'icon'         => 'epkbfa epkbfa-list-alt',
-				'title'        => __( 'Search One or More KBs', 'echo-knowledge-base' ),
-				'desc'         => __( 'Search one or more Knowledge Bases on any page.', 'echo-knowledge-base' ),
-				'desc_escaped' => EPKB_Shortcodes::get_copy_box( 'eckb-advanced-search', $kb_id, __( 'Shortcode:', 'echo-knowledge-base' ) ),
+				'title'        => esc_html__( 'Search One or More KBs', 'echo-knowledge-base' ),
+				'desc'         => esc_html__( 'Search one or more Knowledge Bases on any page.', 'echo-knowledge-base' ),
+				'desc_escaped' => EPKB_Shortcodes::get_copy_box( 'eckb-advanced-search', $kb_id, esc_html__( 'Shortcode:', 'echo-knowledge-base' ) ),
 				'docs'         => 'https://www.echoknowledgebase.com/documentation/advanced-search-shortcode/',
 			],
             [
 	            'plugin'      => 'widg',
-	            'box-heading' => __( 'Widgets Add-on', 'echo-knowledge-base' ),
+	            'box-heading' => esc_html__( 'Widgets Add-on', 'echo-knowledge-base' ),
             ],
 			[
 				'plugin'       => 'widg',
 				'icon'         => 'epkbfa epkbfa-list-alt',
-				'title'        => __( 'Recent Articles', 'echo-knowledge-base' ),
-				'desc'         => __( 'Show either recently created or recently modified KB Articles.', 'echo-knowledge-base' ),
-				'desc_escaped' => EPKB_Shortcodes::get_copy_box( 'widg-recent-articles', $kb_id, __( 'Shortcode:', 'echo-knowledge-base' ) ),
+				'title'        => esc_html__( 'Recent Articles', 'echo-knowledge-base' ),
+				'desc'         => esc_html__( 'Show either recently created or recently modified KB Articles.', 'echo-knowledge-base' ),
+				'desc_escaped' => EPKB_Shortcodes::get_copy_box( 'widg-recent-articles', $kb_id, esc_html__( 'Shortcode:', 'echo-knowledge-base' ) ),
 				'docs'         => 'https://www.echoknowledgebase.com/documentation/recent-articles-shortcode/',
 				'video'        => '',
 			],
 			[
 				'plugin'       => 'widg',
 				'icon'         => 'epkbfa epkbfa-list-alt',
-				'title'        => __( 'Popular Articles', 'echo-knowledge-base' ),
-				'desc'         => __( 'Show a list of the most popular articles based on article views.', 'echo-knowledge-base' ) ,
-				'desc_escaped' => EPKB_Shortcodes::get_copy_box( 'widg-popular-articles', $kb_id, __( 'Shortcode:', 'echo-knowledge-base' ) ),
+				'title'        => esc_html__( 'Popular Articles', 'echo-knowledge-base' ),
+				'desc'         => esc_html__( 'Show a list of the most popular articles based on article views.', 'echo-knowledge-base' ) ,
+				'desc_escaped' => EPKB_Shortcodes::get_copy_box( 'widg-popular-articles', $kb_id, esc_html__( 'Shortcode:', 'echo-knowledge-base' ) ),
 				'docs'         => 'https://www.echoknowledgebase.com/documentation/popular-articles-widget/',
 				'video'        => '',
 			],
 			[
 				'plugin'       => 'widg',
 				'icon'         => 'epkbfa epkbfa-list-alt',
-				'title'        => __( 'KB Categories', 'echo-knowledge-base' ),
-				'desc'         => __( 'List your KB Categories for easy reference, which are typically displayed in sidebars.', 'echo-knowledge-base' ),
-				'desc_escaped' => EPKB_Shortcodes::get_copy_box( 'widg-categories-list', $kb_id, __( 'Shortcode:', 'echo-knowledge-base' ) ),
+				'title'        => esc_html__( 'KB Categories', 'echo-knowledge-base' ),
+				'desc'         => esc_html__( 'List your KB Categories for easy reference, which are typically displayed in sidebars.', 'echo-knowledge-base' ),
+				'desc_escaped' => EPKB_Shortcodes::get_copy_box( 'widg-categories-list', $kb_id, esc_html__( 'Shortcode:', 'echo-knowledge-base' ) ),
 				'docs'         => 'https://www.echoknowledgebase.com/documentation/categories-list-shortcode/',
 				'video'        => '',
 			],
 			[
 				'plugin'       => 'widg',
 				'icon'         => 'epkbfa epkbfa-list-alt',
-				'title'        => __( 'List of Category Articles', 'echo-knowledge-base' ),
-				'desc'         => __( 'Display a list of articles for a given category.', 'echo-knowledge-base' ),
-				'desc_escaped' => EPKB_Shortcodes::get_copy_box( 'widg-category-articles', $kb_id, __( 'Shortcode:', 'echo-knowledge-base' ) ),
+				'title'        => esc_html__( 'List of Category Articles', 'echo-knowledge-base' ),
+				'desc'         => esc_html__( 'Display a list of articles for a given category.', 'echo-knowledge-base' ),
+				'desc_escaped' => EPKB_Shortcodes::get_copy_box( 'widg-category-articles', $kb_id, esc_html__( 'Shortcode:', 'echo-knowledge-base' ) ),
 				'docs'         => 'https://www.echoknowledgebase.com/documentation/category-articles-shortcode/',
 				'video'        => '',
 			],
 			[
 				'plugin'       => 'widg',
 				'icon'         => 'epkbfa epkbfa-list-alt',
-				'title'        => __( 'KB Tags', 'echo-knowledge-base' ),
-				'desc'         => __( 'Display current KB tags ordered alphabetically.', 'echo-knowledge-base' ),
-				'desc_escaped' => EPKB_Shortcodes::get_copy_box( 'widg-tags-list', $kb_id, __( 'Shortcode:', 'echo-knowledge-base' ) ),
+				'title'        => esc_html__( 'KB Tags', 'echo-knowledge-base' ),
+				'desc'         => esc_html__( 'Display current KB tags ordered alphabetically.', 'echo-knowledge-base' ),
+				'desc_escaped' => EPKB_Shortcodes::get_copy_box( 'widg-tags-list', $kb_id, esc_html__( 'Shortcode:', 'echo-knowledge-base' ) ),
 				'docs'         => 'https://www.echoknowledgebase.com/documentation/tags-list-shortcode/',
 				'video'        => '',
 			],
 			[
 				'plugin'       => 'widg',
 				'icon'         => 'epkbfa epkbfa-list-alt',
-				'title'        => __( 'List of Tagged Articles', 'echo-knowledge-base' ),
-				'desc'         => __( 'Display a list of articles that have a given tag.', 'echo-knowledge-base' ),
-				'desc_escaped' => EPKB_Shortcodes::get_copy_box( 'widg-tag-articles', $kb_id, __( 'Shortcode:', 'echo-knowledge-base' ) ),
+				'title'        => esc_html__( 'List of Tagged Articles', 'echo-knowledge-base' ),
+				'desc'         => esc_html__( 'Display a list of articles that have a given tag.', 'echo-knowledge-base' ),
+				'desc_escaped' => EPKB_Shortcodes::get_copy_box( 'widg-tag-articles', $kb_id, esc_html__( 'Shortcode:', 'echo-knowledge-base' ) ),
 				'docs'         => 'https://www.echoknowledgebase.com/documentation/tagged-articles-shortcode/',
 				'video'        => '',
 			],
 			[
 				'plugin'       => 'widg',
 				'icon'         => 'epkbfa epkbfa-list-alt',
-				'title'        => __( 'KB Search', 'echo-knowledge-base' ),
-				'desc'         => __( 'Add a search box on your Home page, Contact Us page, and others.', 'echo-knowledge-base' ),
-				'desc_escaped' => EPKB_Shortcodes::get_copy_box( 'widg-search-articles', $kb_id, __( 'Shortcode:', 'echo-knowledge-base' ) ),
+				'title'        => esc_html__( 'KB Search', 'echo-knowledge-base' ),
+				'desc'         => esc_html__( 'Add a search box on your Home page, Contact Us page, and others.', 'echo-knowledge-base' ),
+				'desc_escaped' => EPKB_Shortcodes::get_copy_box( 'widg-search-articles', $kb_id, esc_html__( 'Shortcode:', 'echo-knowledge-base' ) ),
 				'docs'         => 'https://www.echoknowledgebase.com/documentation/search-shortcode/',
 				'video'        => '',
 			],
@@ -708,7 +743,7 @@ class EPKB_Config_Page {
 				'list_key' => 'setup-wizard',
 
 				// Top Panel Item
-				'label_text' => __( 'Setup Wizard', 'echo-knowledge-base' ),
+				'label_text' => esc_html__( 'Setup Wizard', 'echo-knowledge-base' ),
 				'icon_class' => 'epkbfa epkbfa-cogs',
 
 				'boxes_list' => array(
@@ -734,10 +769,12 @@ class EPKB_Config_Page {
 
 		<div class="epkb-admin__setup-wizard-warning">     <?php
 
-			EPKB_HTML_Forms::notification_box_popup( array(
+			$thanks_message = EPKB_Core_Utilities::is_kb_flag_set( 'epkb_run_setup' ) ? esc_html__( 'Thank you for installing our Knowledge Base.', 'echo-knowledge-base' ) : esc_html__( 'Knowledge Base Shortcode is missing.', 'echo-knowledge-base' );
+
+				EPKB_HTML_Forms::notification_box_popup( array(
 				'type'  => 'success',
-				'title' => __( 'Thank you for installing our Knowledge Base.', 'echo-knowledge-base' ) . ' ' . __( 'Get started by running our Setup Wizard.', 'echo-knowledge-base' ),
-				'desc'  => '<span>' . EPKB_Core_Utilities::get_kb_admin_page_link( 'page=epkb-kb-configuration&setup-wizard-on', __( 'Start the Setup Wizard', 'echo-knowledge-base' ), false,'epkb-success-btn' ) . '</span>',
+				'title' => $thanks_message . ' ' . esc_html__( 'Get started by running our Setup Wizard.', 'echo-knowledge-base' ),
+				'desc'  => '<span>' . EPKB_Core_Utilities::get_kb_admin_page_link( 'page=epkb-kb-configuration&setup-wizard-on', esc_html__( 'Start the Setup Wizard', 'echo-knowledge-base' ), false,'epkb-success-btn' ) . '</span>',
 			) );   ?>
 
 		</div>      <?php
@@ -758,7 +795,7 @@ class EPKB_Config_Page {
 		if ( empty( $this->kb_main_pages ) ) {
 			$error_boxes[] = array(
 				'icon_class' => 'epkbfa-exclamation-circle',
-				'title' => __( 'Missing shortcode', 'echo-knowledge-base' ),
+				'title' => esc_html__( 'Missing shortcode', 'echo-knowledge-base' ),
 				'html' => $this->display_no_shortcode_warning( $this->kb_config, true ),
 				'class' => 'epkb-admin__warning-box',
 			);
@@ -781,7 +818,7 @@ class EPKB_Config_Page {
 				$error_boxes[] = array(
 					'icon_class' => 'epkbfa-exclamation-circle',
 					'class' => 'epkb-admin__boxes-list__box__addons-license',
-					'title' => $add_on_name . ': ' . __('License issue', 'echo-knowledge-base'),
+					'title' => $add_on_name . ': ' . esc_html__('License issue', 'echo-knowledge-base'),
 					'description' => '',
 					'html' => $add_on_message,
 				);
@@ -797,7 +834,7 @@ class EPKB_Config_Page {
 				'list_key' => 'errors',
 
 				// Top Panel Item
-				'label_text' => __( 'Errors', 'echo-knowledge-base' ),
+				'label_text' => esc_html__( 'Errors', 'echo-knowledge-base' ),
 				'icon_class' => 'page-icon overview-icon epkbfa epkbfa-exclamation-triangle',
 
 				// Boxes List
@@ -822,7 +859,7 @@ class EPKB_Config_Page {
 				'list_key' => 'archived-kbs',
 
 				// Top Panel Item
-				'label_text' => __( 'Archived KBs', 'echo-knowledge-base' ),
+				'label_text' => esc_html__( 'Archived KBs', 'echo-knowledge-base' ),
 				'icon_class' => 'epkbfa epkbfa-cubes',
 
 				// Boxes List
@@ -858,7 +895,7 @@ class EPKB_Config_Page {
 		ob_start();
 
 		if ( ! EPKB_Utilities::is_multiple_kbs_enabled() ) {    ?>
-			<div><?php esc_html_e( 'To manage non-default KBs you need Multiple KB add-on to be activated.', 'echo-knowledge-base' ); ?></div><?php
+			<div><?php esc_html_e( 'To manage non-default KBs you need Unlimited KBs add-on to be activated.', 'echo-knowledge-base' ); ?></div><?php
 		}
 
 		do_action( 'eckb_admin_config_page_kb_status', $kb_config );
@@ -872,34 +909,38 @@ class EPKB_Config_Page {
 	 * @param $kb_config
 	 * @param bool $return_html
 	 *
-	 * @return false|string|void
+	 * @return string|void
 	 */
 	private function display_no_shortcode_warning( $kb_config, $return_html=false ) {
 
-        $notification = EPKB_HTML_Forms::notification_box_middle( array(
+        $notification_escaped = EPKB_HTML_Forms::notification_box_middle( array(
             'type'  => 'error',
-            'title' => 'We did not detect any page with KB shortcode for your knowledge base '.$kb_config['kb_name'].'. You can do the following:',
+            'title' => esc_html__( 'We did not detect any page with KB shortcode for your knowledge base', 'echo-knowledge-base' ) . ': ' . esc_html( $kb_config['kb_name'] ) . ' . ' . esc_html__( 'You can do the following:', 'echo-knowledge-base' ),
             'desc'  => '<ul>
-                            <li>If you have this page, please re-save it and come back</li>
-                            <li>Create or update a page and add KB shortcode '.$kb_config['id'].' to that page. Save the page and then come back here.</li>
-                            <li>Run Setup Wizard to create a new KB Main Page <a href="'.esc_url( admin_url( '/edit.php?post_type=' . EPKB_KB_Handler::get_post_type( $kb_config['id'] ) .
-                                  '&page=epkb-kb-configuration&setup-wizard-on' ) ).'" target="_blank">Run Setup Wizard</a></li>
-                        </ul>'
+                            <li>' . esc_html__( 'If you have this page, please re-save it and come back', 'echo-knowledge-base' ) . '</li>
+                            <li>' . esc_html__( 'Create or update a page and add KB shortcode to that page. Save the page and then come back here.', 'echo-knowledge-base' ) .
+	                                EPKB_Shortcodes::get_copy_custom_box( EPKB_KB_Handler::KB_MAIN_PAGE_SHORTCODE_NAME, [ 'id' => $this->kb_config['id'] ], '', false ) . '</li>' .
+	                    ( $kb_config['modular_main_page_toggle'] == 'on' ?
+                            '<li>' . esc_html__( 'Run Setup Wizard to create a new KB Main Page ', 'echo-knowledge-base' ) . '<a href="'.esc_url( admin_url( '/edit.php?post_type=' . EPKB_KB_Handler::get_post_type( $kb_config['id'] ) .
+                                  '&page=epkb-kb-configuration&setup-wizard-on' ) ) . '" target="_blank">' . esc_html__( 'Run Setup Wizard', 'echo-knowledge-base' ) . '</a></li>' : '' ) .
+                        '</ul>'
         ), $return_html  );
 
         if ( $return_html ) {
-            return $notification;
+            return $notification_escaped;
         } else {
-            echo $notification;
+	        //phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+            echo $notification_escaped;
         }
 	}
 
 	/**
 	 * Generic admin page to display message on configuration error
 	 */
-	private static function display_config_error_page() {    ?>
+	private static function display_config_error_page( $message='' ) {    ?>
 		<div id="ekb-admin-page-wrap" class="ekb-admin-page-wrap--config-error">    <?php
-			EPKB_HTML_Forms::notification_box_middle( [ 'type' => 'error', 'title' => __( 'Cannot load configuration.', 'echo-knowledge-base' ), 'desc' =>  EPKB_Utilities::contact_us_for_support() ] );  ?>
+			$message = empty( $message ) ? esc_html__( 'Cannot load configuration.', 'echo-knowledge-base' ) : $message;
+			EPKB_HTML_Forms::notification_box_middle( [ 'type' => 'error', 'title' => $message, 'desc' =>  EPKB_Utilities::contact_us_for_support() ] );  ?>
 		</div>  <?php
 	}
 }

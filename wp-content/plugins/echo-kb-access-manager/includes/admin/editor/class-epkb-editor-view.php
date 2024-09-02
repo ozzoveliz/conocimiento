@@ -84,8 +84,12 @@ class EPKB_Editor_View {
 
 		// get KB ID except on Category Archive Page without any article - we need KB ID here to have the Access Control working
 		global $eckb_kb_id;
-		$eckb_kb_id = empty($eckb_kb_id) ? EPKB_KB_Handler::get_kb_id_from_kb_main_shortcode() : $eckb_kb_id;
-		$eckb_kb_id = empty($eckb_kb_id) ? EPKB_Core_Utilities::get_kb_id() : $eckb_kb_id;
+
+		if ( empty( $eckb_kb_id ) ) {
+			$kb_id = EPKB_KB_Handler::get_kb_id_from_kb_main_shortcode();
+			$kb_id = empty( $kb_id ) ? EPKB_Core_Utilities::get_kb_id() : $kb_id;
+			$eckb_kb_id = empty( $kb_id ) ? EPKB_KB_Config_DB::DEFAULT_KB_ID : $kb_id;
+		}
 
 		if ( ! EPKB_Admin_UI_Access::is_user_access_to_context_allowed( 'admin_eckb_access_frontend_editor_write' ) ) {
 			epkb_load_admin_plugin_pages_resources();
@@ -145,7 +149,7 @@ class EPKB_Editor_View {
 			<div class="eckb-bottom-notice-message eckb-bottom-notice-message--center-loader-bottom">
 				<div class="contents">
 					<span class="error">
-						<h4><?php echo EPKB_Error_Handler::timeout1_error(); ?></h4>
+						<h4><?php echo esc_html( EPKB_Error_Handler::timeout1_error() ); ?></h4>
 					</span>
 				</div>
 				<div class="epkb-close-notice epkbfa epkbfa-window-close"></div>
@@ -178,7 +182,7 @@ class EPKB_Editor_View {
 			<div class="eckb-bottom-notice-message eckb-bottom-notice-message--center-aligned">
 				<div class="contents">
 					<span class="error white-box">
-						<h4><?php echo EPKB_Utilities::report_generic_error( 1105 ); ?></h4>
+						<h4><?php echo EPKB_Utilities::report_generic_error( 1105 ); //phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped  ?></h4>
 					</span>
 				</div>
 			</div>
@@ -186,9 +190,9 @@ class EPKB_Editor_View {
 
 		EPKB_HTML_Forms::dialog_confirm_action( array(
 			'id'                => 'epkb-editor-layout-warning',
-			'title'             => __( 'Changing Template', 'echo-knowledge-base' ),
-			'body'              => __( 'If you have issues using the Current Theme Template, switch back to the KB Template or contact us for help.', 'echo-knowledge-base' ),
-			'accept_label'      => __( 'Ok', 'echo-knowledge-base' ),
+			'title'             => esc_html__( 'Changing Template', 'echo-knowledge-base' ),
+			'body'              => esc_html__( 'If you have issues using the Current Theme Template, switch back to the KB Template or contact us for help.', 'echo-knowledge-base' ),
+			'accept_label'      => esc_html__( 'Ok', 'echo-knowledge-base' ),
 			'accept_type'       => 'warning',
 			'show_cancel_btn' 	=> 'yes',
 			'hidden'			=> true
@@ -203,7 +207,7 @@ class EPKB_Editor_View {
 		$user = EPKB_Utilities::get_current_user();
 
 		$user_first_name = empty($user) ? '' : $user->display_name;
-		$usre_email = empty($user) ? '' : $user->user_email;  ?>
+		$user_email = empty($user) ? '' : $user->user_email;  ?>
 
 		<div class="epkb-editor-error--form-wrap">
 			<div class="epkb-editor-error--form-message-1"></div>
@@ -217,10 +221,10 @@ class EPKB_Editor_View {
 				<div id="epkb-editor-error--form-body">
 
 					<label for="epkb-editor-error--form-first_name"><?php esc_html_e( 'Name', 'echo-knowledge-base' ); ?>*</label>
-					<input name="first_name" type="text" value="<?php echo $user_first_name; ?>" required  id="epkb-editor-error--form-first_name">
+					<input name="first_name" type="text" value="<?php echo esc_attr( $user_first_name ); ?>" required  id="epkb-editor-error--form-first_name">
 
 					<label for="epkb-editor-error--form-email"><?php esc_html_e( 'Email', 'echo-knowledge-base' ); ?>*</label>
-					<input name="email" type="email" value="<?php echo $usre_email; ?>" required id="epkb-editor-error--form-email">
+					<input name="email" type="email" value="<?php echo esc_attr( $user_email ); ?>" required id="epkb-editor-error--form-email">
 
 					<label for="epkb-editor-error--form-editor_error"><?php esc_html_e( 'Error Details', 'echo-knowledge-base' ); ?>*</label>
 					<textarea name="admin_error" class="editor_error" required id="epkb-editor-error--form-editor_error"></textarea>
@@ -228,12 +232,14 @@ class EPKB_Editor_View {
 					<div class="epkb-editor-error--form-btn-wrap">
 						<input type="submit" name="submit_error" value="<?php esc_attr_e( 'Submit', 'echo-knowledge-base' ); ?>" class="epkb-editor-error--form-btn">
 						<span class="epkb-close-notice epkb-editor-error--form-btn epkb-editor-error--form-btn-cancel"><?php esc_html_e( 'Cancel', 'echo-knowledge-base' ); ?></span><?php
-						if ( EPKB_Core_Utilities::is_kb_flag_set( 'editor_backend_mode' ) ) {       ?>
+						if ( EPKB_Core_Utilities::is_kb_flag_set( 'editor_backend_mode' ) ) {
+							//phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped     ?>
 							<a href="<?php echo add_query_arg([ 'enable_editor_frontend_mode' => 1, '_wpnonce_epkb_ajax_action' => wp_create_nonce( '_wpnonce_epkb_ajax_action' ) ]); ?>"
 							   class="epkb-editor-error--form-btn epkb-editor-error--form-btn-cancel" target="_blank"><?php esc_html_e( 'Try front-end Editor', 'echo-knowledge-base' ); ?></a> <?php
-						} else {        ?>
-							<a href="<?php echo admin_url( '/edit.php?post_type=' . EPKB_KB_Handler::get_post_type( EPKB_KB_Handler::get_current_kb_id() ) . '&page=epkb-kb-configuration&action=enable_editor_backend_mode&_wpnonce_epkb_ajax_action=' .
-	                               wp_create_nonce( '_wpnonce_epkb_ajax_action' ) . '#settings__editor' ); ?>" class="epkb-editor-error--form-btn epkb-editor-error--form-btn-cancel"><?php esc_html_e( 'Try backend Editor', 'echo-knowledge-base' ); ?></a><?php
+						} else {
+							$url = admin_url( '/edit.php?post_type=' . EPKB_KB_Handler::get_post_type( EPKB_KB_Handler::get_current_kb_id() ) .
+										'&page=epkb-kb-configuration&action=enable_editor_backend_mode&_wpnonce_epkb_ajax_action=' . wp_create_nonce( '_wpnonce_epkb_ajax_action' ) . '#settings__editor' ); ?>
+							<a href="<?php echo esc_url( $url ); ?>" class="epkb-editor-error--form-btn epkb-editor-error--form-btn-cancel"><?php esc_html_e( 'Try backend Editor', 'echo-knowledge-base' ); ?></a><?php
 						}       ?>
 					</div>
 
@@ -246,10 +252,9 @@ class EPKB_Editor_View {
 	/**
 	 * EDITOR - Current vs KB Template and Layouts
 	 *
-	 * @param $kb_config
 	 * @return false|string
 	 */
-	public static function get_editor_settings_html( $kb_config ) {
+	public static function get_editor_settings_html() {
 		ob_start(); ?>
 
 		<div class="epkb-editor-settings-panel-container" id="epkb-editor-settings-templates">
@@ -262,7 +267,7 @@ class EPKB_Editor_View {
 
 					<div class="epkb-editor-settings-control-image-select--label">
                         <div class="epkb-editor-settings-control-image-select-recommended">Recommended</div>
-						<img src="<?php echo Echo_Knowledge_Base::$plugin_url.'img/editor/kb-template-option.jpg'; ?>">
+						<img src="<?php echo esc_url( Echo_Knowledge_Base::$plugin_url . 'img/editor/kb-template-option.jpg' ); ?>">
 						<span class="epkb-editor-settings-control-image-select-name"><?php echo esc_html__( 'KB Template', 'echo-knowledge-base' ); ?></span>
 						<div class="epkb-editor-settings-accordeon-item__description-line">
 							<div class="epkb-editor-settings-accordeon-item__description-icon"><i class="epkbfa epkbfa-times"></i></div>
@@ -286,7 +291,7 @@ class EPKB_Editor_View {
 					<input type="radio" name="templates_for_kb" value="current_theme_templates">
 
 					<div class="epkb-editor-settings-control-image-select--label">
-						<img src="<?php echo Echo_Knowledge_Base::$plugin_url.'img/editor/current-theme-option.jpg'; ?>">
+						<img src="<?php echo esc_url( Echo_Knowledge_Base::$plugin_url . 'img/editor/current-theme-option.jpg' ); ?>">
 						<span class="epkb-editor-settings-control-image-select-name"><?php echo esc_html__( 'Current Theme Template', 'echo-knowledge-base' ); ?></span>
 						<div class="epkb-editor-settings-accordeon-item__description-line">
 							<div class="epkb-editor-settings-accordeon-item__description-icon"><i class="epkbfa epkbfa-check"></i></div>
@@ -327,7 +332,7 @@ class EPKB_Editor_View {
 					<input type="radio" name="kb_main_page_layout" value="Basic">
 
 					<div class="epkb-editor-settings-control-image-select--label">
-						<img src="<?php echo Echo_Knowledge_Base::$plugin_url . 'img/editor/basic-layout-dark.jpg'; ?>">
+						<img src="<?php echo esc_url( Echo_Knowledge_Base::$plugin_url . 'img/editor/basic-layout-dark.jpg' ); ?>">
 						<span><?php esc_html_e( 'Basic', 'echo-knowledge-base' ); ?></span>
 					</div>
 				</label>
@@ -336,7 +341,7 @@ class EPKB_Editor_View {
 					<input type="radio" name="kb_main_page_layout" value="Tabs">
 
 					<div class="epkb-editor-settings-control-image-select--label">
-						<img src="<?php echo Echo_Knowledge_Base::$plugin_url . 'img/editor/tabs-layout.jpg'; ?>">
+						<img src="<?php echo esc_url( Echo_Knowledge_Base::$plugin_url . 'img/editor/tabs-layout.jpg' ); ?>">
 						<span><?php esc_html_e( 'Tabs', 'echo-knowledge-base' ); ?></span>
 					</div>
 				</label>
@@ -345,7 +350,7 @@ class EPKB_Editor_View {
 					<input type="radio" name="kb_main_page_layout" value="Categories">
 
 					<div class="epkb-editor-settings-control-image-select--label">
-						<img src="<?php echo Echo_Knowledge_Base::$plugin_url . 'img/editor/category-focused-layout.jpg'; ?>">
+						<img src="<?php echo esc_url( Echo_Knowledge_Base::$plugin_url . 'img/editor/category-focused-layout.jpg' ); ?>">
 						<span><?php esc_html_e( 'Category Focused', 'echo-knowledge-base' ); ?></span>
 					</div>
 				</label>
@@ -354,7 +359,7 @@ class EPKB_Editor_View {
 					<input type="radio" name="kb_main_page_layout" value="Classic">
 
 					<div class="epkb-editor-settings-control-image-select--label">
-						<img src="<?php echo Echo_Knowledge_Base::$plugin_url . 'img/setting-icons/classic-layout.jpg'; ?>">
+						<img src="<?php echo esc_url( Echo_Knowledge_Base::$plugin_url . 'img/setting-icons/classic-layout.jpg' ); ?>">
 						<span><?php esc_html_e( 'Classic', 'echo-knowledge-base' ); ?></span>
 					</div>
 				</label>
@@ -363,7 +368,7 @@ class EPKB_Editor_View {
 					<input type="radio" name="kb_main_page_layout" value="Drill-Down">
 
 					<div class="epkb-editor-settings-control-image-select--label">
-						<img src="<?php echo Echo_Knowledge_Base::$plugin_url . 'img/setting-icons/drill-down-layout.jpg'; ?>">
+						<img src="<?php echo esc_url( Echo_Knowledge_Base::$plugin_url . 'img/setting-icons/drill-down-layout.jpg' ); ?>">
 						<span><?php esc_html_e( 'Drill Down', 'echo-knowledge-base' ); ?></span>
 					</div>
 				</label>    <?php
@@ -374,7 +379,7 @@ class EPKB_Editor_View {
 						<input type="radio" name="kb_main_page_layout" value="Grid">
 
 						<div class="epkb-editor-settings-control-image-select--label">
-							<img src="<?php echo Echo_Knowledge_Base::$plugin_url . 'img/editor/grid-layout.jpg'; ?>">
+							<img src="<?php echo esc_url( Echo_Knowledge_Base::$plugin_url . 'img/editor/grid-layout.jpg' ); ?>">
 							<span><?php esc_html_e( 'Grid', 'echo-knowledge-base' ); ?></span>
 						</div>
 					</label>
@@ -383,7 +388,7 @@ class EPKB_Editor_View {
 						<input type="radio" name="kb_main_page_layout" value="Sidebar">
 
 						<div class="epkb-editor-settings-control-image-select--label">
-							<img src="<?php echo Echo_Knowledge_Base::$plugin_url . 'img/editor/sidebar-layout.jpg'; ?>">
+							<img src="<?php echo esc_url( Echo_Knowledge_Base::$plugin_url . 'img/editor/sidebar-layout.jpg' ); ?>">
 							<span><?php esc_html_e( 'Sidebar', 'echo-knowledge-base' ); ?></span>
 						</div>
 					</label><?php
@@ -414,22 +419,32 @@ class EPKB_Editor_View {
 
 			switch ( $url_slug ) {
 				case 'main_page_url':
+
+					if ( $kb_config['modular_main_page_toggle'] == 'on' ) {
+						break;
+					}
+
 					$pages_data['main-page'] = array(
-						'title' => __( 'Main Page Editor', 'echo-knowledge-base' ),
+						'title' => esc_html__( 'Main Page Editor', 'echo-knowledge-base' ),
 						'url' => $url
 					);
 					break;
 
 				case 'article_page_url':
 					$pages_data['article-page'] = array(
-						'title' => __( 'Article Page Editor', 'echo-knowledge-base' ),
+						'title' => esc_html__( 'Article Page Editor', 'echo-knowledge-base' ),
 						'url' => $url
 					);
 					break;
 
 				case 'archive_url':
+
+					if ( $kb_config['archive_page_v3_toggle'] == 'on' ) {
+						return '';
+					}
+
 					$pages_data['archive-page'] = array(
-						'title' => __( 'Archive Page Editor', 'echo-knowledge-base' ),
+						'title' => esc_html__( 'Archive Page Editor', 'echo-knowledge-base' ),
 						'url' => $url
 					);
 					break;
@@ -438,7 +453,7 @@ class EPKB_Editor_View {
 
 		if ( EPKB_Utilities::is_advanced_search_enabled() && ! empty($editor_urls['search_page_url']) ) {
 			$pages_data['search-page'] = array(
-				'title' => __( 'Search Results Editor', 'echo-knowledge-base' ),
+				'title' => esc_html__( 'Search Results Editor', 'echo-knowledge-base' ),
 				'url' => $editor_urls['search_page_url']
 			);
 		}
@@ -456,9 +471,9 @@ class EPKB_Editor_View {
 					<div class="epkb-editor-settings-menu__group__title"><?php esc_html_e( 'Other Pages', 'echo-knowledge-base' ); ?></div>
 					<div class="epkb-editor-settings-menu__group-items-container"><?php
 						foreach ( $pages_data as $page ) { ?>
-							<a href="<?php echo $page['url']; ?>" class="epkb-editor-settings-menu__group-item-container" target="<?php echo EPKB_Core_Utilities::is_kb_flag_set( 'editor_backend_mode' ) ? '_self' : '_blank'; ?>">
+							<a href="<?php echo esc_url( $page['url'] ); ?>" class="epkb-editor-settings-menu__group-item-container" target="<?php echo EPKB_Core_Utilities::is_kb_flag_set( 'editor_backend_mode' ) ? '_self' : '_blank'; ?>">
 								<div class="epkb-editor-settings-menu__group-item__icon epkbfa epkbfa-file-text-o"></div>
-								<div class="epkb-editor-settings-menu__group-item__title"><?php echo $page['title']; ?></div>
+								<div class="epkb-editor-settings-menu__group-item__title"><?php echo esc_html( $page['title'] ); ?></div>
 							</a><?php
 						} ?>
 					</div>
@@ -529,23 +544,23 @@ class EPKB_Editor_View {
 	public static function error_can_not_load() {
 		EPKB_HTML_Forms::notification_box_popup( [
                 'type' => 'error',
-                'title' => __( 'Cannot open the visual Editor', 'echo-knowledge-base' ),
-                'desc' =>  __( 'Cannot load the visual Editor on this page.', 'echo-knowledge-base' ) . ' ' . __( 'Are you logged in?', 'echo-knowledge-base' ) . ' ' .  __( 'Is this Knowledge Base URL?', 'echo-knowledge-base' ) ] );
+                'title' => esc_html__( 'Cannot open the visual Editor', 'echo-knowledge-base' ),
+                'desc' =>  esc_html__( 'Cannot load the visual Editor on this page.', 'echo-knowledge-base' ) . ' ' . esc_html__( 'Are you logged in?', 'echo-knowledge-base' ) . ' ' .  esc_html__( 'Is this Knowledge Base URL?', 'echo-knowledge-base' ) ] );
 	}
 
 	public static function error_user_not_logged_in() {
-		$link = sprintf( '<a href="%s">%s</a>', wp_login_url( empty( $_REQUEST['current_url'] ) ? '' : esc_url_raw( $_REQUEST['current_url'] ) ), __( 'Login here', 'echo-knowledge-base' ) );
+		$link = sprintf( '<a href="%s">%s</a>', wp_login_url( empty( $_REQUEST['current_url'] ) ? '' : esc_url_raw( $_REQUEST['current_url'] ) ), esc_html__( 'Login here', 'echo-knowledge-base' ) );
 		EPKB_HTML_Forms::notification_box_popup( [
                 'type' => 'error',
-                'title' => __( 'Cannot open the visual Editor', 'echo-knowledge-base' ),
-                'desc' => __( 'Your login has expired.', 'echo-knowledge-base' ) . ' ' . $link ]);
+                'title' => esc_html__( 'Cannot open the visual Editor', 'echo-knowledge-base' ),
+                'desc' => esc_html__( 'Your login has expired.', 'echo-knowledge-base' ) . ' ' . $link ]);
 	}
 
 	public static function error_no_permissions() {
 		EPKB_HTML_Forms::notification_box_popup( [
                 'type' => 'error',
-                'title' => __( 'Cannot open the visual Editor', 'echo-knowledge-base' ),
-                'desc' =>  __( 'You do not have permission to edit this knowledge base.', 'echo-knowledge-base' ) ] );
+                'title' => esc_html__( 'Cannot open the visual Editor', 'echo-knowledge-base' ),
+                'desc' =>  esc_html__( 'You do not have permission to edit this knowledge base.', 'echo-knowledge-base' ) ] );
 	}
 
 	/**
@@ -653,10 +668,11 @@ class EPKB_Editor_View {
 	private function backend_article_page_content() {
 		global $post;
 
-		$post->post_title = __( 'Demo Article', 'echo-knowledge-base' );
+		$post->post_title = esc_html__( 'Demo Article', 'echo-knowledge-base' );
 		$post->ID = 0;
 		$post->is_demo = true;
-		echo EPKB_Layouts_Setup::get_kb_page_output_hook( EPKB_KB_Handler::get_sample_post_content(), false );
+		//phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+		echo EPKB_Layouts_Setup::get_kb_page_output_hook( EPKB_KB_Demo_Data::get_sample_post_content(), false );
 	}
 
 	private function backend_archive_page_content() {
@@ -669,7 +685,7 @@ class EPKB_Editor_View {
 	}
 
 	public function enable_frontend_editor() {
-		if ( EPKB_Utilities::get( 'enable_editor_frontend_mode' ) && ! empty( $_REQUEST['_wpnonce_epkb_ajax_action'] ) && wp_verify_nonce( $_REQUEST['_wpnonce_epkb_ajax_action'], '_wpnonce_epkb_ajax_action' ) ) {
+		if ( EPKB_Utilities::get( 'enable_editor_frontend_mode' ) && ! empty( $_REQUEST['_wpnonce_epkb_ajax_action'] ) && wp_verify_nonce( sanitize_text_field( wp_unslash(   $_REQUEST['_wpnonce_epkb_ajax_action'] ) ), '_wpnonce_epkb_ajax_action' ) ) {
 			EPKB_Core_Utilities::remove_kb_flag( 'editor_backend_mode' );
 		}
 	}

@@ -42,14 +42,13 @@ class EPKB_Templates {
 			return $template;
 		}
 		
-		// handle Category archive page
+		// handle Category Archive page
 		$is_kb_taxonomy = ! empty( $GLOBALS['taxonomy'] ) && EPKB_KB_Handler::is_kb_category_taxonomy( $GLOBALS['taxonomy'] );
-		if ( $is_kb_taxonomy && self::is_kb_template_active() ) {
+		if ( $is_kb_taxonomy && self::is_kb_template_active( [], true ) ) {
 
-			$kb_id = EPKB_KB_Handler::get_kb_id_from_any_taxonomy($GLOBALS['taxonomy']);
-
+			$kb_id = EPKB_KB_Handler::get_kb_id_from_any_taxonomy( $GLOBALS['taxonomy'] );
 			$located_template = self::locate_template( 'archive-categories.php' );
-			if ( ! empty( $located_template ) && ! is_wp_error( $kb_id ) ) {
+			if ( !empty( $located_template ) && !is_wp_error( $kb_id ) ) {
 				$eckb_kb_id = $kb_id;
 				return $located_template;
 			}
@@ -82,8 +81,8 @@ class EPKB_Templates {
 		$eckb_is_kb_main_page = false;
         $all_kb_configs = epkb_get_instance()->kb_config_obj->get_kb_configs( true );
         foreach ( $all_kb_configs as $one_kb_config ) {
-            if ( ! empty($one_kb_config['kb_main_pages']) && is_array($one_kb_config['kb_main_pages']) &&
-                 in_array($post->ID, array_keys($one_kb_config['kb_main_pages']) ) ) {
+            if ( ! empty( $one_kb_config['kb_main_pages'] ) && is_array( $one_kb_config['kb_main_pages'] ) &&
+                 in_array( $post->ID, array_keys( $one_kb_config['kb_main_pages'] ) ) ) {
 	            $eckb_is_kb_main_page = true;
                 $kb_id = $one_kb_config['id'];
                 break;  // found matching KB Main Page
@@ -101,7 +100,7 @@ class EPKB_Templates {
 		$eckb_kb_id = $kb_id;
 
 		// continue only if we are using KB templates
-		$temp_config = empty($all_kb_configs[$kb_id]) ? array() : $all_kb_configs[$kb_id];
+		$temp_config = empty( $all_kb_configs[$kb_id] ) ? array() : $all_kb_configs[$kb_id];
 		$temp_config = EPKB_Editor_Utilities::update_kb_from_editor_config( $temp_config );
 		
         if ( ! self::is_kb_template_active( $temp_config ) ) {
@@ -110,7 +109,7 @@ class EPKB_Templates {
 
 		// get the layout name
 		if ( $eckb_is_kb_main_page ) {
-			$layout_name =  empty($all_kb_configs[$kb_id]['kb_main_page_layout']) ? EPKB_Layout::BASIC_LAYOUT : $all_kb_configs[$kb_id]['kb_main_page_layout'];
+			$layout_name =  empty( $all_kb_configs[$kb_id]['kb_main_page_layout'] ) ? EPKB_Layout::BASIC_LAYOUT : $all_kb_configs[$kb_id]['kb_main_page_layout'];
 		} else {
 			$layout_name = 'Article';
 		}
@@ -134,22 +133,28 @@ class EPKB_Templates {
 	 * @param array $kb_config
 	 * @return bool
 	 */
-	private static function is_kb_template_active( $kb_config=array() ) {
+	private static function is_kb_template_active( $kb_config=array(), $check_archive=false ) {
 
-		if ( empty($kb_config) ) {
-			$taxonomy = empty($GLOBALS['taxonomy']) ? '' : $GLOBALS['taxonomy'];
+		if ( empty( $kb_config ) ) {
+
+			$taxonomy = empty( $GLOBALS['taxonomy'] ) ? '' : $GLOBALS['taxonomy'];
 			$kb_id = EPKB_KB_Handler::get_kb_id_from_any_taxonomy( $taxonomy );
-			if ( is_wp_error($kb_id) ) {
+			if ( is_wp_error( $kb_id ) ) {
 				return false;
 			}
 
 			$kb_config = epkb_get_instance()->kb_config_obj->get_kb_config( $kb_id );
-			if ( is_wp_error($kb_config) ) {
+			if ( is_wp_error( $kb_config ) ) {
 				return false;
 			}
 		}
 
-		return ! empty($kb_config['templates_for_kb']) && ( $kb_config['templates_for_kb'] == 'kb_templates' );
+		// handle Category Archive page
+		if ( $check_archive ) {
+			return ! empty( $kb_config['template_for_archive_page'] ) && $kb_config['template_for_archive_page'] == 'kb_templates';
+		}
+
+		return ! empty( $kb_config['templates_for_kb'] ) && ( $kb_config['templates_for_kb'] == 'kb_templates' );
 	}
 
 	/**
@@ -377,7 +382,7 @@ class EPKB_Templates {
 		$template_content = '<!-- wp:template-part {"slug":"header"} /-->
 							 <!-- wp:epkb/content-block {} /-->
 							 <!-- wp:template-part {"slug":"footer"} /-->';
-		$kb_content = self::gutenberg_inject_theme_attribute_in_content( $template_content );
+		$kb_content = self::blocks_inject_theme_attribute_in_content( $template_content );
 
 		// wp class to create custom templates based on the file content
 		$template          = new \WP_Block_Template();
@@ -386,7 +391,7 @@ class EPKB_Templates {
 		$template->source         = 'plugin';
 		$template->slug           = $template_slug;
 		$template->type           = $template_type;
-		$template->title          = __( 'Knowledge Base Template', 'echo-knowledge-base' ); 		// Not used anywhere
+		$template->title          = esc_html__( 'Knowledge Base Template', 'echo-knowledge-base' ); 		// Not used anywhere
 		$template->content        = $kb_content; 		// file content + theme styles
 		$template->status         = 'publish';
 		$template->has_theme_file = true;
@@ -411,12 +416,12 @@ class EPKB_Templates {
 	 *
 	 * @return string Updated wp_template content.
 	 */
-	private static function gutenberg_inject_theme_attribute_in_content( $template_content ) {
+	private static function blocks_inject_theme_attribute_in_content( $template_content ) {
 		$has_updated_content = false;
 		$new_content         = '';
 		$template_blocks     = parse_blocks( $template_content );
 
-		$blocks = self::gutenberg_flatten_blocks( $template_blocks );
+		$blocks = self::flatten_blocks( $template_blocks );
 		foreach ( $blocks as &$block ) {
 			if (
 				'core/template-part' === $block['blockName'] &&
@@ -446,7 +451,7 @@ class EPKB_Templates {
 	 *
 	 * @return array block references to the passed blocks and their inner blocks.
 	 */
-	private static function gutenberg_flatten_blocks( &$blocks ) {
+	private static function flatten_blocks( &$blocks ) {
 		$all_blocks = array();
 		$queue      = array();
 		foreach ( $blocks as &$block ) {
@@ -479,22 +484,25 @@ class EPKB_Templates {
 	}
 
 	/**
-	 * EPKB block will use usual way to show kb. This block can be used by the user theme if need
+	 * EPKB block will use usual way to show KB. This block can be used by the user theme if needed
 	 * @param $attributes
 	 * @param $content
 	 * @return false|string
 	 */
 	public function block_render_callback( $attributes, $content ) {
+		global $eckb_our_block_template;
 
 		$template = self::template_loader( '' );
 		$hide_header_footer = true;
 
-		ob_start();
-
+		$output = '';
 		if ( $template ) {
+			$eckb_our_block_template = true;
+			ob_start();
 			require_once( $template );
+			$output = ob_get_clean();
 		}
 
-		return ob_get_clean();
+		return $output;
 	}
 }

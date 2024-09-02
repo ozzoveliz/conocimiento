@@ -1,4 +1,4 @@
-<?php
+<?php  if ( ! defined( 'ABSPATH' ) ) exit;
 
 /**
  * Handle managing Users configuration
@@ -26,7 +26,7 @@ class AMGP_Access_Page_Cntrl_Users extends AMGP_Access_Page_Controller {
 	public function display_user_roles_tab() {
 
 		// verify that the request is authentic
-		if ( empty( $_REQUEST['_wpnonce_amar_access_content_action_ajax'] ) || ! wp_verify_nonce( $_REQUEST['_wpnonce_amar_access_content_action_ajax'], '_wpnonce_amar_access_content_action_ajax' ) ) {
+		if ( empty( $_REQUEST['_wpnonce_amar_access_content_action_ajax'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_REQUEST['_wpnonce_amar_access_content_action_ajax'] ) ), '_wpnonce_amar_access_content_action_ajax' ) ) {
 			AMGP_Utilities::ajax_show_error_die(__( 'Refresh your page', 'echo-knowledge-base' ));
 		}
 
@@ -70,7 +70,7 @@ class AMGP_Access_Page_Cntrl_Users extends AMGP_Access_Page_Controller {
 	public function add_kb_group_user() {
 
 		// verify that the request is authentic
-		if ( empty( $_REQUEST['_wpnonce_amar_access_content_action_ajax'] ) || ! wp_verify_nonce( $_REQUEST['_wpnonce_amar_access_content_action_ajax'], '_wpnonce_amar_access_content_action_ajax' ) ) {
+		if ( empty( $_REQUEST['_wpnonce_amar_access_content_action_ajax'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_REQUEST['_wpnonce_amar_access_content_action_ajax'] ) ), '_wpnonce_amar_access_content_action_ajax' ) ) {
 			AMGP_Utilities::ajax_show_error_die(__( 'User NOT added. Refresh your page first.', 'echo-knowledge-base' ));
 		}
 
@@ -148,7 +148,7 @@ class AMGP_Access_Page_Cntrl_Users extends AMGP_Access_Page_Controller {
 		// add WP User to the KB Group
 		$result = amgp_get_instance()->db_kb_group_users->add_group_user( $kb_id, $wp_user_id, $kb_group_id, $kb_role_name );
 		if ( empty( $result ) ) {
-			AMGP_Utilities::ajax_show_error_die( 'Error Adding User to the Group', __( 'Could not add User. Role: ' . $kb_role_name, 'echo-knowledge-base' ) );
+			AMGP_Utilities::ajax_show_error_die( 'Error Adding User to the Group', esc_html__( 'Could not add User. Role: ' . $kb_role_name, 'echo-knowledge-base' ) );
 		}
 
 		// we are done here
@@ -161,7 +161,7 @@ class AMGP_Access_Page_Cntrl_Users extends AMGP_Access_Page_Controller {
 	public function remove_kb_group_user() {
 
 		// verify that the request is authentic
-		if ( empty( $_REQUEST['_wpnonce_amar_access_content_action_ajax'] ) || ! wp_verify_nonce( $_REQUEST['_wpnonce_amar_access_content_action_ajax'], '_wpnonce_amar_access_content_action_ajax' ) ) {
+		if ( empty( $_REQUEST['_wpnonce_amar_access_content_action_ajax'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_REQUEST['_wpnonce_amar_access_content_action_ajax'] ) ), '_wpnonce_amar_access_content_action_ajax' ) ) {
 			AMGP_Utilities::ajax_show_error_die(__( 'User NOT added. Refresh your page first.', 'echo-knowledge-base' ));
 		}
 
@@ -218,7 +218,7 @@ class AMGP_Access_Page_Cntrl_Users extends AMGP_Access_Page_Controller {
 		// remove the WP User from the KB Group
 		$result = amgp_get_instance()->db_kb_group_users->remove_group_user( $kb_group_id, $wp_user_id );
 		if ( empty($result) ) {
-			AMGP_Utilities::ajax_show_error_die( 'Error Removing User from Group', __( 'Could not remove User . ' . $kb_role_name, 'echo-knowledge-base' ) );
+			AMGP_Utilities::ajax_show_error_die( 'Error Removing User from Group', esc_html__( 'Could not remove User . ' . $kb_role_name, 'echo-knowledge-base' ) );
 		}
 
 		// we are done here
@@ -231,7 +231,7 @@ class AMGP_Access_Page_Cntrl_Users extends AMGP_Access_Page_Controller {
 	public function filter_user_page() {
 
 		// verify that the request is authentic
-		if ( empty( $_REQUEST['_wpnonce_amgp_get_user_page_ajax'] ) || ! wp_verify_nonce( $_REQUEST['_wpnonce_amgp_get_user_page_ajax'], '_wpnonce_amgp_get_user_page_ajax' ) ) {
+		if ( empty( $_REQUEST['_wpnonce_amgp_get_user_page_ajax'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_REQUEST['_wpnonce_amgp_get_user_page_ajax'] ) ), '_wpnonce_amgp_get_user_page_ajax' ) ) {
 			AMGP_Utilities::ajax_show_error_die(__( 'Refresh your page first.', 'echo-knowledge-base' ));
 		}
 
@@ -270,7 +270,7 @@ class AMGP_Access_Page_Cntrl_Users extends AMGP_Access_Page_Controller {
 			AMGP_Utilities::ajax_show_error_die( 'Error filtering users' );
 		}
 		$output = ob_get_clean();
-		wp_die( json_encode( array( 'message' => $output, 'role' => $kb_role_name ) ) );
+		wp_die( wp_json_encode(  array( 'message' => $output, 'role' => $kb_role_name ) ) );
 	}
 
 	/**
@@ -279,7 +279,7 @@ class AMGP_Access_Page_Cntrl_Users extends AMGP_Access_Page_Controller {
 	public function get_user_page() {
 
 		// verify that the request is authentic
-		if ( empty( $_REQUEST['_wpnonce_amgp_get_user_page_ajax'] ) || ! wp_verify_nonce( $_REQUEST['_wpnonce_amgp_get_user_page_ajax'], '_wpnonce_amgp_get_user_page_ajax' ) ) {
+		if ( empty( $_REQUEST['_wpnonce_amgp_get_user_page_ajax'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_REQUEST['_wpnonce_amgp_get_user_page_ajax'] ) ), '_wpnonce_amgp_get_user_page_ajax' ) ) {
 			AMGP_Utilities::ajax_show_error_die(__( 'Refresh your page first.', 'echo-knowledge-base' ));
 		}
 
@@ -324,7 +324,7 @@ class AMGP_Access_Page_Cntrl_Users extends AMGP_Access_Page_Controller {
 			AMGP_Utilities::ajax_show_error_die(__( 'This page is outdated. Please refresh your browser (213)', 'echo-knowledge-base' ));
 		}
 
-		$next_page_number = $next_page_number == __('Previous') ? $current_page_number - 1 : ( $next_page_number == __('Next') ? $current_page_number + 1 : $next_page_number);
+		$next_page_number = $next_page_number == esc_html__('Previous') ? $current_page_number - 1 : ( $next_page_number == esc_html__('Next') ? $current_page_number + 1 : $next_page_number);
 		$next_page_number = (int) $next_page_number;
 		$next_page_number = $next_page_number < 0 ? 1 : $next_page_number;
 		if ( empty($next_page_number) || ! is_int( $next_page_number ) ) {
@@ -338,7 +338,7 @@ class AMGP_Access_Page_Cntrl_Users extends AMGP_Access_Page_Controller {
 			AMGP_Utilities::ajax_show_error_die( 'Error getting users' );
 		}
 		$output = ob_get_clean();
-		wp_die( json_encode( array( 'message' => $output, 'role' => $kb_role_name ) ) );
+		wp_die( wp_json_encode(  array( 'message' => $output, 'role' => $kb_role_name ) ) );
 	}
 
 	/**

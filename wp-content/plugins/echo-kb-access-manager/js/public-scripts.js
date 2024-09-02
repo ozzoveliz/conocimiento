@@ -778,7 +778,6 @@ jQuery(document).ready(function($) {
 		let default_mobile_breakpoint = 768 // This is the default set on first installation.
 		let mobile_breakpoint = typeof $('#eckb-article-page-container-v2').data('mobile_breakpoint') == "undefined" ? default_mobile_breakpoint : $('#eckb-article-page-container-v2').data('mobile_breakpoint');
 
-		//TODO: Dave - Change Sidebar position if TOC is in the Middle
 		// If the setting is on, Offset the Sidebar to match the article Content
 		if( $('.eckb-article-page--L-sidebar-to-content').length > 0 && window_width > mobile_breakpoint ){
 			$('#eckb-article-page-container-v2').find( '#eckb-article-left-sidebar ').css( "margin-top" , articleContentBodyPosition.top+'px' );
@@ -836,13 +835,15 @@ jQuery(document).ready(function($) {
 		let parent_container = $( this ).closest( '.eckb-kb-no-content' ),
 			confirmation_box = $( '.eckb-kb-no-content' ).find( '#epkb-created-kb-content' );
 
+		let loading_dialog_message = epkb_vars.creating_demo_data ? epkb_vars.creating_demo_data : '';
+
 		$.ajax( {
 			type: 'POST',
 			dataType: 'json',
 			data: postData,
 			url: epkb_vars.ajaxurl,
 			beforeSend: function( xhr ) {
-				epkb_loading_Dialog( 'show', '', parent_container );
+				epkb_loading_Dialog( 'show', loading_dialog_message, parent_container );
 			}
 
 		} ).done( function( response ) {
@@ -958,13 +959,56 @@ jQuery(document).ready(function($) {
 				}
 			});
 
-			// open main accordeon 
+			// open main accordion
 			$sidebar_link.closest('.epkb-sidebar__cat__top-cat').parent().toggleClass( 'epkb-active-top-category' );
 			$sidebar_link.closest('.epkb-sidebar__cat__top-cat').find( $( '.epkb-sidebar__cat__top-cat__body-container') ).show();
 
 			let icon = $sidebar_link.closest('.epkb-sidebar__cat__top-cat').find('.epkb-sidebar__cat__top-cat__heading-container .epkb-sidebar__heading__inner span');
 			if ( icon.length > 0 ) {
 				epkb_toggle_category_icons(icon, icon.attr('class').match(/\ep_font_icon_\S+/g)[0]);
+			}
+		}
+
+		function epkb_open_current_archive_category() {
+			let $current_cat = $( '.epkb-sidebar__cat__current-cat' );
+			if ( ! $current_cat.length ) {
+				return;
+			}
+
+			// expand parent if chosen category is hidden
+			let list = $current_cat.closest( 'li' );
+			for ( let i = 0; i < 5; i ++ ) {
+				if ( ! list.length ) {
+					continue;
+				}
+				// open the top category here
+				if ( list.hasClass( 'epkb-sidebar__cat__top-cat' ) ) {
+					list.find( '.epkb-sidebar__cat__top-cat__body-container' ).css( 'display', 'block' );
+					list.closest( '.epkb-sidebar__cat__top-cat__body-container' ).css( 'display', 'block' );
+				}
+				list.children( 'ul' ).show();
+				list = list.closest( 'li' ).closest( 'ul' ).parent();
+			}
+
+			// highlight categories
+			let level = $current_cat.closest( 'li' );
+			let level_icon;
+			for ( let i = 0; i < 5; i ++ ) {
+				level_icon = level.find( 'span' ).first();
+				level = level_icon.closest( 'ul' ).closest( 'ul' ).closest( 'li' );
+				if ( level_icon.length ) {
+					let match_icon = level_icon.attr('class').match(/\ep_font_icon_\S+/g);
+					if ( match_icon ) {
+						epkb_toggle_category_icons( level_icon, match_icon[0] );
+					}
+				}
+				level.find( 'div[class^=elay-category]' ).first().addClass( 'active' );
+
+				// open the top category here
+				if ( i === 0 ) {
+					level.find( '.epkb-sidebar__cat__top-cat__body-container' ).css( 'display', 'block' );
+					level.closest( '.epkb-sidebar__cat__top-cat__body-container' ).css( 'display', 'block' );
+				}
 			}
 		}
 
@@ -1049,6 +1093,7 @@ jQuery(document).ready(function($) {
 		});
 
 		epkb_open_and_highlight_selected_article_v2();
+		epkb_open_current_archive_category();
 	}
 
 
@@ -1288,7 +1333,9 @@ jQuery(document).ready(function($) {
 
 	// FAQs Module -----------------------------------------------------------------/
 	// Accordion mode
-	$('.epkb-faqs-accordion-mode .epkb-faqs__item__question').on('click', function(){
+	$('.epkb-faqs-accordion-mode .epkb-faqs__item__question').filter(function() {
+		return $(this).data('faq-type') == 'module';
+	}).on('click', function(){
 
 		var container = $(this).closest('.epkb-faqs__item-container').eq(0);
 
@@ -1300,7 +1347,10 @@ jQuery(document).ready(function($) {
 		container.toggleClass('epkb-faqs__item-container--active');
 	});
 	// Toggle Mode
-	$('.epkb-faqs-toggle-mode .epkb-faqs__item__question').on('click', function(){
+	$('.epkb-faqs-toggle-mode .epkb-faqs__item__question').filter(function() {
+		return $(this).data('faq-type') == 'module';
+	}).on('click', function(){
+
 		var container = $(this).closest('.epkb-faqs__item-container').eq(0);
 
 		// Close other opened items
@@ -1375,4 +1425,18 @@ jQuery(document).ready(function($) {
 			}
 		});
 	}
+
+
+	/********************************************************************
+	 *                      Category Archive Page
+	 ********************************************************************/
+	if ( $( '#eckb-archive-page-container' ).length ) {
+
+		$( document ).on( 'click', '.eckb-article-list-show-more-container', function() {
+			$( this ).parent().find( '.eckb-article-container' ).removeClass( 'epkb-hide-elem' );
+			$( '.eckb-article-list-show-more-container' ).hide();
+		});
+	}
+
+
 });

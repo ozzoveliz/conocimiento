@@ -81,15 +81,15 @@ class EPKB_Articles_CPT_Setup {
 		$labels = [
 				'name'              => _x( 'Categories', 'taxonomy general name', 'echo-knowledge-base' ),
 				'singular_name'     => _x( 'Category', 'taxonomy singular name', 'echo-knowledge-base' ),
-				'search_items'      => __( 'Search Categories', 'echo-knowledge-base' ),
-				'all_items'         => __( 'All Categories', 'echo-knowledge-base' ),
-				'parent_item'       => __( 'Parent Category', 'echo-knowledge-base' ),
-				'parent_item_colon' => __( 'Parent Category:', 'echo-knowledge-base' ),
-				'edit_item'         => __( 'Edit Category', 'echo-knowledge-base' ),
-				'update_item'       => __( 'Update Category', 'echo-knowledge-base' ),
-				'add_new_item'      => __( 'Add New Category', 'echo-knowledge-base' ),
-				'new_item_name'     => __( 'New Category Name', 'echo-knowledge-base' ),
-				'menu_name'         => __( 'Categories', 'echo-knowledge-base' ),
+				'search_items'      => esc_html__( 'Search Categories', 'echo-knowledge-base' ),
+				'all_items'         => esc_html__( 'All Categories', 'echo-knowledge-base' ),
+				'parent_item'       => esc_html__( 'Parent Category', 'echo-knowledge-base' ),
+				'parent_item_colon' => esc_html__( 'Parent Category:', 'echo-knowledge-base' ),
+				'edit_item'         => esc_html__( 'Edit Category', 'echo-knowledge-base' ),
+				'update_item'       => esc_html__( 'Update Category', 'echo-knowledge-base' ),
+				'add_new_item'      => esc_html__( 'Add New Category', 'echo-knowledge-base' ),
+				'new_item_name'     => esc_html__( 'New Category Name', 'echo-knowledge-base' ),
+				'menu_name'         => esc_html__( 'Categories', 'echo-knowledge-base' ),
 		];
 		$args = [
 				'hierarchical'      => true,
@@ -101,7 +101,7 @@ class EPKB_Articles_CPT_Setup {
 				'show_in_rest'      => true,
 				'rewrite'           => [
 											/* translators: do NOT change this translation again. It will break links !!! */
-											'slug'         => $kb_articles_common_path . '/' . _x( 'category', 'taxonomy singular name', 'echo-knowledge-base' ),  // TODO FUTURE overwrite with config
+											'slug'         => $kb_articles_common_path . '/' . _x( 'category', 'taxonomy singular name', 'echo-knowledge-base' ),
 											'with_front'   => false,
 											'hierarchical' => true
 										],
@@ -122,18 +122,18 @@ class EPKB_Articles_CPT_Setup {
 		$labels = [
 				'name'                       => _x( 'Tags', 'taxonomy general name', 'echo-knowledge-base' ),
 				'singular_name'              => _x( 'Tag', 'taxonomy singular name', 'echo-knowledge-base' ),
-				'search_items'               => __( 'Search Tags', 'echo-knowledge-base' ),
-				'all_items'                  => __( 'All Tags', 'echo-knowledge-base' ),
-				'parent_item'                => __( 'Parent Tag', 'echo-knowledge-base' ),
-				'parent_item_colon'          => __( 'Parent Tag:', 'echo-knowledge-base' ),
-				'edit_item'                  => __( 'Edit Tag', 'echo-knowledge-base' ),
-				'update_item'                => __( 'Update Tag', 'echo-knowledge-base' ),
-				'view_item'                  => __( 'View Tag', 'echo-knowledge-base' ),
-				'separate_items_with_commas' => __( 'Separate Tags with commas', 'echo-knowledge-base' ),
-				'add_or_remove_items'        => __( 'Add or remove Tags', 'echo-knowledge-base' ),
-				'add_new_item'               => __( 'Add New Tag', 'echo-knowledge-base' ),
-				'new_item_name'              => __( 'New Tag Name', 'echo-knowledge-base' ),
-				'menu_name'                  => __( 'Tags', 'echo-knowledge-base' )
+				'search_items'               => esc_html__( 'Search Tags', 'echo-knowledge-base' ),
+				'all_items'                  => esc_html__( 'All Tags', 'echo-knowledge-base' ),
+				'parent_item'                => esc_html__( 'Parent Tag', 'echo-knowledge-base' ),
+				'parent_item_colon'          => esc_html__( 'Parent Tag:', 'echo-knowledge-base' ),
+				'edit_item'                  => esc_html__( 'Edit Tag', 'echo-knowledge-base' ),
+				'update_item'                => esc_html__( 'Update Tag', 'echo-knowledge-base' ),
+				'view_item'                  => esc_html__( 'View Tag', 'echo-knowledge-base' ),
+				'separate_items_with_commas' => esc_html__( 'Separate Tags with commas', 'echo-knowledge-base' ),
+				'add_or_remove_items'        => esc_html__( 'Add or remove Tags', 'echo-knowledge-base' ),
+				'add_new_item'               => esc_html__( 'Add New Tag', 'echo-knowledge-base' ),
+				'new_item_name'              => esc_html__( 'New Tag Name', 'echo-knowledge-base' ),
+				'menu_name'                  => esc_html__( 'Tags', 'echo-knowledge-base' )
 		];
 		$args = [
 				'hierarchical'          => false,
@@ -146,7 +146,7 @@ class EPKB_Articles_CPT_Setup {
 				'show_in_rest'          => true,
 				'rewrite'               => [
 												/* translators: do NOT change this translation again. It will break links !!! */
-												'slug'         => $kb_articles_common_path . '/' . _x( 'tag', 'taxonomy singular name', 'echo-knowledge-base' ),  // TODO FUTURE override with config
+												'slug'         => $kb_articles_common_path . '/' . _x( 'tag', 'taxonomy singular name', 'echo-knowledge-base' ),
 												'with_front'   => false,
 												'hierarchical' => false
 											],
@@ -171,14 +171,14 @@ class EPKB_Articles_CPT_Setup {
 				'singular_name'      => $post_type_name . ' - ' . _x( 'Article', 'post type singular name', 'echo-knowledge-base' ),
 				'menu_name'          => _x( 'Knowledge Base', 'admin menu', 'echo-knowledge-base' ),
 				'add_new'            => _x( 'Add New Article', 'Articles', 'echo-knowledge-base' ),
-				'add_new_item'       => __( 'Add New Article', 'echo-knowledge-base' ),
-				'edit_item'          => __( 'Edit Article', 'echo-knowledge-base' ),
-				'new_item'           => __( 'New Article', 'echo-knowledge-base' ),
-				'all_items'          => __( 'All Articles', 'echo-knowledge-base' ),
-				'view_item'          => __( 'View Article', 'echo-knowledge-base' ),
-				'search_items'       => __( 'Search in Articles', 'echo-knowledge-base' ),
-				'not_found'          => __( 'No Articles found', 'echo-knowledge-base' ),
-				'not_found_in_trash' => __( 'No Articles found in Trash', 'echo-knowledge-base' ),
+				'add_new_item'       => esc_html__( 'Add New Article', 'echo-knowledge-base' ),
+				'edit_item'          => esc_html__( 'Edit Article', 'echo-knowledge-base' ),
+				'new_item'           => esc_html__( 'New Article', 'echo-knowledge-base' ),
+				'all_items'          => esc_html__( 'All Articles', 'echo-knowledge-base' ),
+				'view_item'          => esc_html__( 'View Article', 'echo-knowledge-base' ),
+				'search_items'       => esc_html__( 'Search in Articles', 'echo-knowledge-base' ),
+				'not_found'          => esc_html__( 'No Articles found', 'echo-knowledge-base' ),
+				'not_found_in_trash' => esc_html__( 'No Articles found in Trash', 'echo-knowledge-base' ),
 				'parent_item_colon'  => '',
 		];
 		$args = [

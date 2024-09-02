@@ -3,7 +3,7 @@
  * Plugin Name: KB - Advanced Search
  * Plugin URI: https://www.echoknowledgebase.com/wordpress-add-ons/
  * Description: Search you Knowledge Base using advanced search features.
- * Version: 2.33.0
+ * Version: 2.34.1
  * Author: Echo Plugins
  * Author URI: https://www.echoknowledgebase.com
  * Text Domain: echo-advanced-search
@@ -41,7 +41,7 @@ final class Echo_Advanced_Search {
 	/* @var Echo_Advanced_Search */
 	private static $instance;
 
-	public static $version = '2.33.0';
+	public static $version = '2.34.1';
 	public static $plugin_dir;
 	public static $plugin_url;
 	public static $plugin_file = __FILE__;
@@ -166,7 +166,7 @@ final class Echo_Advanced_Search {
 	 * @param $action
 	 */
 	private function handle_action_request( $action ) {
-		if ( in_array($action, array('epkb_load_editor', 'eckb_apply_editor_changes', 'eckb_editor_get_themes_list', 'eckb_theme_wizard_get_themes_v2', 'epkb_apply_settings_changes' )) ) {
+		if ( in_array($action, array('epkb_load_editor', 'eckb_apply_editor_changes', 'eckb_theme_wizard_get_themes_v2', 'epkb_apply_settings_changes' )) ) {
 			ASEA_KB_Editor_Config::register_editor_hooks();
 			return;
 		}

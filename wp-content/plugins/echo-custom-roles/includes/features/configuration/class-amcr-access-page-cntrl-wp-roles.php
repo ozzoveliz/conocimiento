@@ -1,4 +1,4 @@
-<?php
+<?php  if ( ! defined( 'ABSPATH' ) ) exit;
 
 /**
  * Handle managing WP Role mapping
@@ -26,7 +26,7 @@ class AMCR_Access_Page_Cntrl_WP_Roles extends AMCR_Access_Page_Controller {
 	public function display_wp_roles_tab() {
 
 		// verify that the request is authentic
-		if ( empty( $_REQUEST['_wpnonce_amar_access_content_action_ajax'] ) || ! wp_verify_nonce( $_REQUEST['_wpnonce_amar_access_content_action_ajax'], '_wpnonce_amar_access_content_action_ajax' ) ) {
+		if ( empty( $_REQUEST['_wpnonce_amar_access_content_action_ajax'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_REQUEST['_wpnonce_amar_access_content_action_ajax'] ) ), '_wpnonce_amar_access_content_action_ajax' ) ) {
 			AMCR_Utilities::ajax_show_error_die(__( 'Refresh your page', 'echo-knowledge-base' ));
 		}
 
@@ -61,7 +61,7 @@ class AMCR_Access_Page_Cntrl_WP_Roles extends AMCR_Access_Page_Controller {
 	public function create_wp_role_mapping() {
 
 		// verify that the request is authentic
-		if ( empty( $_REQUEST['_wpnonce_amar_access_content_action_ajax'] ) || ! wp_verify_nonce( $_REQUEST['_wpnonce_amar_access_content_action_ajax'], '_wpnonce_amar_access_content_action_ajax' ) ) {
+		if ( empty( $_REQUEST['_wpnonce_amar_access_content_action_ajax'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_REQUEST['_wpnonce_amar_access_content_action_ajax'] ) ), '_wpnonce_amar_access_content_action_ajax' ) ) {
 			AMCR_Utilities::ajax_show_error_die(__( 'Refresh your page first.', 'echo-knowledge-base' ));
 		}
 
@@ -92,7 +92,7 @@ class AMCR_Access_Page_Cntrl_WP_Roles extends AMCR_Access_Page_Controller {
 			$kb_groups = AMCR_KB_Core::get_kb_groups( $kb_id );
 			if ( $kb_groups === null ) {
 				AMCR_Logging::add_log( "Could not retrieve KB Groups", $kb_id );
-				AMCR_Utilities::ajax_show_error_die( __( 'This page is outdated. Please refresh your browser (14)', 'echo-knowledge-base' ) );
+				AMCR_Utilities::ajax_show_error_die( esc_html__( 'This page is outdated. Please refresh your browser (14)', 'echo-knowledge-base' ) );
 			}
 			$kb_groups_ids = array();
 			foreach ( $kb_groups as $kb_group ) {
@@ -102,7 +102,7 @@ class AMCR_Access_Page_Cntrl_WP_Roles extends AMCR_Access_Page_Controller {
 			$kb_group_id = AMCR_Utilities::post( 'amcr_kb_group_id' );
 			if ( empty( $kb_group_id ) || is_wp_error( $kb_group_id ) || ! in_array( $kb_group_id, $kb_groups_ids ) ) {
 				AMCR_Logging::add_log( "invalid KB Group ID", $kb_group_id );
-				AMCR_Utilities::ajax_show_error_die( __( 'This page is outdated. Please refresh your browser (13)', 'echo-knowledge-base' ) );
+				AMCR_Utilities::ajax_show_error_die( esc_html__( 'This page is outdated. Please refresh your browser (13)', 'echo-knowledge-base' ) );
 			}
 
 		}
@@ -122,7 +122,7 @@ class AMCR_Access_Page_Cntrl_WP_Roles extends AMCR_Access_Page_Controller {
 
 		// we are done here
 		$reload = false;
-		AMCR_Utilities::ajax_show_info_die( $reload ? __( 'Reload Settings saved. PAGE WILL RELOAD NOW.', 'echo-knowledge-base' ) : __( 'WP Role Added', 'echo-knowledge-base' ) );
+		AMCR_Utilities::ajax_show_info_die( $reload ? esc_html__( 'Reload Settings saved. PAGE WILL RELOAD NOW.', 'echo-knowledge-base' ) : esc_html__( 'WP Role Added', 'echo-knowledge-base' ) );
 	}
 
 	/**
@@ -131,7 +131,7 @@ class AMCR_Access_Page_Cntrl_WP_Roles extends AMCR_Access_Page_Controller {
 	public function delete_wp_role_mapping() {
 
 		// verify that the request is authentic
-		if ( empty( $_REQUEST['_wpnonce_amar_access_content_action_ajax'] ) || ! wp_verify_nonce( $_REQUEST['_wpnonce_amar_access_content_action_ajax'], '_wpnonce_amar_access_content_action_ajax' ) ) {
+		if ( empty( $_REQUEST['_wpnonce_amar_access_content_action_ajax'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_REQUEST['_wpnonce_amar_access_content_action_ajax'] ) ), '_wpnonce_amar_access_content_action_ajax' ) ) {
 			AMCR_Utilities::ajax_show_error_die(__( 'WP Role NOT deleted. First refresh your page', 'echo-knowledge-base' ));
 		}
 
@@ -155,7 +155,7 @@ class AMCR_Access_Page_Cntrl_WP_Roles extends AMCR_Access_Page_Controller {
 			$kb_groups = AMCR_KB_Core::get_kb_groups( $kb_id );
 			if ( $kb_groups === null ) {
 				AMCR_Logging::add_log( "Could not retrieve KB Groups", $kb_id );
-				AMCR_Utilities::ajax_show_error_die( __( 'This page is outdated. Please refresh your browser (14)', 'echo-knowledge-base' ) );
+				AMCR_Utilities::ajax_show_error_die( esc_html__( 'This page is outdated. Please refresh your browser (14)', 'echo-knowledge-base' ) );
 			}
 			$kb_groups_ids = array();
 			foreach ( $kb_groups as $kb_group ) {
@@ -165,7 +165,7 @@ class AMCR_Access_Page_Cntrl_WP_Roles extends AMCR_Access_Page_Controller {
 			$kb_group_id = AMCR_Utilities::post( 'amcr_kb_group_id' );
 			if ( empty( $kb_group_id ) || is_wp_error( $kb_group_id ) || ! in_array( $kb_group_id, $kb_groups_ids ) ) {
 				//AMCR_Logging::add_log( "invalid KB Group ID", $kb_group_id );
-				//AMCR_Utilities::ajax_show_error_die( __( 'This page is outdated. Please refresh your browser (13)', 'echo-knowledge-base' ) );
+				//AMCR_Utilities::ajax_show_error_die( esc_html__( 'This page is outdated. Please refresh your browser (13)', 'echo-knowledge-base' ) );
 			}
 		}
 
@@ -182,7 +182,7 @@ class AMCR_Access_Page_Cntrl_WP_Roles extends AMCR_Access_Page_Controller {
 		}
 
 		// we are done here
-		AMCR_Utilities::ajax_show_info_die( __( 'WP Role mapping Deleted', 'echo-knowledge-base' ) );
+		AMCR_Utilities::ajax_show_info_die( esc_html__( 'WP Role mapping Deleted', 'echo-knowledge-base' ) );
 	}
 
 	/**
@@ -191,13 +191,13 @@ class AMCR_Access_Page_Cntrl_WP_Roles extends AMCR_Access_Page_Controller {
 	public function reset_log() {
 
 		// verify that the request is authentic
-		if ( empty( $_REQUEST['_wpnonce_epkb_ajax_action'] ) || ! wp_verify_nonce( $_REQUEST['_wpnonce_epkb_ajax_action'], '_wpnonce_epkb_ajax_action' ) ) {
-			AMCR_Utilities::ajax_show_error_die( __( 'First refresh your page', 'echo-knowledge-base' ) );
+		if ( empty( $_REQUEST['_wpnonce_epkb_ajax_action'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_REQUEST['_wpnonce_epkb_ajax_action'] ) ), '_wpnonce_epkb_ajax_action' ) ) {
+			AMCR_Utilities::ajax_show_error_die( esc_html__( 'First refresh your page', 'echo-knowledge-base' ) );
 		}
 
 		// ensure user has correct permissions
 		if ( ! current_user_can('admin_eckb_access_manager_page') ) {
-			AMCR_Utilities::ajax_show_error_die( __( 'You do not have ability to change access privileges.', 'echo-knowledge-base' ) );
+			AMCR_Utilities::ajax_show_error_die( esc_html__( 'You do not have ability to change access privileges.', 'echo-knowledge-base' ) );
 		}
 
 		AMCR_Logging::reset_logs();

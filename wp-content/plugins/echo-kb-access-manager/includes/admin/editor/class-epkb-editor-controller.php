@@ -11,9 +11,6 @@ class EPKB_Editor_Controller {
 
 		add_action( 'wp_ajax_epkb_editor_error', array( 'EPKB_Controller', 'handle_report_admin_error' ) );
 		add_action( 'wp_ajax_nopriv_epkb_editor_error', array( 'EPKB_Utilities', 'user_not_logged_in' ) );
-
-		add_action( 'wp_ajax_eckb_editor_get_themes_list',  array( $this, 'get_themes' ));
-		add_action( 'wp_ajax_nopriv_eckb_editor_get_themes_list', array( 'EPKB_Utilities', 'user_not_logged_in' ) );
 	}
 
 	/**
@@ -27,19 +24,19 @@ class EPKB_Editor_Controller {
 		// get current KB ID
 		$editor_kb_id = EPKB_Utilities::post( 'epkb_editor_kb_id' );
 		if ( empty($editor_kb_id) || ! EPKB_Utilities::is_positive_int( $editor_kb_id ) ) {
-			EPKB_Utilities::ajax_show_error_die( __( 'Invalid parameters. Please refresh your page.', 'echo-knowledge-base' ) );
+			EPKB_Utilities::ajax_show_error_die( esc_html__( 'Invalid parameters. Please refresh your page.', 'echo-knowledge-base' ) );
 		}
 
 		// get type of page we are saving
 		$page_type = EPKB_Utilities::post( 'page_type' );
 		if ( empty($page_type) ) {
-			EPKB_Utilities::ajax_show_error_die( __( 'Invalid parameters. Please refresh your page.', 'echo-knowledge-base' ) );
+			EPKB_Utilities::ajax_show_error_die( esc_html__( 'Invalid parameters. Please refresh your page.', 'echo-knowledge-base' ) );
 		}
 
 		// get new KB configuration
 		$new_config = EPKB_Utilities::post( 'kb_config', [], 'db-config-json' );
 		if ( empty($new_config) ) {
-			EPKB_Utilities::ajax_show_error_die( __( 'Invalid parameters. Please refresh your page.', 'echo-knowledge-base' ) );
+			EPKB_Utilities::ajax_show_error_die( esc_html__( 'Invalid parameters. Please refresh your page.', 'echo-knowledge-base' ) );
 		}
 
 		// get current KB configuration
@@ -67,7 +64,7 @@ class EPKB_Editor_Controller {
 
 		EPKB_Core_Utilities::add_kb_flag( 'settings_tab_visited' );
 
-		wp_die( wp_json_encode( array( 'message' => __('Configuration Saved', 'echo-knowledge-base') ) ) );
+		wp_die( wp_json_encode( array( 'message' => esc_html__('Configuration Saved', 'echo-knowledge-base') ) ) );
 	}
 
 	/**
@@ -138,59 +135,7 @@ class EPKB_Editor_Controller {
 		// update KB and add-ons configuration
 		$update_kb_msg = EPKB_Core_Utilities::prepare_update_to_kb_configuration( $editor_kb_id, $orig_config, $new_config );
 		if ( ! empty( $update_kb_msg ) ) {
-			EPKB_Utilities::ajax_show_error_die( __( 'Could not save the new configuration.', 'echo-knowledge-base' ) . $update_kb_msg . '(32) ' . EPKB_Utilities::contact_us_for_support() );
+			EPKB_Utilities::ajax_show_error_die( esc_html__( 'Could not save the new configuration.', 'echo-knowledge-base' ) . $update_kb_msg . '(32) ' . EPKB_Utilities::contact_us_for_support() );
 		}
-	}
-
-	/**
-	 * Get list of themes and its values to be used in the Visual Editor if user chooses to change theme
-	 */
-	public static function get_themes() {
-
-		// get current KB ID
-		$editor_kb_id = EPKB_Utilities::post( 'epkb_editor_kb_id' );
-		if ( empty( $editor_kb_id ) || ! EPKB_Utilities::is_positive_int( $editor_kb_id ) ) {
-			EPKB_Utilities::ajax_show_error_die( __( 'Invalid editor id parameter. Please refresh your page', 'echo-knowledge-base' ) );
-		}
-
-		// get current KB configuration
-		$kb_config = epkb_get_instance()->kb_config_obj->get_kb_config( $editor_kb_id, true );
-		if ( ! is_wp_error( $kb_config ) ) {
-			$kb_config = apply_filters( 'eckb_kb_config', $kb_config );
-		}
-		if ( empty( $kb_config ) || ! is_array( $kb_config ) || is_wp_error( $kb_config ) ) {
-			EPKB_Utilities::ajax_show_error_die( EPKB_Utilities::report_generic_error( 18, $kb_config ) );
-		}
-
-		// get KB specs
-		$field_specification = EPKB_KB_Config_Specs::get_fields_specification( $kb_config['id'] );
-
-		// get add-ons specs
-		$field_specification = apply_filters( 'eckb_editor_fields_specs', $field_specification, $kb_config['id'] );
-		if ( empty( $field_specification ) || is_wp_error( $field_specification ) ) {
-			EPKB_Utilities::ajax_show_error_die( EPKB_Utilities::report_generic_error( 38, $field_specification ) );
-		}
-
-		// combine defaults with theme presets
-		$theme_presets = [];
-		
-		foreach ( EPKB_KB_Wizard_Themes::get_all_presets( [] ) as $theme_name => $theme_values ) {
-			foreach ( $theme_values as $name => $val ) {
-				
-				if ( $val === '' && ! empty( $field_specification[$name] ) && isset( $field_specification[$name]['default'] ) )  {
-					$val = $field_specification[$name]['default'];
-				} else if ( $val === '' ) {
-					continue;
-				}
-				
-				$theme_presets[$theme_name][$name] = $val;
-			}
-		}
-
-		wp_send_json_success( [
-			'theme_presets' => $theme_presets,
-			'search_presets' => EPKB_KB_Wizard_Themes::get_search_presets(),
-			'categories_presets' => array(),
-		] );
 	}
 }

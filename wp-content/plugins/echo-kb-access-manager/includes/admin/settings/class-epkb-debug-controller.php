@@ -106,8 +106,8 @@ class EPKB_Debug_Controller {
 
 		// check wpnonce
 		$wp_nonce = EPKB_Utilities::post( '_wpnonce_epkb_ajax_action' );
-		if ( empty( $wp_nonce ) || ! wp_verify_nonce( $wp_nonce, '_wpnonce_epkb_ajax_action' ) ) {
-			wp_die( __( 'You do not have permission to get debug info', 'echo-knowledge-base' ) . ' (E01)'  );
+		if ( empty( $wp_nonce ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $wp_nonce ) ), '_wpnonce_epkb_ajax_action' ) ) {
+			wp_die( esc_html__( 'You do not have permission to get debug info', 'echo-knowledge-base' ) . ' (E01)'  );
 		}
 
 		nocache_headers();
@@ -124,7 +124,7 @@ class EPKB_Debug_Controller {
 			$output = EPKB_Config_Tools_Page::display_asea_debug_data();
 		}
 
-		echo wp_strip_all_tags( $output );
+		echo esc_html( wp_strip_all_tags( $output ) );
 
 		die();
 	}

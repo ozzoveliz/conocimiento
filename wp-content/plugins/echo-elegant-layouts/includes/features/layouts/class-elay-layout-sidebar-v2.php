@@ -44,7 +44,7 @@ class ELAY_Layout_Sidebar_v2 extends ELAY_Layout {
 	}
 
 	/**
-	 * Display Sidebar
+	 * Display Sidebar on Article Page or Sidebar Layout on Main Page
 	 *
 	 * @param $args
 	 */
@@ -53,23 +53,26 @@ class ELAY_Layout_Sidebar_v2 extends ELAY_Layout {
 		$this->sidebar_loaded = true;
 
 		// setup demo data if needed
-		$is_builder_on = false;
+		$is_ordering_wizard_on = false;
 		$article_seq = array();
 		$categories_seq = array();
-		if ( ! empty($GLOBALS['epkb-articles-seq-data']) && ! empty($GLOBALS['epkb-categories-seq-data']) ) {
-			$is_builder_on = true;
+		if ( ! empty( $GLOBALS['epkb-articles-seq-data'] ) && ! empty( $GLOBALS['epkb-categories-seq-data'] ) ) {
+			$is_ordering_wizard_on = true;
 			$article_seq = $GLOBALS['epkb-articles-seq-data'];
 			$categories_seq = $GLOBALS['epkb-categories-seq-data'];
 		}
 
-		if ( ! empty($_REQUEST['action']) && $_REQUEST['action'] == 'epkb_wizard_update_order_view' ) {
-			$is_builder_on = true;
+		if ( ! empty( $_REQUEST['action'] ) && $_REQUEST['action'] == 'epkb_wizard_update_order_view' ) {
+			$is_ordering_wizard_on = true;
 		}
 
-		$this->display_kb_main_page( $args['config'], $is_builder_on, $article_seq, $categories_seq ); // only sets variables
+		$this->display_kb_main_page( $args['config'], $is_ordering_wizard_on, $article_seq, $categories_seq ); // only sets variables
 		$this->display_sidebar_V2();
 	}
 
+	/**
+	 * Invoked by KB core when Sidebar Layout is displayed on the Main Page
+	 */
 	/** @noinspection PhpUnusedParameterInspection */
 	public function get_main_page_sidebar_intro_text( $content, $kb_id ) {
 		$intro_text = elay_get_instance()->kb_config_obj->get_value( $kb_id, 'sidebar_main_page_intro_text', '' );
@@ -119,8 +122,6 @@ class ELAY_Layout_Sidebar_v2 extends ELAY_Layout {
 
 		// Reformat Class Names
 		$boxShadow      = '';
-		$slimScrollbar  = '';
-
 		if ( ! empty( $this->kb_config['sidebar_section_box_shadow'] ) ) {
 			switch ( $this->kb_config['sidebar_section_box_shadow'] ) {
 				case 'section_light_shadow':
@@ -135,6 +136,7 @@ class ELAY_Layout_Sidebar_v2 extends ELAY_Layout {
 			}
 		}
 
+		$slimScrollbar  = '';
 		if ( ! empty( $this->kb_config['sidebar_scroll_bar'] ) ) {
 			switch ( $this->kb_config['sidebar_scroll_bar'] ) {
 				case 'slim_scrollbar':
@@ -145,13 +147,24 @@ class ELAY_Layout_Sidebar_v2 extends ELAY_Layout {
 			}
 		}
 
+		$current_category_id = 0;
+		$is_archive = is_archive();
+		if ( $is_archive ) {
+			$this->kb_config['sidebar_top_categories_collapsed'] = 'on';
+			$current_term = ELAY_Utilities::get_current_category();
+			$current_category_id = empty( $current_term) ? 0 : $current_term->term_id;
+		}
+
 		$sidebar_top_categories_collapsed_Class = '';
 		$sidebar_top_categories_collapsed = $this->kb_config['sidebar_top_categories_collapsed'];
 		if ( $sidebar_top_categories_collapsed == 'on' ) {
 			$sidebar_top_categories_collapsed_Class = 'elay-sidebar--TopCat-on';
-		}		?>
+		}
 
-		<section id="elay-sidebar-container-v2" class="elay-sidebar--reset <?php echo $boxShadow . ' ' . $slimScrollbar . ' ' . $sidebar_top_categories_collapsed_Class . ' ';?> <?php echo ELAY_Utilities::get_active_theme_classes( 'mp' ); ?>">
+		$prefix = $is_archive ? 'cp' : ( ELAY_Utilities::is_kb_main_page() ? 'mp' : 'ap' );    ?>
+
+		<section id="elay-sidebar-container-v2" class="elay-sidebar--reset <?php echo
+				$boxShadow . ' ' . $slimScrollbar . ' ' . $sidebar_top_categories_collapsed_Class . ' ' . ELAY_Utilities::get_active_theme_classes( $prefix ) . '" ' . 'aria-label="Side menu"'; ?>>
 
 			<ul class="elay-sidebar__cat-container">  			<?php
 
@@ -159,9 +172,9 @@ class ELAY_Layout_Sidebar_v2 extends ELAY_Layout {
 				$this->displayed_article_ids = array();
 
 				foreach ( $this->category_seq_data as $category_id => $subcategories ) {   ?>
-					<li id="elay-top-cat-id-<?php echo $category_id;?>" class="elay-sidebar__cat__top-cat"> 				<?php
-						$this->display_section_heading_V2( $category_id );
-						$this->display_section_body_V2( $subcategories, $category_id ); 			?>
+					<li id="elay-top-cat-id-<?php echo $category_id; ?>" class="elay-sidebar__cat__top-cat"> 				<?php
+						$this->display_section_heading_V2( $category_id, $current_category_id );
+						$this->display_section_body_V2( $subcategories, $category_id, $current_category_id ); 			?>
 					</li>  				<?php
 				}  	?>
 
@@ -170,13 +183,13 @@ class ELAY_Layout_Sidebar_v2 extends ELAY_Layout {
 		</section>   		<?php
 	}
 
-	private function display_section_heading_V2( $category_id ) {
+	private function display_section_heading_V2( $category_id, $current_category_id ) {
 
 		$section_divider = $this->kb_config['sidebar_section_divider'] == 'on' ? ' sidebar_section_divider' : '' ;
 
 		$category_name = isset($this->articles_seq_data[$category_id][0]) ? $this->articles_seq_data[$category_id][0] : 'Uncategorized';
 		$category_desc = isset($this->articles_seq_data[$category_id][1]) && $this->kb_config['sidebar_section_desc_text_on'] == 'on' ? $this->articles_seq_data[$category_id][1] : '';
-		$box_category_data = $this->is_builder_on ? 'data-kb-category-id=' . $category_id . ' data-kb-type=category ' : '';
+		$box_category_data = $this->is_ordering_wizard_on ? 'data-kb-category-id=' . $category_id . ' data-kb-type=category ' : '';
 
 		$class1 = $this->get_css_class( '::sidebar_expand_articles_icon, elay_sidebar_expand_category_icon' );
 
@@ -198,7 +211,7 @@ class ELAY_Layout_Sidebar_v2 extends ELAY_Layout {
 			$categoryIcon = '<span '.$class1.'></span>';
 		}			?>
 
-		<div class="elay-sidebar__cat__top-cat__heading-container <?php echo $topClassCollapse.' '.$section_divider; ?>">
+		<div class="elay-sidebar__cat__top-cat__heading-container <?php echo $topClassCollapse . ' ' . $section_divider . ( $current_category_id == $category_id ? ' ' . 'elay-sidebar__cat__current-cat' : '' ); ?>">
 			<div class="elay-sidebar__heading__inner" <?php echo $box_category_data; ?>>
 
 				<!-- CATEGORY ICON -->
@@ -219,7 +232,7 @@ class ELAY_Layout_Sidebar_v2 extends ELAY_Layout {
 		</div>		<?php
 	}
 
-	private function display_section_body_V2( $subcategories, $category_id ) {
+	private function display_section_body_V2( $subcategories, $category_id, $current_category_id ) {
 		$top_category_body_style = $this->get_inline_style(
 			'typography:: sidebar_section_body_typography'
 		);		?>
@@ -244,12 +257,14 @@ class ELAY_Layout_Sidebar_v2 extends ELAY_Layout {
 						$class1 = $this->get_css_class( '::sidebar_expand_articles_icon, elay_sidebar_expand_category_icon' );
 						$style1 = $this->get_inline_style( 'color:: sidebar_section_category_icon_color' );
 
-						$box_sub_category_data = $this->is_builder_on ? 'data-kb-category-id=' . $sub_category_id  . ' data-kb-type=sub-category ' : '';  	?>
+						$box_sub_category_data = $this->is_ordering_wizard_on ? 'data-kb-category-id=' . $sub_category_id  . ' data-kb-type=sub-category ' : '';  	?>
 
 						<li>
-							<div class="elay-category-level-2-3" <?php echo $this->get_inline_style( 'padding-bottom:: article_list_spacing,padding-top::article_list_spacing' ); ?><?php echo $box_sub_category_data; ?>>
+							<div class="elay-category-level-2-3<?php echo $current_category_id == $sub_category_id ? ' ' . 'elay-sidebar__cat__current-cat' : ''; ?>" <?php echo $box_sub_category_data; ?>>
 								<span <?php echo $class1 . ' ' . $style1; ?> ></span>
-								<a class="elay-category-level-2-3__cat-name" ><h3><?php echo $sub_category_name; ?></h3></a>
+								<a class="elay-category-level-2-3__cat-name" >
+									<h3><?php echo $sub_category_name; ?></h3>
+								</a>
 							</div>    <?php
 
 							/** DISPLAY SUB-CATEGORY ARTICLES LIST */
@@ -257,7 +272,7 @@ class ELAY_Layout_Sidebar_v2 extends ELAY_Layout {
 								$this->display_articles_list( 2, $sub_category_id, ! empty($sub_sub_categories) );
 							}
 
-							$this->display_sub_sub_categories( $sub_sub_categories );
+							$this->display_sub_sub_categories( $sub_sub_categories, 'sub-', 4, $current_category_id );
 
 							/** DISPLAY SUB-CATEGORY ARTICLES LIST */
 							if (  $this->kb_config['sidebar_show_articles_before_categories'] == 'off' ) {
@@ -277,11 +292,11 @@ class ELAY_Layout_Sidebar_v2 extends ELAY_Layout {
 		</div>  	<?php
 	}
 
-	private function display_sub_sub_categories( $sub_sub_categories, $level = 'sub-', $levelNum = 4 ) {
+	private function display_sub_sub_categories( $sub_sub_categories, $level = 'sub-', $levelNum = 4, $current_category_id = 0 ) {
 
 		$level .= 'sub-';
 
-		$sub_category_styles =  'padding-left::   sidebar_article_list_margin';
+		$sub_category_styles = is_rtl() ? 'padding-right:: sidebar_article_list_margin,' : 'padding-left:: sidebar_article_list_margin,';
 
 		$sub_category_list = is_array($sub_sub_categories) ? $sub_sub_categories : array();
 		if ( $sub_category_list ) {     ?>
@@ -295,10 +310,10 @@ class ELAY_Layout_Sidebar_v2 extends ELAY_Layout {
 					$class1 = $this->get_css_class( '::sidebar_expand_articles_icon, elay_sidebar_expand_category_icon' );
 					$style1 = $this->get_inline_style( 'color:: sidebar_section_category_icon_color' );
 
-					$box_sub_category_data = $this->is_builder_on ? 'data-kb-category-id=' . $sub_sub_category_id  . ' data-kb-type='.$level.'category ' : '';  	?>
+					$box_sub_category_data = $this->is_ordering_wizard_on ? 'data-kb-category-id=' . $sub_sub_category_id  . ' data-kb-type='.$level.'category ' : '';  	?>
 
 					<li>
-						<div class="elay-category-level-2-3" <?php echo $this->get_inline_style( 'padding-bottom:: article_list_spacing, padding-top::article_list_spacing' ); ?> <?php echo $box_sub_category_data; ?>>
+						<div class="elay-category-level-2-3<?php echo $current_category_id == $sub_sub_category_id ? ' ' . 'elay-sidebar__cat__current-cat' : ''; ?>" <?php echo $box_sub_category_data; ?>>
 							<span <?php echo $class1 . ' ' . $style1; ?> ></span>
 							<a class="elay-category-level-2-3__cat-name">
 								<h<?php echo $levelNum; ?>><?php echo $sub_category_name; ?></h<?php echo $levelNum; ?> >
@@ -313,7 +328,7 @@ class ELAY_Layout_Sidebar_v2 extends ELAY_Layout {
 						/** RECURSION DISPLAY SUB-SUB-...-CATEGORIES */
 						if ( ! empty($sub_sub_category_list) && strlen($level) < 20 ) {
 							$levelNum++;
-							$this->display_sub_sub_categories( $sub_sub_category_list, $level, $levelNum );
+							$this->display_sub_sub_categories( $sub_sub_category_list, $level, $levelNum, $current_category_id );
 						}
 
 						/** DISPLAY SUB-SUB-CATEGORY ARTICLES LIST */
@@ -372,7 +387,7 @@ class ELAY_Layout_Sidebar_v2 extends ELAY_Layout {
 
 			$article_num = 0;
 
-			$nof_articles_displayed = isset($_GET['wizard-on']) ? 9999 : $this->kb_config['sidebar_nof_articles_displayed'];
+			$nof_articles_displayed = isset( $_GET['ordering-wizard-on'] ) ? 9999 : $this->kb_config['sidebar_nof_articles_displayed'];
 
 			// show list of articles in this category
 			foreach ( $articles_list as $article_id => $article_title ) {
@@ -387,18 +402,17 @@ class ELAY_Layout_Sidebar_v2 extends ELAY_Layout {
 				$hide_class = $article_num > $nof_articles_displayed ? 'elay-hide-elem' : '';
 				$style2 = 'id="sidebar_link_' . $article_id . ( $seq_no > 1 ? '_' . $seq_no : '' ) . '"';
 
-				$article_data = $this->is_builder_on ? 'data-kb-article-id=' . $article_id . ' data-kb-type=' . $data_kb_type : '';
+				$article_data = $this->is_ordering_wizard_on ? 'data-kb-article-id=' . $article_id . ' data-kb-type=' . $data_kb_type : '';
 
 				/** DISPLAY ARTICLE LINK */      ?>
 				<li class="<?php echo $hide_class; ?>" <?php echo $article_data . ' ' . $style2 . ' ' . $this->get_inline_style( 'padding-bottom:: article_list_spacing,padding-top::article_list_spacing' ); ?> >   <?php
-					$article_link_data = 'class="elay-sidebar-article" ' . 'data-kb-article-id=' . $article_id;
-					$this->single_article_link( $article_title, $article_id, $article_link_data, 'sidebar_', $seq_no ); ?>
+					$this->single_article_link( $article_title, $article_id, $seq_no ); ?>
 				</li> <?php
 			}
 
 			// if article list is longer than initial article list size then show expand/collapse message
 			if ( $article_num > $nof_articles_displayed ) {	?>
-				<li class="elay-show-all-articles">
+				<li class="elay-show-all-articles" <?php echo $this->get_inline_style( 'padding-bottom:: article_list_spacing,padding-top::article_list_spacing' ); ?> aria-expanded="false">
 					<span class="elay-show-text">
 						<span><?php echo esc_html( $this->kb_config['sidebar_show_all_articles_msg'] ) . '</span> ( ' . ( $article_num - $nof_articles_displayed ); ?> )
 					</span>
@@ -425,11 +439,12 @@ class ELAY_Layout_Sidebar_v2 extends ELAY_Layout {
 	public static function get_inline_styles( $output, $kb_config ) {
 
 		// Container
-		$container_background_Color     = $kb_config['sidebar_background_color'];
+		$container_background_Color     = $kb_config['article-content-background-color-v2'];
 		$container_border_Color         = $kb_config['sidebar_section_border_color'];
 		$container_border_Width         = $kb_config['sidebar_section_border_width'];
 		$container_border_Radius        = $kb_config['sidebar_section_border_radius'];
 		$sidebar_side_bar_height        = $kb_config['sidebar_side_bar_height'];
+		$sidebar_background_color       = $kb_config['sidebar_background_color'];
 
 		// Category Heading
 		$catHeading_alignment           = $kb_config['sidebar_section_head_alignment'];
@@ -451,6 +466,7 @@ class ELAY_Layout_Sidebar_v2 extends ELAY_Layout {
 		$catBodyContainer_paddingBottom = $kb_config['sidebar_section_body_padding_bottom'];
 		$catBodyContainer_paddingLeft   = $kb_config['sidebar_section_body_padding_left'];
 		$catBodyContainer_paddingRight  = $kb_config['sidebar_section_body_padding_right'];
+		$subCategory_padding            = $kb_config['article_list_spacing'] + 2;
 
 		$catBodyContainer_BodyHeight    = $kb_config['sidebar_section_body_height'];
 
@@ -484,13 +500,18 @@ class ELAY_Layout_Sidebar_v2 extends ELAY_Layout {
 		$output .= '
 			#elay-sidebar-container-v2,
             #epkb-ml-sidebar-layout #epkb-ml-sidebar-layout-inner {
-                background-color:   ' . $container_background_Color . ';
                 border-color:       ' . $container_border_Color . ';
                 border-width:       ' . $container_border_Width . 'px;
                 border-radius:      ' . $container_border_Radius . 'px;
                 overflow:           ' . $overflow . ';
                 max-height:         ' . $max_height . ';
-            } ';
+            }
+            #elay-sidebar-container-v2 {
+                background-color:   ' . $sidebar_background_color . ';
+            }
+            #epkb-ml-sidebar-layout #epkb-ml-sidebar-layout-inner {
+                background-color:   ' . $container_background_Color . ';
+            }';
 
 		// Headings  -----------------------------------------/
 		$output .= '
@@ -570,7 +591,7 @@ class ELAY_Layout_Sidebar_v2 extends ELAY_Layout {
 
 		} else if ( $catHeading_alignment == 'center' ) {
 
-			$output = '
+			$output .= '
 			#elay-sidebar-container-v2 .elay-sidebar__cat__top-cat__heading-container .elay-sidebar__heading__inner__name,
 			#epkb-ml-sidebar-layout #epkb-ml-sidebar-layout-inner .elay-sidebar__cat__top-cat__heading-container .elay-sidebar__heading__inner__name {
 				justify-content: center;
@@ -621,8 +642,12 @@ class ELAY_Layout_Sidebar_v2 extends ELAY_Layout {
 				padding-bottom:         ' . $catBodyContainer_paddingBottom . 'px;
 				padding-left:           ' . $catBodyContainer_paddingLeft . 'px;
 				padding-right:          ' . $catBodyContainer_paddingRight . 'px;
-			} ';
-
+			}
+			#elay-sidebar-container-v2 .elay-sidebar__body__sub-cat .elay-category-level-2-3 {
+			    padding-top: ' . $subCategory_padding . 'px;
+			    padding-bottom: ' . $subCategory_padding . 'px;
+			}  ';
+		
 		if ( $kb_config['sidebar_section_box_height_mode'] == 'section_min_height' ) {
 			$output .= '
 				#elay-sidebar-container-v2 .elay-sidebar__cat__top-cat__body-container,

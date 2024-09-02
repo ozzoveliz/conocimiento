@@ -84,7 +84,7 @@ class EPKB_Editor_Archive_Page_Config extends EPKB_Editor_KB_Base_Config {
 
 		return [
 			'archive' => [
-				'title'     =>  __( 'Archive', 'echo-knowledge-base' ),
+				'title'     =>  esc_html__( 'Archive', 'echo-knowledge-base' ),
 				'classes'   => '#eckb-categories-archive__body',
 				'settings'  => $settings
 			]];
@@ -132,7 +132,7 @@ class EPKB_Editor_Archive_Page_Config extends EPKB_Editor_KB_Base_Config {
 
 		return [
 			'archive_meta' => [
-				'title'     =>  __( 'Archive Meta Data', 'echo-knowledge-base' ),
+				'title'     =>  esc_html__( 'Archive Meta Data', 'echo-knowledge-base' ),
 				'classes'   => '.eckb-article-metadata',
 				'settings'  => $settings,
 				'disabled_settings' => [
@@ -200,7 +200,7 @@ class EPKB_Editor_Archive_Page_Config extends EPKB_Editor_KB_Base_Config {
 
 		return [
 			'categories_list' => [
-				'title'     =>  __( 'Categories List', 'echo-knowledge-base' ),
+				'title'     =>  esc_html__( 'Categories List', 'echo-knowledge-base' ),
 				'classes'   => '.eckb-article-cat-layout-list',
 				'settings'  => $settings
 			]];

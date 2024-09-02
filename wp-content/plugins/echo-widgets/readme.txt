@@ -4,8 +4,8 @@ Plugin URI: https://www.echoknowledgebase.com/wordpress-plugin/widgets/
 Contributors: echoplugins
 Tags: widgets, sidebar, shortcodes, knowledge base, articles, documents, documentation, wiki, plugin, add-on
 Requires at least: 5.0
-Tested up to: 6.3
-Stable tag: 2.0.1
+Tested up to: 6.5
+Stable tag: 2.0.2
 
 This Widget extension lets you place KB Widgets, Shortcodes and Sidebars anywhere on your website.
 
@@ -32,6 +32,10 @@ Please read instructions at https://www.echoknowledgebase.com/documentation/?top
 Please read instructions at https://www.echoknowledgebase.com/documentation/?top-category=add-ons
 
 == Changelog ==
+
+= 2.0.2, May 29, 2024 =
+* Fix: Category List widget/shortcode
+* Fix: Cleanup and minor fixes
 
 = 2.0.1, Feb 10, 2024 =
 * Fix: Cleanup and minor fixes

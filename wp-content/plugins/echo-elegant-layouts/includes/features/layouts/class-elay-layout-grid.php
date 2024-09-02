@@ -44,19 +44,19 @@ class ELAY_Layout_Grid extends ELAY_Layout {
 	 * Output the Layout
 	 *
 	 * @param $kb_config
-	 * @param $is_builder_on
+	 * @param $is_ordering_wizard_on
 	 * @param $article_seq
 	 * @param $categories_seq
 	 */
-	public function get_layout_output( $kb_config, $is_builder_on, $article_seq, $categories_seq ) {
-		$this->display_kb_main_page( $kb_config, $is_builder_on, $article_seq, $categories_seq );
-		$this->generate_kb_main_page();
+	public function get_layout_output( $kb_config, $is_ordering_wizard_on, $article_seq, $categories_seq ) {
+		$this->display_kb_main_page( $kb_config, $is_ordering_wizard_on, $article_seq, $categories_seq );
+		$this->generate_non_modular_kb_main_page();
 	}
 
 	/**
 	 * Generate content of the KB main page
 	*/
-	private function generate_kb_main_page() {
+	private function generate_non_modular_kb_main_page() {
 
 		if ( class_exists( 'AMGR_Access_Utilities', false ) ) {
 			$kb_groups_set = AMGR_Access_Utilities::get_main_page_group_sets( $this->kb_id, $this->category_seq_data, $this->articles_seq_data );
@@ -131,7 +131,7 @@ class ELAY_Layout_Grid extends ELAY_Layout {
 				continue;
 			}
 
-			if ( $this->is_builder_on ) {
+			if ( $this->is_ordering_wizard_on ) {
 				$this->display_section( $box_category_id, $categories_icons, $category_name );
 			} else {
 
@@ -238,7 +238,7 @@ class ELAY_Layout_Grid extends ELAY_Layout {
 			$style5 .= 'overflow: auto, height:: grid_section_body_height';
 		}
 
-		$box_category_data = $this->is_builder_on ? 'data-kb-category-id=' . $box_category_id . ' data-kb-type=category ' : '';
+		$box_category_data = $this->is_ordering_wizard_on ? 'data-kb-category-id=' . $box_category_id . ' data-kb-type=category ' : '';
 		$body_text_align = 'elay-text-' . $this->kb_config['grid_section_body_alignment'];
 		$elay_body_class = $this->get_css_class( 'elay-section-body, ' . $body_text_align );
 		$body_text_style = $this->get_inline_style(	'padding-top::article_list_spacing, padding-bottom::article_list_spacing, typography:: grid_section_article_typography' );        ?>
@@ -294,27 +294,39 @@ class ELAY_Layout_Grid extends ELAY_Layout {
 			</div>
 			<!-- /SECTION HEAD -->
 
-			<!-- SECTION BODY -->
-			<div <?php echo $elay_body_class; ?> <?php echo $this->get_inline_style( $style5 ); ?> > <?php
+			<!-- SECTION BODY -->   <?php
+				$this->output_box_message( $box_category_id, $elay_body_class, $style5, $body_text_style ); 			?>
+			<!-- /SECTION BODY -->
 
-				$nof_articles = $this->get_articles_count( $box_category_id );
-				if ( $this->kb_config['grid_section_article_count'] == 'on' && $nof_articles > 0 ) {
+		</section><!-- /SECTION MAIN CONTAINER -->      <?php
+	}
+
+	private function output_box_message( $box_category_id, $elay_body_class, $style5, $body_text_style ) {
+
+		if ( $this->kb_config['grid_section_article_count'] == 'off' && empty( $this->kb_config['grid_category_link_text'] ) ) {
+			return;
+		}		?>
+
+		<div <?php echo $elay_body_class; ?> <?php echo $this->get_inline_style( $style5 ); ?> > <?php
+
+			$nof_articles = $this->get_articles_count( $box_category_id );
+
+			// if category has no articles then show empty message instead of link
+			if ( $nof_articles == 0 ) {
+				echo '<p ' . $body_text_style . ' class="elay_grid_empty_msg">' . $this->kb_config['category_empty_msg'] . '</p>';
+
+			} else {
+
+				if ( $this->kb_config['grid_section_article_count'] == 'on' ) {
 					$count_text = $nof_articles == 1 ? $this->kb_config['grid_article_count_text'] : $this->kb_config['grid_article_count_plural_text'];
 					$plural_class = $nof_articles == 1 ? 'single' : 'plural';
 					echo '<p ' . $body_text_style . '>' . $nof_articles . ' <span class="elay_grid_count_text--' . $plural_class . '">' . $count_text . '</span></p>';
 				}
 
-				// if category has no articles then should empty message instead of link
-				if ( $nof_articles === 0 ) {
-					echo '<p ' . $body_text_style . ' class="elay_grid_empty_msg">' . $this->kb_config['category_empty_msg'] . '</p>';
-				} else {
-					echo '<p ' . $body_text_style . ' class="elay_grid_link_text">' . $this->kb_config['grid_category_link_text'] . '</p>';
-				}		?>
+				echo '<p ' . $body_text_style . ' class="elay_grid_link_text">' . $this->kb_config['grid_category_link_text'] . '</p>';
+			} 	?>
 
-			</div>
-			<!-- /SECTION BODY -->
-
-		</section><!-- /SECTION MAIN CONTAINER -->      <?php
+		</div>	<?php
 	}
 
 	/**
@@ -337,7 +349,7 @@ class ELAY_Layout_Grid extends ELAY_Layout {
 
 		$url = get_permalink( $post_id );
 
-		return empty($url) || is_wp_error( $url ) ? '' : $url;
+		return empty( $url ) || is_wp_error( $url ) ? '' : $url;
 	}
 	
 	private function get_articles_count( $box_category_id ) {

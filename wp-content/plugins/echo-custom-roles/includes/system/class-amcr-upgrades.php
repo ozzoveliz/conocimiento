@@ -76,7 +76,7 @@ class AMCR_Upgrades {
 
 		if ( AMCR_Utilities::get_wp_option( 'amcr_show_upgrade_message', false ) ) {
 
-			$plugin_name = '<strong>' . __('KB - Custom Roles', 'echo-knowledge-base') . '</strong>';
+			$plugin_name = '<strong>' . esc_html__('KB - Custom Roles', 'echo-knowledge-base') . '</strong>';
 			$output .= '<p>' . $plugin_name . ' ' . sprintf( esc_html( _x( 'add-on was updated to version %s.',
 									' version number, link to what is new page', 'echo-knowledge-base' ) ),
 									Echo_Custom_roles::$version ) . '</p>';

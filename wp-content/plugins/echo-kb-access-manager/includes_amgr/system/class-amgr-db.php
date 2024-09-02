@@ -491,7 +491,7 @@ abstract class AMGR_DB {
         /** @var $wpdb Wpdb */
 		global $wpdb;
 
-		return $wpdb->get_var( $wpdb->prepare( "SHOW TABLES LIKE '%s'", $table ) ) === $table;
+		return $wpdb->get_var( $wpdb->prepare( "SHOW TABLES LIKE %s", $table ) ) === $table;
 	}
 
 	/**

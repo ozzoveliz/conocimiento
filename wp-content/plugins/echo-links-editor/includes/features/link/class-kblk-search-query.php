@@ -273,7 +273,7 @@ class KBLK_Search_Query {
 
 		// NEW installation:
 		// - in SQL for logged-in users select only those articles which they are allowed to see
-		} else if ( KBLK_Utilities::is_new_user( '7.4.0' ) && is_user_logged_in() ) {
+		} else if ( is_user_logged_in() ) {
 			$where_post_status .= current_user_can( 'read_private_posts' )
 					? " OR wp.post_status = 'private' "
 					: " OR ( wp.post_status = 'private' AND wp.post_author = " . get_current_user_id() . " ) ";
@@ -477,7 +477,7 @@ class KBLK_Search_Query {
 
 		// NEW installation:
 		// - in SQL for logged-in users select only those articles which they are allowed to see
-		} else if ( KBLK_Utilities::is_new_user( '7.4.0' ) && is_user_logged_in() ) {
+		} else if ( is_user_logged_in() ) {
 			$where_post_status .= current_user_can( 'read_private_posts' )
 				? " OR p.post_status = 'private' "
 				: " OR ( p.post_status = 'private' AND p.post_author = " . get_current_user_id() . " ) ";

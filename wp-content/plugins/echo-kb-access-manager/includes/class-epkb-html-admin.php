@@ -1,4 +1,4 @@
-<?php
+<?php if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 
 /**
  * HTML Elements for admin pages excluding boxes
@@ -22,11 +22,7 @@ class EPKB_HTML_Admin {
 	 * @param string $content_type
 	 * @param string $position
 	 */
-	public static function admin_header( $kb_config, $permissions, $content_type='header', $position = '' ) {
-
-		if ( ! empty( $kb_config ) ) {
-			EPKB_Upgrades::force_plugin_11_40_0_upgrade( $kb_config );  // TODO REMOVE
-		}   ?>
+	public static function admin_header( $kb_config, $permissions, $content_type='header', $position = '' ) {  ?>
 
 		<!-- Admin Header -->
 		<div class="epkb-admin__header">
@@ -35,9 +31,11 @@ class EPKB_HTML_Admin {
 				switch ( $content_type ) {
 					case 'header':
 					default:
+						//phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 						echo self::admin_header_content( $kb_config, $permissions ) ;
 						break;
 					case 'logo':
+						//phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 						echo self::admin_header_logo();
 						break;
 				}  ?>
@@ -58,13 +56,14 @@ class EPKB_HTML_Admin {
 		ob_start();
 
 		if ( ! empty( $kb_config ) ) {
-			$link_output = EPKB_Core_Utilities::get_current_kb_main_page_link( $kb_config, __('View KB', 'echo-knowledge-base'), 'epkb-admin__header__view-kb__link' );
-			if ( empty( $link_output ) && EPKB_Admin_UI_Access::is_user_access_to_context_allowed('admin_eckb_access_frontend_editor_write')) {
+			$link_output = EPKB_Core_Utilities::get_current_kb_main_page_link( $kb_config, esc_html__( 'View KB', 'echo-knowledge-base' ), 'epkb-admin__header__view-kb__link' );
+			if ( empty( $link_output ) && $kb_config['modular_main_page_toggle'] == 'on' && EPKB_Admin_UI_Access::is_user_access_to_context_allowed('admin_eckb_access_frontend_editor_write')) {
 				$link_output = '<a href="' . esc_url( admin_url( '/edit.php?post_type=' . EPKB_KB_Handler::get_post_type( $kb_config['id'] ) . '&page=epkb-kb-configuration&setup-wizard-on' ) ) .
-					'" class="epkb-admin__header__view-kb__link" target="_blank">' . esc_html__("Setup KB", "echo-knowledge-base") . '</a>';
+					'" class="epkb-admin__header__view-kb__link" target="_blank">' . esc_html__( "Setup KB", "echo-knowledge-base" ) . '</a>';
 			}
 		}
 
+		//phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		echo self::admin_header_logo();
 
 		if ( ! empty( $kb_config ) ) {    ?>
@@ -77,8 +76,8 @@ class EPKB_HTML_Admin {
 				</div>
 
 				<!-- Link to KB View -->
-				<div class="epkb-admin__header__view-kb">
-					<?php echo $link_output; ?>
+				<div class="epkb-admin__header__view-kb">					<?php
+					echo wp_kses_post( $link_output ); ?>
 					<span class="epkb-admin__header__view-kb__icon epkbfa epkbfa-external-link"></span>
 				</div>  <?php    ?>
 			</div>      <?php
@@ -100,8 +99,8 @@ class EPKB_HTML_Admin {
 
 		<!-- Echo Logo -->
 		<div class="epkb-admin__header__logo-wrap">
-			<img class="epkb-admin__header__logo-mobile" alt="<?php esc_html_e( 'Echo Knowledge Base Logo', 'echo-knowledge-base' ); ?>" src="<?php echo Echo_Knowledge_Base::$plugin_url . 'img/kb-icon.png'; ?>">
-			<img class="epkb-admin__header__logo-desktop" alt="<?php esc_html_e( 'Echo Knowledge Base Logo', 'echo-knowledge-base' ); ?>" src="<?php echo Echo_Knowledge_Base::$plugin_url . 'img/echo-kb-logo' . ( is_rtl() ? '-rtl' : '' ) . '.png'; ?>">
+			<img class="epkb-admin__header__logo-mobile" alt="<?php esc_html_e( 'Echo Knowledge Base Logo', 'echo-knowledge-base' ); ?>" src="<?php echo esc_url( Echo_Knowledge_Base::$plugin_url . 'img/kb-icon.png' ); ?>">
+			<img class="epkb-admin__header__logo-desktop" alt="<?php esc_html_e( 'Echo Knowledge Base Logo', 'echo-knowledge-base' ); ?>" src="<?php echo esc_url( Echo_Knowledge_Base::$plugin_url . 'img/echo-kb-logo' . ( is_rtl() ? '-rtl' : '' ) . '.png' ); ?>">
 		</div>  <?php
 
 		$result = ob_get_clean();
@@ -344,6 +343,7 @@ class EPKB_HTML_Admin {
 
 		// Optional buttons row displayed at the top of the boxes list
 		if ( ! empty( $page_view['list_top_actions_html'] ) ) {
+			// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 			echo $page_view['list_top_actions_html'];
 		}
 
@@ -360,7 +360,7 @@ class EPKB_HTML_Admin {
 
 		// Optional buttons row displayed at the bottom of the boxes list
 		if ( ! empty( $page_view['list_bottom_actions_html'] ) ) {
-			echo $page_view['list_bottom_actions_html'];
+			echo wp_kses_post( $page_view['list_bottom_actions_html'] );
 		}
 	}
 
@@ -678,33 +678,23 @@ class EPKB_HTML_Admin {
 	}
 
 	/**
-	 * We need to add this HTML to admin page to catch WP admin JS functionality
-	 *
-	 * @param false $include_no_css_message
-	 * @param false $support_for_old_design
+	 * We need to add this HTML to admin page to catch JS from third party plugins and show missing CSS message if needed
 	 */
-	public static function admin_page_css_missing_message( $include_no_css_message=false, $support_for_old_design=false ) {  ?>
+	public static function admin_page_header() {  ?>
 
-		<!-- This is to catch WP JS garbage -->
-		<div class="wrap epkb-wp-admin<?php echo ( $support_for_old_design ? ' epkb-admin-old-design-support' : '' ); ?>">
+		<!-- This is to catch 3rd party plugins JS output -->
+		<div class="wrap epkb-wp-admin">
 			<h1></h1>
 		</div>
 		<div class=""></div>  <?php
 
-		if ( $include_no_css_message ) {    ?>
-			<!-- This is for cases of CSS incorrect loading -->
-			<h1 style="color: red; line-height: 1.2em; background-color: #eaeaea; border: solid 1px #ddd; padding: 20px;" class="epkb-css-working-hide-message">
-				<?php esc_html_e( 'Please reload the page to refresh CSS styles. That should correctly render the page. This issue is typically caused by timeout or other plugins blocking CSS.' .
-				                  'If that does not help, contact us for help.', 'echo-knowledge-base' ); ?></h1>   <?php
-		}
+		EPKB_Core_Utilities::display_missing_css_message();
 	}
 
 	/**
 	 * Display modal form in admin area for user to submit an error to support. For example Setup Wizard/Editor encounters error.
 	 */
-	public static function display_report_admin_error_form() {
-
-		$current_user = wp_get_current_user();      ?>
+	public static function display_report_admin_error_form() {     ?>
 
 		<!-- Submit Error Form -->
 		<div class="epkb-admin__error-form__container" style="display:none!important;">
@@ -721,12 +711,6 @@ class EPKB_HTML_Admin {
 
 							<input type="hidden" name="action" value="epkb_report_admin_error" >
 							<div class="epkb-admin__error-form__body">
-
-								<label for="epkb-admin__error-form__first-name"><?php esc_html_e( 'Name', 'echo-knowledge-base' ); ?>*</label>
-								<input name="first_name" type="text" value="<?php echo esc_attr( $current_user->display_name ); ?>" required  id="epkb-admin__error-form__first-name">
-
-								<label for="epkb-admin__error-form__email"><?php esc_html_e( 'Email', 'echo-knowledge-base' ); ?>*</label>
-								<input name="email" type="email" value="<?php echo esc_attr( $current_user->user_email ); ?>" required id="epkb-admin__error-form__email">
 
 								<label for="epkb-admin__error-form__message"><?php esc_html_e( 'Error Details', 'echo-knowledge-base' ); ?>*</label>
 								<textarea name="admin_error" class="admin_error" required id="epkb-admin__error-form__message"></textarea>
@@ -761,7 +745,7 @@ class EPKB_HTML_Admin {
 			ob_start();
 		}   ?>
 
-		<input type="hidden" name="_wpnonce_epkb_ajax_action" value="<?php echo wp_create_nonce( '_wpnonce_epkb_ajax_action' ); ?>">	<?php
+		<input type="hidden" name="_wpnonce_epkb_ajax_action" value="<?php echo wp_create_nonce( '_wpnonce_epkb_ajax_action' ); //phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped  ?>">	<?php
 
 		if ( $return_html ) {
 			return ob_get_clean();

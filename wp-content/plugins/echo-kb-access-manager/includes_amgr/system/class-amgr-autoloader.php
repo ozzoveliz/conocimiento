@@ -31,12 +31,10 @@ class AMGR_Autoloader {
 				'amgr_settings_page'                =>  'includes_amgr/admin/settings/class-amgr-settings-page.php',
 
 				// ADMIN PLUGIN MENU PAGES
+
 				// KB Configuration
-				'amgr_kb_config_controller'         =>  'includes_amgr/admin/kb-configuration/class-amgr-kb-config-controller.php',
 				'amgr_kb_config_specs'              =>  'includes_amgr/admin/kb-configuration/class-amgr-kb-config-specs.php',
 				'amgr_kb_access_config_db'          =>  'includes_amgr/admin/kb-configuration/class-amgr-kb-access-config-db.php',
-				'amgr_kb_config_elements'           =>  'includes_amgr/admin/kb-configuration/class-amgr-kb-config-elements.php',
-
 				'amgr_add_ons_page'                 =>  'includes_amgr/admin/add-ons/class-amgr-add-ons-page.php',
 
 				// FEATURES

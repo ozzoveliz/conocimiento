@@ -318,6 +318,17 @@ jQuery(document).ready(function($) {
 				} );
 			} );
 
+			// Show message when user clicks inside Archive Page V3 which is NOT controlled by Editor
+			app.iframe.on( 'click', 'body #eckb-archive-header, body #eckb-archive-body', function( event ) {
+				event.stopPropagation();
+
+				app.showMessage( {
+					text: epkb_editor.archive_page_v3_edit_msg,
+					type: 'attention',
+					timeout: 5000
+				} );
+			} );
+
 			app.iframe.find('input[name=s]').prop('autocomplete','off');
 
 			app.updateStyles();
@@ -850,7 +861,6 @@ jQuery(document).ready(function($) {
 				app.openZone( app.lastActiveZone );
 				app.showMenuButtons();
 			} else {
-				// TODO initial screen 
 				app.clearModal();
 				$('.epkb-editor-header__inner__title').html( epkb_editor.epkb_name );
 				$('.epkb-editor-settings__panel-content-container').append( EPKBEditorTemplates.notice( { 'icon' : 'info-circle','title' : epkb_editor.clear_modal_notice, 'style' : 'edit-zone' } ) );
@@ -1167,13 +1177,6 @@ jQuery(document).ready(function($) {
 					'article-left-sidebar-desktop-width-v2',
 					'article-left-sidebar-tablet-width-v2',
 				];
-				
-				if ( ~articleColumnSettings.indexOf( name ) ) {
-					// recalculate content area 
-					app.currentSettings.article_content.settings['article-content-desktop-width-v2'].value = 100 - leftSidebarWidthDesktop - rightSidebarWidthDesktop;
-					//app.currentSettings.article_content.settings['article-content-tablet-width-v2'] = 100 - leftSidebarWidthTablet - rightSidebarWidthTablet;
-				}
-				
 			}
 			
 			if ( typeof app.currentSettings.settings_zone != 'undefined' && typeof app.currentSettings.settings_zone.settings[name] != 'undefined' ) {
@@ -1227,7 +1230,6 @@ jQuery(document).ready(function($) {
 			app.updateText();
 			
 			// check if we change presets 
-			// TODO update for new presets 
 			app.currentPreset = false;
 			
 			if ( name == 'theme_presets' && typeof app.theme_presets[newVal] != 'undefined' ) {
@@ -1250,8 +1252,7 @@ jQuery(document).ready(function($) {
 				app.refreshPanel( app );
 			}
 			
-			// TODO check if we can use isZoneEnabled here 
-			// check if zone become disabled 
+			// check if zone become disabled
 			for ( let zoneName in app.currentSettings ) {
 				
 				// exclude search for this feature 
@@ -1845,7 +1846,6 @@ jQuery(document).ready(function($) {
 			app.activateSliders();
 			app.checkTogglers();
 			app.showModal();
-			app.loadThemes();
 		},
 		
 		// add tabs to active zone 
@@ -2067,7 +2067,6 @@ jQuery(document).ready(function($) {
 				// resave content width if it is not true 
 				app.currentSettings.left_sidebar.settings['article-left-sidebar-desktop-width-v2'].value = leftSidebarWidthDesktop;
 				app.currentSettings.right_sidebar.settings['article-right-sidebar-desktop-width-v2'].value = rightSidebarWidthDesktop;
-				app.currentSettings.article_content.settings['article-content-desktop-width-v2'].value = contentWidthDesktop;
 
 				app.styles.append(`
 						#eckb-article-page-container-v2 #eckb-article-body {
@@ -2259,7 +2258,6 @@ jQuery(document).ready(function($) {
 						<input type="hidden" name="epkb-editor-settings">
 						<input type="hidden" name="epkb-editor-page-loaded" value="1">
 						<input type="hidden" name="epkb-editor-kb-id" value="${epkb_editor.epkb_editor_kb_id}">
-						<input type="hidden" name="epkb-editor-preset" value="">
 					</form>
 				`);
 			}
@@ -2290,13 +2288,6 @@ jQuery(document).ready(function($) {
 						app.preselectEq++;
 					});
 				}
-			}
-			
-			// add preset values 
-			if ( app.currentPreset ) {
-				app.iframe.find('#epkb-settings-form input[name=epkb-editor-preset]').val( JSON.stringify( app.currentPreset ) );
-			} else {
-				app.iframe.find('#epkb-settings-form input[name=epkb-editor-preset]').val( JSON.stringify( [] ) );
 			}
 			
 			// remember scroll top 
@@ -2381,49 +2372,6 @@ jQuery(document).ready(function($) {
 			});
 		},
 		
-		loadThemes: function() {
-			let app = this;
-			
-			if ( $('[name=theme_presets]').length == 0 || typeof app.theme_presets != 'undefined') {
-				return;
-			}
-			
-			// load with ajax 
-			let postData = {
-				action: 'eckb_editor_get_themes_list',
-				epkb_editor_kb_id: epkb_editor.epkb_editor_kb_id,
-				_wpnonce_epkb_ajax_action: epkb_editor._wpnonce_epkb_ajax_action,
-			};
-			
-			$.ajax({
-				type: 'POST',
-				dataType: 'json',
-				data: postData,
-				url: epkb_editor.ajaxurl,
-				beforeSend: function (xhr) {
-					$('[name=theme_presets]').prop('disabled', 'disabled');
-					$('[name=search_presets]').prop('disabled', 'disabled');
-					$('[name=categories_presets]').prop('disabled', 'disabled');
-				}
-			}).done(function (response) {
-				app.theme_presets = response.data.theme_presets;
-				app.search_presets = response.data.search_presets;
-				app.categories_presets = response.data.categories_presets;
-
-			}).fail(function (response, textStatus, error) {
-				let msg = ( error ? error : 'unknown error' );
-				app.showMessage({
-					text: msg,
-					type: 'error'
-				});
-			}).always(function () {
-				$('[name=theme_presets]').prop('disabled', false);
-				$('[name=search_presets]').prop('disabled', false);
-				$('[name=categories_presets]').prop('disabled', false);
-			});
-
-		},
-		
 		/*******  MODAL SHOW/HIDE   ********/
 		toggleMode: function( event ){
 			let app = event.data;
@@ -2505,7 +2453,7 @@ jQuery(document).ready(function($) {
 			} else {
 				message = data.html;
 			}
-			
+
 			$('body>.eckb-bottom-notice-message').remove();
 
 			$('body').append( message );
@@ -2514,7 +2462,7 @@ jQuery(document).ready(function($) {
 			if ( typeof data.timeout == 'undefined' ) {
 				data.timeout = 60000;
 			}
-			
+
 			setTimeout(function(){
 				$('body>.eckb-bottom-notice-message').remove();
 				$('body').removeClass('epkb-showing-message');
@@ -3296,7 +3244,6 @@ jQuery(document).ready(function($) {
 			app.highlightZone( settingZoneName );
 			
 			// check if zone hidden by toggler
-			// TODO in future get name and show why setting can't be shown 
 			if ( ! app.getFieldTogglerState(settingName) ) {
 				app.showMessage({
 					text: epkb_editor.zone_absent_error + ' ' + settingTitle,

@@ -33,7 +33,6 @@ class EPKB_Uninstall {
 
         delete_option( 'epkb_version' );
 		delete_option( 'epkb_last_seen_version' );
-        delete_option( 'epkb_version_first' );
         delete_option( 'epkb_config_1' );
         delete_option( 'epkb_orignal_config_1' );
         delete_option( 'epkb_articles_sequence_1' );

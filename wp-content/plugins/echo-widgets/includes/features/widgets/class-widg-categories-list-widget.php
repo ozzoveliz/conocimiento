@@ -39,13 +39,14 @@ class WIDG_Categories_List_Widget extends WP_Widget {
 		// allows to adjust the widget title
 		$instance_title = empty( $instance['title'] ) ? '' : $instance['title'];
 		$instance_widget_id = empty( $instance['widget_id'] ) ? '' : WIDG_Utilities::sanitize_int( $instance['widget_id'] );
+
 		$title = apply_filters( 'widget_title', $instance_title, $instance_widget_id );
 		$title = empty( $title ) ? __( 'Categories', 'echo-widgets' ) : $title;
 
 		// get add-on configuration
 		$kb_id = empty( $instance['kb_id'] ) ? ( empty( $eckb_kb_id ) ? WIDG_KB_Config_DB::DEFAULT_KB_ID : $eckb_kb_id ) : $instance['kb_id'];
-
 		$kb_id = WIDG_Utilities::sanitize_int( $kb_id, WIDG_KB_Config_DB::DEFAULT_KB_ID );
+
 		$add_on_config = widg_get_instance()->kb_config_obj->get_kb_config_or_default( $kb_id );
 
 		$filter = empty( $instance['filter'] ) || $instance['filter'] == 'top' ? 'top' : 'all';
@@ -66,7 +67,7 @@ class WIDG_Categories_List_Widget extends WP_Widget {
 
 	        echo $args['before_title'] . esc_html( $title ) . $args['after_title'];
 
-	        if ( empty($terms) ) {
+	        if ( empty( $terms ) ) {
 	            echo esc_html__( 'Coming Soon', 'echo-widgets' );
 	        } else {
 		        
@@ -75,7 +76,7 @@ class WIDG_Categories_List_Widget extends WP_Widget {
 	            foreach( $terms as $category ) {
 					
 	                $category_url = get_term_link( $category );
-	                if ( empty($category_url) || is_wp_error( $category_url )) {
+	                if ( empty( $category_url ) || is_wp_error( $category_url )) {
 	                    continue;
 	                }
 
@@ -164,7 +165,7 @@ class WIDG_Categories_List_Widget extends WP_Widget {
 		if ( ! empty( $category_data ) ) {
 			// remove draft categories
 			foreach ( $terms as $key => $term ) {
-				if ( empty( $category_data[ $term->term_id ] ) || ! empty( $category_data[ $term->term_id ]['is_draft'] ) ) {
+				if ( ! empty( $category_data[ $term->term_id ] ) && ! empty( $category_data[ $term->term_id ]['is_draft'] ) ) {
 					unset( $terms[ $key ] );
 				}
 			}

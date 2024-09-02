@@ -19,8 +19,8 @@ class EPKB_Faqs_Shortcode {
 	 *      - 'design': Design style of the shortcode.
 	 *      - 'title': Title of the shortcode.
 	 *      - 'class': Additional CSS classes for user custom CSS
-	 *      - 'category_ids': Category IDs.
-	 *      - 'group_ids': Group IDs.
+	 *      - 'group_ids': Group IDs
+	 *      - 'category_ids': Category IDs. (OLD parameter)
 	 *      - 'kb_id': Knowledge base ID. ( OLD parameter )
 	 *      - 'preset': Preset configuration. ( OLD parameter )
 	 */
@@ -52,9 +52,7 @@ class EPKB_Faqs_Shortcode {
 	private static function display_faq_groups( $kb_config, $faq_group_ids, $attributes ) {
 
 		$design_name = empty( $attributes['design'] ) ? '' : sanitize_text_field( $attributes['design'] );
-		$faq_title = empty( $attributes['title'] ) ? '' : strip_tags( trim( $attributes['title'] ) );
-
-		//$kb_config['faq_nof_columns'] = empty( $attributes['col'] ) ? '1' : sanitize_text_field( $attributes['col'] );
+		$faq_title = empty( $attributes['title'] ) ? '' : esc_html( wp_strip_all_tags( trim( $attributes['title'] ) ) );
 
 		// only get terms that are in $group_ids
 		$faq_groups = EPKB_FAQs_Utilities::get_faq_groups( $faq_group_ids, 'include' );
@@ -67,7 +65,36 @@ class EPKB_Faqs_Shortcode {
 		$design_settings = EPKB_FAQs_Utilities::get_design_settings( $design_name );
 		$kb_config = array_merge( $kb_config, $design_settings );
 
-		return EPKB_FAQs_Utilities::display_faqs( $kb_config, $faq_groups_questions, $faq_title );
+		$faq_title_alignment = empty( $attributes['title_alignment'] ) ? '' : esc_html( wp_strip_all_tags( trim( $attributes['title_alignment'] ) ) );
+		$kb_config['ml_faqs_title_location'] = in_array( $faq_title_alignment, array( 'none', 'left', 'center', 'right' ) ) ? $faq_title_alignment : 'center';
+
+		$faq_nof_columns = empty( $attributes['number_of_columns'] ) ? '' : esc_html( wp_strip_all_tags( trim( $attributes['number_of_columns'] ) ) );
+		$kb_config['faq_nof_columns'] = in_array( $faq_nof_columns, array( '1', '2' ) ) ? $faq_nof_columns : '1';
+
+		$faq_value = empty( $attributes['border_mode'] ) ? '' : esc_html( wp_strip_all_tags( trim( $attributes['border_mode'] ) ) );
+		$kb_config['faq_border_mode'] = in_array( $faq_value, array( 'none', 'all_around', 'separator' ) ) ? $faq_value : 'all_around';
+
+		$faq_value = empty( $attributes['icon_type'] ) ? '' : esc_html( wp_strip_all_tags( trim( $attributes['icon_type'] ) ) );
+		$kb_config['faq_icon_type'] = in_array( $faq_value, array( 'icon_plus_box', 'icon_plus_circle', 'icon_plus', 'icon_arrow_caret', 'icon_arrow_angle' ) ) ? $faq_value : 'all_around';
+
+		$faq_value = empty( $attributes['icon_location'] ) ? '' : esc_html( wp_strip_all_tags( trim( $attributes['icon_location'] ) ) );
+		$kb_config['faq_icon_location'] = in_array( $faq_value, array( 'no_icons', 'left', 'right' ) ) ? $faq_value : 'all_around';
+
+		$faq_value = empty( $attributes['compact_mode'] ) ? '' : esc_html( wp_strip_all_tags( trim( $attributes['compact_mode'] ) ) );
+		$kb_config['faq_compact_mode'] = in_array( $faq_value, array( 'compact_small', 'compact_medium' ) ) ? $faq_value : 'all_around';
+
+		$faq_value = empty( $attributes['open_mode'] ) ? '' : esc_html( wp_strip_all_tags( trim( $attributes['open_mode'] ) ) );
+		$kb_config['faq_open_mode'] = in_array( $faq_value, array( 'accordion_mode', 'toggle_mode', 'show_all_mode' ) ) ? $faq_value : 'all_around';
+
+		// colors
+		$faq_question_background_color = self::retrieve_shortcode_color( $attributes, 'question_background_color' );
+		$kb_config['faq_question_background_color'] = empty( $faq_question_background_color ) ?: $faq_question_background_color;
+		$faq_answer_background_color = self::retrieve_shortcode_color( $attributes, 'answer_background_color' );
+		$kb_config['faq_answer_background_color'] = empty( $faq_answer_background_color ) ?: $faq_answer_background_color;
+		$faq_icon_color = self::retrieve_shortcode_color( $attributes, 'icon_color' );
+		$kb_config['faq_icon_color'] = empty( $faq_icon_color ) ?: $faq_icon_color;
+
+		return EPKB_FAQs_Utilities::display_faqs( $kb_config, $faq_groups_questions, $faq_title, true );
 	}
 
 	private static function display_faq_categories( $kb_config, $attributes ) {
@@ -116,7 +143,7 @@ class EPKB_Faqs_Shortcode {
 
 		// No categories found - message only for admins
 		if ( empty( $allowed_categories_ids ) ) {
-			return EPKB_FAQs_Utilities::display_error( __( 'No categories found.', 'echo-knowledge-base' ) );
+			return EPKB_FAQs_Utilities::display_error( esc_html__( 'No categories found.', 'echo-knowledge-base' ) );
 		}
 
 		// remove epkb filter
@@ -217,7 +244,7 @@ class EPKB_Faqs_Shortcode {
 		$design_settings = EPKB_FAQs_Utilities::get_design_settings( $design_name );
 		$kb_config = array_merge( $kb_config, $design_settings );
 
-		$output = EPKB_FAQs_Utilities::display_faqs( $kb_config, $faq_groups, '' );
+		$output = EPKB_FAQs_Utilities::display_faqs( $kb_config, $faq_groups, '', true, true );
 
 		$output_kb_faq_shortcode = false;
 
@@ -225,5 +252,22 @@ class EPKB_Faqs_Shortcode {
 		add_filter( 'the_content', array( 'EPKB_Layouts_Setup', 'get_kb_page_output_hook' ), 99999 );
 
 		return $output;
+	}
+
+	private static function retrieve_shortcode_color( $attributes, $name ) {
+
+		$value = empty( $attributes[$name] ) ? '' : esc_html( wp_strip_all_tags( trim( $attributes[$name] ) ) );
+
+		// Check for a hex color string '#c1c2b4'
+		if ( preg_match('/^#[a-f0-9]{6}$/i', $value) ) {
+			return $value;
+		}
+
+		// Check for a hex color string without hash 'c1c2b4'
+		else if ( preg_match('/^[a-f0-9]{6}$/i', $value) ) {
+			return '#' . $value;
+		}
+
+		return '';
 	}
 }

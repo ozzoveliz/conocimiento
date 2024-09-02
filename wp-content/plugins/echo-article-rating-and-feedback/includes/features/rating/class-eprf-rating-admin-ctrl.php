@@ -55,6 +55,6 @@ class EPRF_Rating_Admin_Cntrl {
 			EPRF_Utilities::ajax_show_error_die( EPRF_Utilities::report_generic_error( 412, __( 'Could not reset (1)', 'echo-article-rating-and-feedback' ) ) );
 		}
 
-		wp_die( json_encode( array( 'status' => 'success', 'alert' => __( 'Article ratings were reset', 'echo-article-rating-and-feedback' ), 'message' => '') ) );
+		wp_die( wp_json_encode( array( 'status' => 'success', 'alert' => __( 'Article ratings were reset', 'echo-article-rating-and-feedback' ), 'message' => '') ) );
 	}
 }

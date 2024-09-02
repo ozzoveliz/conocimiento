@@ -63,7 +63,7 @@ class EPKB_KB_Wizard_Global {
             return $html::notification_box_middle (
                 array(
                     'type' => 'error-no-icon',
-                    'desc' => 'Ensure that Multiple KB add-on is active and refresh this page.' . EPKB_Utilities::contact_us_for_support() ,
+                    'desc' => 'Ensure that Unlimited KBs add-on is active and refresh this page.' . EPKB_Utilities::contact_us_for_support() ,
                 ) ,true );
 
 		}       ?>
@@ -136,7 +136,7 @@ class EPKB_KB_Wizard_Global {
 				<!--  SWITCH TO A DIFFERENT URL section -->
 				<h3 class="epkb-wso__options-title"><?php esc_html_e( 'Switch to a Different URL', 'echo-knowledge-base' ); ?></h3>
 				<div class="epkb-wso__options-cotent">
-					<div class="epkb-wso__options-description"><?php esc_html_e( 'Choose one of the other pages with KB shortcode:', 'echo-knowledge-base' ); ?></div>    <?php
+					<div class="epkb-wso__options-description"><?php echo ( count( $this->kb_main_pages ) > 1 ? esc_html__( 'Choose one of the other pages with KB shortcode:', 'echo-knowledge-base' ) : '' ); ?></div>    <?php
 
 						foreach ( $this->kb_main_pages as $post_id => $title ) {
 							$input_index++;
@@ -207,7 +207,7 @@ class EPKB_KB_Wizard_Global {
 				</span>     <?php
 
 				if ( $is_new_url ) {   ?>
-					<span class="epkb-wso-with-category__new-url">[<?php esc_html_e( 'new URL', 'echo-knowledge-base' ); ?>]</span>     <?php
+					<span class="epkb-wso-with-category__new-url">[<?php esc_html_e( 'This is a new URL', 'echo-knowledge-base' ); ?>]</span>     <?php
 				}   ?>
 
 			</label>
@@ -236,7 +236,7 @@ class EPKB_KB_Wizard_Global {
 		<div class="epkb-wizard-button-container epkb-wizard-button-container--first-step">
 			<div class="epkb-wizard-button-container__inner">
 				<button value="apply" id="epkb-wizard-button-apply" class="epkb-wizard-button epkb-wizard-button-apply"  data-wizard-type="global"><?php esc_html_e( 'Apply', 'echo-knowledge-base' ); ?></button>
-				<input type="hidden" id="_wpnonce_epkb_ajax_action" name="_wpnonce_epkb_ajax_action" value="<?php echo wp_create_nonce( "_wpnonce_epkb_ajax_action" ); ?>">
+				<input type="hidden" id="_wpnonce_epkb_ajax_action" name="_wpnonce_epkb_ajax_action" value="<?php echo wp_create_nonce( "_wpnonce_epkb_ajax_action" ); //phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped  ?>">
 			</div>
 		</div>	<?php
 	}

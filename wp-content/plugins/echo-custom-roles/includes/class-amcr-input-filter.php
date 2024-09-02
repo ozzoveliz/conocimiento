@@ -1,4 +1,4 @@
-<?php
+<?php  if ( ! defined( 'ABSPATH' ) ) exit;
 
 /**
  *
@@ -145,7 +145,7 @@ class AMCR_Input_Filter {
 			return $sanitized_input;
 		}
 
-		return new WP_Error('invalid_input', __( 'validation failed', 'echo-knowledge-base' ), $errors );
+		return new WP_Error('invalid_input', esc_html__( 'validation failed', 'echo-knowledge-base' ), $errors );
 	}
 
 	private function filter_input_field( $value, $field_spec ) {
@@ -250,7 +250,7 @@ class AMCR_Input_Filter {
 
 		if ( ! in_array( $value, array_keys($field_spec['options']) )  && ! empty($field_spec['mandatory']) ) {
 			$value_text = ( empty($value) ? 'empty.' : '"' . $value . '".' );
-			$msg = sprintf( __( 'The value cannot be ' . $value_text . ' Valid values are: <p>%s</p>', 'echo-knowledge-base' ), implode(", ", $field_spec['options']) );
+			$msg = sprintf( esc_html__( 'The value cannot be ' . $value_text . ' Valid values are: <p>%s</p>', 'echo-knowledge-base' ), implode(", ", $field_spec['options']) );
 			return new WP_Error('filter_selection_invalid', $msg );
 		}
 
@@ -272,7 +272,7 @@ class AMCR_Input_Filter {
 			return $value;
 		}
 
-		return new WP_Error('filter_checkbox_invalid', __( 'The value "' . $value . '"" is not valid', 'echo-knowledge-base' ) );
+		return new WP_Error('filter_checkbox_invalid', esc_html__( 'The value "' . $value . '"" is not valid', 'echo-knowledge-base' ) );
 	}
 
 	/**
@@ -291,10 +291,10 @@ class AMCR_Input_Filter {
 		}
 
 		if ( $number > $field_spec['max'] ) {
-			$msg = sprintf( __( 'The value ' . $number . ' is larger than maximum of: %s', 'echo-knowledge-base' ), $field_spec['max'] );
+			$msg = sprintf( esc_html__( 'The value ' . $number . ' is larger than maximum of: %s', 'echo-knowledge-base' ), $field_spec['max'] );
 			return new WP_Error( 'filter_not_number', $msg );
 		} else if ( $number < $field_spec['min'] ) {
-			$msg = sprintf( __( 'The value ' . $number . ' is smaller than minimum of: %s', 'echo-knowledge-base' ), $field_spec['min'] );
+			$msg = sprintf( esc_html__( 'The value ' . $number . ' is smaller than minimum of: %s', 'echo-knowledge-base' ), $field_spec['min'] );
 			return new WP_Error( 'filter_not_number', $msg );
 		}
 
@@ -315,7 +315,7 @@ class AMCR_Input_Filter {
 			return false;
 		}
 
-		return new WP_Error( 'filter_not_number', __( 'The value ' . $boolean . ' is not boolean', 'echo-knowledge-base' ) );
+		return new WP_Error( 'filter_not_number', esc_html__( 'The value ' . $boolean . ' is not boolean', 'echo-knowledge-base' ) );
 	}
 
 	/**
@@ -344,7 +344,7 @@ class AMCR_Input_Filter {
 			return $value;
 		}
 
-		return new WP_Error('filter_not_color_hex', __( 'The value "' . $value . '" is not valid HEX color.', 'echo-knowledge-base' ) );
+		return new WP_Error('filter_not_color_hex', esc_html__( 'The value "' . $value . '" is not valid HEX color.', 'echo-knowledge-base' ) );
 	}
 
 	/**
@@ -375,7 +375,7 @@ class AMCR_Input_Filter {
 			return $value;
 		}
 
-		return new WP_Error('filter_not_enumeration', __( 'The value "' . $value . '" is not in enumeration', 'echo-knowledge-base' ) );
+		return new WP_Error('filter_not_enumeration', esc_html__( 'The value "' . $value . '" is not in enumeration', 'echo-knowledge-base' ) );
 	}
 
 	/**

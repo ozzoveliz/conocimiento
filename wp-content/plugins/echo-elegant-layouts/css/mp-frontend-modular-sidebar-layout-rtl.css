@@ -10,13 +10,17 @@
 [dir=rtl] #elay-sidebar-container-v2 .elay-sidebar__cat-container li .active {
   margin-left: auto !important;
   margin-right: -5px !important; }
+[dir=rtl] #elay-sidebar-container-v2 .elay-sidebar__cat-container .elay-articles-coming-soon {
+  text-align: right; }
 [dir=rtl] #elay-sidebar-container-v2 .elay-article-title .elay-article-title__icon {
   position: absolute;
   top: 2px;
-  right: 0; }
+  right: 0;
+  left: initial; }
 [dir=rtl] #elay-sidebar-container-v2 .elay-article-title .elay-article-title__text {
   margin-right: 1.5em;
-  margin-left: auto; }
+  margin-left: auto;
+  text-align: right; }
 [dir=rtl] #elay-sidebar-container-v2 .elay-article-title {
   position: relative;
   font-size: 1em;

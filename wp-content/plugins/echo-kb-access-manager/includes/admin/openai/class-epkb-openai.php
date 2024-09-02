@@ -110,7 +110,7 @@ class EPKB_OpenAI {
 		$choices = $this->make_api_request( self::API_V1_URL . '/chat/completions', array(
 			'model'         => 'gpt-3.5-turbo',
 			'messages'      => $messages,
-			'max_tokens'    => 2048, // NOTE: it supports 4096 max, but the limit is exceeded for some reason when we use it; (int)$this->global_config['openai_max_tokens'], // max 4096 supported by 'gpt-3.5-turbo' model TODO future: let user set this value in settings
+			'max_tokens'    => 2048, // NOTE: it supports 4096 max, but the limit is exceeded for some reason when we use it; (int)$this->global_config['openai_max_tokens'], // max 4096 supported by 'gpt-3.5-turbo' model
 			'temperature'   => $temperature,
 			'n'             => 1,
 		) );
@@ -158,9 +158,9 @@ class EPKB_OpenAI {
 		if ( empty( $api_key ) || ! is_string( $api_key ) ) {
 			$openai_settings_capability = EPKB_Admin_UI_Access::get_admin_capability();
 			if ( current_user_can( $openai_settings_capability ) ) {
-				$this->error_message = sprintf( __( 'Please enter your OpenAI API key in the %s AI Settings %s', 'echo-knowledge-base' ),  '<a href="#" class="epkb-ai-help-sidebar__open-settings-tab-btn">', '</a>' );
+				$this->error_message = sprintf( esc_html__( 'Please enter your OpenAI API key in the %s AI Settings %s', 'echo-knowledge-base' ),  '<a href="#" class="epkb-ai-help-sidebar__open-settings-tab-btn">', '</a>' );
 			} else {
-				$this->error_message = __( 'You have no API key.', 'echo-knowledge-base' );
+				$this->error_message = esc_html__( 'You have no API key.', 'echo-knowledge-base' );
 			}
 			return [];
 		}
@@ -204,7 +204,7 @@ class EPKB_OpenAI {
 		// validate HTTP code - for detailed description about each response code look to https://beta.openai.com/docs/guides/error-codes/api-errors
 		if ( $http_result['response']['code'] != 200 ) {
 			EPKB_Logging::add_log( 'OpenAI API request failed. HTTP response code: ' . $http_result['response']['code'] . '. API error message: ' . $api_result['error']['message'] );
-			$this->error_message = __( 'OpenAI reported the following error' , 'echo-knowledge-base' ) . ': ' . $api_result['error']['message'];
+			$this->error_message = esc_html__( 'OpenAI reported the following error' , 'echo-knowledge-base' ) . ': ' . $api_result['error']['message'];
 			$this->is_openai_error = true;
 			return [];
 		}

@@ -118,6 +118,53 @@ jQuery(document).ready(function($) {
 		}
 
 		/**
+		 * Open current category for Sidebar on Archive Page V3
+		 */
+		function elay_open_current_archive_category() {
+			let $current_cat = $( '.elay-sidebar__cat__current-cat' );
+			if ( ! $current_cat.length ) {
+				return;
+			}
+
+			// expand parent if chosen category is hidden
+			let list = $current_cat.closest( 'li' );
+			for ( let i = 0; i < 5; i ++ ) {
+				if ( ! list.length ) {
+					continue;
+				}
+				// open the top category here
+				if ( list.hasClass( 'elay-sidebar__cat__top-cat' ) ) {
+					list.find( '.elay-sidebar__cat__top-cat__body-container' ).css( 'display', 'block' );
+					list.closest( '.elay-sidebar__cat__top-cat__body-container' ).css( 'display', 'block' );
+				}
+				list.children( 'ul' ).show();
+				list = list.closest( 'li' ).closest( 'ul' ).parent();
+			}
+
+			// highlight categories
+			let level = $current_cat.closest( 'li' );
+			let level_icon;
+			for ( let i = 0; i < 5; i ++ ) {
+				level_icon = level.find( 'span' ).first();
+				level = level_icon.closest( 'ul' ).closest( 'ul' ).closest( 'li' );
+				if ( level_icon.length ) {
+					let match_icon = level_icon.attr('class').match(/\ep_font_icon_\S+/g);
+					if ( match_icon ) {
+						elay_toggle_category_icons( level_icon, match_icon[0] );
+					}
+				}
+				level.find( 'div[class^=elay-category]' ).first().addClass( 'active' );
+
+				// open the top category here
+				if ( i === 0 ) {
+					level.find( '.elay-sidebar__cat__top-cat__body-container' ).css( 'display', 'block' );
+					level.closest( '.elay-sidebar__cat__top-cat__body-container' ).css( 'display', 'block' );
+				}
+			}
+		}
+		elay_open_current_archive_category();
+
+		/**
 		 * 1. ICON TOGGLE for Top / Sub Category - toggle between open icon and close icon
 		 */
 		sidebar.on('click', '.sidebar-sections .elay-category-level-1, .sidebar-sections .elay-category-level-2-3', function () {

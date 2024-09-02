@@ -12,7 +12,18 @@ class EPKB_KB_Wizard_Setup {
 	private $kb_config;
 	private $is_setup_run_first_time;
 	private $elay_enabled;
-	private $is_old_elay;   // FUTURE TODO: remove in December 2024
+	private $is_old_elay;   // TODO: remove in December 2024
+
+	private static $sidebar_images = array(
+		0 => 'setup-wizard/step-5/Article-Setup-No-sidebar.jpg',
+		1 => 'setup-wizard/step-5/Article-Setup-Left-Sidebar-Category-and-Article.jpg',
+		2 => 'setup-wizard/step-5/Article-Setup-Right-Sidebar-Category-and-Article.jpg',
+		3 => 'setup-wizard/step-5/Article-Setup-Left-Sidebar-Top-Category-Navigation.jpg',
+		4 => 'setup-wizard/step-5/Article-Setup-Right-Sidebar-Top-Category-Navigation.jpg',
+		5 => 'setup-wizard/step-5/Article-Setup-Left-Sidebar-current-category-articles.jpg',    
+		6 => 'setup-wizard/step-5/Article-Setup-Right-Sidebar-current-category-articles.jpg',
+		7 => 'setup-wizard/step-5/Article-Setup-No-Sidebar.jpg',
+	);
 
 	function __construct( $kb_config=array() ) {
 		$this->kb_config = $kb_config;
@@ -24,47 +35,40 @@ class EPKB_KB_Wizard_Setup {
 
 	/**
 	 * Show KB Setup page
-	 *
-	 * @return boolean
 	 */
 	public function display_kb_setup_wizard() {
 
-		$is_modular_main_page = $this->kb_config['modular_main_page_toggle'] == 'on';
-
 		// Step: URL
 		$setup_steps_config[] = [
-			'label'     => __( 'URL', 'echo-knowledge-base' ),
-			'header'    => $this->wizard_step_header( array(
-				'title_html'            => __( 'Setup Your Knowledge Base', 'echo-knowledge-base' ),
-				'info_title'            => __( 'Set your Knowledge Base nickname, create a slug, and add it to the menu.', 'echo-knowledge-base' ),
+			'label'     => esc_html__( 'URL', 'echo-knowledge-base' ),
+			'header_escaped'    => $this->wizard_step_header( array(
+				'title_html'            => esc_html__( 'Setup Your Knowledge Base', 'echo-knowledge-base' ),
+				'info_title'            => esc_html__( 'Set your Knowledge Base nickname, create a slug, and add it to the menu.', 'echo-knowledge-base' ),
 			) ),
-			'content'   => $this->wizard_step_title_url_content(),
+			'content_escaped'   => $this->wizard_step_title_url_content(),
 		];
 
 		// Step: Modules
-		if ( $is_modular_main_page ) {
-			$setup_steps_config[] = [
-				'label'     => __( 'Features', 'echo-knowledge-base' ),
-				'sub_label' => __( 'Main Page', 'echo-knowledge-base' ),
-				'header'    => $this->wizard_step_header( array(
-					'title_html'        => esc_html__( 'Customize KB Main Page', 'echo-knowledge-base' ),
-					'info_title'        => sprintf( esc_html__( 'The page is divided into rows. Simply select which features, called %s, you want to display in each row.', 'echo-knowledge-base' ),
-												'<span class="epkb-setup-wizard-step__topic">' . esc_html__( 'Modules', 'echo-knowledge-base' ) . '</span>' ),
-					'info_description'  => __( 'Feel free to experiment with different arrangements. You can make additional changes at any time, either on this page or in the Knowledge Base Settings.', 'echo-knowledge-base' ),
-				) ),
-				'content'   => $this->wizard_step_modules_content(),
-			];
-		}
+		$setup_steps_config[] = [
+			'label'     => esc_html__( 'Features', 'echo-knowledge-base' ),
+			'sub_label' => esc_html__( 'Main Page', 'echo-knowledge-base' ),
+			'header_escaped'    => $this->wizard_step_header( array(
+				'title_html'        => esc_html__( 'Customize KB Main Page', 'echo-knowledge-base' ),
+				'info_title'        => sprintf( esc_html__( 'The page is divided into rows. Simply select which features, called %s, you want to display in each row.', 'echo-knowledge-base' ),
+											'<span class="epkb-setup-wizard-step__topic">' . esc_html__( 'Modules', 'echo-knowledge-base' ) . '</span>' ),
+				'info_description'  => esc_html__( 'Feel free to experiment with different arrangements. You can make additional changes at any time, either on this page or in the Knowledge Base Settings.', 'echo-knowledge-base' ),
+			) ),
+			'content_escaped'   => $this->wizard_step_modules_content(),
+		];
 
 		// Step: Layout
 		$setup_steps_config[] = [
-			'label'     => __( 'Layout', 'echo-knowledge-base' ),
-			'sub_label' => __( 'Main Page', 'echo-knowledge-base' ),
-			'header'    => $is_modular_main_page
-				? $this->wizard_step_header( array(
+			'label'     => esc_html__( 'Layout', 'echo-knowledge-base' ),
+			'sub_label' => esc_html__( 'Main Page', 'echo-knowledge-base' ),
+			'header_escaped'    => $this->wizard_step_header( array(
 					'title_html'        => esc_html__( 'Choose Layout Matching Your Needs', 'echo-knowledge-base' ),
-					'info_title'        => __( 'Each layout offers a different way to show categories and articles. Layout features are explained below.', 'echo-knowledge-base' ),
-					'info_description'  => __( 'Don\'t hesitate to try out various layouts. You can change your KB Layout at any time.', 'echo-knowledge-base' ),
+					'info_title'        => esc_html__( 'Each layout offers a different way to show categories and articles. Layout features are explained below.', 'echo-knowledge-base' ),
+					'info_description'  => esc_html__( 'Don\'t hesitate to try out various layouts. You can change your KB Layout at any time.', 'echo-knowledge-base' ),
 					'info_html'         => $this->is_old_elay
 						? EPKB_HTML_Forms::notification_box_middle( array(
 							'type' => 'error',
@@ -72,44 +76,39 @@ class EPKB_KB_Wizard_Setup {
 								'<br>' . sprintf( esc_html__( 'Please %supgrade%s the add-on to use Modular Main Page feature for the Sidebar and Grid layouts.', 'echo-knowledge-base' ), '<a href="https://www.echoknowledgebase.com/wordpress-plugin/elegant-layouts/" target="_blank">', '</a>' ) . '</p>',
 						), true )
 						: '',
-				) )
-				: $this->wizard_step_header( array(
-					'title_html'        => __( 'Setup Your Knowledge Base', 'echo-knowledge-base' ),
-					'info_title'        => __( 'Choose an initial Knowledge Base design. You can easily adjust colors and other elements later.', 'echo-knowledge-base' ),
 				) ),
-			'content'   => $is_modular_main_page ? $this->wizard_step_modular_layout_content() : $this->wizard_step_layout_content(),
+			'content_escaped'   => $this->wizard_step_modular_layout_content(),
 		];
 
 		// Step: Designs
-		if ( $is_modular_main_page ) {
-			$setup_steps_config[] = [
-				'label'     => __( 'Designs', 'echo-knowledge-base' ),
-				'sub_label' => __( 'Main Page', 'echo-knowledge-base' ),
-				'header'    => $this->wizard_step_header( array(
-					'title_html'        => __( 'Select a Design that best matches your requirements (Optional Step)', 'echo-knowledge-base' ),
-					'info_title'        => '', // __( 'Select a Design that best matches your site theme or requirements.', 'echo-knowledge-base' ),
-					'info_description'  => __( 'You can easily fine-tune colors and other elements later on the Settings page.', 'echo-knowledge-base' ),
-					'content_show_option'  => array(
-						'ignore_layouts'=> 'Classic, Drill-Down',
-						'text'          => __( 'Do you want to change the style and colors of the KB Main Page using one of our designs?', 'echo-knowledge-base' ),
-					)
-				) ),
-				'content'   => $this->wizard_step_designs_content(),
-			];
-		}
+		$setup_steps_config[] = [
+			'label'     => esc_html__( 'Designs', 'echo-knowledge-base' ),
+			'sub_label' => esc_html__( 'Main Page', 'echo-knowledge-base' ),
+			'header_escaped'    => $this->wizard_step_header( array(
+				'title_html'        => esc_html__( 'Select a Design that best matches your requirements (Optional Step)', 'echo-knowledge-base' ),
+				'info_title'        => '', // esc_html__( 'Select a Design that best matches your site theme or requirements.', 'echo-knowledge-base' ),
+				'info_description_icon' => 'paint-brush',
+				'info_description'  => esc_html__( 'You can easily fine-tune colors and other elements later on the Settings page.', 'echo-knowledge-base' ),
+				'content_show_option'  => array(
+					'current_layout' => $this->kb_config['kb_main_page_layout'],
+					'text'          => esc_html__( 'Do you want to change the style and colors of the KB Main Page using one of our designs?', 'echo-knowledge-base' ),
+				)
+			) ),
+			'content_escaped'   => $this->wizard_step_designs_content(),
+		];
 
 		// Step: Article Page
 		$setup_steps_config[] = [
-			'label'     => __( 'Article Page', 'echo-knowledge-base' ),
-			'header'    => $this->wizard_step_header( array(
-				'title_html'        => __( 'Setup Your Article Page', 'echo-knowledge-base' ),
-				'info_title'        => __( 'Article pages can have navigation links in the left sidebar or in the right sidebar.', 'echo-knowledge-base' ),
+			'label'     => esc_html__( 'Article Page', 'echo-knowledge-base' ),
+			'header_escaped'    => $this->wizard_step_header( array(
+				'title_html'        => esc_html__( 'Setup Your Article Page', 'echo-knowledge-base' ),
+				'info_title'        => esc_html__( 'Article pages can have navigation links in the left sidebar or in the right sidebar.', 'echo-knowledge-base' ),
 			) ),
-			'content'   => $is_modular_main_page ? $this->wizard_step_modular_navigation_content() : $this->wizard_step_navigation_content(),
+			'content_escaped'   => $this->wizard_step_modular_navigation_content(),
 		];  ?>
 
 		<div id="ekb-admin-page-wrap" class="ekb-admin-page-wrap epkb-wizard-container">
-			<div class="<?php echo $is_modular_main_page ? 'epkb-config-setup-wizard-modular' : ''; echo $this->is_setup_run_first_time ? ' ' . 'epkb-config-setup-wizard-modular--first-setup' : ''; ?>" id="epkb-config-wizard-content">
+			<div class="<?php echo 'epkb-config-setup-wizard-modular'; echo $this->is_setup_run_first_time ? ' ' . 'epkb-config-setup-wizard-modular--first-setup' : ''; ?>" id="epkb-config-wizard-content">
 
 				<!------- Wizard Steps Bar ------------>
 				<div class="epkb-setup-wizard-steps-bar">   <?php
@@ -137,18 +136,30 @@ class EPKB_KB_Wizard_Setup {
 
 					<!------- Wizard Header ------------>
 					<div class="epkb-wizard-header">    <?php
-						foreach ( $setup_steps_config as $step_index => $step_config ) {    ?>
-							<div class="epkb-wc-step-header epkb-wc-step-header--<?php echo esc_attr( $step_index + 1 ); echo $step_index == 0 ? ' ' . 'epkb-wc-step-header--active' : ''; ?>"> <?php
-								echo $step_config['header'];   ?>
+						foreach ( $setup_steps_config as $step_index => $step_config ) {
+							$class = ( $step_index + 1 ) . ( $step_index == 0 ? ' ' . 'epkb-wc-step-header--active' : '' ); ?>
+							<div class="epkb-wc-step-header epkb-wc-step-header--<?php echo esc_attr( $class ); ?>"> <?php
+								//phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+								echo $step_config['header_escaped'];   ?>
 							</div>  <?php
 						}   ?>
 					</div>
 
 					<!------- Wizard Content ---------->
 					<div class="epkb-wizard-content">   <?php
-						foreach ( $setup_steps_config as $step_index => $step_config ) {
-							echo $step_config['content'];
-						}   ?>
+
+						if ( $this->kb_config['modular_main_page_toggle'] == 'off' ) {
+							echo EPKB_HTML_Forms::notification_box_middle( array(
+								'type' => 'error',
+								'desc' => esc_html__( 'Please switch to Modules in Settings UI before proceeding with Setup Wizard', 'echo-knowledge-base' ),
+							), true );
+						} else {
+							foreach ( $setup_steps_config as $step_index => $step_config ) {
+								//phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+								echo $step_config['content_escaped'];
+							}
+						}		  ?>
+
 					</div>
 
 					<!------- Wizard Footer ---------->
@@ -183,13 +194,13 @@ class EPKB_KB_Wizard_Setup {
 								</button>
 								<button value="apply" class="epkb-wizard-button epkb-setup-wizard-button-apply" data-wizard-type="setup"><?php esc_html_e( 'Finish Set Up', 'echo-knowledge-base' ); ?></button>
 
-								<input type="hidden" id="_wpnonce_epkb_ajax_action" name="_wpnonce_epkb_ajax_action" value="<?php echo wp_create_nonce( "_wpnonce_epkb_ajax_action" ); ?>">
+								<input type="hidden" id="_wpnonce_epkb_ajax_action" name="_wpnonce_epkb_ajax_action" value="<?php echo wp_create_nonce( "_wpnonce_epkb_ajax_action" ); //phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>">
 							</div>
 						</div>
 
 					</div>
 
-					<input type="hidden" id="epkb_wizard_kb_id" name="epkb_wizard_kb_id" value="<?php echo $this->kb_config['id']; ?>"/>
+					<input type="hidden" id="epkb_wizard_kb_id" name="epkb_wizard_kb_id" value="<?php echo esc_attr( $this->kb_config['id'] ); ?>"/>
 
 					<div class="eckb-bottom-notice-message"></div>
 
@@ -204,13 +215,11 @@ class EPKB_KB_Wizard_Setup {
 		// Success message
 		EPKB_HTML_Forms::dialog_confirm_action( [
 			'id'           => 'epkb-wizard-success-message',
-			'title'        => __( 'Success', 'echo-knowledge-base' ),
-			'body'         => __( 'Wizard Completed Successfully.', 'echo-knowledge-base' ),
-			'accept_label' => __( 'Ok', 'echo-knowledge-base' ),
+			'title'        => esc_html__( 'Success', 'echo-knowledge-base' ),
+			'body'         => esc_html__( 'Wizard Completed Successfully.', 'echo-knowledge-base' ),
+			'accept_label' => esc_html__( 'Ok', 'echo-knowledge-base' ),
 			'accept_type'  => 'success'
 		] );
-
-		return true;
 	}
 
 	/**
@@ -227,8 +236,8 @@ class EPKB_KB_Wizard_Setup {
 			// KB Name
 		    EPKB_HTML_Elements::text(
 				array(
-					'label'             => __('Knowledge Base Nickname', 'echo-knowledge-base'),
-					'placeholder'       => __('Knowledge Base', 'echo-knowledge-base'),
+					'label'             => esc_html__('Knowledge Base Nickname', 'echo-knowledge-base'),
+					'placeholder'       => esc_html__('Knowledge Base', 'echo-knowledge-base'),
 					'main_tag'          => 'div',
 					'input_group_class' => 'epkb-wizard-row-form-input epkb-wizard-name',
 					'value'             => $this->kb_config['kb_name']
@@ -248,7 +257,7 @@ class EPKB_KB_Wizard_Setup {
 			if ( $this->is_setup_run_first_time || empty( $main_pages ) ) {
 				EPKB_HTML_Elements::text(
 					array(
-						'label'             => __( 'Knowledge Base Slug', 'echo-knowledge-base' ),
+						'label'             => esc_html__( 'Knowledge Base Slug', 'echo-knowledge-base' ),
 						'placeholder'       => 'knowledge-base',
 						'main_tag'          => 'div',
 						'readonly'          => ! EPKB_Admin_UI_Access::is_user_access_to_context_allowed( 'admin_eckb_access_frontend_editor_write' ),
@@ -260,7 +269,7 @@ class EPKB_KB_Wizard_Setup {
 					<div class="epkb-wizard-col2">
 						<p id="epkb-wizard-slug-error"><?php esc_html_e( 'The slug should not contain full KB URL.', 'echo-knowledge-base' ); ?></p>
 						<p class="epkb-wizard-input-desc"><?php esc_html_e( 'This KB slug is part of your full knowledge base URL:', 'echo-knowledge-base' ); ?></p>
-						<p class="epkb-wizard-input-desc"><span><?php echo site_url(); ?></span> / <span id="epkb-wizard-slug-target"><?php echo $this->kb_config['kb_articles_common_path']; ?></span></p>
+						<p class="epkb-wizard-input-desc"><span><?php echo esc_url( site_url() ); ?></span> / <span id="epkb-wizard-slug-target"><?php echo esc_html( $this->kb_config['kb_articles_common_path'] ); ?></span></p>
 					</div>
 				</div>				<?php
 
@@ -271,7 +280,7 @@ class EPKB_KB_Wizard_Setup {
 				$main_page_url = EPKB_KB_Handler::get_first_kb_main_page_url( $this->kb_config );
 				EPKB_HTML_Elements::text(
 					array(
-						'label'             => __( 'Knowledge Base Slug', 'echo-knowledge-base' ),
+						'label'             => esc_html__( 'Knowledge Base Slug', 'echo-knowledge-base' ),
 						'placeholder'       => 'knowledge-base',
 						'main_tag'          => 'div',
 						'readonly'          => ! ( EPKB_Utilities::get_wp_option( 'epkb_not_completed_setup_wizard_' . $this->kb_config['id'], false ) && EPKB_Admin_UI_Access::is_user_access_to_context_allowed( 'admin_eckb_access_frontend_editor_write' ) ),
@@ -282,7 +291,7 @@ class EPKB_KB_Wizard_Setup {
 				<div class="epkb-wizard-row-form-input">
 					<div class="epkb-wizard-col2">
 						<p class="epkb-wizard-input-desc"><?php esc_html_e( 'This is KB slug that is part of your full knowledge base URL:', 'echo-knowledge-base' ); ?></p>
-						<a class="epkb-wizard-input-desc" href="<?php echo esc_url( $main_page_url ); ?>" target="_blank"><?php echo esc_url( $main_page_url ); ?></a><?php
+						<a class="epkb-wizard-input-desc" href="<?php echo esc_url( $main_page_url ); ?>" target="_blank"><?php echo esc_html( $main_page_url ); ?></a><?php
 						if ( current_user_can( EPKB_Admin_UI_Access::get_admin_capability() ) ) {   ?>
 							<p class="epkb-wizard-input-desc">
 								<a href="https://www.echoknowledgebase.com/documentation/changing-permalinks-urls-and-slugs/" target="_blank"><?php esc_html_e( 'Need to change KB URL?', 'echo-knowledge-base' ); ?>
@@ -296,7 +305,7 @@ class EPKB_KB_Wizard_Setup {
 
 			// if we have menus and menus without link
 			$menus = $this->kb_menus_without_item();
-			if ( is_array($menus) && ! empty($menus) ) {      ?>
+			if ( is_array( $menus ) && ! empty( $menus ) ) {      ?>
 
 				<div class="input_group epkb-wizard-row-form-input epkb-wizard-menus" >
 					<label><?php esc_html_e( 'Add KB to Website Menu', 'echo-knowledge-base' ); ?></label>
@@ -319,208 +328,6 @@ class EPKB_KB_Wizard_Setup {
 
 			}       ?>
 		</div>	<?php
-
-		return ob_get_clean();
-	}
-
-	/**
-	 * Setup Wizard: Step 2 - Choose Design
-	 *
-	 * @return false|string
-	 */
-	private function wizard_step_layout_content() {
-
-		// group themes by layout names
-		$theme_description = EPKB_KB_Wizard_Themes::get_themes_description();
-
-		// pre-define sequence of layouts shown in Setup Wizard presets
-		$preset_options = array(
-			'Basic'         => [],
-			'Tabs'          => [],
-			'Categories'    => [],
-		);
-
-		// group themes by layout names
-		foreach ( EPKB_KB_Wizard_Themes::get_all_presets( $this->kb_config ) as $theme_slug => $theme_data ) {
-			$preset_options[$theme_data['kb_main_page_layout']][$theme_slug] = $theme_data['kb_name'];
-		}
-
-		ob_start(); ?>
-
-		<div id="epkb-wsb-step-2-panel" class="epkb-setup-wizard-theme epkb-wc-step-panel eckb-wizard-step-2">
-			<div class="epkb-setup-wizard-theme-preview">
-
-				<!-- THEME BUTTONS -->
-				<div class="epkb-wizard-theme-tab-container">
-					<input type="hidden" id="_wpnonce_epkb_ajax_action" name="_wpnonce_epkb_ajax_action" value="<?php echo wp_create_nonce( "_wpnonce_epkb_ajax_action" ); ?>"/>		<?php
-
-					// add categories  	?>
-					<div class="epkb-setup-wizard-group__container"> <?php
-
-					// Pre-select first theme if Setup Wizard is running first time or KB > 1
-					$pre_select_theme = false;
-					if ( $this->is_setup_run_first_time ) {
-						$pre_select_theme = true;
-					} else { ?>
-						<div class="epkb-setup-wt-tc__themes-group__list config-input-group">
-
-                            <div class="epkb-setup-current">
-                                <div class="epkb-setup-option-container epkb-setup-option-container--description">
-                                    <h4><?php esc_html_e( 'Your current settings', 'echo-knowledge-base'); ?></h4>
-                                    <p><?php esc_html_e( 'You can either keep the current colors and design or choose a different one below.', 'echo-knowledge-base'); ?></p>
-                                </div>
-                                <div id="epkb-setup-wt-theme-current-panel" class="epkb-setup-option-container epkb-setup-option-container--active">
-                                    <div class="epkb-setup-option__inner">
-                                        <div class="epkb-setup-option__selection">
-                                            <div class="epkb-setup-option__option-container">
-                                                <label class="epkb-setup-option__option__label">
-                                                    <input type="radio" name="epkp-theme" value="current" checked>
-                                                </label>
-                                            </div>
-                                            <div class="epkb-setup-option__featured-img-container">
-                                                <img alt="" class="epkb-setup-option__featured-img" src="<?php echo EPKB_KB_Wizard_Themes::$theme_images['current_design']; ?>" title="<?php esc_html_e( 'Current Colors', 'echo-knowledge-base' ); ?>" />
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-						</div><?php
-					}
-
-					foreach ( $preset_options as $title => $group ) {
-
-						$layout_title = self::get_layout_title( $title ); ?>
-
-						<div class="epkb-setup-wizard-group__container-inner">
-							<div class="epkb-setup-wt-tc__themes-group__header__title"><?php echo esc_html( $layout_title ); ?></div>
-						    <div class="epkb-setup-wt-tc__themes-group__header__desc"><?php echo esc_html( $theme_description[$title] ); ?></div>
-
-							<div class="epkb-setup-wt-tc__themes-group__list config-input-group">       <?php
-
-								foreach ( $group as $template_id => $template_name ) {      ?>
-									<div id="epkb-setup-wt-theme-<?php echo esc_attr( $template_id ); ?>-panel" class="epkb-setup-option-container">
-										<div class="epkb-setup-option__inner">
-											<div class="epkb-setup-option__selection">
-												<div class="epkb-setup-option__option-container">
-													<label class="epkb-setup-option__option__label">
-														<input type="radio" name="epkp-theme" value="<?php echo esc_attr( $template_id ); ?>"<?php echo $pre_select_theme ? ' checked' : ''; ?>>
-														<span><?php echo esc_html( $template_name ); ?></span>
-													</label>
-												</div>
-												<div class="epkb-setup-option__featured-img-container">
-													<img alt="" class="epkb-setup-option__featured-img" src="<?php echo EPKB_KB_Wizard_Themes::$theme_images[$template_id]; ?>" title="<?php echo $template_name; ?>" />
-												</div>
-											</div>
-										</div>
-									</div>		<?php
-
-									$pre_select_theme = false;
-								}       ?>
-
-							</div>
-
-						</div><?php
-					} ?>
-					</div>
-
-				</div>
-
-			</div>
-		</div>	<?php
-
-		return ob_get_clean();
-	}
-
-	/**
-	 * Setup Wizard: Step 3 - Choose navigation on left or right sidebar
-	 *
-	 * @return false|string
-	 */
-	private function wizard_step_navigation_content() {
-
-		$groups = EPKB_KB_Wizard_Themes::get_sidebar_groups();
-
-		$selected_option_id = 1;
-		if ( ! $this->is_setup_run_first_time ) {
-			$groups = array_merge( [
-				[
-					'title' => __( 'Your current settings', 'echo-knowledge-base' ),
-                    'class' => 'epkb-setup-current-article',
-					'description' => __( 'You can either keep the current sidebars setup or choose a different one below.', 'echo-knowledge-base' ),
-					'learn_more_url' => '',
-					'options' => [
-						0 => __( 'Current Navigation', 'echo-knowledge-base' ),
-					]
-				],
-			], $groups );
-
-			$selected_option_id = 0;
-		}
-
-		ob_start(); ?>
-
-		<div id="epkb-wsb-step-3-panel" class="epkb-setup-wizard-sidebar epkb-wc-step-panel eckb-wizard-step-3">
-			<div class="epkb-setup-wizard-theme-preview">
-				<div class="epkb-wizard-theme-tab-container">
-					<div class="epkb-setup-wizard-group__container"><?php
-						foreach ( $groups as $group ) { ?>
-							<div class="epkb-setup-wizard-group__container-inner <?php echo esc_attr( $group['class'] ); ?>">                                <?php
-
-								if ( $group['class'] == 'epkb-setup-current-article') { ?>
-									<div class="epkb-setup-current-article__text"> <?php
-								}       ?>
-
-									<div class="epkb-setup-wt-tc__themes-group__header__title"><?php echo esc_html( $group['title'] ); ?></div>
-									<div class="epkb-setup-wt-tc__themes-group__header__desc"><?php
-										echo esc_html( $group['description'] );
-										if ( ! empty( $group['learn_more_url'] ) ) { ?>
-											<a href="<?php echo esc_url( $group['learn_more_url'] ); ?>" target="_blank"><?php esc_html_e( 'See navigation demo page', 'echo-knowledge-base' ); ?></a><?php
-										} ?>
-									</div>                                <?php
-
-								if ( $group['class'] == 'epkb-setup-current-article') { ?>
-									</div>
-									<div class="epkb-setup-current-article__image"> <?php
-								}   ?>
-
-									<div class="epkb-setup-wt-tc__themes-group__list config-input-group">       <?php
-
-									foreach ( $group['options'] as $id => $option_title ) {
-										$image_id = $id ? $id : self::get_current_sidebar_selection( $this->kb_config );
-										$image_url = Echo_Knowledge_Base::$plugin_url . 'img/' . EPKB_KB_Wizard_Themes::$sidebar_images[ $image_id ]; ?>
-										<div id="epkb-setup-wt-sidebar-<?php echo esc_attr( $id ); ?>-panel"
-											 class="epkb-setup-option-container <?php echo $selected_option_id == $id ? 'epkb-setup-option-container--active' : ''; ?>">
-											<div class="epkb-setup-option__inner">
-												<div class="epkb-setup-option__selection">
-													<div class="epkb-setup-option__option-container">
-														<label class="epkb-setup-option__option__label">
-															<input type="radio" name="epkb-sidebar" value="<?php echo esc_attr( $id ); ?>" <?php checked( $selected_option_id, $id ); ?>>
-															<span><?php echo esc_html( $option_title ); ?></span>
-														</label>
-													</div>
-													<div class="epkb-setup-option__featured-img-container">
-														<img alt="" class="epkb-setup-option__featured-img"
-															 src="<?php echo $image_url; ?>"
-															 title="<?php echo $option_title; ?>"/>
-													</div>
-												</div>
-											</div>
-										</div><?php
-									} ?>
-
-									</div>                                <?php
-
-								if ( $group['class'] == 'epkb-setup-current-article') { ?>
-									</div> <?php
-								}       ?>
-
-							</div><?php
-						} ?>
-					</div>
-				</div>
-			</div>
-		</div>    <?php
 
 		return ob_get_clean();
 	}
@@ -566,13 +373,6 @@ class EPKB_KB_Wizard_Setup {
 		return $menu_without_kb_links;
 	}
 
-
-	/***************************************************************************
-	 *
-	 * Setup Wizards Functions
-	 *
-	 ***************************************************************************/
-
 	/**
 	 * Determine what sidebar set up the user has and return corresponding selection id.
 	 *
@@ -592,6 +392,11 @@ class EPKB_KB_Wizard_Setup {
 			if ( $kb_config['article_nav_sidebar_type_left'] == 'eckb-nav-sidebar-categories' ) {
 				return 3;
 			}
+
+			// Current Category and Articles: Left Side
+			if ( $kb_config['article_nav_sidebar_type_left'] == 'eckb-nav-sidebar-current-category' ) {
+				return 5;
+			}
 		}
 
 		if ( $kb_config['article-right-sidebar-toggle'] == 'on' && isset( $kb_config['article_sidebar_component_priority']['nav_sidebar_right'] ) && (int)$kb_config['article_sidebar_component_priority']['nav_sidebar_right'] ) {
@@ -605,10 +410,15 @@ class EPKB_KB_Wizard_Setup {
 			if ( $kb_config['article_nav_sidebar_type_right'] == 'eckb-nav-sidebar-categories' ) {
 				return 4;
 			}
+
+			// Current Category and Articles: Right Side
+			if ( $kb_config['article_nav_sidebar_type_right'] == 'eckb-nav-sidebar-current-category' ) {
+				return 6;
+			}
 		}
 
 		// No Navigation/Default
-		return 5;
+		return 7;
 	}
 
 	/**
@@ -620,147 +430,143 @@ class EPKB_KB_Wizard_Setup {
 
 		$layouts_config = [];
 
-		// TODO: update text and images
 		$layouts_config['Basic'] = [
-			'layout_title'          => __( 'Basic Layout', 'echo-knowledge-base' ),
-			'layout_description'    => __( 'This layout lists the top two levels of categories with the option to expand each category. ' .
-											'It also shows the main articles from the top category.', 'echo-knowledge-base' ),
+			'layout_title'          => esc_html__( 'Basic Layout', 'echo-knowledge-base' ),
+			'layout_description'    => esc_html__( 'The Basic Layout offers a user-friendly grid format for viewing categories, subcategories, and articles. Expand and collapse article lists for easy navigation.', 'echo-knowledge-base' ),
 			'layout_image'          => [
-				'title' => __( 'Basic', 'echo-knowledge-base' ),
+				'title' => esc_html__( 'Basic', 'echo-knowledge-base' ),
 				'url'   => Echo_Knowledge_Base::$plugin_url . 'img/' . 'setup-wizard/step-3/Basic-Layout-Standard.jpg',
 			],
 			'layout_features'       => [
-				__( 'Two levels of categories are initially displayed.', 'echo-knowledge-base' ),
-				__( 'Articles from the top categories are also listed.', 'echo-knowledge-base' ),
+				esc_html__( 'Two levels of categories are initially displayed.', 'echo-knowledge-base' ),
+				esc_html__( 'Articles from the top categories are also listed.', 'echo-knowledge-base' ),
 			],
-			/* 'youtube_link'          => [    // TODO
-				'title' => __( 'Watch our Video', 'echo-knowledge-base' ),
+			/* 'youtube_link'          => [
+				'title' => esc_html__( 'Watch our Video', 'echo-knowledge-base' ),
 				'url'   => '#',
 			], */
 			'demo_link'             => [
-				'title' => __( 'Try out our Demo', 'echo-knowledge-base' ),
+				'title' => esc_html__( 'Try out our Demo', 'echo-knowledge-base' ),
 				'url'   => 'https://www.echoknowledgebase.com/demo-1-knowledge-base-basic-layout/',
 			],
 		];
 		$layouts_config['Classic'] = [
-			'layout_title'          => __( 'Classic Layout', 'echo-knowledge-base' ),
-			'layout_description'    => __( 'In the Classic layout, the top categories are shown with the option to expand each category to reveal its articles and sub-categories directly below.', 'echo-knowledge-base' ),
+			'layout_title'          => esc_html__( 'Classic Layout', 'echo-knowledge-base' ),
+			'layout_description'    => esc_html__( 'The Classic Layout offers a simple, compressed view of top-level categories. Click to expand each category and see its associated articles and subcategories.', 'echo-knowledge-base' ),
 			'layout_image'          => [
-				'title' => __( 'Classic', 'echo-knowledge-base' ),
+				'title' => esc_html__( 'Classic', 'echo-knowledge-base' ),
 				'url'   => Echo_Knowledge_Base::$plugin_url . 'img/' . 'setup-wizard/step-3/Classic-Layout-Standard.jpg',
 			],
 			'layout_features'       => [
-				__( 'Initially, only top categories are listed.', 'echo-knowledge-base' ),
-				__( 'Users can click to expand and view articles and sub-categories in a compact format.', 'echo-knowledge-base' ),
+				esc_html__( 'Initially, only top categories are listed.', 'echo-knowledge-base' ),
+				esc_html__( 'Users can click to expand and view articles and sub-categories in a compact format.', 'echo-knowledge-base' ),
 			],
-			/* 'youtube_link'          => [    // TODO
-				'title' => __( 'Watch our Video', 'echo-knowledge-base' ),
+			/* 'youtube_link'          => [
+				'title' => esc_html__( 'Watch our Video', 'echo-knowledge-base' ),
 				'url'   => '#',
 			], */
 			'demo_link'             => [
-				'title' => __( 'Try out our Demo', 'echo-knowledge-base' ),
+				'title' => esc_html__( 'Try out our Demo', 'echo-knowledge-base' ),
 				'url'   => 'https://www.echoknowledgebase.com/demo-12-knowledge-base-image-layout/',
 			],
 		];
 		$layouts_config['Drill-Down'] = [
-			'layout_title'          => __( 'Drill Down Layout', 'echo-knowledge-base' ),
-			'layout_description'    => __( 'The Drill Down layout allows users to click on a category, expanding it to display a list of ' .
-										'its articles and sub-categories in a wide format. Users can further explore sub-categories in the same manner.', 'echo-knowledge-base' ),
+			'layout_title'          => esc_html__( 'Drill Down Layout', 'echo-knowledge-base' ),
+			'layout_description'    => esc_html__( 'The Drill Down Layout helps you navigate large knowledge bases easily. Click top categories to progressively reveal articles and subcategories.', 'echo-knowledge-base' ),
 			'layout_video'          => [
-				'title' => __( 'Drill Down', 'echo-knowledge-base' ),
-				'url'   => Echo_Knowledge_Base::$plugin_url . 'img/' . 'setup-wizard/step-3/drill-down-example.webm',
+				'title' => esc_html__( 'Drill Down', 'echo-knowledge-base' ),
+				'url'   => Echo_Knowledge_Base::$plugin_url . 'img/' . 'setup-wizard/step-3/drill-down-example-2.webm',
 			],
 			'layout_features'       => [
-				__( 'Only top categories are initially listed.', 'echo-knowledge-base' ),
-				__( 'Users can click to reveal articles and sub-categories in an extensive format.', 'echo-knowledge-base' ),
+				esc_html__( 'Only top categories are initially listed.', 'echo-knowledge-base' ),
+				esc_html__( 'Users can click to reveal articles and sub-categories in an extensive format.', 'echo-knowledge-base' ),
 			],
-			/* 'youtube_link'          => [    // TODO
-				'title' => __( 'Watch our Video', 'echo-knowledge-base' ),
-				'url'   => '#',
-			], */
-			/* 'demo_link'             => [  // TODO
-				'title' => __( 'Try out our Demo', 'echo-knowledge-base' ),
-				'url'   => '#',
-			], */
-		];
-		$layouts_config['Tabs'] = [
-			'layout_title'          => __( 'Tabs Layout', 'echo-knowledge-base' ),
-			'layout_description'    => __( 'The Tabs layout displays top categories as tabs, allowing documentation to be divided across several separate pages. ' .
-										'This format is particularly useful for differentiating products, services, or areas of interest.', 'echo-knowledge-base' ),
-			'layout_image'          => [
-				'title' => __( 'Tabs', 'echo-knowledge-base' ),
-				'url'   => Echo_Knowledge_Base::$plugin_url . 'img/' . 'setup-wizard/step-3/Tab-Layout-Standard.jpg',
-			],
-			'layout_features'       => [
-				__( 'Top categories are presented as tabs.', 'echo-knowledge-base' ),
-				__( 'Each tab page follows a structure similar to the Basic layout.', 'echo-knowledge-base' ),
-			],
-			/* 'youtube_link'          => [    // TODO
-				'title' => __( 'Watch our Video', 'echo-knowledge-base' ),
+			/* 'youtube_link'          => [
+				'title' => esc_html__( 'Watch our Video', 'echo-knowledge-base' ),
 				'url'   => '#',
 			], */
 			'demo_link'             => [
-				'title' => __( 'Try out our Demo', 'echo-knowledge-base' ),
+				'title' => esc_html__( 'Try out our Demo', 'echo-knowledge-base' ),
+				'url'   => 'https://www.echoknowledgebase.com/demo-4-knowledge-base-tabs-layout/',
+			],
+		];
+		$layouts_config['Tabs'] = [
+			'layout_title'          => esc_html__( 'Tabs Layout', 'echo-knowledge-base' ),
+			'layout_description'    => esc_html__( 'The Tab Layout clearly organizes top categories for subject-specific browsing. Within each tab, find related articles and sub-categories.', 'echo-knowledge-base' ),
+			'layout_image'          => [
+				'title' => esc_html__( 'Tabs', 'echo-knowledge-base' ),
+				'url'   => Echo_Knowledge_Base::$plugin_url . 'img/' . 'setup-wizard/step-3/Tab-Layout-Standard.jpg',
+			],
+			'layout_features'       => [
+				esc_html__( 'Top categories are presented as tabs.', 'echo-knowledge-base' ),
+				esc_html__( 'Each tab page follows a structure similar to the Basic layout.', 'echo-knowledge-base' ),
+			],
+			/* 'youtube_link'          => [
+				'title' => esc_html__( 'Watch our Video', 'echo-knowledge-base' ),
+				'url'   => '#',
+			], */
+			'demo_link'             => [
+				'title' => esc_html__( 'Try out our Demo', 'echo-knowledge-base' ),
 				'url'   => 'https://www.echoknowledgebase.com/demo-3-knowledge-base-tabs-layout/',
 			],
 		];
 		$layouts_config['Categories'] = [
-			'layout_title'          => __( 'Category Focused Layout', 'echo-knowledge-base' ),
-			'layout_description'    => __( 'The Categories layout resembles the Basic layout but includes the number of articles beside each category name.', 'echo-knowledge-base' ),
+			'layout_title'          => esc_html__( 'Category Focused Layout', 'echo-knowledge-base' ),
+			'layout_description'    => esc_html__( 'The Categories layout resembles the Basic layout but includes the number of articles beside each category name.', 'echo-knowledge-base' ),
 			'layout_image'          => [
-				'title' => __( 'Category Focused', 'echo-knowledge-base' ),
+				'title' => esc_html__( 'Category Focused', 'echo-knowledge-base' ),
 				'url'   => Echo_Knowledge_Base::$plugin_url . 'img/' . 'setup-wizard/step-3/Category-Layout-Standard.jpg',
 			],
 			'layout_features'       => [
-				__( 'Lists two levels of categories. Sub categories link to their Category Archive page.', 'echo-knowledge-base' ),
-				__( 'Displays the number of articles in each category.', 'echo-knowledge-base' ),
+				esc_html__( 'Lists two levels of categories. Sub categories link to their Category Archive page.', 'echo-knowledge-base' ),
+				esc_html__( 'Displays the number of articles in each category.', 'echo-knowledge-base' ),
 			],
-			/* 'youtube_link'          => [    // TODO
-				'title' => __( 'Watch our Video', 'echo-knowledge-base' ),
+			/* 'youtube_link'          => [
+				'title' => esc_html__( 'Watch our Video', 'echo-knowledge-base' ),
 				'url'   => '#',
 			], */
 			'demo_link'             => [
-				'title' => __( 'Try out our Demo', 'echo-knowledge-base' ),
+				'title' => esc_html__( 'Try out our Demo', 'echo-knowledge-base' ),
 				'url'   => 'https://www.echoknowledgebase.com/demo-14-category-layout/',
 			],
 		];
 		$layouts_config['Grid'] = [
-			'layout_title'          => __( 'Grid Layout', 'echo-knowledge-base' ),
-			'layout_description'    => __( 'This layout presents top categories with the count of articles in each. Clicking on a category navigates the user to either an article page or a category archive page.', 'echo-knowledge-base' ),
+			'layout_title'          => esc_html__( 'Grid Layout', 'echo-knowledge-base' ),
+			'layout_description'    => esc_html__( 'Grid layout presents top categories with the count of articles in each. Clicking on a category navigates the user to either an article page or a category archive page.', 'echo-knowledge-base' ),
 			'layout_image'          => [
-				'title' => __( 'Grid', 'echo-knowledge-base' ),
+				'title' => esc_html__( 'Grid', 'echo-knowledge-base' ),
 				'url'   => Echo_Knowledge_Base::$plugin_url . 'img/' . 'setup-wizard/step-3/Grid-Layout-Standard.jpg',
 			],
 			'layout_features'       => [
-				__( 'Initially displays only top categories.', 'echo-knowledge-base' ),
-				__( 'Clicking on a category leads to the first article or the category archive page.', 'echo-knowledge-base' ),
+				esc_html__( 'Initially displays only top categories.', 'echo-knowledge-base' ),
+				esc_html__( 'Clicking on a category leads to the first article or the category archive page.', 'echo-knowledge-base' ),
 			],
-			/* 'youtube_link'          => [    // TODO
-				'title' => __( 'Watch our Video', 'echo-knowledge-base' ),
+			/* 'youtube_link'          => [
+				'title' => esc_html__( 'Watch our Video', 'echo-knowledge-base' ),
 				'url'   => '#',
 			], */
 			'demo_link'             => [
-				'title' => __( 'Try out our Demo', 'echo-knowledge-base' ),
+				'title' => esc_html__( 'Try out our Demo', 'echo-knowledge-base' ),
 				'url'   => 'https://www.echoknowledgebase.com/demo-5-knowledge-base-grid-layout/',
 			],
 		];
 		$layouts_config['Sidebar'] = [
-			'layout_title'          => __( 'Sidebar Layout', 'echo-knowledge-base' ),
-			'layout_description'    => __( 'The Sidebar layout features a navigation sidebar alongside articles on both the Knowledge Base (KB) Main Page and KB Article Pages.', 'echo-knowledge-base' ),
+			'layout_title'          => esc_html__( 'Sidebar Layout', 'echo-knowledge-base' ),
+			'layout_description'    => esc_html__( 'The Sidebar layout features a navigation sidebar alongside articles on both the Knowledge Base (KB) Main Page and KB Article Pages.', 'echo-knowledge-base' ),
 			'layout_image'          => [
-				'title' => __( 'Sidebar', 'echo-knowledge-base' ),
+				'title' => esc_html__( 'Sidebar', 'echo-knowledge-base' ),
 				'url'   => Echo_Knowledge_Base::$plugin_url . 'img/' . 'setup-wizard/step-3/Sidebar-Layout-Standard.jpg',
 			],
 			'layout_features'       => [
-				__( 'The article navigation sidebar is always visible.', 'echo-knowledge-base' ),
-				__( 'The KB Main Page includes introductory text.', 'echo-knowledge-base' ),
+				esc_html__( 'The article navigation sidebar is always visible.', 'echo-knowledge-base' ),
+				esc_html__( 'The KB Main Page includes introductory text.', 'echo-knowledge-base' ),
 			],
-			/* 'youtube_link'          => [    // TODO
-				'title' => __( 'Watch our Video', 'echo-knowledge-base' ),
+			/* 'youtube_link'          => [
+				'title' => esc_html__( 'Watch our Video', 'echo-knowledge-base' ),
 				'url'   => '#',
 			], */
 			'demo_link'             => [
-				'title' => __( 'Try out our Demo', 'echo-knowledge-base' ),
+				'title' => esc_html__( 'Try out our Demo', 'echo-knowledge-base' ),
 				'url'   => 'https://www.echoknowledgebase.com/demo-7-knowledge-base-sidebar-layout/',
 			],
 		];
@@ -788,7 +594,7 @@ class EPKB_KB_Wizard_Setup {
 			<div class="epkb-setup-wizard-no-categories-articles-message"><?php esc_html_e( 'Categories & Articles module was not selected in previous step.', 'echo-knowledge-base' ); ?></div>
 
 			<div class="epkb-setup-wizard-step-container epkb-setup-wizard-step-container--layout">
-				<input type="hidden" id="_wpnonce_epkb_ajax_action" name="_wpnonce_epkb_ajax_action" value="<?php echo wp_create_nonce( "_wpnonce_epkb_ajax_action" ); ?>"/>    <?php
+				<input type="hidden" id="_wpnonce_epkb_ajax_action" name="_wpnonce_epkb_ajax_action" value="<?php echo wp_create_nonce( "_wpnonce_epkb_ajax_action" ); //phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>"/>    <?php
 
 				foreach ( $layouts_config as $layout_name => $layout_config ) { ?>
 
@@ -886,9 +692,9 @@ class EPKB_KB_Wizard_Setup {
 						EPKB_HTML_Forms::dialog_pro_feature_ad( array(
 							'id' => 'epkb-dialog-pro-feature-ad-' . strtolower( $layout_name ),
 							'title' => sprintf(__("Unlock %s" . $layout_config['layout_title'] . " Feature%s By Upgrading to PRO ", 'echo-knowledge-base'), '<strong>', '</strong>'),
-							'list' => array( __( 'Grid Layout for the Main Page', 'echo-knowledge-base'), __( 'Sidebar Layout for the Main Page', 'echo-knowledge-base'),
+							'list' => array( esc_html__( 'Grid Layout for the Main Page', 'echo-knowledge-base'), esc_html__( 'Sidebar Layout for the Main Page', 'echo-knowledge-base'),
 											__( 'Resource Links feature for the Main Page', 'echo-knowledge-base')),
-							'btn_text' => __('Upgrade Now', 'echo-knowledge-base'),
+							'btn_text' => esc_html__('Upgrade Now', 'echo-knowledge-base'),
 							'btn_url' => 'https://www.echoknowledgebase.com/wordpress-plugin/elegant-layouts/',
 							'show_close_btn' => 'yes',
 							'return_html' => true,
@@ -901,25 +707,6 @@ class EPKB_KB_Wizard_Setup {
 		</div>	<?php
 
 		return ob_get_clean();
-	}
-
-	/**
-	 * Return Layout name
-	 *
-	 * @param $title
-	 * @return string|void
-	 */
-	private static function get_layout_title( $title ) {
-		switch ( $title ) {
-			case 'Basic': return __( 'Basic Layout', 'echo-knowledge-base' );
-			case 'Tabs': return __( 'Tabs Layout', 'echo-knowledge-base' );
-			case 'Categories': return __( 'Category Focused Layout', 'echo-knowledge-base' );
-			case 'Classic': return __( 'Classic Layout', 'echo-knowledge-base' );
-			case 'Drill-Down': return __( 'Drill Down Layout', 'echo-knowledge-base' );
-			case 'Grid': return __( 'Grid Layout', 'echo-knowledge-base' );
-			case 'Sidebar': return __( 'Sidebar Layout', 'echo-knowledge-base' );
-			default: return '';
-		}
 	}
 
 	/**
@@ -936,7 +723,12 @@ class EPKB_KB_Wizard_Setup {
 		<div class="epkb-setup-wizard-theme-header">
 			<h2 class="epkb-setup-wizard-theme-header__info__title"><?php echo wp_kses( $args['info_title'], EPKB_Utilities::get_admin_ui_extended_html_tags() ); ?></h2>  <?php
 			if ( isset( $args['info_description'] ) ) { ?>
-				<h2 class="epkb-setup-wizard-theme-header__info__description"><?php echo esc_html( $args['info_description'] ); ?></h2>  <?php
+				<h2 class="epkb-setup-wizard-theme-header__info__description">	<?php
+					if ( isset ( $args[ 'info_description_icon'] ) ) { ?>
+						<span class="epkb-setup-wizard-theme-header__info__description__icon epkbfa epkbfa-<?php esc_attr_e( $args[ 'info_description_icon'] ); ?>"></span>
+					<?php }
+					echo esc_html( $args['info_description'] ); ?></h2>
+				<?php
 			}
 			if ( isset( $args['info_html'] ) ) {
 				echo wp_kses( $args['info_html'], EPKB_Utilities::get_admin_ui_extended_html_tags() );
@@ -944,12 +736,12 @@ class EPKB_KB_Wizard_Setup {
 		</div>  <?php
 		$first_time = EPKB_Core_Utilities::is_run_setup_wizard_first_time() || EPKB_Utilities::post( 'emkb_admin_notice' ) == 'kb_add_success';
 		if ( ! $first_time && isset( $args['content_show_option'] ) ) { ?>
-			<div class="epkb-setup-wizard-theme-content-show-option" data-ignore_layouts="<?php echo esc_attr( $args['content_show_option']['ignore_layouts'] ); ?>">
+			<div class="epkb-setup-wizard-theme-content-show-option" data-current-layout="<?php echo esc_attr( $args['content_show_option']['current_layout'] ); ?>">
 				<h5 class="epkb-setup-wizard-theme-content-show-option__text"><?php echo esc_html( $args['content_show_option']['text'] ); ?></h5> <?php
 				EPKB_HTML_Elements::checkbox_toggle( [
 					'name' => 'epkb-setup-wizard-theme-content-show-option__toggle',
-					'toggleOnText'  => __( 'yes', 'echo-knowledge-base' ),
-					'toggleOffText'  => __( 'no', 'echo-knowledge-base' ),
+					'toggleOnText'  => esc_html__( 'yes', 'echo-knowledge-base' ),
+					'toggleOffText'  => esc_html__( 'no', 'echo-knowledge-base' ),
 				] ); ?>
 			</div> <?php
 		}
@@ -980,7 +772,7 @@ class EPKB_KB_Wizard_Setup {
 		<div id="epkb-wsb-step-2-panel" class="epkb-wc-step-panel eckb-wizard-step-2">
 
 			<div class="epkb-setup-wizard-step-container epkb-setup-wizard-step-container--modules">
-				<input type="hidden" id="_wpnonce_epkb_ajax_action" name="_wpnonce_epkb_ajax_action" value="<?php echo wp_create_nonce( "_wpnonce_epkb_ajax_action" ); ?>"/>
+				<input type="hidden" id="_wpnonce_epkb_ajax_action" name="_wpnonce_epkb_ajax_action" value="<?php echo wp_create_nonce( "_wpnonce_epkb_ajax_action" );//phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped  ?>"/>
 
 				<!-- Modules Rows List -->
 				<div class="epkb-setup-wizard-module-rows-list">    <?php
@@ -1011,12 +803,12 @@ class EPKB_KB_Wizard_Setup {
 										EPKB_HTML_Elements::radio_buttons_horizontal( [
 											'name' => 'categories_articles_sidebar_location',
 											'options' => [
-												'none' => __( 'None', 'echo-knowledge-base' ),
-												'left' => __( 'Left', 'echo-knowledge-base' ),
-												'right' => __( 'Right', 'echo-knowledge-base' ),
+												'none' => esc_html__( 'None', 'echo-knowledge-base' ),
+												'left' => esc_html__( 'Left', 'echo-knowledge-base' ),
+												'right' => esc_html__( 'Right', 'echo-knowledge-base' ),
 											],
 											'value' => $sidebar_location_value,
-											'label' => __( 'Sidebar Visibility', 'echo-knowledge-base' ),
+											'label' => esc_html__( 'Sidebar Visibility', 'echo-knowledge-base' ),
 											'input_group_class' => 'epkb-setup-wizard-module-sidebar-selector',
 										] );    ?>
 									</div>  <?php
@@ -1124,9 +916,9 @@ class EPKB_KB_Wizard_Setup {
 
 			EPKB_HTML_Forms::dialog_pro_feature_ad( array(
 				'id'                => 'epkb-dialog-pro-feature-ad-resource-links',
-				'title'             => sprintf( __( "Unlock %sResource Links Feature%s", 'echo-knowledge-base' ), '<strong>', '</strong>' ),
-				'list'              => array( __( 'Grid Layout for the Main Page', 'echo-knowledge-base' ), __( 'Sidebar Layout for the Main Page', 'echo-knowledge-base' ), __( 'Resource Links feature for the Main Page', 'echo-knowledge-base' ) ),
-				'btn_text'          => __( 'Upgrade Now', 'echo-knowledge-base' ),
+				'title'             => sprintf( esc_html__( "Unlock %sResource Links Feature%s", 'echo-knowledge-base' ), '<strong>', '</strong>' ),
+				'list'              => array( esc_html__( 'Grid Layout for the Main Page', 'echo-knowledge-base' ), esc_html__( 'Sidebar Layout for the Main Page', 'echo-knowledge-base' ), esc_html__( 'Resource Links feature for the Main Page', 'echo-knowledge-base' ) ),
+				'btn_text'          => esc_html__( 'Upgrade Now', 'echo-knowledge-base' ),
 				'btn_url'           => 'https://www.echoknowledgebase.com/wordpress-plugin/elegant-layouts/',
 				'show_close_btn'    => 'yes',
 				'return_html'       => true,
@@ -1153,7 +945,7 @@ class EPKB_KB_Wizard_Setup {
 			<div class="epkb-setup-wizard-no-categories-articles-message"><?php esc_html_e( 'Categories & Articles module was not selected in previous step.', 'echo-knowledge-base' ); ?></div>
 
 			<div class="epkb-setup-wizard-step-container epkb-setup-wizard-step-container--presets">
-				<input type="hidden" id="_wpnonce_epkb_ajax_action" name="_wpnonce_epkb_ajax_action" value="<?php echo wp_create_nonce( "_wpnonce_epkb_ajax_action" ); ?>"/>
+				<input type="hidden" id="_wpnonce_epkb_ajax_action" name="_wpnonce_epkb_ajax_action" value="<?php echo wp_create_nonce( "_wpnonce_epkb_ajax_action" ); //phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>"/>
 
 				<!-- Module Row -->
 				<div class="epkb-setup-wizard-module-row">
@@ -1220,13 +1012,13 @@ class EPKB_KB_Wizard_Setup {
 	}
 
 	/**
-	 * Setup Wizard: Modular Step 5 - Choose navigation on left or right sidebar
+	 * Setup Wizard: Modular Step 5 - Choose article page navigation on left or right sidebar
 	 *
 	 * @return false|string
 	 */
 	private function wizard_step_modular_navigation_content() {
 
-		$groups = EPKB_KB_Wizard_Themes::get_sidebar_groups();
+		$groups = $this->get_sidebar_groups();
 
 		$selected_id = $this->is_setup_run_first_time ? 1 : self::get_current_sidebar_selection( $this->kb_config );
 
@@ -1241,7 +1033,7 @@ class EPKB_KB_Wizard_Setup {
 								foreach ( $groups as $group ) {
 									foreach ( $group['options'] as $id => $option_title ) {
 										$image_id = $id ? $id : self::get_current_sidebar_selection( $this->kb_config );
-										$image_url = Echo_Knowledge_Base::$plugin_url . 'img/' . EPKB_KB_Wizard_Themes::$sidebar_images[ $image_id ]; ?>
+										$image_url = Echo_Knowledge_Base::$plugin_url . 'img/' . self::$sidebar_images[ $image_id ]; ?>
 										<div class="epkb-setup-wizard__featured-img-container <?php echo $selected_id === $image_id ? 'epkb-setup-wizard__featured-img-container--active' : ''; ?>" data-value="<?php echo esc_attr( $image_id ); ?>">
 											<img alt="" class="epkb-setup-wizard__featured-img" src="<?php echo esc_url( $image_url ); ?>" title="<?php echo esc_attr( $option_title ); ?>"/>
 										</div> <?php
@@ -1259,15 +1051,19 @@ class EPKB_KB_Wizard_Setup {
 							if ( $selected_id === 3 || $selected_id === 4 ) {
 								$article_navigation = 'top_categories';
 							}
-							if ( $selected_id === 2 || $selected_id === 4 ) {
+							if ( $selected_id === 5 || $selected_id === 6 ) {
+								$article_navigation = 'current_category_articles';
+							}
+							if ( $selected_id === 2 || $selected_id === 4 || $selected_id === 6 ) {
 								$article_location = 'right';
 							}
 							EPKB_HTML_Elements::radio_buttons_horizontal( [
 								'name' => 'article_navigation',
 								'options' => [
-									'categories_articles' => __( 'Categories and Articles', 'echo-knowledge-base' ),
-									'top_categories' => __( 'Top Categories', 'echo-knowledge-base' ),
-									'none' => __( 'None', 'echo-knowledge-base' ),
+									'categories_articles' => esc_html__( 'All Categories and Articles', 'echo-knowledge-base' ),
+									'top_categories' => esc_html__( 'Top Categories', 'echo-knowledge-base' ),
+									'current_category_articles' => esc_html__( 'Current Category and Articles', 'echo-knowledge-base' ),
+									'none' => esc_html__( 'None', 'echo-knowledge-base' ),
 								],
 								'value' => $article_navigation,
 								'input_group_class' => 'epkb-setup-wizard-option__navigation-selector',
@@ -1277,8 +1073,8 @@ class EPKB_KB_Wizard_Setup {
 							EPKB_HTML_Elements::radio_buttons_horizontal( [
 								'name' => 'article_location',
 								'options' => [
-									'left' => __( 'Left', 'echo-knowledge-base' ),
-									'right' => __( 'Right', 'echo-knowledge-base' ),
+									'left' => esc_html__( 'Left', 'echo-knowledge-base' ),
+									'right' => esc_html__( 'Right', 'echo-knowledge-base' ),
 								],
 								'value' => $article_location,
 								'input_group_class' => 'epkb-setup-wizard-option__location-selector',
@@ -1314,7 +1110,7 @@ class EPKB_KB_Wizard_Setup {
 				'preset_1' => [
 					'preselected'   => true,
 					'image_url'     => Echo_Knowledge_Base::$plugin_url . 'img/' . 'setup-wizard/step-2/module-search.jpg',
-					'title'         => __( 'Basic', 'echo-knowledge-base' ),
+					'title'         => esc_html__( 'Basic', 'echo-knowledge-base' ),
 				],
 			],
 		];
@@ -1323,30 +1119,62 @@ class EPKB_KB_Wizard_Setup {
 		$modules_presets_config['categories_articles']['Basic'] = [
 			'preselected' => $this->kb_config['kb_main_page_layout'] == 'Basic',
 			'presets' => [
-				'standard' => [
+				'office' => [
 					'preselected'   => true,
-					'image_url'     => Echo_Knowledge_Base::$plugin_url . 'img/' . 'setup-wizard/step-4/cat-art-module-basic-standard.jpg',
-					'title'         => __( 'Standard', 'echo-knowledge-base' ),
+					'image_url'     => Echo_Knowledge_Base::$plugin_url . 'img/' . 'setup-wizard/step-4/cat-art-module-basic-office.jpg',
+					'title'         => esc_html__( 'Office', 'echo-knowledge-base' ),
 				],
-				'elegant' => [
-					'image_url'     => Echo_Knowledge_Base::$plugin_url . 'img/' . 'setup-wizard/step-4/cat-art-module-basic-elegant.jpg',
-					'title'         => __( 'Elegant', 'echo-knowledge-base' ),
+				'organized_basic' => [
+					'image_url'     => Echo_Knowledge_Base::$plugin_url . 'img/' . 'setup-wizard/step-4/cat-art-module-basic-organized.jpg',
+					'title'         => esc_html__( 'Organized', 'echo-knowledge-base' ),
 				],
-				'modern' => [
-					'image_url'     => Echo_Knowledge_Base::$plugin_url . 'img/' . 'setup-wizard/step-4/cat-art-module-basic-modern.jpg',
-					'title'         => __( 'Modern', 'echo-knowledge-base' ),
+				'creative' => [
+					'image_url'     => Echo_Knowledge_Base::$plugin_url . 'img/' . 'setup-wizard/step-4/cat-art-module-basic-creative.jpg',
+					'title'         => esc_html__( 'Creative', 'echo-knowledge-base' ),
 				],
 				'image' => [
 					'image_url'     => Echo_Knowledge_Base::$plugin_url . 'img/' . 'setup-wizard/step-4/cat-art-module-basic-image.jpg',
-					'title'         => __( 'Image', 'echo-knowledge-base' ),
+					'title'         => esc_html__( 'Image', 'echo-knowledge-base' ),
 				],
 				'informative' => [
 					'image_url'     => Echo_Knowledge_Base::$plugin_url . 'img/' . 'setup-wizard/step-4/cat-art-module-basic-informative.jpg',
-					'title'         => __( 'Informative', 'echo-knowledge-base' ),
+					'title'         => esc_html__( 'Informative', 'echo-knowledge-base' ),
 				],
-				'distinct' => [
-					'image_url'     => Echo_Knowledge_Base::$plugin_url . 'img/' . 'setup-wizard/step-4/cat-art-module-basic-distinct.jpg',
-					'title'         => __( 'Distinct', 'echo-knowledge-base' ),
+				'formal' => [
+					'image_url'     => Echo_Knowledge_Base::$plugin_url . 'img/' . 'setup-wizard/step-4/cat-art-module-basic-formal.jpg',
+					'title'         => esc_html__( 'Formal', 'echo-knowledge-base' ),
+				],
+				'elegant' => [
+					'image_url'     => Echo_Knowledge_Base::$plugin_url . 'img/' . 'setup-wizard/step-4/cat-art-module-basic-elegant.jpg',
+					'title'         => esc_html__( 'Elegant', 'echo-knowledge-base' ),
+				],
+				'icon_focused' => [
+					'image_url'     => Echo_Knowledge_Base::$plugin_url . 'img/' . 'setup-wizard/step-4/cat-art-module-basic-organized-no-icons.jpg',
+					'title'         => esc_html__( 'No Article Icons', 'echo-knowledge-base' ),
+				],
+				'bright' => [
+					'image_url'     => Echo_Knowledge_Base::$plugin_url . 'img/' . 'setup-wizard/step-4/cat-art-module-basic-bright.jpg',
+					'title'         => esc_html__( 'Bright', 'echo-knowledge-base' ),
+				],
+				'compact' => [
+					'image_url'     => Echo_Knowledge_Base::$plugin_url . 'img/' . 'setup-wizard/step-4/cat-art-module-basic-compact.jpg',
+					'title'         => esc_html__( 'Compact', 'echo-knowledge-base' ),
+				],
+				'sharp' => [
+					'image_url'     => Echo_Knowledge_Base::$plugin_url . 'img/' . 'setup-wizard/step-4/cat-art-module-basic-sharp.jpg',
+					'title'         => esc_html__( 'Sharp', 'echo-knowledge-base' ),
+				],
+				'simple' => [
+					'image_url'     => Echo_Knowledge_Base::$plugin_url . 'img/' . 'setup-wizard/step-4/cat-art-module-basic-simple.jpg',
+					'title'         => esc_html__( 'Simple', 'echo-knowledge-base' ),
+				],
+				'modern' => [
+					'image_url'     => Echo_Knowledge_Base::$plugin_url . 'img/' . 'setup-wizard/step-4/cat-art-module-basic-modern.jpg',
+					'title'         => esc_html__( 'Modern', 'echo-knowledge-base' ),
+				],
+				'gray' => [
+					'image_url'     => Echo_Knowledge_Base::$plugin_url . 'img/' . 'setup-wizard/step-4/cat-art-module-basic-gray.jpg',
+					'title'         => esc_html__( 'Gray', 'echo-knowledge-base' ),
 				],
 			],
 		];
@@ -1355,23 +1183,60 @@ class EPKB_KB_Wizard_Setup {
 		$modules_presets_config['categories_articles']['Tabs'] = [
 			'preselected' => $this->kb_config['kb_main_page_layout'] == 'Tabs',
 			'presets' => [
-				'basic' => [
+
+				'office_tabs' => [
 					'preselected'   => true,
-					'image_url'     => Echo_Knowledge_Base::$plugin_url . 'img/' . 'setup-wizard/step-4/cat-art-module-tabs-basic.jpg',
-					'title'         => __( 'Basic', 'echo-knowledge-base' ),
+					'image_url'     => Echo_Knowledge_Base::$plugin_url . 'img/' . 'setup-wizard/step-4/cat-art-module-tabs-office.jpg',
+					'title'         => esc_html__( 'Office', 'echo-knowledge-base' ),
 				],
-				'organized' => [
+				'organized_tabs' => [
 					'image_url'     => Echo_Knowledge_Base::$plugin_url . 'img/' . 'setup-wizard/step-4/cat-art-module-tabs-organized.jpg',
-					'title'         => __( 'Organized', 'echo-knowledge-base' ),
+					'title'         => esc_html__( 'Organized', 'echo-knowledge-base' ),
 				],
-				'organized_2' => [
-					'image_url'     => Echo_Knowledge_Base::$plugin_url . 'img/' . 'setup-wizard/step-4/cat-art-module-tabs-organized-2.jpg',
-					'title'         => __( 'Organized 2', 'echo-knowledge-base' ),
+				'modern_tabs' => [
+					'image_url'     => Echo_Knowledge_Base::$plugin_url . 'img/' . 'setup-wizard/step-4/cat-art-module-tabs-modern.jpg',
+					'title'         => esc_html__( 'Modern', 'echo-knowledge-base' ),
 				],
-				'products_based' => [
-					'image_url'     => Echo_Knowledge_Base::$plugin_url . 'img/' . 'setup-wizard/step-4/cat-art-module-tabs-product-based.jpg',
-					'title'         => __( 'Product Based', 'echo-knowledge-base' ),
-				]
+				'image_tabs' => [
+					'image_url'     => Echo_Knowledge_Base::$plugin_url . 'img/' . 'setup-wizard/step-4/cat-art-module-tabs-image.jpg',
+					'title'         => esc_html__( 'Image', 'echo-knowledge-base' ),
+				],
+				'informative_tabs' => [
+					'image_url'     => Echo_Knowledge_Base::$plugin_url . 'img/' . 'setup-wizard/step-4/cat-art-module-tabs-informative.jpg',
+					'title'         => esc_html__( 'Informative', 'echo-knowledge-base' ),
+				],
+				'creative_tabs' => [
+					'image_url'     => Echo_Knowledge_Base::$plugin_url . 'img/' . 'setup-wizard/step-4/cat-art-module-tabs-creative.jpg',
+					'title'         => esc_html__( 'Creative', 'echo-knowledge-base' ),
+				],
+				'formal_tabs' => [
+					'image_url'     => Echo_Knowledge_Base::$plugin_url . 'img/' . 'setup-wizard/step-4/cat-art-module-tabs-formal.jpg',
+					'title'         => esc_html__( 'Formal', 'echo-knowledge-base' ),
+				],
+				'compact_tabs' => [
+					'image_url'     => Echo_Knowledge_Base::$plugin_url . 'img/' . 'setup-wizard/step-4/cat-art-module-tabs-compact.jpg',
+					'title'         => esc_html__( 'Compact', 'echo-knowledge-base' ),
+				],
+				'sharp_tabs' => [
+					'image_url'     => Echo_Knowledge_Base::$plugin_url . 'img/' . 'setup-wizard/step-4/cat-art-module-tabs-sharp.jpg',
+					'title'         => esc_html__( 'Sharp', 'echo-knowledge-base' ),
+				],
+				'elegant_tabs' => [
+					'image_url'     => Echo_Knowledge_Base::$plugin_url . 'img/' . 'setup-wizard/step-4/cat-art-module-tabs-elegant.jpg',
+					'title'         => esc_html__( 'Elegant', 'echo-knowledge-base' ),
+				],
+				'icon_focused_tabs' => [
+					'image_url'     => Echo_Knowledge_Base::$plugin_url . 'img/' . 'setup-wizard/step-4/cat-art-module-basic-organized-no-icons.jpg',
+					'title'         => esc_html__( 'No Article Icons', 'echo-knowledge-base' ),
+				],
+				'simple_tabs' => [
+					'image_url'     => Echo_Knowledge_Base::$plugin_url . 'img/' . 'setup-wizard/step-4/cat-art-module-tabs-simple.jpg',
+					'title'         => esc_html__( 'Simple', 'echo-knowledge-base' ),
+				],
+				'clean' => [
+					'image_url'     => Echo_Knowledge_Base::$plugin_url . 'img/' . 'setup-wizard/step-4/cat-art-module-tabs-clean.jpg',
+					'title'         => esc_html__( 'Clean', 'echo-knowledge-base' ),
+				],
 			],
 		];
 
@@ -1379,71 +1244,111 @@ class EPKB_KB_Wizard_Setup {
 		$modules_presets_config['categories_articles']['Categories'] = [
 			'preselected' => $this->kb_config['kb_main_page_layout'] == 'Categories',
 			'presets' => [
-				'standard_2' => [
+				'office_categories' => [
 					'preselected'   => true,
-					'image_url'     => Echo_Knowledge_Base::$plugin_url . 'img/' . 'setup-wizard/step-4/cat-art-module-categoryfocused-standard.jpg',
-					'title'         => __( 'Standard 2', 'echo-knowledge-base' ),
+					'image_url'     => Echo_Knowledge_Base::$plugin_url . 'img/' . 'setup-wizard/step-4/cat-art-module-category-focused-office.jpg',
+					'title'         => esc_html__( 'Office', 'echo-knowledge-base' ),
+				],
+				'corporate' => [
+					'image_url'     => Echo_Knowledge_Base::$plugin_url . 'img/' . 'setup-wizard/step-4/cat-art-module-category-focused-corporate.jpg',
+					'title'         => esc_html__( 'Corporate', 'echo-knowledge-base' ),
+				],
+				'creative_categories' => [
+					'image_url'     => Echo_Knowledge_Base::$plugin_url . 'img/' . 'setup-wizard/step-4/cat-art-module-category-creative.jpg',
+					'title'         => esc_html__( 'Creative', 'echo-knowledge-base' ),
 				],
 				'business' => [
-					'image_url'     => Echo_Knowledge_Base::$plugin_url . 'img/' . 'setup-wizard/step-4/cat-art-module-categoryfocused-business.jpg',
-					'title'         => __( 'Business', 'echo-knowledge-base' ),
+					'image_url'     => Echo_Knowledge_Base::$plugin_url . 'img/' . 'setup-wizard/step-4/cat-art-module-category-focused-business.jpg',
+					'title'         => esc_html__( 'Business', 'echo-knowledge-base' ),
 				],
 				'minimalistic' => [
-					'image_url'     => Echo_Knowledge_Base::$plugin_url . 'img/' . 'setup-wizard/step-4/cat-art-module-categoryfocused-minimalistic.jpg',
-					'title'         => __( 'Minimalistic', 'echo-knowledge-base' ),
+					'image_url'     => Echo_Knowledge_Base::$plugin_url . 'img/' . 'setup-wizard/step-4/cat-art-module-category-focused-minimalistic.jpg',
+					'title'         => esc_html__( 'Minimalistic', 'echo-knowledge-base' ),
+				],
+				'sharp_categories' => [
+					'image_url'     => Echo_Knowledge_Base::$plugin_url . 'img/' . 'setup-wizard/step-4/cat-art-module-category-focused-sharp.jpg',
+					'title'         => esc_html__( 'Sharp', 'echo-knowledge-base' ),
+				],
+				'icon_focused_categories' => [
+					'image_url'     => Echo_Knowledge_Base::$plugin_url . 'img/' . 'setup-wizard/step-4/cat-art-module-category-focused-no-icons.jpg',
+					'title'         => esc_html__( 'No Article Icons', 'echo-knowledge-base' ),
+				],
+				'compact_categories' => [
+					'image_url'     => Echo_Knowledge_Base::$plugin_url . 'img/' . 'setup-wizard/step-4/cat-art-module-category-focused-compact.jpg',
+					'title'         => esc_html__( 'Compact', 'echo-knowledge-base' ),
+				],
+				'formal_categories' => [
+					'image_url'     => Echo_Knowledge_Base::$plugin_url . 'img/' . 'setup-wizard/step-4/cat-art-module-category-formal.jpg',
+					'title'         => esc_html__( 'Formal', 'echo-knowledge-base' ),
+				],
+				'simple_categories' => [
+					'image_url'     => Echo_Knowledge_Base::$plugin_url . 'img/' . 'setup-wizard/step-4/cat-art-module-category-focused-simple.jpg',
+					'title'         => esc_html__( 'Simple', 'echo-knowledge-base' ),
 				],
 			],
 		];
 
-		// Categories & Articles Module Presets: Classic    // TODO: it looks like we need update names for the presets to fit the current logic (as Categories & Articles module does not control FAQs or Articles List or Sidebar by presets)
+		// Categories & Articles Module Presets: Classic
 		$modules_presets_config['categories_articles']['Classic'] = [
 			'preselected' => $this->kb_config['kb_main_page_layout'] == 'Classic',
 			'presets' => [
-				'ml_articles_list_classic_layout' => [
+				'standard_classic' => [
 					'preselected'   => true,
-					'image_url'     => Echo_Knowledge_Base::$plugin_url . 'img/' . 'setup-wizard/step-4/cat-art-module-classic-1.jpg',
-					'title'         => __( 'Default Design', 'echo-knowledge-base' ),   // __( 'Classic', 'echo-knowledge-base' ),
+					'image_url'     => Echo_Knowledge_Base::$plugin_url . 'img/' . 'setup-wizard/step-4/cat-art-module-classic-standard.jpg',
+					'title'         => esc_html__( 'Standard', 'echo-knowledge-base' ),
 				],
-			/*	'ml_classic_layout_articles_list' => [
-					'image_url'     => Echo_Knowledge_Base::$plugin_url . 'img/' . 'setup-wizard/step-4/categories-and-articles-module-preset2.jpg',
-					'title'         => __( 'Classic 2', 'echo-knowledge-base' ),
+				'sharp_classic' => [
+					'image_url'     => Echo_Knowledge_Base::$plugin_url . 'img/' . 'setup-wizard/step-4/cat-art-module-classic-sharp.jpg',
+					'title'         => esc_html__( 'Sharp', 'echo-knowledge-base' ),
 				],
-				'ml_articles_list_classic_layout_faqs' => [
-					'image_url'     => Echo_Knowledge_Base::$plugin_url . 'img/' . 'setup-wizard/step-4/categories-and-articles-module-preset3.jpg',
-					'title'         => __( 'Classic 3', 'echo-knowledge-base' ),
+				'organized_classic' => [
+					'image_url'     => Echo_Knowledge_Base::$plugin_url . 'img/' . 'setup-wizard/step-4/cat-art-module-classic-organized.jpg',
+					'title'         => esc_html__( 'Organized', 'echo-knowledge-base' ),
 				],
-				'ml_classic_layout_sidebar' => [
-					'image_url'     => Echo_Knowledge_Base::$plugin_url . 'img/' . 'setup-wizard/step-4/categories-and-articles-module-preset4.jpg',
-					'title'         => __( 'Classic 4', 'echo-knowledge-base' ),
+				'creative_classic' => [
+					'image_url'     => Echo_Knowledge_Base::$plugin_url . 'img/' . 'setup-wizard/step-4/cat-art-module-classic-creative.jpg',
+					'title'         => esc_html__( 'Creative', 'echo-knowledge-base' ),
 				],
-				'ml_classic_layout_sidebar_faqs' => [
-					'image_url'     => Echo_Knowledge_Base::$plugin_url . 'img/' . 'setup-wizard/step-4/categories-and-articles-module-preset5.jpg',
-					'title'         => __( 'Classic 5', 'echo-knowledge-base' ),
-				],*/
+				'simple_classic' => [
+					'image_url'     => Echo_Knowledge_Base::$plugin_url . 'img/' . 'setup-wizard/step-4/cat-art-module-classic-simple.jpg',
+					'title'         => esc_html__( 'Simple', 'echo-knowledge-base' ),
+				],
+				'icon_focused_classic' => [
+					'image_url'     => Echo_Knowledge_Base::$plugin_url . 'img/' . 'setup-wizard/step-4/cat-art-module-classic-no-icons.jpg',
+					'title'         => esc_html__( 'No Article Icons', 'echo-knowledge-base' ),
+				],
 			],
 		];
 
-		// Categories & Articles Module Presets: Drill-Down    // TODO: it looks like we need update names for the presets to fit the current logic (as Categories & Articles module does not control FAQs or Articles List or Sidebar by presets)
+		// Categories & Articles Module Presets: Drill-Down
 		$modules_presets_config['categories_articles']['Drill-Down'] = [
 			'preselected' => $this->kb_config['kb_main_page_layout'] == 'Drill-Down',
 			'presets' => [
-				'ml_articles_list_drill_down_layout' => [
+				'standard_drill_down' => [
 					'preselected'   => true,
-					'image_url'     => Echo_Knowledge_Base::$plugin_url . 'img/' . 'setup-wizard/step-4/cat-art-module-drill-down-1.jpg',
-					'title'         => __( 'Default Design', 'echo-knowledge-base' ),   // __( 'Drill Down', 'echo-knowledge-base' ),
+					'image_url'     => Echo_Knowledge_Base::$plugin_url . 'img/' . 'setup-wizard/step-4/cat-art-module-drill-down-standard.jpg',
+					'title'         => esc_html__( 'Standard', 'echo-knowledge-base' ),
 				],
-			/*	'ml_drill_down_layout_articles_list' => [
-					'image_url'     => Echo_Knowledge_Base::$plugin_url . 'img/' . 'setup-wizard/step-4/categories-and-articles-module-preset2.jpg',
-					'title'         => __( 'Drill Down 2', 'echo-knowledge-base' ),
+				'sharp_drill_down' => [
+					'image_url'     => Echo_Knowledge_Base::$plugin_url . 'img/' . 'setup-wizard/step-4/cat-art-module-drill-down-sharp.jpg',
+					'title'         => esc_html__( 'Sharp', 'echo-knowledge-base' ),
 				],
-				'ml_articles_list_drill_down_layout_faqs' => [
-					'image_url'     => Echo_Knowledge_Base::$plugin_url . 'img/' . 'setup-wizard/step-4/categories-and-articles-module-preset3.jpg',
-					'title'         => __( 'Drill Down 3', 'echo-knowledge-base' ),
+				'organized_drill_down' => [
+					'image_url'     => Echo_Knowledge_Base::$plugin_url . 'img/' . 'setup-wizard/step-4/cat-art-module-drill-down-organized.jpg',
+					'title'         => esc_html__( 'Organized', 'echo-knowledge-base' ),
 				],
-				'ml_drill_down_layout_sidebar' => [
-					'image_url'     => Echo_Knowledge_Base::$plugin_url . 'img/' . 'setup-wizard/step-4/categories-and-articles-module-preset4.jpg',
-					'title'         => __( 'Drill Down 4', 'echo-knowledge-base' ),
-				],*/
+				'creative_drill_down' => [
+					'image_url'     => Echo_Knowledge_Base::$plugin_url . 'img/' . 'setup-wizard/step-4/cat-art-module-drill-down-creative.jpg',
+					'title'         => esc_html__( 'Creative', 'echo-knowledge-base' ),
+				],
+				'simple_drill_down' => [
+					'image_url'     => Echo_Knowledge_Base::$plugin_url . 'img/' . 'setup-wizard/step-4/cat-art-module-drill-down-simple.jpg',
+					'title'         => esc_html__( 'Simple', 'echo-knowledge-base' ),
+				],
+				'icon_focused_drill_down' => [
+					'image_url'     => Echo_Knowledge_Base::$plugin_url . 'img/' . 'setup-wizard/step-4/cat-art-module-drill-down-no-icons.jpg',
+					'title'         => esc_html__( 'No Article Icons', 'echo-knowledge-base' ),
+				],
 			],
 		];
 
@@ -1457,19 +1362,27 @@ class EPKB_KB_Wizard_Setup {
 					'grid_basic' => [
 						'preselected'   => true,
 						'image_url'     => Echo_Knowledge_Base::$plugin_url . 'img/' . 'setup-wizard/step-4/cat-art-module-grid-basic.jpg',
-						'title'         => __( 'Basic', 'echo-knowledge-base' ),
+						'title'         => esc_html__( 'Basic', 'echo-knowledge-base' ),
 					],
 					'grid_demo_5' => [
 						'image_url'     => Echo_Knowledge_Base::$plugin_url . 'img/' . 'setup-wizard/step-4/cat-art-module-grid-informative.jpg',
-						'title'         => __( 'Informative', 'echo-knowledge-base' ),
+						'title'         => esc_html__( 'Informative', 'echo-knowledge-base' ),
 					],
 					'grid_demo_6' => [
 						'image_url'     => Echo_Knowledge_Base::$plugin_url . 'img/' . 'setup-wizard/step-4/cat-art-module-grid-simple.jpg',
-						'title'         => __( 'Simple', 'echo-knowledge-base' ),
+						'title'         => esc_html__( 'Simple', 'echo-knowledge-base' ),
 					],
 					'grid_demo_7' => [
 						'image_url'     => Echo_Knowledge_Base::$plugin_url . 'img/' . 'setup-wizard/step-4/cat-art-module-grid-left-icon.jpg',
-						'title'         => __( 'Left Icon Style', 'echo-knowledge-base' ),
+						'title'         => esc_html__( 'Left Icon Style', 'echo-knowledge-base' ),
+					],
+					'grid_demo_8' => [
+						'image_url'     => Echo_Knowledge_Base::$plugin_url . 'img/' . 'setup-wizard/step-4/cat-art-module-grid-simple-2.jpg',
+						'title'         => esc_html__( 'Simple 2', 'echo-knowledge-base' ),
+					],
+					'grid_demo_9' => [
+						'image_url'     => Echo_Knowledge_Base::$plugin_url . 'img/' . 'setup-wizard/step-4/cat-art-module-grid-icon-squares.jpg',
+						'title'         => esc_html__( 'Icon Squares', 'echo-knowledge-base' ),
 					],
 				],
 			];
@@ -1481,23 +1394,23 @@ class EPKB_KB_Wizard_Setup {
 					'sidebar_basic' => [
 						'preselected'   => true,
 						'image_url'     => Echo_Knowledge_Base::$plugin_url . 'img/' . 'setup-wizard/step-4/cat-art-module-sidebar-basic.jpg',
-						'title'         => __( 'Basic', 'echo-knowledge-base' ),
+						'title'         => esc_html__( 'Basic', 'echo-knowledge-base' ),
 					],
 					'sidebar_colapsed' => [
 						'image_url'     => Echo_Knowledge_Base::$plugin_url . 'img/' . 'setup-wizard/step-4/cat-art-module-sidebar-collapsed.jpg',
-						'title'         => __( 'Collapsed', 'echo-knowledge-base' ),
+						'title'         => esc_html__( 'Collapsed', 'echo-knowledge-base' ),
 					],
 					'sidebar_formal' => [
 						'image_url'     => Echo_Knowledge_Base::$plugin_url . 'img/' . 'setup-wizard/step-4/cat-art-module-sidebar-formal.jpg',
-						'title'         => __( 'Formal', 'echo-knowledge-base' ),
+						'title'         => esc_html__( 'Formal', 'echo-knowledge-base' ),
 					],
 					'sidebar_compact' => [
 						'image_url'     => Echo_Knowledge_Base::$plugin_url . 'img/' . 'setup-wizard/step-4/cat-art-module-sidebar-compact.jpg',
-						'title'         => __( 'Compact', 'echo-knowledge-base' ),
+						'title'         => esc_html__( 'Compact', 'echo-knowledge-base' ),
 					],
 					'sidebar_plain' => [
 						'image_url'     => Echo_Knowledge_Base::$plugin_url . 'img/' . 'setup-wizard/step-4/cat-art-module-sidebar-plain.jpg',
-						'title'         => __( 'Plain', 'echo-knowledge-base' ),
+						'title'         => esc_html__( 'Plain', 'echo-knowledge-base' ),
 					],
 				],
 			];
@@ -1510,7 +1423,7 @@ class EPKB_KB_Wizard_Setup {
 				'preset_1' => [
 					'preselected'   => true,
 					'image_url'     => Echo_Knowledge_Base::$plugin_url . 'img/' . 'setup-wizard/step-2/module-articles-list.jpg',
-					'title'         => __( 'Basic', 'echo-knowledge-base' ),
+					'title'         => esc_html__( 'Basic', 'echo-knowledge-base' ),
 				],
 			],
 		];
@@ -1522,7 +1435,7 @@ class EPKB_KB_Wizard_Setup {
 				'preset_1' => [
 					'preselected'   => true,
 					'image_url'     => Echo_Knowledge_Base::$plugin_url . 'img/' . 'setup-wizard/step-2/module-faqs.jpg',
-					'title'         => __( 'Basic', 'echo-knowledge-base' ),
+					'title'         => esc_html__( 'Basic', 'echo-knowledge-base' ),
 				],
 			],
 		];
@@ -1534,7 +1447,7 @@ class EPKB_KB_Wizard_Setup {
 				'preset_1' => [
 					'preselected'   => true,
 					'image_url'     => Echo_Knowledge_Base::$plugin_url . 'img/' . 'setup-wizard/step-2/module-resource-links.jpg',
-					'title'         => __( 'Basic', 'echo-knowledge-base' ),
+					'title'         => esc_html__( 'Basic', 'echo-knowledge-base' ),
 				],
 			],
 		];
@@ -1551,49 +1464,49 @@ class EPKB_KB_Wizard_Setup {
 
 		$modules_config = [
 			'search'                => [
-				'label' => __( 'Search', 'echo-knowledge-base' ),
+				'label' => esc_html__( 'Search', 'echo-knowledge-base' ),
 				'toggle_value' => $this->is_setup_run_first_time ? 'search' : 'none',
 				'toggle_options' => [
 					'search'  => '<i class="epkbfa epkbfa-plus epkb-setup-wizard-module-row-toggle--on"></i>',
 					'none'  => '<i class="epkbfa epkbfa-minus epkb-setup-wizard-module-row-toggle--off"></i>',
 				],
-				'tooltip_external_links' => [ [ 'link_text' => __( 'Learn More', 'echo-knowledge-base' ), 'link_url' => 'https://www.echoknowledgebase.com/documentation/search/' ] ]
+				'tooltip_external_links' => [ [ 'link_text' => esc_html__( 'Learn More', 'echo-knowledge-base' ), 'link_url' => 'https://www.echoknowledgebase.com/documentation/search/' ] ]
 			],
 			'categories_articles'   => [
-				'label' => __( 'Categories & Articles', 'echo-knowledge-base' ),
+				'label' => esc_html__( 'Categories & Articles', 'echo-knowledge-base' ),
 				'toggle_value' => $this->is_setup_run_first_time ? 'categories_articles' : 'none',
 				'toggle_options' => [
 					'categories_articles'  => '<i class="epkbfa epkbfa-plus epkb-setup-wizard-module-row-toggle--on"></i>',
 					'none'  => '<i class="epkbfa epkbfa-minus epkb-setup-wizard-module-row-toggle--off"></i>',
 				],
-				'tooltip_external_links' => [ [ 'link_text' => __( 'Learn More', 'echo-knowledge-base' ), 'link_url' => 'https://www.echoknowledgebase.com/documentation/categories-and-articles/' ] ]
+				'tooltip_external_links' => [ [ 'link_text' => esc_html__( 'Learn More', 'echo-knowledge-base' ), 'link_url' => 'https://www.echoknowledgebase.com/documentation/categories-and-articles/' ] ]
 			],
 			'articles_list'         => [
-				'label' => __( 'Articles List', 'echo-knowledge-base' ),
+				'label' => esc_html__( 'Articles List', 'echo-knowledge-base' ),
 				'toggle_value' => $this->is_setup_run_first_time ? 'articles_list' : 'none',
 				'toggle_options' => [
 					'articles_list'  => '<i class="epkbfa epkbfa-plus epkb-setup-wizard-module-row-toggle--on"></i>',
 					'none'  => '<i class="epkbfa epkbfa-minus epkb-setup-wizard-module-row-toggle--off"></i>',
 				],
-				'tooltip_external_links' => [ [ 'link_text' => __( 'Learn More', 'echo-knowledge-base' ), 'link_url' => 'https://www.echoknowledgebase.com/documentation/articles-list/' ] ]
+				'tooltip_external_links' => [ [ 'link_text' => esc_html__( 'Learn More', 'echo-knowledge-base' ), 'link_url' => 'https://www.echoknowledgebase.com/documentation/articles-list/' ] ]
 			],
 			'faqs'                  => [
-				'label' => __( 'FAQs', 'echo-knowledge-base' ),
+				'label' => esc_html__( 'FAQs', 'echo-knowledge-base' ),
 				'toggle_value' => $this->is_setup_run_first_time ? 'faqs' : 'none',
 				'toggle_options' => [
 					'faqs'  => '<i class="epkbfa epkbfa-plus epkb-setup-wizard-module-row-toggle--on"></i>',
 					'none'  => '<i class="epkbfa epkbfa-minus epkb-setup-wizard-module-row-toggle--off"></i>',
 				],
-				'tooltip_external_links' => [ [ 'link_text' => __( 'Learn More', 'echo-knowledge-base' ), 'link_url' => 'https://www.echoknowledgebase.com/documentation/faqs/' ] ]
+				'tooltip_external_links' => [ [ 'link_text' => esc_html__( 'Learn More', 'echo-knowledge-base' ), 'link_url' => 'https://www.echoknowledgebase.com/documentation/faqs/' ] ]
 			],
 			'resource_links'        => [
-				'label' => __( 'Resource Links', 'echo-knowledge-base' ),
+				'label' => esc_html__( 'Resource Links', 'echo-knowledge-base' ),
 				'toggle_value' => $this->is_setup_run_first_time && $this->elay_enabled ? 'resource_links' : 'none',
 				'toggle_options' => [
 					'resource_links'  => '<i class="epkbfa epkbfa-plus epkb-setup-wizard-module-row-toggle--on"></i>',
 					'none'  => '<i class="epkbfa epkbfa-minus epkb-setup-wizard-module-row-toggle--off"></i>',
 				],
-				'tooltip_external_links' => [ [ 'link_text' => __( 'Learn More', 'echo-knowledge-base' ), 'link_url' => 'https://www.echoknowledgebase.com/documentation/resource-links/' ] ]
+				'tooltip_external_links' => [ [ 'link_text' => esc_html__( 'Learn More', 'echo-knowledge-base' ), 'link_url' => 'https://www.echoknowledgebase.com/documentation/resource-links/' ] ]
 			],
 		];
 
@@ -1624,5 +1537,53 @@ class EPKB_KB_Wizard_Setup {
 
 		// append unselected modules and return the full modules list
 		return array_merge_recursive( $selected_modules_config, $modules_config );
+	}
+
+	/**
+	 * Get names of the sidebar presets
+	 * @return array
+	 */
+	private function get_sidebar_groups() {
+		return [
+			[
+				'title' => esc_html__( 'Articles and Categories Navigation', 'echo-knowledge-base' ),
+				'class' => '',
+				'description' => esc_html__( 'This navigation sidebar displays a list of links to all categories and their articles. Users can navigate your KB using the links in the navigation sidebar.', 'echo-knowledge-base' ),
+				'learn_more_url' => 'https://www.echoknowledgebase.com/demo-1-knowledge-base-basic-layout/administration/demo-article-1/',
+				'options' => [
+					1 => esc_html__( 'Left Side', 'echo-knowledge-base' ),
+					2 => esc_html__( 'Right Side', 'echo-knowledge-base' )
+				]
+			],
+			[
+				'title' => esc_html__( 'Top Categories Navigation', 'echo-knowledge-base' ),
+				'class' => '',
+				'description' => esc_html__( 'This navigation sidebar displays only top-level categories. Each category displays a counter of articles within the category.', 'echo-knowledge-base' ),
+				'learn_more_url' => 'https://www.echoknowledgebase.com/demo-14-category-layout/demo-article-2/',
+				'options' => [
+					3 => esc_html__( 'Left Side', 'echo-knowledge-base' ),
+					4 => esc_html__( 'Right Side', 'echo-knowledge-base' )
+				]
+			],
+			[
+				'title' => esc_html__( 'Current Category and Articles', 'echo-knowledge-base' ),
+				'class' => '',
+				'description' => esc_html__( 'This navigation sidebar displays only the current category, its subcategories, and articles.', 'echo-knowledge-base' ),
+				'learn_more_url' => 'https://www.echoknowledgebase.com/demo-14-category-layout/demo-article-2/',    // TODO: update URL
+				'options' => [
+					5 => esc_html__( 'Left Side', 'echo-knowledge-base' ),
+					6 => esc_html__( 'Right Side', 'echo-knowledge-base' )
+				]
+			],
+			[
+				'title' => esc_html__( 'No Navigation', 'echo-knowledge-base' ),
+				'class' => '',
+				'description' => esc_html__( 'Articles do not show any navigation links. The table of content and KB widgets sidebar can still be displayed.', 'echo-knowledge-base' ),
+				'learn_more_url' => 'https://www.echoknowledgebase.com/demo-12-knowledge-base-image-layout/demo-article-3/',
+				'options' => [
+					7 => esc_html__( 'No Navigation', 'echo-knowledge-base' ),
+				]
+			],
+		];
 	}
 }

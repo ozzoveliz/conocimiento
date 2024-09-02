@@ -32,14 +32,14 @@ class ELAY_KB_Config_DB {
 		global $wpdb;
 
 		// retrieve settings if already cached
-		if ( ! empty($this->cached_settings) && $this->is_cached_all_kbs ) {
+		if ( ! empty( $this->cached_settings ) && $this->is_cached_all_kbs ) {
 			if ( $skip_check ) {
 				return $this->cached_settings;
 			}
 			$kb_options_checked = array();
 			$data_valid = true;
 			foreach( $this->cached_settings as $config ) {
-				if ( empty($config['id']) ) {
+				if ( empty( $config['id'] ) ) {
 					$data_valid = false;
 					break;
 				}
@@ -105,11 +105,10 @@ class ELAY_KB_Config_DB {
 			$this->cached_settings[$kb_id] = $kb_options_checked[$kb_id];
 		}
 
-		$this->is_cached_all_kbs = ! empty($kb_options_checked);
+		$this->is_cached_all_kbs = ! empty( $kb_options_checked );
 
 		// if no valid KB configuration found use default
-		if ( empty($kb_options_checked) || ! isset($kb_options_checked[self::DEFAULT_KB_ID]) ) {
-			ELAY_Logging::add_log("Need at least default configuration.");
+		if ( empty( $kb_options_checked ) || ! isset( $kb_options_checked[self::DEFAULT_KB_ID] ) ) {
 			$kb_options_checked[self::DEFAULT_KB_ID] = ELAY_KB_Config_Specs::get_default_kb_config();
 		}
 
@@ -139,7 +138,7 @@ class ELAY_KB_Config_DB {
 		$kb_ids = array();
 		foreach ( $kb_option_names as $kb_option_name ) {
 
-			if ( empty($kb_option_name) ) {
+			if ( empty( $kb_option_name ) ) {
 				continue;
 			}
 
@@ -149,7 +148,7 @@ class ELAY_KB_Config_DB {
 		}
 
 		// at least include default KB ID
-		if ( empty($kb_ids) || ! isset($kb_ids[self::DEFAULT_KB_ID]) ) {
+		if ( empty( $kb_ids ) || ! isset( $kb_ids[self::DEFAULT_KB_ID] ) ) {
 			$kb_ids[self::DEFAULT_KB_ID] = self::DEFAULT_KB_ID;
 		}
 
@@ -171,7 +170,7 @@ class ELAY_KB_Config_DB {
 		// always return error if kb_id invalid. we don't want to override stored KB config if there is
 		// internal error that causes this
 		$kb_id = ( $kb_id === self::DEFAULT_KB_ID ) ? $kb_id : ELAY_Utilities::sanitize_get_id( $kb_id );
-		if ( is_wp_error($kb_id) ) {
+		if ( is_wp_error( $kb_id ) ) {
 			return $return_error ? $kb_id : ELAY_KB_Config_Specs::get_default_kb_config();
 		}
 		/** @var int $kb_id */
@@ -266,7 +265,7 @@ class ELAY_KB_Config_DB {
 	public function set_value( $kb_id, $key, $value ) {
 
 		$kb_config = $this->get_kb_config( $kb_id, true );
-		if ( is_wp_error($kb_config) ) {
+		if ( is_wp_error( $kb_config ) ) {
 			return $kb_config;
 		}
 
@@ -287,7 +286,7 @@ class ELAY_KB_Config_DB {
 	public function update_kb_configuration( $kb_id, array $config, $upsert=true ) {
 
 		$kb_id = ( $kb_id === self::DEFAULT_KB_ID ) ? $kb_id : ELAY_Utilities::sanitize_get_id( $kb_id );
-		if ( is_wp_error($kb_id) ) {
+		if ( is_wp_error( $kb_id ) ) {
 			return $kb_id;
 		}
 		/** @var int $kb_id */
@@ -295,7 +294,7 @@ class ELAY_KB_Config_DB {
 		$fields_specification = ELAY_KB_Config_Specs::get_fields_specification();
 		$input_filter = new ELAY_Input_Filter();
 		$sanitized_config = $input_filter->validate_and_sanitize_specs( $config, $fields_specification );
-		if ( is_wp_error($sanitized_config) ) {
+		if ( is_wp_error( $sanitized_config ) ) {
 			ELAY_Logging::add_log( 'Could not update the configuration', $kb_id, $sanitized_config );
 			return $sanitized_config;
 		}

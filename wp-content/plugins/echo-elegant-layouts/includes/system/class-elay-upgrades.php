@@ -17,26 +17,35 @@ class ELAY_Upgrades {
 	 */
 	public static function update_plugin_version() {
 
-		$last_version = ELAY_Utilities::get_wp_option( 'elay_version', null );		// TODO FUTURE use elay_upgrade_plugin_version
+		// ensure the plugin version and configuration is set
+		$last_version = ELAY_Utilities::get_wp_option( 'elay_version', null );
 		if ( empty( $last_version ) ) {
 			ELAY_Utilities::save_wp_option( 'elay_version', Echo_Elegant_Layouts::$version ) ;
 			return;
 		}
 
+		$kb_config = elay_get_instance()->kb_config_obj->get_kb_config( ELAY_KB_Config_DB::DEFAULT_KB_ID, true );
+		if ( is_wp_error( $kb_config ) ) {
+			// TODO report error in admin page
+			return;
+		}
+		
+		// initialize plugin upgraded version if empty or not initialized
+		$last_upgrade_version = $kb_config['elay_upgrade_plugin_version'];
+		if ( empty( $last_upgrade_version ) ) {
+			$last_upgrade_version = $last_version;
+			elay_get_instance()->kb_config_obj->set_value( ELAY_KB_Config_DB::DEFAULT_KB_ID, 'elay_upgrade_plugin_version', $last_upgrade_version );
+		}
+
 		// if plugin is up-to-date then return
-		if ( version_compare( $last_version, Echo_Elegant_Layouts::$version, '>=' ) ) {
+		if ( version_compare( $last_upgrade_version, Echo_Elegant_Layouts::$version, '>=' ) ) {
 			return;
 		}
 
 		// upgrade the plugin
-		self::invoke_upgrades( $last_version );
+		self::invoke_upgrades( $last_upgrade_version );
 
-		// update the plugin version
-		$result = ELAY_Utilities::save_wp_option( 'elay_version', Echo_Elegant_Layouts::$version );
-		if ( is_wp_error( $result ) ) {
-			ELAY_Logging::add_log( 'Could not update plugin version', $result );
-			return;
-		}
+		ELAY_Utilities::save_wp_option( 'elay_version', Echo_Elegant_Layouts::$version );
 	}
 
 	/**
@@ -47,28 +56,34 @@ class ELAY_Upgrades {
 	private static function invoke_upgrades( $last_version ) {
 
 		// update all KBs
-        $all_kb_ids = elay_get_instance()->kb_config_obj->get_kb_ids();
-        foreach ( $all_kb_ids as $kb_id ) {
+		$all_kb_configs = elay_get_instance()->kb_config_obj->get_kb_configs();
+		foreach ( $all_kb_configs as $kb_config ) {
 
-	        $add_on_config = elay_get_instance()->kb_config_obj->get_kb_config_or_default( $kb_id );
+			self::run_upgrade( $kb_config, $last_version );
 
-			self::run_upgrade( $add_on_config, $last_version );
-
-			$add_on_config['elay_upgrade_plugin_version'] = Echo_Elegant_Layouts::$version;
+			$kb_config['elay_upgrade_plugin_version'] = Echo_Elegant_Layouts::$version;
 
 			// store the updated KB data
-            elay_get_instance()->kb_config_obj->update_kb_configuration( $kb_id, $add_on_config );
+			elay_get_instance()->kb_config_obj->update_kb_configuration( $kb_config['id'], $kb_config );
 		}
 	}
 
 	public static function run_upgrade( &$add_on_config, $last_version ) {
 
 		if ( version_compare( $last_version, '2.8.0', '<' ) ) {
-			self::upgrade_to_v280( $add_on_config );
+			self::upgrade_to_v2_8_0( $add_on_config );
+		}
+
+		if ( version_compare( $last_version, '2.23.1', '<' ) ) {
+			self::upgrade_to_v2_23_1( $add_on_config );
 		}
 	}
 
-	private static function upgrade_to_v280( &$add_on_config ) {
+	private static function upgrade_to_v2_23_1( &$kb_config ) {
+		$kb_config['grid_section_body_padding_bottom'] = 20;        // add back padding that was removed from hard-coded CSS
+	}
+
+	private static function upgrade_to_v2_8_0( &$add_on_config ) {
 
 		if ( ! empty($add_on_config['grid_section_font_size']) ) {
 

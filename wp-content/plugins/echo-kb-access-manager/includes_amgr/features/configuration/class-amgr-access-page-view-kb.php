@@ -5,9 +5,9 @@
  */
 class AMGR_Access_Page_View_KB {
 
-    protected $html;
     private $kb_id;
     private $kb_name;
+	private $html;
 
 	/**
 	 * AMGR_Page_Section_KB constructor.
@@ -17,7 +17,7 @@ class AMGR_Access_Page_View_KB {
     public function __construct( $kb_id ) {
 
 			if ( ! current_user_can('admin_eckb_access_manager_page') ) {
-				AMGR_Access_Utilities::output_inline_error_notice( __( 'You do not have permission.', 'echo-knowledge-base' ) . ' (E56)' );
+				AMGR_Access_Utilities::output_inline_error_notice( esc_html__( 'You do not have permission.', 'echo-knowledge-base' ) . ' (E56)' );
 				return;
 			}
 
@@ -52,7 +52,7 @@ class AMGR_Access_Page_View_KB {
 		    $this->kb_section_status( array(
 						'status-type'        => 'restricted',
 						'kb-name'            => $this->kb_name,
-						'description'        => '<p>This Knowledge Base is <strong><u>restricted</u></strong> and therefore its content is restricted to specific users.</p>',
+						'description'        => '<p>' . sprintf( esc_html__( 'This Knowledge Base is %s restricted %s and therefore its content is restricted to specific users.', 'echo-knowledge-base' ), '<strong><u>', '</u></strong>' ) . '</p>',
 						'icon'               => ' epkbfa-lock',
 						'status-text'        => 'RESTRICTED',
 						'form-id'            => 'amgr_set_kb_restricted_ajax',
@@ -93,7 +93,6 @@ class AMGR_Access_Page_View_KB {
 
 	    // display AMGR configuration
 	    $this->display_info_section( 'Configuration', array( $this->display_amgr_config_option( $kb_id ) ) );
-
     }
 
 	/**
@@ -102,18 +101,18 @@ class AMGR_Access_Page_View_KB {
 	 * @param array $args
 	 */
     private function kb_section_status( $args=array() ) {     ?>
-        <div class="amgr-kb-status-container  amgr-<?php echo $args[ 'status-type' ]; ?>">
+        <div class="amgr-kb-status-container  amgr-<?php echo esc_attr( $args[ 'status-type' ] ); ?>">
             <section class="amgr-access-cta">
-                <h2><?php echo "Status"; //$args[ 'kb-name' ]; ?></h2>				<?php
+                <h2><?php echo "Status"; ?></h2>				<?php
 
 						$amgr_access_page = new AMGR_Access_Page();
 						$amgr_access_page->log_errors(); ?>
 	            
                 <div class="amgr-access-status-icon-container">
-                    <div class="amgr-access-status-icon epkbfa <?php echo $args[ 'icon' ]; ?>"></div>
-                    <p class="amgr-access-status-text"><span><?php echo $args[ 'status-text' ]; ?></span></p>
+                    <div class="amgr-access-status-icon epkbfa <?php echo esc_attr( $args[ 'icon' ] ); ?>"></div>
+                    <p class="amgr-access-status-text"><span><?php echo esc_html( $args[ 'status-text' ] ); ?></span></p>
                 </div>
-                <div><?php echo $args[ 'description' ]; ?></div>
+                <div><?php echo wp_kses_post( $args[ 'description' ] ); ?></div>
             </section>
         </div>    <?php
     }
@@ -132,13 +131,11 @@ class AMGR_Access_Page_View_KB {
 
 			<!--  KB NAME and other global settings -->
 			<div class="callout callout_default">
-				<h4>AMGR Settings</h4>
                 <br>
 				<div class="amgr-access-config-inner">					<?php
 
 					$feature_specs = AMGR_KB_Config_Specs::get_fields_specification( $kb_id );
 					$form = new EPKB_HTML_Elements();
-					$html = New AMGR_KB_Config_Elements();
 					$amgr_config = epkb_get_instance()->kb_access_config_obj->get_kb_config_or_default( $kb_id );					?>
 
                     <div id="amgr-enable-private-config" class="epkb-amgr-form-field">                        <?php
@@ -147,6 +144,7 @@ class AMGR_Access_Page_View_KB {
                                 'id'                => 'show_private_article_prefix',
                             ) );                        ?>
                     </div>
+					<h3><?php esc_html_e( 'Frontend No Access Settings', 'echo-knowledge-base' ); ?></h3>
                     <br>
                     <div class="epkb-amgr-form-field">                        <?php
                         $form->text_basic( $feature_specs['no_access_title'] + array(
@@ -157,36 +155,41 @@ class AMGR_Access_Page_View_KB {
                     <br>
 					<div class="epkb-amgr-form-field">
 						<ul><?php
-							$html->radio_buttons_vertical_v2(
-								$feature_specs['no_access_action_user_without_login'] + array(
-									'current' => $amgr_config['no_access_action_user_without_login'],
+							$form->radio_buttons_vertical( $feature_specs['no_access_action_user_without_login'] + array(
+									'value' => $amgr_config['no_access_action_user_without_login'],
+									'input_group_class' => 'epkb-radio-vertical-group-container',
 								) ); ?>
 						</ul>
 					</div>
-					<br>
-					<div class="epkb-amgr-form-field">                        <?php
-						$form->text_basic( $feature_specs['no_access_text'] + array(
-								'value'             => $amgr_config['no_access_text'],
-								'id'                => 'no_access_text',
-							) );                        ?>
-					</div>
-					<br>
-					<div class="epkb-amgr-form-field">
-						<ul><?php
-							$html->radio_buttons_vertical_v2(
-								$feature_specs['no_access_action_user_with_login'] + array(
-									'current' => $amgr_config['no_access_action_user_with_login'],
-								) ); ?>
-						</ul>
-					</div>
-					<br>
-					<div class="epkb-amgr-form-field">                        <?php
-						$form->text_basic( $feature_specs['no_access_text_logged'] + array(
-								'value'             => $amgr_config['no_access_text_logged'],
-								'id'                => 'no_access_text_logged',
-							) );                        ?>
-					</div>
-					<br><br>
+					<br><?php
+
+					if ( AMGR_WP_ROLES::use_kb_groups() ) {    ?>
+
+						<div class="epkb-amgr-form-field">                        <?php
+							$form->text_basic( $feature_specs['no_access_text'] + array(
+									'value'             => $amgr_config['no_access_text'],
+									'id'                => 'no_access_text',
+								) );                        ?>
+						</div>
+						<br>
+						<div class="epkb-amgr-form-field">
+							<ul><?php
+								$form->radio_buttons_vertical( $feature_specs['no_access_action_user_with_login'] + array(
+										'value' => $amgr_config['no_access_action_user_with_login'],
+										'input_group_class' => 'epkb-radio-vertical-group-container',
+									) ); ?>
+							</ul>
+						</div>
+						<br>
+						<div class="epkb-amgr-form-field">                        <?php
+							$form->text_basic( $feature_specs['no_access_text_logged'] + array(
+									'value'             => $amgr_config['no_access_text_logged'],
+									'id'                => 'no_access_text_logged',
+								) );                        ?>
+						</div>
+						<br><br>    <?php
+					}			?>
+
 					<div class="epkb-amgr-form-field">                        <?php
 						$form->text_basic( $feature_specs['no_access_redirect_to_custom_page'] + array(
 								'value'             => $amgr_config['no_access_redirect_to_custom_page'],
@@ -196,7 +199,7 @@ class AMGR_Access_Page_View_KB {
 					<br>
 					<br><?php
 
-					$form->submit_button_v2( __( 'Save', 'echo-knowledge-base' ), 'epkb_save_amgr_settings', 'amgr-submit', '', true, '', 'epkb-primary-btn' );  ?>
+					$form->submit_button_v2( esc_html__( 'Save', 'echo-knowledge-base' ), 'epkb_save_amgr_settings', 'amgr-submit', '', true, '', 'epkb-primary-btn' );  ?>
 
 				</div>
 			</div>
@@ -214,12 +217,12 @@ class AMGR_Access_Page_View_KB {
 	private function display_info_section( $title , $content ) {             ?>
 		<section class="amgr-info-section-container">
 			<div class="amgr-info-section-header">
-				<div class="amgr-info-section-title"><?php echo $title; ?></div>
+				<div class="amgr-info-section-title"><?php echo esc_html( $title ); ?></div>
 				<div class="amgr-info-section-brief"><span class="amgr-info-section-icon ep_font_icon_gear"></span>Additional Global Settings</div>
 			</div>
 			<div class="amgr-info-section-content">				<?php
 				foreach ( $content as $item ){
-					echo $item;
+					echo $item; //phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 				}       ?>
 			</div>
 		</section>	<?php

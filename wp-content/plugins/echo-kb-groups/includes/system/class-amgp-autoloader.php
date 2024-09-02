@@ -33,12 +33,11 @@ class AMGP_Autoloader {
 				'amgp_settings_page'                =>  'includes/admin/settings/class-amgp-settings-page.php',
 
 				// ADMIN PLUGIN MENU PAGES
+
 				// KB Configuration
 				'amgp_kb_config_controller'         =>  'includes/admin/kb-configuration/class-amgp-kb-config-controller.php',
 				'amgp_kb_config_specs'              =>  'includes/admin/kb-configuration/class-amgp-kb-config-specs.php',
 				'amgp_kb_config_db'                 =>  'includes/admin/kb-configuration/class-amgp-kb-config-db.php',
-				'amgp_kb_config_elements'           =>  'includes/admin/kb-configuration/class-amgp-kb-config-elements.php',
-				'amgp_kb_config_page'               =>  'includes/admin/kb-configuration/class-amgp-kb-config-page.php',
 
 				'amgp_add_ons_page'                 =>  'includes/admin/add-ons/class-amgp-add-ons-page.php',
 

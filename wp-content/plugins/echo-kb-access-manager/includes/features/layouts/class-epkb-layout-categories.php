@@ -31,11 +31,11 @@ class EPKB_Layout_Categories extends EPKB_Layout {
     /**
 	 * Generate content of the KB main page
 	 */
-	public function generate_kb_main_page() {
+	public function generate_non_modular_kb_main_page() {
 
 		$class2 = $this->get_css_class( '::width' );		    ?>
 
-		<div id="epkb-main-page-container" role="main" aria-labelledby="Knowledge Base" class="epkb-css-full-reset epkb-categories-template <?php echo EPKB_Utilities::get_active_theme_classes( 'mp' ); ?>">
+		<div id="epkb-main-page-container" role="main" aria-labelledby="Knowledge Base" class="epkb-css-full-reset epkb-categories-template <?php echo esc_attr( EPKB_Utilities::get_active_theme_classes() ); ?>">
 			<div <?php echo $class2; ?>>  <?php
 
 				//  KB Search form
@@ -125,7 +125,7 @@ class EPKB_Layout_Categories extends EPKB_Layout {
 
 		$categories_per_row = $this->get_nof_columns_int();  ?>
 
-		<div class="<?php echo empty( $this->kb_config['nof_columns'] ) ? '' : 'epkb-' . $this->kb_config['nof_columns']; ?> eckb-categories-list" > <?php
+		<div class="<?php echo empty( $this->kb_config['nof_columns'] ) ? '' : 'epkb-' . esc_attr( $this->kb_config['nof_columns'] ); ?> eckb-categories-list" > <?php
 
 			/** DISPLAY BOXED CATEGORIES */
 			$category_number = 0;
@@ -143,7 +143,6 @@ class EPKB_Layout_Categories extends EPKB_Layout {
 				$category_icon = EPKB_KB_Config_Category::get_category_icon( $box_category_id, $categories_icons );
 				$category_desc = isset($this->articles_seq_data[$box_category_id][1]) && $this->kb_config['section_desc_text_on'] == 'on' ? $this->articles_seq_data[$box_category_id][1] : '';
 				$box_sub_categories = is_array($box_sub_categories) ? $box_sub_categories : array();
-				$box_category_data = $this->is_builder_on ? 'data-kb-category-id=' . $box_category_id . ' data-kb-type=category ' : '';
 				$category_count = EPKB_Categories_DB::get_category_count( $this->kb_config['id'] , $box_category_id );
 
 				if ( $is_modular && $column_index == 1 ) { ?>
@@ -151,21 +150,20 @@ class EPKB_Layout_Categories extends EPKB_Layout {
 				}   ?>
 
 				<!-- Section Container ( Category Box ) -->
-				<section id="<?php echo 'epkb_cat_' . $category_number; ?>" <?php echo $class0 . ' ' . $style0; ?> >
+				<section id="<?php echo esc_attr( 'epkb_cat_' . $category_number ); ?>" <?php echo $class0 . ' ' . $style0; ?> >
 
 					<!-- Section Head -->
 					<div <?php echo $class_section_head . ' ' . $style_section_head; ?> >
 
 						<!-- Category Name + Icon -->
-						<div class="epkb-category-level-1 <?php echo $top_icon_class . ' ' . $alignmentClass; ?>" <?php echo $box_category_data . ' ' . $style3; ?> >
+						<div class="epkb-category-level-1 <?php echo esc_attr( $top_icon_class . ' ' . $alignmentClass ); ?>" data-kb-category-id="<?php echo esc_attr( $box_category_id ); ?>" data-kb-type="category" <?php echo $style3; ?> >
 
 							<!-- Icon Top / Left -->	                            <?php
 							if ( in_array( $icon_location, array('left', 'top') ) ) {
 
 								if ( $category_icon['type'] == 'image' ) { ?>
-									<img class="epkb-cat-icon epkb-cat-icon--image "
-									     src="<?php echo esc_url($category_icon['image_thumbnail_url']); ?>" alt="<?php echo $category_icon['image_alt']; ?>"
-										<?php echo $header_image_style; ?>
+									<img class="epkb-cat-icon epkb-cat-icon--image " src="<?php echo esc_url($category_icon['image_thumbnail_url']); ?>" alt="<?php echo esc_attr( $category_icon['image_alt'] ); ?>"		<?php
+										echo $header_image_style; ?>
 									>								<?php
 								} else { ?>
 									<span class="epkb-cat-icon epkbfa <?php echo esc_attr( $category_icon['name'] ); ?>" data-kb-category-icon="<?php echo esc_attr( $category_icon['name'] ); ?>" <?php echo $header_icon_style; ?>></span>	<?php
@@ -179,12 +177,12 @@ class EPKB_Layout_Categories extends EPKB_Layout {
 									$category_link = EPKB_Utilities::get_term_url( $box_category_id );      ?>
 									<a class="epkb-cat-name-count-container" href="<?php echo esc_url( $category_link ); ?>" <?php echo $style31; ?>>
 										<h2 class="epkb-cat-name"><?php echo esc_html( $category_name ); ?></h2>
-										<span class="epkb-cat-count"><?php echo $category_count; ?></span>
+										<span class="epkb-cat-count"><?php echo esc_html( $category_count ); ?></span>
 									</a>    <?php
 								} else {   ?>
 									<div class="epkb-cat-name-count-container" <?php echo $style31; ?>>
 										<h2 class="epkb-cat-name"><?php echo esc_html( $category_name ); ?></h2>
-										<span class="epkb-cat-count"><?php echo $category_count; ?></span>
+										<span class="epkb-cat-count"><?php echo esc_html( $category_count ); ?></span>
 									</div> <?php
 								}   ?>
 
@@ -195,8 +193,7 @@ class EPKB_Layout_Categories extends EPKB_Layout {
 
 								if ( $category_icon['type'] == 'image' ) { ?>
 									<img class="epkb-cat-icon epkb-cat-icon--image"
-									     src="<?php echo esc_url($category_icon['image_thumbnail_url']); ?>" alt="<?php echo $category_icon['image_alt']; ?>"
-										<?php echo $header_image_style; ?>
+									     src="<?php echo esc_url($category_icon['image_thumbnail_url']); ?>" alt="<?php echo esc_attr( $category_icon['image_alt'] ); ?>"<?php echo $header_image_style; ?>
 									>								<?php
 								} else { ?>
 									<span class="epkb-cat-icon epkbfa <?php echo esc_attr( $category_icon['name'] ); ?>" data-kb-category-icon="<?php echo esc_attr( $category_icon['name'] ); ?>" <?php echo $header_icon_style; ?>></span>	<?php
@@ -208,7 +205,7 @@ class EPKB_Layout_Categories extends EPKB_Layout {
 						<!-- Category Description -->						<?php
 						if ( $category_desc ) {   ?>
 						    <p class="epkb-cat-desc" <?php echo $style4; ?> >
-						        <?php echo $category_desc; ?>
+						        <?php echo wp_kses_post( $category_desc ); ?>
 						    </p>						<?php
 						}       ?>
 					</div>
@@ -267,12 +264,10 @@ class EPKB_Layout_Categories extends EPKB_Layout {
 				$default_icon_name = $this->kb_config['expand_articles_icon'];
 				$category_icon = EPKB_KB_Config_Category::get_category_icon( $box_sub_category_id, $categories_icons, $default_icon_name );
 				$style1 = $this->get_inline_style( 'color:: section_category_icon_color' );
-				$style2 = $this->get_inline_style( 'color:: section_category_font_color' );
-				
-				$box_sub_category_data = $this->is_builder_on ? 'data-kb-category-id=' . $box_sub_category_id  . ' data-kb-type=sub-category ' : '';  	?>
+				$style2 = $this->get_inline_style( 'color:: section_category_font_color' ); 	?>
 
 				<li <?php echo $this->get_inline_style( 'padding-bottom:: article_list_spacing,padding-top::article_list_spacing' ); ?>>
-					<div class="epkb-category-level-2-3 epkb-category-focused" <?php echo $box_sub_category_data; ?> role="region">
+					<div class="epkb-category-level-2-3 epkb-category-focused" data-kb-category-id="<?php echo esc_attr( $box_sub_category_id ); ?>" data-kb-type="sub-category" role="region">
 
 						<span class="epkb-category-level-2-3__cat-icon epkbfa <?php echo esc_attr( $category_icon['name'] ); ?>" <?php echo $style1; ?>></span>					<?php
 
@@ -285,7 +280,7 @@ class EPKB_Layout_Categories extends EPKB_Layout {
 									<?php echo esc_html( $category_name ); ?>
 									</a>
 								</h3>
-								<span class="epkb-cat-count"><?php echo $category_count; ?></span>
+								<span class="epkb-cat-count"><?php echo esc_html( $category_count ); ?></span>
 
 						</div>
 
@@ -342,7 +337,7 @@ class EPKB_Layout_Categories extends EPKB_Layout {
 
 		$style = 'class="' . ( $level == 1 ? 'epkb-main-category ' : '' ) .  'epkb-articles"';		?>
 
-		<ul <?php echo $style . ' ' . $this->get_inline_style( $sub_category_styles ); ?> data-list-id="<?php echo $category_id; ?>"> <?php
+		<ul <?php echo $style . ' ' . $this->get_inline_style( $sub_category_styles ); ?> data-list-id="<?php echo esc_attr( $category_id ); ?>"> <?php
 
 			$article_num = 0;
 			$nof_articles_displayed = $this->kb_config['nof_articles_displayed'];
@@ -354,11 +349,11 @@ class EPKB_Layout_Categories extends EPKB_Layout {
 
 				$article_num++;
 				$hide_class = $article_num > $nof_articles_displayed ? 'epkb-hide-elem' : '';
-				$article_data = $this->is_builder_on ? 'data-kb-article-id=' . $article_id . ' data-kb-type=' . $data_kb_type : '';
 
 				/** DISPLAY ARTICLE LINK */         ?>
-				<li class="epkb-article-level-<?php echo $level . ' ' . $hide_class; ?>" <?php echo $article_data; ?> <?php echo $this->get_inline_style( 'padding-bottom:: article_list_spacing,padding-top::article_list_spacing' ); ?> >   <?php
-								$this->single_article_link( $article_title, $article_id, EPKB_Layout::CATEGORIES_LAYOUT); ?>
+				<li class="epkb-article-level-<?php echo esc_attr( $level . ' ' . $hide_class ); ?>" data-kb-article-id="<?php echo esc_attr( $article_id ); ?>"
+				        data-kb-type="<?php echo esc_attr( $data_kb_type ); ?>" <?php echo $this->get_inline_style( 'padding-bottom:: article_list_spacing,padding-top::article_list_spacing' ); ?> >   <?php
+					$this->single_article_link( $article_title, $article_id, EPKB_Layout::CATEGORIES_LAYOUT); ?>
 				</li> <?php
 			}
 
@@ -369,9 +364,9 @@ class EPKB_Layout_Categories extends EPKB_Layout {
 		</ul> <?php
 		// if article list is longer than initial article list size then show expand/collapse message
 		if ( $article_num > $nof_articles_displayed ) { ?>
-			<button class="epkb-show-all-articles" aria-expanded="false" data-btn-id="<?php echo $category_id; ?>">
+			<button class="epkb-show-all-articles" aria-expanded="false" data-btn-id="<?php echo esc_attr( $category_id ); ?>">
 					<span class="epkb-show-text">
-						<?php echo esc_html( $this->kb_config['show_all_articles_msg'] ) . ' ( ' . ( $article_num - $nof_articles_displayed ); ?> )
+						<?php echo esc_html( $this->kb_config['show_all_articles_msg'] . ' ( ' . ( $article_num - $nof_articles_displayed ) ); ?> )
 					</span>
 				<span class="epkb-hide-text epkb-hide-elem"><?php echo esc_html( $this->kb_config['collapse_articles_msg'] ); ?></span>
 			</button>					<?php

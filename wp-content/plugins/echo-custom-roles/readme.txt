@@ -4,8 +4,8 @@ Plugin URI: https://www.echoknowledgebase.com/wordpress-plugin/custom-roles/
 Contributors: echoplugins
 Tags: roles, users, knowledge base, articles, documents, documentation, urls, plugin, add-on
 Requires at least: 4.5
-Tested up to: 6.0
-Stable tag: 1.7.0
+Tested up to: 6.6
+Stable tag: 1.9.0
 
 Custom Roles for Access Manager
 
@@ -32,6 +32,14 @@ Please read instructions at https://www.echoknowledgebase.com/documentation/?top
 Please read instructions at https://www.echoknowledgebase.com/documentation/?top-category=access-manager
 
 == Changelog ==
+
+= 1.9.0, July 8, 2024 =
+* Update: WordPress 6.6
+* Update: security improvements
+* Fix: Various minor fixes
+
+= 1.8.0, Mar 2, 2024 =
+* Fix: Various minor fixes
 
 = 1.7.0, Aug 29, 2022 =
 * Fix: Various minor fixes

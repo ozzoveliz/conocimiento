@@ -328,7 +328,10 @@ jQuery(document).ready(function($) {
 	const eprfIncreaseButton = document.querySelector( '.eprf-mobile-rating-btn.eprf-increase' );
 	const ratingValueSpan = document.querySelector( '.eprf-mobile-rating-value' );
 
-	let mobileRatingValue = parseFloat( ratingValueSpan.innerText );
+	let mobileRatingValue;
+	if ( ratingValueSpan ) {
+		mobileRatingValue = parseFloat( ratingValueSpan.innerText );
+	}
 
 	function updateMobileRatingDisplay(){
 		let $main_container = $( '.eprf-stars-container' );
@@ -337,21 +340,27 @@ jQuery(document).ready(function($) {
 		redraw_stars( $main_container, mobileRatingValue );
 		eprfDecreaseButton.disabled = mobileRatingValue <= 1;
 		eprfIncreaseButton.disabled = mobileRatingValue >= 5;
-	};
-	eprfDecreaseButton.addEventListener( 'click', function() {
-		if ( mobileRatingValue > 1 ) {
-			mobileRatingValue -= 0.5;
-			updateMobileRatingDisplay();
-		}
-	});
-	eprfIncreaseButton.addEventListener( 'click', function() {
-		if ( mobileRatingValue < 5 ) {
-			mobileRatingValue += 0.5;
-			updateMobileRatingDisplay();
-		}
-	});
+	}
+	if ( eprfDecreaseButton ) {
+		eprfDecreaseButton.addEventListener( 'click', function() {
+			if ( mobileRatingValue > 1 ) {
+				mobileRatingValue -= 0.5;
+				updateMobileRatingDisplay();
+			}
+		});
+	}
+	if ( eprfIncreaseButton ) {
+		eprfIncreaseButton.addEventListener( 'click', function() {
+			if ( mobileRatingValue < 5 ) {
+				mobileRatingValue += 0.5;
+				updateMobileRatingDisplay();
+			}
+		});
+	}
 
-	updateMobileRatingDisplay();
+	if ( eprfDecreaseButton && eprfIncreaseButton && ratingValueSpan && mobileRatingValue ) {
+		updateMobileRatingDisplay();
+	}
 
 	$(document.body).on('click', '.eprf-stars-container', function(e){
 		if ( !$(this).hasClass('disabled') && $(this).closest('.eprf-rating--blocked').length == 0 ) {

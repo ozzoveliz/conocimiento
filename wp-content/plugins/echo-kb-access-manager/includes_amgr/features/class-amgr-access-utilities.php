@@ -715,7 +715,7 @@ class AMGR_Access_Utilities {
 		// get article categories
 		$post_taxonomy_objs = $wpdb->get_results( $wpdb->prepare(
 			"SELECT term_id FROM $wpdb->term_taxonomy
-										 WHERE taxonomy = '%s' and term_taxonomy_id in 
+										 WHERE taxonomy = %s and term_taxonomy_id in 
 										(SELECT term_taxonomy_id FROM $wpdb->term_relationships WHERE object_id = %d) ",
 			EPKB_KB_Handler::get_category_taxonomy_name( $kb_id ), $article_id ) );
 		if ( $post_taxonomy_objs === null || ! is_array( $post_taxonomy_objs ) ) {
@@ -953,7 +953,7 @@ class AMGR_Access_Utilities {
 	 * @param $message
 	 */
 	public static function ajax_show_content( $message ) {
-		wp_die( json_encode( array( 'message' => wp_kses( $message, EPKB_Utilities::get_admin_ui_extended_html_tags() ) ) ) );
+		wp_die( wp_json_encode(  array( 'message' => wp_kses( $message, EPKB_Utilities::get_admin_ui_extended_html_tags() ) ) ) );
 	}
 }
 

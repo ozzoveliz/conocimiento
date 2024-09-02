@@ -47,7 +47,7 @@ function epkbShowErrorNotices() {
 
 	let error;
 	for (error of epkbErrorsList) {
-		// we will show only last error in this case TODO check
+		// we will show only last error in this case
 		jQuery('.epkb-js-error-notice').find('.epkb-js-error-msg').text(error.msg);
 		jQuery('.epkb-js-error-notice').find('.epkb-js-error-url').text(error.url);
 		jQuery('.epkb-js-error-notice').show('fast');

@@ -417,7 +417,7 @@ jQuery(document).ready(function($) {
 		// Show cancel button
 		epkb_convert_data.$wrap.find('.epkb-convert-button-cancel').removeClass('epkb-hidden');
 
-		// clear attachments links message TODO maybe remove
+		// clear attachments links message
 		epkb_convert_data.$wrap.find('.epkb-form-field-non_attachments-message').html('');
 
 		// Show progress bar

@@ -1,6 +1,4 @@
-<?php
-// Exit if accessed directly
-if ( ! defined( 'ABSPATH' ) ) exit;
+<?php if ( ! defined( 'ABSPATH' ) ) exit;
 
 /**
  * Access to KB Categories.
@@ -90,7 +88,7 @@ class AMGR_DB_Access_KB_Categories extends AMGR_DB  {
 
 		$user_category_groups = $wpdb->get_results(	$wpdb->prepare(
 							"SELECT * 
-							 FROM $this->table_name c INNER JOIN " . $wpdb->prefix . 'amgr_kb_group_users' . " u 
+							 FROM $this->table_name c INNER JOIN " . $wpdb->prefix . "amgr_kb_group_users u  
 							 ON c.kb_group_id = u.kb_group_id AND c.kb_id = u.kb_id 
 							 WHERE c.kb_id = %d AND c.kb_category_id = %d AND u.wp_user_id = %d LIMIT 100;", $kb_id, $kb_category_id, $user->ID
 						) );

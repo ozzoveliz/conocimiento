@@ -250,7 +250,7 @@ class EMKB_Utilities {
 	 * @param $message
 	 */
 	public static function ajax_show_content( $message ) {
-		wp_die( json_encode( array( 'message' => wp_kses( $message, self::get_allowed_html_tags( ['all'] ) ) ) ) );
+		wp_die( wp_json_encode( array( 'message' => wp_kses( $message, self::get_allowed_html_tags( ['all'] ) ) ) ) );
 	}
 
 	/**
@@ -261,7 +261,7 @@ class EMKB_Utilities {
 	 * @param string $type
 	 */
 	public static function ajax_show_info_die( $message, $title='', $type='success' ) {
-		wp_die( json_encode( array( 'message' => self::get_bottom_notice_message_box( $message, $title, $type ) ) ) );
+		wp_die( wp_json_encode( array( 'message' => self::get_bottom_notice_message_box( $message, $title, $type ) ) ) );
 	}
 
 	/**
@@ -272,7 +272,7 @@ class EMKB_Utilities {
 	 * @param string $error_code
 	 */
 	public static function ajax_show_error_die( $message, $title = '', $error_code = '' ) {
-		wp_die( json_encode( array( 'error' => true, 'message' => self::get_bottom_notice_message_box( $message, $title, 'error'), 'error_code' => $error_code ) ) );
+		wp_die( wp_json_encode( array( 'error' => true, 'message' => self::get_bottom_notice_message_box( $message, $title, 'error'), 'error_code' => $error_code ) ) );
 	}
 
 	/**
@@ -1536,6 +1536,21 @@ class EMKB_Utilities {
 	 * @return string
 	 */
 	public static function contact_us_for_support() {
+
+		// show only for admins and editors
+		if ( ! function_exists( 'wp_get_current_user' ) ) {
+			include( ABSPATH . "wp-includes/pluggable.php" );
+		}
+
+		$user = wp_get_current_user();
+		if ( empty( $user ) || empty ( $user->roles ) ) {
+			return '';
+		}
+
+		if ( ! in_array( 'administrator', $user->roles ) && ! in_array( 'administrator', $user->roles ) ) {
+			return '';
+		}
+
 		return ' ' . esc_html_x( 'Please contact us for support', 'echo-knowledge-base' ) . ' ' .
 		       '<a href="https://www.echoknowledgebase.com/technical-support/" target="_blank" rel="noopener noreferrer">' . esc_html_x( 'here', 'echo-knowledge-base' ) . '</a>.';
 	}
@@ -1706,11 +1721,6 @@ class EMKB_Utilities {
 		}
 
 		return $category_url;
-	}
-
-	public static function is_new_user( $version ) {
-		$plugin_first_version = self::get_wp_option( 'epkb_version_first', $version );
-		return ! version_compare( $plugin_first_version, $version, '<' );
 	}
 
 	/**

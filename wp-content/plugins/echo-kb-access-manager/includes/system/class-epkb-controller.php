@@ -30,10 +30,10 @@ class EPKB_Controller {
 		$kb_config = epkb_get_instance()->kb_config_obj->get_kb_config( $kb_id );
 
 		// create demo data for the current KB if no categories exist yet
-		EPKB_KB_Handler::create_sample_categories_and_articles( $kb_id, $kb_config['kb_main_page_layout'] );
+		EPKB_KB_Demo_Data::create_sample_categories_and_articles( $kb_id, $kb_config['kb_main_page_layout'] );
 
 		// we are done here
-		EPKB_Utilities::ajax_show_info_die( esc_html__( 'Demo categories and articles were created.', 'echo-knowledge-base' ) );
+		EPKB_Utilities::ajax_show_info_die( esc_html__( 'Demo categories and articles have been created. The page will reload.', 'echo-knowledge-base' ) );
 	}
 
 	/**
@@ -45,13 +45,10 @@ class EPKB_Controller {
 		// die if nonce invalid or user does not have correct permission
 		EPKB_Utilities::ajax_verify_nonce_and_admin_permission_or_error_die();
 
-		$first_version = get_option( 'epkb_version_first' );
 		$active_theme = wp_get_theme();
 		$theme_info = $active_theme->get( 'Name' ) . ' ' . $active_theme->get( 'Version' );
 
-		$email = EPKB_Utilities::post( 'email', '[Email name is missing]', 'email', 50 );
-		$first_name = EPKB_Utilities::post( 'first_name' );
-		$first_name = empty($first_name) ? '[First name is missing]' : substr( $first_name, 0, 30 );
+		$current_user = EPKB_Utilities::get_current_user();
 
 		$error = EPKB_Utilities::post( 'admin_error' );
 		$error = empty($error) ? '[Error details are missing]' : substr( $error, 0, 5000 );
@@ -69,11 +66,11 @@ class EPKB_Controller {
 			'epkb_action' => 'epkb_report_error',
 			'plugin_name' => EPKB_Utilities::is_amag_on() ? 'Access Manager' : 'EPKB',
 			'plugin_version' => class_exists( 'Echo_Knowledge_Base' ) ? Echo_Knowledge_Base::$version : 'N/A',
-			'first_version' => empty( $first_version ) ? 'N/A' : $first_version,
+			'first_version' => $kb_config['first_plugin_version'],
 			'wp_version' => $wp_version,
 			'theme_info' => $theme_info,
-			'email' => $email,
-			'first_name' => $first_name,
+			'email' => empty( $current_user->user_email ) ? '' : $current_user->user_email,
+			'first_name' => empty( $current_user->display_name ) ? '' : $current_user->display_name,
 			'editor_error' => $error,
 			'kb_main_page' => $kb_main_page_url
 		);

@@ -65,7 +65,7 @@ class EPRF_Rating_Cntrl {
 
 		// did user already vote for this article?
 		if ( $did_vote ) {
-			wp_die( json_encode( array( 'status' => 'success', 'message' => $this->article_feedback_confirmation_msg( $kb_config['rating_confirmation_negative'] ) ) ) );
+			wp_die( wp_json_encode( array( 'status' => 'success', 'message' => $this->article_feedback_confirmation_msg( $kb_config['rating_confirmation_negative'] ) ) ) );
 		}
 
 		$user = EPRF_Utilities::get_current_user();
@@ -92,7 +92,7 @@ class EPRF_Rating_Cntrl {
 		}
 
 		$statistics = EPRF_Rating_View::show_statistics_table( $new_rating, $kb_config, true );
-		wp_die( json_encode( array( 'status' => 'success', 'message' => $this->article_feedback_confirmation_msg( $kb_config['rating_confirmation_positive'] ), 'rating' => $new_rating, 'statistics' => $statistics ) ) );
+		wp_die( wp_json_encode( array( 'status' => 'success', 'message' => $this->article_feedback_confirmation_msg( $kb_config['rating_confirmation_positive'] ), 'rating' => $new_rating, 'statistics' => $statistics ) ) );
 	}
 
 	/**
@@ -128,7 +128,7 @@ class EPRF_Rating_Cntrl {
 		// Spam checking
 		// 1. Fake input field - do not proceed if is filled, return generic response
 		if ( ! empty( $_REQUEST['catch_details'] ) ) {
-			wp_die( json_encode( array( 'status' => 'success_1', 'message' => $this->article_feedback_confirmation_msg( $kb_config['rating_confirmation_positive'] ) ) ) );
+			wp_die( wp_json_encode( array( 'status' => 'success_1', 'message' => $this->article_feedback_confirmation_msg( $kb_config['rating_confirmation_positive'] ) ) ) );
 		}
 
 		$current_vote = (int)EPRF_Utilities::get( 'current_vote', -1 );
@@ -139,7 +139,7 @@ class EPRF_Rating_Cntrl {
 		}
 
 		// no needs to filter data, wp_new_comment will do it
-		$commentdata = array(
+		$comment_data = array(
 			'comment_post_ID'      => $article_id,
 			'comment_approved'     => 0,
 			'comment_author'       => EPRF_Utilities::get( 'name' ),
@@ -150,15 +150,15 @@ class EPRF_Rating_Cntrl {
 		);
 
 		if ( $user = EPRF_Utilities::get_current_user() ) {
-			$commentdata['user_ID'] = $user->ID;
+			$comment_data['user_ID'] = $user->ID;
 		}
 
 		// to enable multiple feedbacks per user: add_filter('duplicate_comment_id', '__return_false');
-		$result = wp_new_comment( $commentdata, true );
+		$result = wp_new_comment( $comment_data, true );
 		if ( is_wp_error( $result ) ) {
 			EPRF_Utilities::ajax_show_error_die( $this->article_feedback_confirmation_msg( __( 'You have already submitted feedback.', 'echo-article-rating-and-feedback' ) ) );
 		} else {
-			wp_die( json_encode( array( 'status' => 'success', 'message' => $this->article_feedback_confirmation_msg( $kb_config['rating_confirmation_positive'] ) ) ) );
+			wp_die( wp_json_encode( array( 'status' => 'success', 'message' => $this->article_feedback_confirmation_msg( $kb_config['rating_confirmation_positive'] ) ) ) );
 		}
 	}
 

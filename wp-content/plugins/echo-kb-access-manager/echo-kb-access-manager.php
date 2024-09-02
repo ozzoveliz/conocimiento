@@ -3,7 +3,7 @@
  * Plugin Name: Knowledge Base with Access Manager
  * Plugin URI: https://www.echoknowledgebase.com
  * Description: Create Echo Knowledge Base articles, docs and FAQs with Access Manager.
- * Version: 8.42.0
+ * Version: 9.11.1
  * Author: Echo Plugins
  * Author URI: https://www.echoknowledgebase.com
  * Text Domain: echo-knowledge-base
@@ -43,8 +43,8 @@ final class Echo_Knowledge_Base {
 	/* @var Echo_Knowledge_Base */
 	private static $instance;
 
-	public static $version = '11.42.0';
-	public static $amag_version = '8.42.0';
+	public static $version = '12.31.1';
+	public static $amag_version = '9.11.1';
 	public static $plugin_dir;
 	public static $plugin_url;
 	public static $plugin_file = __FILE__;
@@ -176,7 +176,7 @@ final class Echo_Knowledge_Base {
 		}
 
 		// ADMIN or CLI
-		if ( is_admin() || ( defined( 'WP_CLI' ) && WP_CLI ) ) {	// || ( defined( 'REST_REQUEST' ) && REST_REQUEST )
+		if ( is_admin() || ( defined( 'WP_CLI' ) && WP_CLI ) ) {
             if ( $this->is_kb_plugin_active_for_network( 'echo-kb-access-manager/echo-kb-access-manager.php' ) ) {
 	            EPKB_Logging::add_log( 'Access Manager cannot be installed network-wide.' );
 	            return;
@@ -279,7 +279,7 @@ final class Echo_Knowledge_Base {
 			return;
 		}
 
-		if ( $action == 'epkb_editor_error' || $action == 'eckb_editor_get_themes_list' ) {
+		if ( $action == 'epkb_editor_error' ) {
 			new EPKB_Editor_Controller();
 			return;
 		}
@@ -327,12 +327,6 @@ final class Echo_Knowledge_Base {
 			return;
 		}
 
-		// AMGR: handle management of Articles ACCESS
-		if ( $_REQUEST['action'] == 'amgr_save_kb_config_changes' ) {
-			new AMGR_KB_Config_Controller();
-			return;
-		}
-
 		if ($action == 'amgr_handle_license_request' ) {
 			new AMGR_Add_Ons_Page();
 			return;
@@ -362,6 +356,7 @@ final class Echo_Knowledge_Base {
 		}
 
 		// article edit page - include scripts to show categories box
+		// phpcs:disable WordPress.Security.NonceVerification.Recommended
 		if ( $pagenow == 'post.php' && ! empty( $_REQUEST['post'] ) && ! empty( $_REQUEST['action'] ) && $_REQUEST['action'] == 'edit' ) {
 			$kb_post_type = get_post_type( $_REQUEST['post'] );
 			if ( EPKB_KB_Handler::is_kb_post_type( $kb_post_type ) ) {
@@ -395,13 +390,13 @@ final class Echo_Knowledge_Base {
 			}
 		}
 
-		// AMGR: if KB Groups is "active" but not activated then don't let user to browse or create an article until activated
+		// AMGR: if KB Groups is "active" but not activated then don't let user browse or create an article until activated
 		if ( empty( $request_page ) && in_array( $pagenow, array('edit.php', 'post-new.php') ) && AMGR_WP_Roles::use_kb_groups() ) {
 			include_once( ABSPATH . 'wp-admin/includes/plugin.php' );
 			if ( ! is_plugin_active( 'echo-kb-groups/echo-kb-groups.php' ) ) {
 				echo '<h4>' . esc_html__('Activate plugin', 'echo-knowledge-base' ) . '</h4>';
 				echo '<p>' . esc_html__('KB Groups plugin is not active. Active it before proceeding.', 'echo-knowledge-base' ) . '</p>';
-				echo '<a href="' . self_admin_url( 'index.php' ) . '">' . esc_html__('Back to WP Admin', 'echo-knowledge-base' ) . '</a>';
+				echo '<a href="' . esc_url( self_admin_url( 'index.php' ) ) . '">' . esc_html__('Back to WP Admin', 'echo-knowledge-base' ) . '</a>';
 				die();
 			}
 		}
@@ -429,7 +424,7 @@ final class Echo_Knowledge_Base {
 			array( 'AMGR_Admin_Articles_Page', array( 'backend' ), array( 'edit.php' ), array( 'edit' ), false ),  // after Add submit or Article Edit (edit)
 		);
 
-		$current_page = empty($request_page) ? $pagenow : $request_page;
+		$current_page = empty( $request_page ) ? $pagenow : $request_page;
 		$action = EPKB_Utilities::get('action');
 		foreach( $classes as $class_info ) {
 
@@ -479,12 +474,7 @@ final class Echo_Knowledge_Base {
 	 * When developing and debugging we don't need heartbeat
 	 */
 	public function epkb_stop_heartbeat() {
-
 		AMGR_Access_Manager::check_amgr_tables();
-
-		if ( defined( 'RUNTIME_ENVIRONMENT' ) && RUNTIME_ENVIRONMENT == 'ECHODEV' ) {
-			wp_deregister_script( 'heartbeat' );
-		}
 	}
 
     private function is_kb_plugin_active_for_network( $plugin ) {

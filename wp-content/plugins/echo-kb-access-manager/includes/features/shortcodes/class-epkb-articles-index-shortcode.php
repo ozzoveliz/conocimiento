@@ -17,7 +17,7 @@ class EPKB_Articles_Index_Shortcode {
 		wp_enqueue_style( 'epkb-shortcodes' );
 
 		// allows to adjust the widget title
-		$title = empty($attributes['title']) ? '' : strip_tags( trim($attributes['title']) );
+		$title = empty($attributes['title']) ? '' : esc_html( wp_strip_all_tags( trim( $attributes['title'] ) ) );
 		$title = ( empty( $title ) ? esc_html__( 'Indexed Articles', 'echo-knowledge-base' ) : esc_html( $title ) );
 
 		// get add-on configuration
@@ -36,7 +36,7 @@ class EPKB_Articles_Index_Shortcode {
 			return ob_get_clean();
 		}
 
-		// DISPLAY INDEXED ARTICLES // TODO improve html, add correct classes and ids
+		// DISPLAY INDEXED ARTICLES
 		ob_start(); ?>
 		<div id="epkb-article-index-dir-container">
 
@@ -91,7 +91,7 @@ class EPKB_Articles_Index_Shortcode {
 	private function get_indexed_articles_list( $kb_id ) {
 
 		// name for non-alphabetic indexes
-		$other_index_char = __( 'Other', 'echo-knowledge-base' );
+		$other_index_char = esc_html__( 'Other', 'echo-knowledge-base' );
 
 		$articles_list = $this->get_articles_list( $kb_id );
 

@@ -3,7 +3,7 @@
  * Plugin Name: KB - Links Editor
  * Plugin URI: https://www.echoknowledgebase.com/wordpress-add-ons/
  * Description: Replace links to KB articles with links to PDF files, documents, images and web pages.
- * Version: 1.5.2
+ * Version: 1.5.5
  * Author: Echo Plugins
  * Author URI: https://www.echoknowledgebase.com
  * Text Domain: echo-links-editor
@@ -41,7 +41,7 @@ final class Echo_Links_Editor {
 	/* @var Echo_Links_Editor */
 	private static $instance;
 
-	public static $version = '1.5.2';
+	public static $version = '1.5.5';
 	public static $plugin_dir;
 	public static $plugin_url;
 	public static $plugin_file = __FILE__;
@@ -220,7 +220,6 @@ final class Echo_Links_Editor {
 			array( 'KBLK_Add_Ons_Page', array('backend'), array('edit.php', KBLK_KB_Core::KBLK_KB_ADD_ONS_PAGE), array(''), true ),
 			array( 'KBLK_Article_Editor_View', array('backend'), array('post-new.php'), array(''), true ),   // initial Add article screen
 			array( 'KBLK_Article_Editor_View', array('backend'), array('post.php'), array('edit'), false ),  // after Add submit or Article Edit (edit)
-			array( 'KBLK_Settings_Page', array('backend'), array(KBLK_KB_Core::KBLK_KB_ADD_ONS_PAGE), array(''), true ),
 		);
 
 		$current_page = empty($request_page) ? $pagenow : $request_page;

@@ -15,14 +15,12 @@ class EPKB_ML_FAQs {
 	private $kb_config;
 
 	private $faqs_kb_config;
-	private $faqs_category_ids;
-	private $faqs_category_seq_data;
-	private $faqs_articles_seq_data;
 
 	function __construct( $kb_config ) {
+
 		$this->kb_config = $kb_config;
 
-		// FAQs module can use Categories and Articles from another KB
+		// LEGACY: FAQs module can use Categories and Articles from another KB
 		$faqs_kb_id = EPKB_Utilities::get_kb_option( $this->kb_config['id'], self::FAQS_KB_ID, null );
 		if ( empty( $faqs_kb_id ) ) {
 			return;
@@ -32,39 +30,14 @@ class EPKB_ML_FAQs {
 		if ( is_wp_error( $this->faqs_kb_config ) ) {
 			return;
 		}
-
-		// Display categories and articles only from published KBs
-		if ( $this->faqs_kb_config['status'] != 'published' ) {
-			return;
-        }
-
-		$this->faqs_category_ids = EPKB_Utilities::get_kb_option( $this->kb_config['id'], self::FAQS_CATEGORY_IDS, array() );
-		$this->faqs_category_seq_data = EPKB_Utilities::get_kb_option( $this->faqs_kb_config['id'], EPKB_Categories_Admin::KB_CATEGORIES_SEQ_META, array(), true );
-		$this->faqs_articles_seq_data = EPKB_Utilities::get_kb_option( $this->faqs_kb_config['id'], EPKB_Articles_Admin::KB_ARTICLES_SEQ_META, array(), true );
-
-		// for WPML filter categories and articles given active language
-		if ( EPKB_Utilities::is_wpml_enabled( $this->faqs_kb_config ) ) {
-			$this->faqs_category_seq_data = EPKB_WPML::apply_category_language_filter( $this->faqs_category_seq_data );
-			$this->faqs_articles_seq_data = EPKB_WPML::apply_article_language_filter( $this->faqs_articles_seq_data );
-		}
-
-		// AMGR protect KB Main Page - only KB Manager and administrator can see even empty KB Main Page
-		$kb_groups_set = AMGR_Access_Utilities::get_main_page_group_sets( $this->kb_config['id'], $this->faqs_category_seq_data, $this->faqs_articles_seq_data );
-		if ( $kb_groups_set === null || ( ! AMGR_Access_Utilities::is_admin_or_kb_manager() && empty( $kb_groups_set['categories_seq_data'] ) && empty( $kb_groups_set['articles_seq_data'] ) ) ) {
-			echo AMGR_Access_Reject::reject_user_access( $this->kb_config['id'], '04' );
-			return;
-		}
-
-		$this->faqs_category_seq_data = $kb_groups_set['categories_seq_data'];
-		$this->faqs_articles_seq_data = $kb_groups_set['articles_seq_data'];
-		// AMGR - END
 	}
 
 	public function display_faqs_module() {
 
 		// do we display old FAQ Categories?
-		if ( ! empty( $this->faqs_category_ids ) ) {
-			$this->get_faqs_as_categories();
+		$faqs_category_ids = EPKB_Utilities::get_kb_option( $this->kb_config['id'], self::FAQS_CATEGORY_IDS, array() );
+		if ( ! empty( $faqs_category_ids ) ) {
+			$this->get_faqs_as_categories_legacy( $faqs_category_ids );
 			return;
 		}
 
@@ -81,12 +54,38 @@ class EPKB_ML_FAQs {
 
 		$faq_groups_questions = EPKB_FAQs_Utilities::get_faq_groups_questions( $faq_groups );
 
+		//phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		echo EPKB_FAQs_Utilities::display_faqs( $this->kb_config, $faq_groups_questions, $this->kb_config['ml_faqs_title_text'] );
 	}
 
-	private function get_faqs_as_categories() {
+	private function get_faqs_as_categories_legacy( $faqs_category_ids ) {
 
-		$stored_ids_obj = new EPKB_Categories_Array( $this->faqs_category_seq_data ); // normalizes the array as well
+		// Display categories and articles only from published KBs
+		if ( empty( $this->faqs_kb_config ) || $this->faqs_kb_config['status'] != 'published' ) {
+			return;
+		}
+
+		$faqs_category_seq_data = EPKB_Utilities::get_kb_option( $this->faqs_kb_config['id'], EPKB_Categories_Admin::KB_CATEGORIES_SEQ_META, array(), true );
+		$faqs_articles_seq_data = EPKB_Utilities::get_kb_option( $this->faqs_kb_config['id'], EPKB_Articles_Admin::KB_ARTICLES_SEQ_META, array(), true );
+
+		// for WPML filter categories and articles given active language
+		if ( EPKB_Utilities::is_wpml_enabled( $this->faqs_kb_config ) ) {
+			$faqs_category_seq_data = EPKB_WPML::apply_category_language_filter( $faqs_category_seq_data );
+			$faqs_articles_seq_data = EPKB_WPML::apply_article_language_filter( $faqs_articles_seq_data );
+		}
+
+		// AMGR protect KB Main Page - only KB Manager and administrator can see even empty KB Main Page
+		$kb_groups_set = AMGR_Access_Utilities::get_main_page_group_sets( $this->kb_config['id'], $this->faqs_category_seq_data, $this->faqs_articles_seq_data );
+		if ( $kb_groups_set === null || ( ! AMGR_Access_Utilities::is_admin_or_kb_manager() && empty( $kb_groups_set['categories_seq_data'] ) && empty( $kb_groups_set['articles_seq_data'] ) ) ) {
+			echo AMGR_Access_Reject::reject_user_access( $this->kb_config['id'], '04' );
+			return;
+		}
+
+		$this->faqs_category_seq_data = $kb_groups_set['categories_seq_data'];
+		$this->faqs_articles_seq_data = $kb_groups_set['articles_seq_data'];
+		// AMGR - END
+
+		$stored_ids_obj = new EPKB_Categories_Array( $faqs_category_seq_data ); // normalizes the array as well
 		$allowed_categories_ids = $stored_ids_obj->get_all_keys();
 
 		// No categories found - message only for admins
@@ -100,14 +99,14 @@ class EPKB_ML_FAQs {
 		// remove epkb filter
 		remove_filter( 'the_content', array( 'EPKB_Layouts_Setup', 'get_kb_page_output_hook' ), 99999 );    ?>
 
-		<div id="epkb-ml-faqs-<?php echo strtolower( $this->kb_config['kb_main_page_layout'] ); ?>-layout" class="epkb-ml-faqs-container <?php echo esc_html( $this->kb_config['ml_faqs_custom_css_class'] ); ?>">
+		<div id="epkb-ml-faqs-<?php echo esc_attr( strtolower( $this->kb_config['kb_main_page_layout'] ) ); ?>-layout" class="epkb-ml-faqs-container <?php echo esc_html( $this->kb_config['ml_faqs_custom_css_class'] ); ?>">
 
 			<div class="epkb-ml-faqs__row"> <?php
 
 				$faq_groups = [];
-				foreach( $this->faqs_category_ids as $selected_category_id ) {
+				foreach( $faqs_category_ids as $selected_category_id ) {
 
-					if ( empty( $this->faqs_articles_seq_data[$selected_category_id] ) ) {
+					if ( empty( $faqs_articles_seq_data[$selected_category_id] ) ) {
 						continue;
 					}
 
@@ -115,7 +114,7 @@ class EPKB_ML_FAQs {
 						continue;
 					}
 
-					foreach ( $this->faqs_articles_seq_data[$selected_category_id] as $article_id => $article_title ) {
+					foreach ( $faqs_articles_seq_data[$selected_category_id] as $article_id => $article_title ) {
 
 						// category title/description
 						if ( $article_id == 0 || $article_id == 1 ) {
@@ -127,28 +126,28 @@ class EPKB_ML_FAQs {
 
 						// disallow article that failed to retrieve
 						if ( empty( $article ) || empty( $article->post_status ) ) {
-							unset( $this->faqs_articles_seq_data[$selected_category_id][$article_id] );
+							unset( $faqs_articles_seq_data[$selected_category_id][$article_id] );
 							continue;
 						}
 
 						if ( EPKB_Utilities::is_link_editor( $article ) ) {
-							unset( $this->faqs_articles_seq_data[$selected_category_id][$article_id] );
+							unset( $faqs_articles_seq_data[$selected_category_id][$article_id] );
 							continue;
 						}
 
 						// exclude not allowed
 						if ( ! EPKB_Utilities::is_article_allowed_for_current_user( $article_id ) ) {
-							unset( $this->faqs_articles_seq_data[$selected_category_id][$article_id] );
+							unset( $faqs_articles_seq_data[$selected_category_id][$article_id] );
 						}
 					}
 
 					// not empty term but with hidden articles for the user
-					if ( empty( $this->faqs_articles_seq_data[$selected_category_id] ) ) {
+					if ( empty( $faqs_articles_seq_data[$selected_category_id] ) ) {
 						continue;
 					}
 
 					$faqs = [];
-					foreach( $this->faqs_articles_seq_data[$selected_category_id] as $article_id => $article_title ) {
+					foreach( $faqs_articles_seq_data[$selected_category_id] as $article_id => $article_title ) {
 
 						if ( $article_id == 0 || $article_id == 1 ) {
 							continue;
@@ -179,10 +178,11 @@ class EPKB_ML_FAQs {
 						$faqs[] = $article;
 					}
 
-					$faq_groups[$selected_category_id] = ['title' => $this->faqs_articles_seq_data[$selected_category_id][0], 'faqs' => $faqs];
+					$faq_groups[$selected_category_id] = ['title' => $faqs_articles_seq_data[$selected_category_id][0], 'faqs' => $faqs];
 				}
 
-				echo EPKB_FAQs_Utilities::display_faqs( $this->kb_config, $faq_groups, $this->kb_config['ml_faqs_title_text'] );				?>
+				//phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+				echo EPKB_FAQs_Utilities::display_faqs( $this->kb_config, $faq_groups, $this->kb_config['ml_faqs_title_text'], false, true );				?>
 
 			</div>
 

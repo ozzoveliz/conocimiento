@@ -9,6 +9,7 @@
 class EPKB_Shortcodes {
 
 	const SHORTCODES = array(
+		'epkb-knowledge-base',
 		'epkb-articles-index-directory',
 		'eckb-advanced-search',
 		'widg-recent-articles',
@@ -76,7 +77,7 @@ class EPKB_Shortcodes {
 	 *
 	 * @return string
 	 */
-	public static function get_copy_custom_box( $shortcode_name, $parameters = [], $box_label='' ) {
+	public static function get_copy_custom_box( $shortcode_name, $parameters = [], $box_label='', $quotes=true ) {
 
 		if ( empty( self::is_shortcode_exists( $shortcode_name ) ) ) {
 			return '';
@@ -84,7 +85,7 @@ class EPKB_Shortcodes {
 
 		$embed_code = '[' . $shortcode_name;
 		foreach ( $parameters as $key => $val ) {
-			$embed_code .= ' ' . $key . '="' . $val . '"';
+			$embed_code .= ' ' . $key . '=' . ( $quotes ? '"' : '' ) . $val . ( $quotes ? '"' : '' );
 		}
 
 		$embed_code .= ']';

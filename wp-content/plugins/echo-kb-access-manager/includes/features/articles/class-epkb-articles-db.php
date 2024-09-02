@@ -51,40 +51,42 @@ class EPKB_Articles_DB {
 
 		// OLD installation or Access Manager
 		$query_args['post_status'] = array( 'publish' );
-		$where_post_status = " p.post_status = 'publish' ";
+		$where_post_status_escaped = " p.post_status = 'publish' ";
 		if ( EPKB_Utilities::is_amag_on() ) {
 			$query_args['post_status'] = array( 'publish', 'private' );
-			$where_post_status .= " OR p.post_status = 'private' ";
+			$where_post_status_escaped .= " OR p.post_status = 'private' ";
 
 		// NEW installation:
 		// WordPress uses 'publish' and corresponding 'private' posts by default in get_posts()
 		// - in SQL for logged-in users select only those articles which they are allowed to see
 		// - in SQL for NOT logged-in users select only 'publish' articles
-		} else if ( EPKB_Utilities::is_new_user( '7.4.0' ) && is_user_logged_in() ) {
+		} else if ( is_user_logged_in() ) {
 
 			// use 'publish' and 'private' articles (filter articles by corresponding access where display them)
 			if ( $all_articles ) {
 				$query_args['post_status'] = array( 'publish', 'private' );
-				$where_post_status .= " OR p.post_status = 'private' ";
+				$where_post_status_escaped .= " OR p.post_status = 'private' ";
 			} else {
-				$where_post_status .= current_user_can( 'read_private_posts' )
+				$where_post_status_escaped .= current_user_can( 'read_private_posts' )
 				? " OR p.post_status = 'private' "
-				: " OR ( p.post_status = 'private' AND p.post_author = " . get_current_user_id() . " ) ";
+				: " OR ( p.post_status = 'private' AND p.post_author = " . esc_sql( get_current_user_id() ) . " ) ";
 			}
 		}
 
-		$where_post_status = ' (' . $where_post_status . ') ';
+		$where_post_status_escaped = ' (' . $where_post_status_escaped . ') ';
 
+		// Get only Published articles
 		$kb_config = epkb_get_instance()->kb_config_obj->get_kb_config( $kb_id );
 		if ( ! is_wp_error( $kb_config ) && EPKB_Utilities::is_wpml_enabled( $kb_config ) ) {
 			$order_by = $order_by == 'title' ? 'post_title' : 'post_date';
-			return $wpdb->get_results( " SELECT * " .
+			return $wpdb->get_results( $wpdb->prepare( " SELECT * " .
 			                                " FROM $wpdb->posts p " .
 			                                " WHERE p.ID in " .
 			                                "   (SELECT object_id FROM $wpdb->term_relationships tr INNER JOIN $wpdb->term_taxonomy tt ON tt.term_taxonomy_id = tr.term_taxonomy_id " .
-			                                "    WHERE tt.term_id = " . $sub_or_category_id . " AND tt.taxonomy = '" . EPKB_KB_Handler::get_category_taxonomy_name( $kb_id ) . "') " .
-			                                "   AND p.post_type = '" . EPKB_KB_Handler::get_post_type( $kb_id ) . "' AND " . $where_post_status . "
-		                              ORDER BY " . $order_by . ' ' . $order );  // Get only Published articles
+			                                "    WHERE tt.term_id = %d AND tt.taxonomy = %s) " .
+			                                "   AND p.post_type = %s AND " . $where_post_status_escaped .
+		                                    " ORDER BY " . esc_sql( $order_by ) . " " . esc_sql( $order ),
+										$sub_or_category_id, EPKB_KB_Handler::get_category_taxonomy_name( $kb_id ), EPKB_KB_Handler::get_post_type( $kb_id ) ) );
 		}
 
 		return get_posts( $query_args );
@@ -104,27 +106,24 @@ class EPKB_Articles_DB {
 
 		// NEW users: in SQL select only those articles which the current user is allowed to see
 		if ( EPKB_Utilities::is_amag_on() ) {
-			$where_post_status = "post_status IN ('publish', 'private')";
+			$where_post_status_escaped = "post_status IN ('publish', 'private')";
 
-		} else if ( EPKB_Utilities::is_new_user( '7.4.0' ) ) {
-			$where_post_status = current_user_can( 'read_private_posts' )
-					? "( post_status = 'publish' OR post_status = 'private' ) "
-					: "( post_status = 'publish' OR ( post_status = 'private' AND post_author = " . get_current_user_id() . " ) )";
-
-		// OLD users: show only 'publish' articles
 		} else {
-			$where_post_status = "post_status IN ('publish')";
+			$where_post_status_escaped = current_user_can( 'read_private_posts' )
+					? "( post_status = 'publish' OR post_status = 'private' ) "
+					: "( post_status = 'publish' OR ( post_status = 'private' AND post_author = " . esc_sql( get_current_user_id() ) . " ) )";
+
 		}
 
 		// parameters sanitized
-		$posts = $wpdb->get_results( " SELECT * " .
-									 " FROM $wpdb->posts " . /** @secure 02.17 */
-		                             " WHERE post_type = '" . EPKB_KB_Handler::get_post_type( $kb_id ) . "' AND " . $where_post_status );
+		$posts = $wpdb->get_results( $wpdb->prepare( " SELECT * " .
+									 " FROM $wpdb->posts " .
+		                             " WHERE post_type = %s AND " . $where_post_status_escaped, EPKB_KB_Handler::get_post_type( $kb_id ) ) );
 		if ( empty( $posts ) || ! is_array( $posts ) ) {
 			return 0;
 		}
 
-		return empty( $posts ) ? 0 : count( $posts );
+		return count( $posts );
 	}
 
 	/**
@@ -145,13 +144,13 @@ class EPKB_Articles_DB {
 		}
 
 		// parameters sanitized
-		$posts = $wpdb->get_results( "SELECT * FROM " .
-		                             "   $wpdb->posts p LEFT JOIN " .  /** @secure 02.17 */
+		$posts = $wpdb->get_results( $wpdb->prepare( "SELECT * FROM " .
+		                             "   $wpdb->posts p LEFT JOIN " .
 	                                 "   (SELECT object_id FROM $wpdb->term_relationships tr INNER JOIN $wpdb->term_taxonomy tt ON tt.term_taxonomy_id = tr.term_taxonomy_id " .
-		                                        " WHERE tt.taxonomy = '" . EPKB_KB_Handler::get_category_taxonomy_name( $kb_id ) . "') AS ta " .
-		                             "ON ta.object_id = p.ID " .
-		                             "WHERE post_type = '" . EPKB_KB_Handler::get_post_type( $kb_id ) . "' AND object_id IS NULL AND post_status in ('publish') ");
-
+		                                        " WHERE tt.taxonomy = %s) AS ta " .
+		                             " ON ta.object_id = p.ID " .
+		                             " WHERE post_type = %s AND object_id IS NULL AND post_status in ('publish') ",
+										EPKB_KB_Handler::get_category_taxonomy_name( $kb_id ), EPKB_KB_Handler::get_post_type( $kb_id ) ) );
 		if ( empty( $posts ) || ! is_array( $posts ) ) {
 			return array();
 		}

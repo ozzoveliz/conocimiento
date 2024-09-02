@@ -1,4 +1,4 @@
-<?php
+<?php  if ( ! defined( 'ABSPATH' ) ) exit;
 
 /**
  * Lists all KB configuration settings and adds filter to get configuration from add-ons.

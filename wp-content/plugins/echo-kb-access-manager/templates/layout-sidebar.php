@@ -18,19 +18,13 @@ if ( empty( $hide_header_footer ) ) {
 }
 
 // initialize Main Page title
-$kb_main_pg_title = '';
 if ( $kb_config[ 'template_main_page_display_title' ] === 'off' ) {
-	$kb_main_pg_title = '';
+	$kb_main_pg_title_escaped = '';
 } else {
-	$kb_main_pages_info = $kb_config['kb_main_pages'];
-	if ( ! empty($kb_main_pages_info) ) {
-		reset($kb_main_pages_info);
-		$page_id = key($kb_main_pages_info);
-		$kb_main_pg_title = '<div class="eckb_main_title">' . get_the_title( $page_id ) . '</div>';
-	}
+	$kb_main_pg_title_escaped = '<h1 class="eckb_main_title">' . esc_html( get_the_title() ) . '</h1>';
 }
 
-$template_style1 = EPKB_Utilities::get_inline_style(
+$template_style_escaped = EPKB_Utilities::get_inline_style(
            'padding-top::       template_main_page_padding_top,
 	        padding-bottom::    template_main_page_padding_bottom,
 	        padding-left::      template_main_page_padding_left,
@@ -41,23 +35,24 @@ $template_style1 = EPKB_Utilities::get_inline_style(
 	        margin-right::      template_main_page_margin_right,', $kb_config );
 
 			// CSS Article Reset / Defaults
-			$article_class = '';
+			$article_class_escaped = '';
 			if ( $kb_config[ 'templates_for_kb_article_reset'] === 'on' ) {
-				$article_class .= 'eckb-article-resets ';
+				$article_class_escaped .= 'eckb-article-resets ';
 			}
 			if ( $kb_config[ 'templates_for_kb_article_defaults'] === 'on' ) {
-				$article_class .= 'eckb-article-defaults ';
+				$article_class_escaped .= 'eckb-article-defaults ';
 			}		?>
 
-	<div class="eckb-kb-template <?php echo $article_class; ?>" <?php echo $template_style1; ?>>	        <?php
+	<div class="eckb-kb-template <?php echo $article_class_escaped; ?>" <?php echo $template_style_escaped; ?>>	        <?php
 
-	    echo $kb_main_pg_title;
+	    echo $kb_main_pg_title_escaped;
 
 		while ( have_posts() ) {
 
 		    the_post();
 
 			if ( post_password_required() ) {
+				//phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 				echo get_the_password_form();
 				echo '</div>';
 				get_footer();
@@ -74,32 +69,20 @@ $template_style1 = EPKB_Utilities::get_inline_style(
 
 			// output KB Main Page
 			if ( $eckb_is_kb_main_page ) {
+				// output the full content of the KB Main Page using 'the_content' filter
+				$post_content = apply_filters( 'the_content', $post_content );
+				//phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+				echo str_replace( ']]>', ']]&gt;', $post_content ); // the replacement is required to run Elementor editor correctly
 
-				$striped_content = empty($post_content) ? '' : preg_replace('/\s+|&nbsp;/', '', $post_content);
-				$plugin_first_version = get_option( 'epkb_version_first' );
-				$plugin_first_version = empty($plugin_first_version) ? '6.7.0' : $plugin_first_version;
-
-				// output the full content of the page using 'the_content' filter if any of the condition is true:
-				// - page content is not empty and contains more than just KB Main Page shortcode
-				// - Elementor plugin is enabled
-				// - the first version of KB is higher than 6.6.0
-				if ( ( ( ! empty($striped_content) && strlen($striped_content) > 26 ) ) || EPKB_Site_Builders::is_elementor_enabled() || version_compare( $plugin_first_version, '6.6.0', '>' ) ) {
-					$post_content = apply_filters( 'the_content', $post_content );
-					echo str_replace( ']]>', ']]&gt;', $post_content ); // the replacement is required to run Elementor editor correctly
-
-				// directly generate the Main Page - keep same output as before KB version 6.6.0 to avoid affect of 'the_content' filter for older installations
-				} else {
-					echo EPKB_Layouts_Setup::output_main_page( $kb_config );
-				}
 
 			// output KB Article Page
 			} else {
 				$post_content = apply_filters( 'the_content', $post_content );
+				//phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 				echo str_replace( ']]>', ']]&gt;', $post_content );
 			}
 
 		}  ?>
-
 
 	</div>   <?php
 

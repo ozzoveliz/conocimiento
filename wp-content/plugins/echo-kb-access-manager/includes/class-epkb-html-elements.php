@@ -1,4 +1,4 @@
-<?php
+<?php if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 
 /**
  * Elements of form UI and others
@@ -52,6 +52,7 @@ class EPKB_HTML_Elements {
 			'text_class'        => '',
 			'icon'              => '',
 			'list'              => array(),
+			'img_list'          => array(),
 			'btn_text'          => '',
 			'btn_url'           => '',
 			'more_info_text'    => '',
@@ -90,12 +91,12 @@ class EPKB_HTML_Elements {
 		$required = empty( $args['required'] ) ? '' : ' required';
 
 		$group_data_escaped = self::get_data_escaped( $args['group_data'] );
-		$data_escaped = self::get_data_escaped( $args['data'] );  ?>
+		$data_escaped = self::get_data_escaped( $args['data'] ); ?>
 
-		<div class="epkb-input-group epkb-admin__text-field <?php echo esc_html( $args['input_group_class'] ); ?>" id="<?php echo esc_attr( $args['name'] ); ?>_group" <?php echo $group_data_escaped; ?>>
+		<div class="epkb-input-group epkb-admin__text-field <?php echo esc_html( $args['input_group_class'] ); ?>" id="<?php echo esc_attr( $args['name'] ); ?>_group" <?php echo $group_data_escaped;  /* phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped */ ?>>
 
 			<label class="<?php echo esc_attr( $args['label_class'] ); ?>" for="<?php echo esc_attr( $args['name'] ); ?>">  <?php
-			    echo esc_html( $args['label'] );
+			    echo wp_kses_post( $args['label'] );
 
 				self::display_tooltip( $args['tooltip_title'], $args['tooltip_body'], $args['tooltip_args'], $args['tooltip_external_links'] );
 
@@ -106,19 +107,19 @@ class EPKB_HTML_Elements {
 					self::display_pro_setting_tag_pro_feature_ad( $args['pro_tooltip_args'] );
 				}
 				if ( ! empty( $args['desc'] ) ) {
-					echo $args['desc'];
+					echo wp_kses_post( $args['desc'] );
 				}   ?>
 			</label>
 
 			<div class="input_container <?php echo esc_attr( $args['input_class'] ); ?>">
 			    <input type="text"
 			           class="epkb-input--<?php echo esc_attr( $args['input_size'] ); ?>"
-			           name="<?php echo  esc_attr( $args['name'] ); ?>"
+			           name="<?php echo esc_attr( $args['name'] ); ?>"
 			           id="<?php echo  esc_attr( $args['name'] ); ?>"
 			           autocomplete="<?php echo ( $args[ 'autocomplete' ] ? 'on' : 'off' ); ?>"
 			           value="<?php echo esc_attr( $args['value'] ); ?>"
 			           placeholder="<?php echo esc_attr( $args['placeholder'] ); ?>"						<?php
-			           echo $data_escaped . $readonly . $required;						?>
+			           echo $data_escaped . esc_attr( $readonly . $required );						?>
 			           maxlength="<?php echo esc_attr( $args['max'] ); ?>"
 			    >
 			</div>
@@ -157,7 +158,7 @@ class EPKB_HTML_Elements {
         <div class="epkb-input-group epkb-admin__text-field <?php echo esc_attr( $args['input_group_class'] ); ?>" id="<?php echo esc_attr( $args['name'] ); ?>_group" <?php echo $group_data_escaped; ?>>
 
             <label class="<?php echo esc_attr( $args['label_class'] ); ?>">  <?php
-		        echo esc_html( $args['label'] );
+		        echo wp_kses_post( $args['label'] );
 
 	            self::display_tooltip( $args['tooltip_title'], $args['tooltip_body'], $args['tooltip_args'], $args['tooltip_external_links'] );
 
@@ -189,7 +190,7 @@ class EPKB_HTML_Elements {
                         >
 
                         <label class="epkb-label" for="<?php echo esc_attr( $input['name'] ); ?>">
-                            <span class="epkb-label__text"><?php echo esc_html( $input['label'] ); ?></span>
+                            <span class="epkb-label__text"><?php echo wp_kses_post( $input['label'] ); ?></span>
                         </label>
 
                     </div>  <?php
@@ -223,18 +224,19 @@ class EPKB_HTML_Elements {
 			'name'        => 'textarea',
 			'class'       => 'large-text',
 			'rows'        => 4,
+			'main_tag'    => 'li'
 		);
 		$args = self::add_defaults( $args, $defaults );
 		$args = self::get_specs_info( $args );
 
-		$main_tag = empty( $args['main_tag'] ) ? 'li' : $args['main_tag'];
+		$html_tag_escaped = $args['main_tag'] == 'div' ? 'div' : 'li';;
 
 		$group_data_escaped = self::get_data_escaped( $args['group_data'] );    ?>
 
-		<<?php echo ( $main_tag == 'li' ? $main_tag : 'div' ); ?> class="epkb-input-group <?php echo esc_attr( $args['input_group_class'] ); ?>" id="<?php echo esc_attr( $args['name'] ); ?>_group" <?php echo $group_data_escaped; ?>>
+		<<?php echo esc_attr( $html_tag_escaped ); ?> class="epkb-input-group <?php echo esc_attr( $args['input_group_class'] ); ?>" id="<?php echo esc_attr( $args['name'] ); ?>_group" <?php echo $group_data_escaped; ?>>
 
 		<label class="<?php echo esc_attr( $args['label_class'] ); ?>" for="<?php echo esc_attr( $args['name'] ); ?>">
-			<?php echo esc_html( $args['label'] );
+			<?php echo wp_kses_post( $args['label'] );
 
 			if ( $args['is_pro'] ) {
 				self::display_pro_setting_tag( $args['pro_tooltip_args'] );
@@ -254,11 +256,11 @@ class EPKB_HTML_Elements {
 				<?php echo ( $args['disabled'] ? ' disabled="disabled"' : '' ); ?> ><?php echo esc_html( $args['value'] )/* do not leave empty space here in HTML via PHP */; ?></textarea> <?php
 
 			if ( $args['desc'] ) {  ?>
-				<div class="epkb-input_description"><i><?php echo $args['desc']; ?></i></div><?php
+				<div class="epkb-input_description"><i><?php echo wp_kses_post( $args['desc'] ); ?></i></div><?php
 			}   ?>
 		</div>
 
-		</<?php echo ( $main_tag == 'li' ? $main_tag : 'div' ); ?>>		<?php
+		</<?php echo esc_attr( $html_tag_escaped ); ?>>		<?php
 
 		if ( $return_html ) {
 			return ob_get_clean();
@@ -290,8 +292,8 @@ class EPKB_HTML_Elements {
 
 		<div class="config-input-group <?php echo esc_attr( $args['input_group_class'] ); ?>" id="<?php echo esc_attr( $args['name'] ); ?>_group" <?php echo $group_data_escaped; ?>>
 
-			<label class="<?php echo esc_attr( $args['label_class'] ); ?>" for="<?php echo esc_attr( $args['name'] ); ?>">
-				<?php echo esc_html( $args['label'] ); ?>
+			<label class="<?php echo esc_attr( $args['label_class'] ); ?>" for="<?php echo esc_attr( $args['name'] ); ?>">				<?php
+				echo wp_kses_post( $args['label'] ); ?>
 			</label>
 
 			<div class="input_container <?php echo esc_attr( $args['container_class'] ); ?>">
@@ -299,8 +301,8 @@ class EPKB_HTML_Elements {
 				       name="<?php echo esc_attr( $args['name'] ); ?>"
 				       id="<?php echo esc_attr( $args['name'] ); ?>"
 				       value="on"
-				       class="<?php echo esc_attr( $args['input_class'] ); ?>"
-					<?php echo checked( "on", $args['value'], false ); ?> >
+				       class="<?php echo esc_attr( $args['input_class'] ); ?>"		<?php
+						echo checked( "on", $args['value'], false ); ?> >
 			</div>
 		</div>			<?php
 
@@ -327,8 +329,8 @@ class EPKB_HTML_Elements {
 			'bottomDesc'    => '',
 			'textLoc'       => 'left',
 			'checked'       => false,
-			'toggleOnText'  => __( 'on', 'echo-knowledge-base' ),
-			'toggleOffText' => __( 'off', 'echo-knowledge-base' ),
+			'toggleOnText'  => esc_html__( 'on', 'echo-knowledge-base' ),
+			'toggleOffText' => esc_html__( 'off', 'echo-knowledge-base' ),
 			'return_html'   => false,
 		);
 		$args       = self::add_defaults( $args, $defaults );
@@ -342,7 +344,8 @@ class EPKB_HTML_Elements {
 			ob_start();
 		}   ?>
 
-		<div id="<?php echo esc_attr( $args['id'] ); ?>" class="epkb-settings-control-container epkb-settings-control-type-toggle epkb-input-group <?php echo 'epkb-settings-control-type-toggle--' . esc_attr( $args['textLoc'] ); ?> <?php echo esc_attr( $args['input_group_class'] ); ?>" data-field="<?php echo esc_attr( $args['data'] ); ?>" <?php echo $group_data_escaped; ?>>     <?php
+		<div id="<?php echo esc_attr( $args['id'] ); ?>" class="epkb-settings-control-container epkb-settings-control-type-toggle epkb-input-group <?php
+			echo 'epkb-settings-control-type-toggle--' . esc_attr( $args['textLoc'] ); ?> <?php echo esc_attr( $args['input_group_class'] ); ?>" data-field="<?php echo esc_attr( $args['data'] ); ?>" <?php echo $group_data_escaped; ?>>     <?php
 
 			if ( ! empty( $topDesc ) ) {    ?>
 				<div class="epkb-settings-control__description"><?php echo wp_kses_post( $topDesc ); ?></div>  <?php
@@ -355,7 +358,7 @@ class EPKB_HTML_Elements {
 					self::display_tooltip( $args['tooltip_title'], $args['tooltip_body'], $args['tooltip_args'], $args['tooltip_external_links'] );
 
 					if ( ! empty( $args['desc'] ) ) {
-						echo $args['desc'];
+						echo wp_kses_post( $args['desc'] );
 					}
 					if ( $args['is_pro'] ) {
 						self::display_pro_setting_tag( $args['pro_tooltip_args'] );
@@ -396,9 +399,9 @@ class EPKB_HTML_Elements {
 
 		$group_data_escaped = self::get_data_escaped( $args['group_data'] );    ?>
 
-		<div class="epkb-input-group <?php echo esc_attr( $args['input_group_class'] ); ?>" id="<?php echo esc_attr( $args['name'] ); ?>_group" <?php echo $group_data_escaped; ?>>
+		<div class="epkb-input-group <?php echo esc_attr( $args['input_group_class'] ); ?>" id="<?php echo esc_attr( $args['name'] ); ?>_group" <?php echo $group_data_escaped; /* phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped */ ?>>
 			<label class="<?php echo esc_attr( $args['label_class'] ); ?>" for="<?php echo esc_attr( $args['name'] ); ?>">  <?php
-				echo esc_html( $args['label'] );
+				echo wp_kses_post( $args['label'] );
 
 				self::display_tooltip( $args['tooltip_title'], $args['tooltip_body'], $args['tooltip_args'], $args['tooltip_external_links'] );
 
@@ -416,8 +419,7 @@ class EPKB_HTML_Elements {
 					foreach( $args['options'] as $key => $value ) {
 						$label = is_array( $value ) ? $value['label'] : $value;
                         $class = isset( $value['class'] ) ? $value['class'] : '';
-						$selected = selected( $key, $args['value'], false );
-						echo '<option value="' . esc_attr( $key ) . '" class="' . esc_attr( $class ) . '"' . $selected . '>' . esc_html( $label ) . '</option>';
+						echo '<option value="' . esc_attr( $key ) . '" class="' . esc_attr( $class ) . '"' . selected( $key, $args['value'], false ) . '>' . esc_html( $label ) . '</option>';
 					}  ?>
 				</select>
 			</div>
@@ -435,11 +437,16 @@ class EPKB_HTML_Elements {
 		$args = self::add_defaults( $args );
 		$args = self::get_specs_info( $args );
 
-		$group_data_escaped = self::get_data_escaped( $args['group_data'] );    ?>
+		$group_data_escaped = self::get_data_escaped( $args['group_data'] ); ?>
 
-		<div class="epkb-input-group epkb-input-custom-dropdown <?php echo esc_attr( $args['input_group_class'] ); ?>" id="<?php echo esc_attr( $args['name'] ); ?>_group" <?php echo $group_data_escaped; ?>>
+		<div class="epkb-input-group epkb-input-custom-dropdown <?php echo esc_attr( $args['input_group_class'] ); ?>" id="<?php echo esc_attr( $args['name'] ); ?>_group" <?php echo $group_data_escaped; ?>>  <?php
+
+			if ( ! empty( $args['top_html'] ) ) {
+				echo wp_kses( $args['top_html'], EPKB_Utilities::get_admin_ui_extended_html_tags() );
+			}   ?>
+
 			<label class="<?php echo esc_attr( $args['label_class'] ); ?>" for="<?php echo esc_attr( $args['name'] ); ?>">  <?php
-				echo esc_html( $args['label'] );
+				echo wp_kses_post( $args['label'] );
 				self::display_tooltip( $args['tooltip_title'], $args['tooltip_body'], $args['tooltip_args'], $args['tooltip_external_links'] );
 				if ( $args['is_pro'] ) {
 					self::display_pro_setting_tag( $args['pro_tooltip_args'] );
@@ -456,7 +463,7 @@ class EPKB_HTML_Elements {
 					foreach( $args['options'] as $key => $value ) {
 						$label = is_array( $value ) ? $value['label'] : $value;
 						$class = isset( $value['class'] ) ? $value['class'] : '';
-						echo '<div data-value="' . esc_attr( $key ) . '" class="epkb-input-custom-dropdown__option ' . ( $key == $args['value'] ? 'epkb-input-custom-dropdown__option--selected' : '' ) . esc_attr( $class ) . '">' .
+						echo '<div data-value="' . esc_attr( $key ) . '" class="epkb-input-custom-dropdown__option ' . ( $key == $args['value'] ? 'epkb-input-custom-dropdown__option--selected' : '' ) . esc_attr( $class )  . '">' .
 								'<span class="epkb-input-custom-dropdown__option-text">' . esc_html( $label ) . '</span><span class="epkb-input-custom-dropdown__option-mark"></span></div>';
 					}   ?>
 				</div>
@@ -465,8 +472,7 @@ class EPKB_HTML_Elements {
 					foreach( $args['options'] as $key => $value ) {
 						$label = is_array( $value ) ? $value['label'] : $value;
 						$class = isset( $value['class'] ) ? $value['class'] : '';
-						$selected = selected( $key, $args['value'], false );
-						echo '<option value="' . esc_attr( $key ) . '" class="' . esc_attr( $class ) . '"' . $selected . '>' . esc_html( $label ) . '</option>';
+						echo '<option value="' . esc_attr( $key ) . '" class="' . esc_attr( $class ) . '"' . selected( $key, $args['value'], false ) . '>' . esc_html( $label ) . '</option>';
 					}  ?>
 				</select>   <?php
 
@@ -476,6 +482,12 @@ class EPKB_HTML_Elements {
 							<span data-option-value="<?php echo esc_attr( $key ); ?>"
 							      class="epkbfa epkbfa-font epkbfa-<?php echo esc_attr( $key ) . ' '; ?>epkb-input-custom-dropdown__option-icon<?php echo $key == $args['value'] ? ' ' . 'epkb-input-custom-dropdown__option-icon--active' : ''; ?>"></span> <?php
 						}   ?>
+					</div>  <?php
+				}
+
+				if ( isset( $args['static_icon'] ) ) {    ?>
+					<div class="epkb-input-custom-dropdown__static-icon">
+						<span class="epkbfa epkbfa-font epkbfa-<?php echo esc_attr( $args['static_icon'] ) . ' '; ?>"></span>
 					</div>  <?php
 				}   ?>
 
@@ -515,7 +527,7 @@ class EPKB_HTML_Elements {
 
 			if ( ! empty( $args['label'] ) ) {  ?>
 				<span class="epkb-main_label <?php echo esc_attr( $args['main_label_class'] ); ?>">                <?php
-					echo esc_html( $args['label'] );
+					echo wp_kses_post( $args['label'] );
 					self::display_tooltip( $args['tooltip_title'], $args['tooltip_body'], $args['tooltip_args'], $args['tooltip_external_links'] );
 
 	                if ( $args['is_pro'] ) {
@@ -529,7 +541,10 @@ class EPKB_HTML_Elements {
 
             <div class="epkb-radio-buttons-container <?php echo esc_attr( $args['input_class'] ); ?>" id="<?php echo esc_attr( $args['name'] ); ?>">              <?php
 
-				foreach( $args['options'] as $key => $label ) { ?>
+				foreach( $args['options'] as $key => $label ) {
+					if ( empty( $label ) ) {
+						continue;
+						}?>
                     <div class="epkb-input-container">
 
                         <input class="epkb-input" type="radio"
@@ -538,7 +553,7 @@ class EPKB_HTML_Elements {
                                value="<?php echo esc_attr( $key ); ?>"  <?php
 								checked( $key, $args['value'] );	?>
                         >
-	                    <label class="epkb-label" for="<?php echo esc_attr( $args['name'] ) . $ix; ?>">
+	                    <label class="epkb-label" for="<?php echo esc_attr( $args['name'] . $ix ); ?>">
                             <span class="epkb-label__text"><?php echo wp_kses_post( $label ); ?></span>
                         </label>
 
@@ -563,7 +578,7 @@ class EPKB_HTML_Elements {
 				} else {  // If no Condition show desc all the time.
 					$showDesc = 'radio-buttons-horizontal-desc--show';
 				}
-				echo '<span class="radio-buttons-horizontal-desc '.$showDesc.'">'.$args['desc'].'</span>';
+				echo '<span class="radio-buttons-horizontal-desc ' . esc_attr( $showDesc ) . '">' . wp_kses_post( $args['desc'] ) . '</span>';
 
 			} ?>
 
@@ -596,7 +611,7 @@ class EPKB_HTML_Elements {
 
 		<div class="epkb-input-group epkb-admin__radio-icons <?php echo esc_attr( $args['input_group_class'] ); ?>" id="<?php echo esc_attr( $args['name'] ); ?>_group" <?php echo $group_data_escaped; ?>>
 
-			<span class="epkb-main_label <?php echo esc_attr( $args['main_label_class'] ); ?>"><?php echo esc_html( $args['label'] );
+			<span class="epkb-main_label <?php echo esc_attr( $args['main_label_class'] ); ?>"><?php echo wp_kses_post( $args['label'] );
 
 				self::display_tooltip( $args['tooltip_title'], $args['tooltip_body'], $args['tooltip_args'], $args['tooltip_external_links'] );
 
@@ -613,7 +628,7 @@ class EPKB_HTML_Elements {
 				foreach( $args['options'] as $key => $label ) {	?>
 
 					<div class="epkb-input-container">
-						<label class="epkb-label" for="<?php echo esc_attr( $args['name'] ).$ix ?>">
+						<label class="epkb-label" for="<?php echo esc_attr( $args['name'] . $ix ); ?>">
 							<span class="epkb-label__text"><?php echo esc_html( $label ); ?></span>
 							<input class="epkb-input" type="radio"
 								name="<?php echo esc_attr( $args['name'] ); ?>"
@@ -621,7 +636,7 @@ class EPKB_HTML_Elements {
 								value="<?php echo esc_attr( $key ); ?>" <?php
 								checked( $key, $args['value'] );	?>
 							>
-                            <span class="<?php echo preg_match( '/ep_font_/', $key ) ? '' : 'epkbfa epkbfa-font epkbfa-'; ?><?php echo esc_attr( $key ); ?> epkbfa-input-icon"></span>
+                            <span class="<?php echo str_contains( $key, 'ep_font_' ) ? '' : 'epkbfa epkbfa-'; ?><?php echo esc_attr( $key ); ?> epkbfa-input-icon"></span>
 						</label>
 					</div> <?php
 
@@ -629,7 +644,7 @@ class EPKB_HTML_Elements {
 				} //foreach
 
 				if ( $args['desc'] ) {
-					echo $args['desc'];
+					echo wp_kses_post( $args['desc'] );
 				} ?>
 			</div>
 		</div>	<?php
@@ -657,7 +672,7 @@ class EPKB_HTML_Elements {
 
 		<div class="epkb-input-group epkb-admin__checkbox-icons <?php echo esc_attr( $args['input_group_class'] ); ?>" id="<?php echo esc_attr( $args['name'] ); ?>_group" <?php echo $group_data_escaped; ?>>
 
-			<span class="epkb-main_label <?php echo esc_attr( $args['main_label_class'] ); ?>"><?php echo esc_html( $args['label'] );
+			<span class="epkb-main_label <?php echo esc_attr( $args['main_label_class'] ); ?>"><?php echo wp_kses_post( $args['label'] );
 				if ( $args['is_pro'] ) {
 					self::display_pro_setting_tag( $args['pro_tooltip_args'] );
 				}
@@ -671,7 +686,7 @@ class EPKB_HTML_Elements {
 				foreach( $args['options'] as $key => $label ) {     ?>
 
 					<div class="epkb-input-container">
-						<label class="epkb-label" for="<?php echo esc_attr( $args['name'] ).$ix ?>">
+						<label class="epkb-label" for="<?php echo esc_attr( $args['name'] . $ix ); ?>">
 							<span class="epkb-label__text"><?php echo esc_html( $label ); ?></span>
 							<input class="epkb-input" type="checkbox"
 							       name="<?php echo esc_attr( $args['name'] ); ?>"
@@ -690,7 +705,7 @@ class EPKB_HTML_Elements {
 			</div> <?php
 
 			if ( $args['desc'] ) {
-				echo $args['desc'];
+				echo wp_kses_post( $args['desc'] );
 			} ?>
 
 		</div>	<?php
@@ -705,7 +720,7 @@ class EPKB_HTML_Elements {
 	 * @param array $args
 	 * @return false|string
 	 */
-	public static function radio_buttons_vertical($args = array() ) {
+	public static function radio_buttons_vertical( $args = array() ) {
 
 		$defaults = array(
 			'id'                => 'radio',
@@ -723,8 +738,8 @@ class EPKB_HTML_Elements {
 		}   ?>
         <div class="epkb-input-group <?php echo esc_attr( $args['input_group_class'] ); ?>" id="<?php echo esc_attr( $args['name'] ); ?>_group" <?php echo $group_data_escaped; ?>>
 
-			<span class="epkb-main_label <?php echo esc_attr( $args['main_label_class'] ); ?>">
-                <?php echo esc_html( $args['label'] );
+			<span class="epkb-main_label <?php echo esc_attr( $args['main_label_class'] ); ?>">                <?php
+				echo wp_kses_post( $args['label'] );
                 self::display_tooltip( $args['tooltip_title'], $args['tooltip_body'], $args['tooltip_args'], $args['tooltip_external_links'] );
 
                 if ( $args['is_pro'] ) {
@@ -746,7 +761,7 @@ class EPKB_HTML_Elements {
                                value="<?php echo esc_attr( $key ); ?>"  <?php
 								checked( $key, $args['value'] );	?>
                         >
-                        <label class="epkb-label" for="<?php echo esc_attr( $args['name'] ).$ix ?>">
+                        <label class="epkb-label" for="<?php echo esc_attr( $args['name'] . $ix ); ?>">
                             <span class="epkb-label__text"><?php echo esc_html( $label ); ?></span>
                         </label>
 
@@ -754,13 +769,12 @@ class EPKB_HTML_Elements {
                     </div> <?php
 
 					$ix++;
-				} //foreach
+				} //foreach				?>
 
-				?>
             </div> <?php
 
 			if ( $args['desc'] ) {
-				echo $args['desc'];
+				echo wp_kses_post( $args['desc'] );
 			} ?>
 
         </div>	<?php
@@ -783,8 +797,8 @@ class EPKB_HTML_Elements {
 		<div class="<?php echo esc_attr( $args['text_class'] ); ?>">     <?php
 
 			if ( ! empty( $args['label'] ) ) {    ?>
-				<label class="<?php echo esc_attr( $args['label_class'] ); ?>" for="<?php echo esc_attr( $args['name'] ); ?>">
-					<?php echo esc_html( $args['label'] ); ?>
+				<label class="<?php echo esc_attr( $args['label_class'] ); ?>" for="<?php echo esc_attr( $args['name'] ); ?>">					<?php
+					echo wp_kses_post( $args['label'] ); ?>
 				</label>    <?php
 			}   ?>
 
@@ -819,9 +833,10 @@ class EPKB_HTML_Elements {
 		$args = self::add_defaults( $args, $defaults );
 		$ix = 0;
 
-		$group_data_escaped = self::get_data_escaped( $args['group_data'] );    ?>
+		$group_data_escaped = self::get_data_escaped( $args['group_data'] );
+		$html_tag_escaped = $args['main_tag'] == 'div' ? 'div' : 'li';  ?>
 
-		<<?php echo esc_html( $args['main_tag'] ); ?> class=" <?php echo esc_attr( $args['input_group_class'] ); ?>" id="<?php echo esc_attr( $args['name'] ); ?>_group" <?php echo $group_data_escaped; ?>>    <?php
+		<<?php echo esc_html( $html_tag_escaped ); ?> class=" <?php echo esc_attr( $args['input_group_class'] ); ?>" id="<?php echo esc_attr( $args['name'] ); ?>_group" <?php echo $group_data_escaped; ?>>    <?php
 
 		if ( $args['label'] != '' ) {   ?>
 			<div class="main_label <?php echo esc_attr( $args['main_label_class'] ); ?>"><?php echo esc_html( $args['label'] ); ?></div>  <?php
@@ -837,8 +852,8 @@ class EPKB_HTML_Elements {
 				$input_id = $args['name'] . '-' . $ix;  ?>
 
 				<div class="epkb-input-group">
-					<label class="<?php echo esc_attr( $args['label_class'] ); ?>" for="<?php echo esc_attr( $input_id ); ?>">
-						<?php echo esc_html( $label ); ?>
+					<label class="<?php echo esc_attr( $args['label_class'] ); ?>" for="<?php echo esc_attr( $input_id ); ?>">			<?php
+						echo wp_kses_post( $label ); ?>
 					</label>
 					<div class="input_container <?php echo esc_html( $args['input_class'] ); ?>">
 						<input type="checkbox"
@@ -854,7 +869,7 @@ class EPKB_HTML_Elements {
 			} //foreach   	?>
 
 		</div>
-		</<?php echo esc_html( $args['main_tag'] ); ?>>   <?php
+		</<?php echo esc_html( $html_tag_escaped ); ?>>   <?php
 	}
 
 	/**
@@ -879,7 +894,7 @@ class EPKB_HTML_Elements {
 			<input type="hidden" name="action" value="<?php echo esc_attr( $action ); ?>">     <?php
 
 			if ( $unique_button ) {  ?>
-				<input type="hidden" name="_wpnonce_epkb_ajax_action" value="<?php echo wp_create_nonce( "_wpnonce_epkb_ajax_action" ); ?>">
+				<input type="hidden" name="_wpnonce_epkb_ajax_action" value="<?php echo wp_create_nonce( "_wpnonce_epkb_ajax_action" ); //phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped  ?>">
 				<input type="submit" id="<?php echo esc_attr( $action ); ?>" class="<?php echo esc_attr( $inputClass ); ?>" value="<?php echo esc_attr( $button_label ); ?>" >  <?php
 			} else {    ?>
 				<input type="submit" class="<?php echo esc_attr( $action ) . ' ' . esc_attr( $inputClass ); ?>" value="<?php echo esc_attr( $button_label ); ?>" >  <?php
@@ -906,37 +921,31 @@ class EPKB_HTML_Elements {
 
 		$args = self::add_defaults( $args );
 		$id             = $args['name'];
-		$autocomplete   = $args['autocomplete'] ? 'on' : 'off';
-		$readonly       = $args['readonly'] ? ' readonly' : '';
-		$label_wrap_open  = '';
-		$label_wrap_close = '';
-		$input_wrap_open  = '';
-		$input_wrap_close = '';
+		$label_wrap_open_escaped  = '';
+		$label_wrap_close_escaped = '';
 		$group_data_escaped = self::get_data_escaped( $args['group_data'] );
 		$data_escaped = self::get_data_escaped( $args['data'] );
 
 		if ( ! empty( $args['label_wrapper']) ) {
-			$label_wrap_open   = '<' . esc_html( $args['label_wrapper'] ) . ' class="' . esc_attr( $args['main_label_class'] ) . '">';
-			$label_wrap_close  = '</' . esc_html( $args['label_wrapper'] ) . '>';
+			$label_wrap_open_escaped   = '<' . esc_html( $args['label_wrapper'] ) . ' class="' . esc_attr( $args['main_label_class'] ) . '">';
+			$label_wrap_close_escaped  = '</' . esc_html( $args['label_wrapper'] ) . '>';
 		}
 		if ( ! empty( $args['input_wrapper']) ) {
-			$label_wrap_open   = '<' . esc_html( $args['input_wrapper'] ) . ' class="' . esc_attr( $args['input_group_class'] ) . '" ' . $group_data_escaped . '>';
-			$label_wrap_close  = '<' . esc_html( $args['input_wrapper'] ) . '>';
+			$label_wrap_open_escaped   = '<' . esc_html( $args['input_wrapper'] ) . ' class="' . esc_attr( $args['input_group_class'] ) . '" ' . $group_data_escaped . '>';
+			$label_wrap_close_escaped  = '<' . esc_html( $args['input_wrapper'] ) . '>';
 		}
 
 		if ( ! empty( $args['return_html'] ) ) {
 			ob_start();
 		}
 
-		echo $label_wrap_open;  ?>
+		echo $label_wrap_open_escaped;  ?>
 		<label class="<?php echo esc_attr( $args['label_class'] ); ?>" for="<?php echo esc_attr( $id ); ?>"><?php echo esc_html( $args['label'] ); ?></label>		<?php
-		echo $label_wrap_close;
+		echo $label_wrap_close_escaped; ?>
 
-		echo  $input_wrap_open; ?>
 		<input type="text" name="<?php echo esc_attr( $id ); ?>" id="<?php echo esc_attr( $id ); ?>" class="<?php echo esc_attr( $args['input_class'] ); ?>"
-		       autocomplete="<?php echo $autocomplete; ?>" value="<?php echo esc_attr( $args['value'] ); ?>"
-		       placeholder="<?php echo esc_attr( $args['placeholder'] ); ?>" maxlength="<?php echo esc_attr( $args['max'] ); ?>" <?php echo $data_escaped . $readonly; ?> >		<?php
-		echo  $input_wrap_close;
+		       autocomplete="<?php echo ( $args['autocomplete'] ? 'on' : 'off' ); ?>" value="<?php echo esc_attr( $args['value'] ); ?>"
+		       placeholder="<?php echo esc_attr( $args['placeholder'] ); ?>" maxlength="<?php echo esc_attr( $args['max'] ); ?>" <?php echo $data_escaped . ( $args['readonly'] ? ' readonly' : '' ); ?> >		<?php
 
 		if ( ! empty( $args['return_html'] ) ) {
 			return ob_get_clean();
@@ -961,18 +970,19 @@ class EPKB_HTML_Elements {
         if ( ! empty( $label ) ) {  ?>
             <span class=""><?php echo esc_html( $label ); ?></span> <?php
 		}   ?>
-        <div class="epkb-copy-to-clipboard-box-container">
-            <div class="epkb-ctc__embed-content">
+        <span class="epkb-copy-to-clipboard-box-container">
+            <span class="epkb-ctc__embed-content">
                 <span class="epkb-ctc__embed-notification"><?php echo esc_html__( 'Copied to clipboard', 'echo-knowledge-base' ); ?></span>
                 <span class="epkb-ctc__embed-code"><?php echo esc_html( $copy_text ); ?></span>
-            </div>
+            </span>
             <a class="epkb-ctc__copy-button" href="#">
                 <span><?php echo esc_html__( 'Copy', 'echo-knowledge-base' ); ?></span>
             </a>
-        </div>  <?php
+        </span>  <?php
 		if ( ! empty( $return_html ) ) {
 			return ob_get_clean();
 		}
+
         return '';
 	}
 
@@ -980,14 +990,14 @@ class EPKB_HTML_Elements {
 	 * Display a tooltip for admin form fields.
 	 *
 	 * @param string $title - The title of the tooltip.
-	 * @param string $body - The content/body of the tooltip.
+	 * @param string $body_escaped - The content/body of the tooltip.
 	 * @param array $args - Additional arguments for the tooltip.
 	 * @param array $external_links - An array of external link for the tooltip. //// [ [ 'link_text' => string, 'link_url' => string ], [...] ]
 	 *
 	 * @return void
 	 */
-	public static function display_tooltip( $title, $body, $args = array(), $external_links = array() ) {
-		if ( empty( $body ) && empty( $external_links ) ) {
+	public static function display_tooltip( $title, $body_escaped, $args = array(), $external_links = array() ) {
+		if ( empty( $body_escaped ) && empty( $external_links ) ) {
 			return;
 		}
 
@@ -995,43 +1005,44 @@ class EPKB_HTML_Elements {
 			'class'         => '',
 			'open-icon'     => 'info-circle',
 			'open-text'     => '',
-			'link_text'     => __( 'Learn More', 'echo-knowledge-base' ),
+			'link_text'     => esc_html__( 'Learn More', 'echo-knowledge-base' ),
 			'link_url'      => '',
-			'link_target'   => '_blank'
+			'link_target'   => '_blank',
 		);
-		$args = array_merge( $defaults, $args );  ?>
-
-		<div class="epkb__option-tooltip <?php echo esc_attr( $args['class'] ); ?>">
+		$args = array_merge( $defaults, $args ); ?>
+			<div class="epkb__option-tooltip <?php echo esc_attr( $args['class'] ); ?>">
 			<span class="epkb__option-tooltip__button <?php echo $args['open-icon'] ? 'epkbfa epkbfa-' . esc_attr( $args['open-icon'] ) : ''; ?>">  <?php
 				echo esc_html( $args['open-text'] );  ?>
 			</span>
-			<div class="epkb__option-tooltip__contents">    <?php
-				if ( ! empty( $title ) ) {   ?>
-					<div class="epkb__option-tooltip__header">						<?php
-						echo esc_html( $title );  ?>
-					</div>  <?php
-				}   ?>
-				<div class="epkb__option-tooltip__body">					<?php
-					echo wp_kses_post( $body );
+				<div class="epkb__option-tooltip__contents">    <?php
+					if ( ! empty( $title ) ) {   ?>
+						<div class="epkb__option-tooltip__header">						<?php
+							echo esc_html( $title );  ?>
+						</div>  <?php
+					}   ?>
+					<div class="epkb__option-tooltip__body">					<?php
+						//phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+						echo $body_escaped;
 
-					if ( ! empty( $external_links ) ) {
-						foreach ( $external_links as $external_link ) { ?>
-							<div class="epkb__option-tooltip__body__external_link">
-								<a target="_blank" href="<?php echo esc_url( $external_link['link_url'] ); ?>"><?php echo esc_html( $external_link['link_text'] ); ?></a><span class="epkbfa epkbfa-external-link"></span>
-							</div> <?php
-						}
-					} ?>
+						if ( ! empty( $external_links ) ) {
+							foreach ( $external_links as $external_link ) { ?>
+								<div class="epkb__option-tooltip__body__external_link">
+									<a target="_blank" href="<?php echo esc_url( $external_link['link_url'] ); ?>"><?php echo esc_html( $external_link['link_text'] ); ?></a><span class="epkbfa epkbfa-external-link"></span>
+								</div> <?php
+							}
+						} ?>
 
-				</div>  <?php
-				if ( ! empty( $args['link_url'] ) ) { ?>
-					<div class="epkb__option-tooltip__footer">
-						<a href="<?php echo esc_url( $args['link_url'] ); ?>" class="epkb__option-tooltip__button" target="<?php echo esc_attr( $args['link_target'] ); ?>">  <?php
-							echo esc_html( $args['link_text'] );    ?>
-						</a>
 					</div>  <?php
-				}  ?>
-			</div>
-		</div>  <?php
+					if ( ! empty( $args['link_url'] ) ) { ?>
+						<div class="epkb__option-tooltip__footer">
+							<a href="<?php echo esc_url( $args['link_url'] ); ?>" class="epkb__option-tooltip__button" target="<?php echo esc_attr( $args['link_target'] ); ?>">  <?php
+								echo esc_html( $args['link_text'] );    ?>
+							</a>
+						</div>  <?php
+					}  ?>
+				</div>
+			</div>		<?php 
+
 	}
 
 	/**
@@ -1042,12 +1053,12 @@ class EPKB_HTML_Elements {
 	public static function display_pro_setting_tag_pro_feature_ad( $args ) {  ?>
 
 		<div class="epkb__option-pro-tag-container">
-			<div class="epkb__option-pro-tag-pro-feature-ad" data-target="<?php echo esc_attr( 'epkb-dialog-pro-feature-ad-pro-setting-tag-' . strtolower( str_replace( ' ', '-', $args['name'] ) ) ); ?>"><?php echo __( 'PRO', 'echo-knowledge-base' ); ?></div> <?php
+			<div class="epkb__option-pro-tag-pro-feature-ad" data-target="<?php echo esc_attr( 'epkb-dialog-pro-feature-ad-pro-setting-tag-' . strtolower( str_replace( ' ', '-', $args['name'] ) ) ); ?>"><?php echo esc_html__( 'PRO', 'echo-knowledge-base' ); ?></div> <?php
 			EPKB_HTML_Forms::dialog_pro_feature_ad( array(
 				'id' => 'epkb-dialog-pro-feature-ad-pro-setting-tag-' . strtolower( str_replace( ' ', '-', $args['name'] ) ),
-				'title' => empty( $args['title'] ) ? __( 'PRO Feature', 'echo-knowledge-base' ) : $args['title'],
+				'title' => empty( $args['title'] ) ? esc_html__( 'PRO Feature', 'echo-knowledge-base' ) : $args['title'],
 				'list' => empty( $args['body'] ) ? array() : array($args['body']),
-				'btn_text' => empty( $args['btn_text'] ) ? __('Upgrade Now', 'echo-knowledge-base' ) :  $args['btn_text'],
+				'btn_text' => empty( $args['btn_text'] ) ? esc_html__('Upgrade Now', 'echo-knowledge-base' ) :  $args['btn_text'],
 				'btn_url' => empty( $args['btn_url'] ) ? '' : $args['btn_url'],
 				'show_close_btn' => 'yes',
 				'return_html' => true,
@@ -1063,7 +1074,7 @@ class EPKB_HTML_Elements {
 	public static function display_pro_setting_tag( $args ) {  ?>
 
 		<div class="epkb__option-pro-tag-container">
-			<div class="epkb__option-pro-tag"><?php echo __( 'PRO', 'echo-knowledge-base' ); ?></div>
+			<div class="epkb__option-pro-tag"><?php echo esc_html__( 'PRO', 'echo-knowledge-base' ); ?></div>
 			<div class="epkb__option-pro-tooltip">
 
 				<div class="epkb__option-pro-tooltip__contents">
@@ -1167,7 +1178,7 @@ class EPKB_HTML_Elements {
 		<div class="epkb-input-group epkb-admin__wp-editor-field <?php echo esc_html( $args['input_group_class'] ); ?>" id="<?php echo esc_attr( $args['name'] ); ?>_group" <?php echo $group_data_escaped; ?>>
 
 			<label class="<?php echo esc_attr( $args['label_class'] ); ?>" for="<?php echo esc_attr( $args['name'] ); ?>">  <?php
-				echo esc_html( $args['label'] );
+				echo wp_kses_post( $args['label'] );
 				self::display_tooltip( $args['tooltip_title'], $args['tooltip_body'], $args['tooltip_args'], $args['tooltip_external_links'] );
 				if ( $args['is_pro'] ) {
 					self::display_pro_setting_tag( $args['pro_tooltip_args'] );
@@ -1200,8 +1211,8 @@ class EPKB_HTML_Elements {
 		$group_data_escaped = self::get_data_escaped( $args['group_data'] );    ?>
 		<div class="epkb-admin__input-field <?php echo esc_attr( $args['input_group_class'] ); ?>" <?php echo $group_data_escaped; ?>>
 			<p>
-				<span class="epkb__option-pro-tag"><?php esc_html_e( 'PRO', 'echo-knowledge-base' ); ?></span>
-				<?php echo esc_html( $args['desc'] ); ?>
+				<span class="epkb__option-pro-tag"><?php esc_html_e( 'PRO', 'echo-knowledge-base' ); ?></span>				<?php
+				echo wp_kses_post( $args['desc'] ); ?>
 				<a href="<?php echo esc_url( $args['more_info_url'] ); ?>" target="_blank"><?php echo esc_html( $args['more_info_text'] );  ?></a>
 			</p>
 		</div>  <?php

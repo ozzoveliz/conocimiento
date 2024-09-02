@@ -55,7 +55,7 @@ class EPKB_Layout_Classic extends EPKB_Layout {
 
 				// render opening div tag before first category in the current row
 				if ( $column_index == 1 ) { ?>
-					<div class="epkb-ml__module-categories-articles__row <?php echo $icon_loc; ?>">  <?php
+					<div class="epkb-ml__module-categories-articles__row <?php echo esc_attr( $icon_loc ); ?>">  <?php
 				}
 
 				self::display_classic_category( $category_id, $category_name, $articles_level_1_list, $level_2_categories, $categories_icons );
@@ -84,7 +84,8 @@ class EPKB_Layout_Classic extends EPKB_Layout {
 	private function display_classic_category( $category_id, $category_name, $level_1_articles, $level_2_categories, $categories_icons ) {
 
 		$category_icon = EPKB_KB_Config_Category::get_category_icon( $category_id, $categories_icons );
-		$category_title_tag = empty( $this->kb_config['ml_categories_articles_category_title_html_tag'] ) ? 'div' : $this->kb_config['ml_categories_articles_category_title_html_tag'];
+
+		$category_title_tag_escaped = EPKB_Utilities::sanitize_html_tag( $this->kb_config['ml_categories_articles_category_title_html_tag'] );
 		$category_desc = isset( $this->articles_seq_data[ $category_id ][1] ) && $this->kb_config['section_desc_text_on'] == 'on' ? $this->articles_seq_data[ $category_id ][1] : '';
 		$category_articles_number = 0;
 		$use_show_more = $this->kb_config['ml_categories_articles_collapse_categories'] == 'all_collapsed'; ?>
@@ -99,12 +100,12 @@ class EPKB_Layout_Classic extends EPKB_Layout {
 
 						<!-- Category Name -->
 						<div class="epkb-category-section__head_title">
-							<<?php echo esc_html( $category_title_tag ); ?> class="epkb-category-section__head_title__text"><?php echo esc_html( $category_name ); ?></<?php echo esc_html( $category_title_tag ); ?>>
+							<<?php echo esc_html( $category_title_tag_escaped ); ?> class="epkb-category-section__head_title__text"><?php echo esc_html( $category_name ); ?></<?php echo esc_html( $category_title_tag_escaped ); ?>>
 						</div>
 
 						<!-- Category Description -->
 						<div class="epkb-category-section__head_desc">
-							<?php echo esc_html( $category_desc ); ?>
+							<?php echo wp_kses_post( $category_desc ); ?>
 						</div>
 
 					</div					<?php
@@ -126,12 +127,12 @@ class EPKB_Layout_Classic extends EPKB_Layout {
 
 						<!-- Category Name -->
 						<div class="epkb-category-section__head_title">
-							<<?php echo esc_html( $category_title_tag ); ?> class="epkb-category-section__head_title__text"><?php echo esc_html( $category_name ); ?></<?php echo esc_html( $category_title_tag ); ?>>
+							<<?php echo esc_html( $category_title_tag_escaped ); ?> class="epkb-category-section__head_title__text"><?php echo esc_html( $category_name ); ?></<?php echo esc_html( $category_title_tag_escaped ); ?>>
 						</div>
 
 						<!-- Category Description -->
 						<div class="epkb-category-section__head_desc">
-							<?php echo esc_html( $category_desc ); ?>
+							<?php echo wp_kses_post( $category_desc ); ?>
 						</div>
 
 					</div>					<?php
@@ -153,14 +154,14 @@ class EPKB_Layout_Classic extends EPKB_Layout {
 
 							<!-- Category Name -->
 							<div class="epkb-category-section__head_title">
-								<<?php echo esc_html( $category_title_tag ); ?> class="epkb-category-section__head_title__text"><?php echo esc_html( $category_name ); ?></<?php echo esc_html( $category_title_tag ); ?>>
+								<<?php echo esc_html( $category_title_tag_escaped ); ?> class="epkb-category-section__head_title__text"><?php echo esc_html( $category_name ); ?></<?php echo esc_html( $category_title_tag_escaped ); ?>>
 							</div>
 
 						</div>
 
 						<!-- Category Description -->
 						<div class="epkb-category-section__head_desc">
-							<?php echo esc_html( $category_desc ); ?>
+							<?php echo wp_kses_post( $category_desc ); ?>
 						</div>
 
 					</div>					<?php
@@ -173,7 +174,7 @@ class EPKB_Layout_Classic extends EPKB_Layout {
 
 							<!-- Category Name -->
 							<div class="epkb-category-section__head_title">
-								<<?php echo esc_html( $category_title_tag ); ?> class="epkb-category-section__head_title__text"><?php echo esc_html( $category_name ); ?></<?php echo esc_html( $category_title_tag ); ?>>
+								<<?php echo esc_html( $category_title_tag_escaped ); ?> class="epkb-category-section__head_title__text"><?php echo esc_html( $category_name ); ?></<?php echo esc_html( $category_title_tag_escaped ); ?>>
 							</div>
 
 							<!-- Icon -->
@@ -190,7 +191,7 @@ class EPKB_Layout_Classic extends EPKB_Layout {
 
 						<!-- Category Description -->
 						<div class="epkb-category-section__head_desc">							<?php
-							echo esc_html( $category_desc ); ?>
+							echo wp_kses_post( $category_desc ); ?>
 						</div>
 
 					</div>					<?php
@@ -517,7 +518,7 @@ class EPKB_Layout_Classic extends EPKB_Layout {
 		return $output;
 	}
 
-	public function generate_kb_main_page() {
+	public function generate_non_modular_kb_main_page() {
 		// for compatibility reasons
 	}
 }

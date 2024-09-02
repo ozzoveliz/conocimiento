@@ -16,7 +16,7 @@
 function emkb_add_plugin_action_links ( $links ) {
 	$my_links = array(
 		__( 'Documentation', 'echo-knowledge-base' )      => '<a href="https://www.echoknowledgebase.com/documentation/?top-category=add-ons" target="_blank">' . esc_html__( 'Docs', 'echo-knowledge-base' ) . '</a>',
-		__( 'Support', 'echo-knowledge-base' )            => '<a href="https://www.echoknowledgebase.com/contact-us/?inquiry-type=technical">' . esc_html__( 'Support', 'echo-knowledge-base' ) . '</a>'
+		__( 'Support', 'echo-knowledge-base' )            => '<a href="https://www.echoknowledgebase.com/contact-us/?inquiry-type=technical" target="_blank">' . esc_html__( 'Support', 'echo-knowledge-base' ) . '</a>'
 	);
 
 	return array_merge( $my_links, $links );

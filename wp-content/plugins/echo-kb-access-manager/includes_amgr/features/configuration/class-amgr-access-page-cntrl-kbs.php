@@ -1,4 +1,4 @@
-<?php
+<?php if ( ! defined( 'ABSPATH' ) ) exit;
 
 /**
  * Handle saving specific KB configuration.
@@ -24,7 +24,7 @@ class AMGR_Access_Page_Cntrl_KBs extends AMGR_Access_Page_Controller {
 	public function display_access_tab() {
 
 		// verify that the request is authentic
-		if ( empty( $_REQUEST['_wpnonce_amar_access_content_action_ajax'] ) || ! wp_verify_nonce( $_REQUEST['_wpnonce_amar_access_content_action_ajax'], '_wpnonce_amar_access_content_action_ajax' ) ) {
+		if ( empty( $_REQUEST['_wpnonce_amar_access_content_action_ajax'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_REQUEST['_wpnonce_amar_access_content_action_ajax'] ) ), '_wpnonce_amar_access_content_action_ajax' ) ) {
 			EPKB_Utilities::ajax_show_error_die(__( 'Refresh your page', 'echo-knowledge-base' ));
 		}
 
@@ -52,13 +52,13 @@ class AMGR_Access_Page_Cntrl_KBs extends AMGR_Access_Page_Controller {
 	public function reset_log() {
 
 		// verify that the request is authentic
-		if ( empty( $_REQUEST['_wpnonce_epkb_ajax_action'] ) || ! wp_verify_nonce( $_REQUEST['_wpnonce_epkb_ajax_action'], '_wpnonce_epkb_ajax_action' ) ) {
-			EPKB_Utilities::ajax_show_error_die( __( 'First refresh your page', 'echo-knowledge-base' ) );
+		if ( empty( $_REQUEST['_wpnonce_epkb_ajax_action'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_REQUEST['_wpnonce_epkb_ajax_action'] ) ), '_wpnonce_epkb_ajax_action' ) ) {
+			EPKB_Utilities::ajax_show_error_die( esc_html__( 'First refresh your page', 'echo-knowledge-base' ) );
 		}
 
 		// ensure user has correct permissions
 		if ( ! current_user_can('admin_eckb_access_manager_page') ) {
-			EPKB_Utilities::ajax_show_error_die( __( 'You do not have ability to change access privileges.', 'echo-knowledge-base' )  . ' (E96)' );
+			EPKB_Utilities::ajax_show_error_die( esc_html__( 'You do not have ability to change access privileges.', 'echo-knowledge-base' )  . ' (E96)' );
 		}
 
 		AMGR_Logging::reset_logs();
@@ -80,7 +80,7 @@ class AMGR_Access_Page_Cntrl_KBs extends AMGR_Access_Page_Controller {
 
 		// ensure user has correct permissions
 		if ( ! current_user_can('admin_eckb_access_manager_page') ) {
-			EPKB_Utilities::ajax_show_error_die( __( 'You do not have ability to change access privileges.', 'echo-knowledge-base' )  . ' (E97)' );
+			EPKB_Utilities::ajax_show_error_die( esc_html__( 'You do not have ability to change access privileges.', 'echo-knowledge-base' )  . ' (E97)' );
 		}
 
 		// retrieve KB ID we are saving
@@ -112,7 +112,7 @@ class AMGR_Access_Page_Cntrl_KBs extends AMGR_Access_Page_Controller {
 
 		// ensure that we have a valid configuration for custom redirect URL
 		if ( ( $new_kb_config['no_access_action_user_without_login'] == 'redirect_to_custom_page' || $new_kb_config['no_access_action_user_with_login'] == 'redirect_to_custom_page' ) && empty( $new_kb_config['no_access_redirect_to_custom_page'] ) ) {
-			EPKB_Utilities::ajax_show_error_die( __( 'Invalid custom redirect URL', 'echo-knowledge-base' ) );
+			EPKB_Utilities::ajax_show_error_die( esc_html__( 'Invalid custom redirect URL', 'echo-knowledge-base' ) );
 		}
 
 		// sanitize and save AMGR configuration in the database. see AMGR_Settings_DB class

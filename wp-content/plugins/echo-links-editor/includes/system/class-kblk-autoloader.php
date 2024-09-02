@@ -30,8 +30,6 @@ class KBLK_Autoloader {
 
 				// PAGES
 				'kblk_add_ons_page'                 =>  'includes/admin/pages/class-kblk-add-ons-page.php',
-				'kblk_settings_page'                =>  'includes/admin/pages/class-kblk-settings-page.php',
-				'kblk_configuration_page'               =>  'includes/admin/pages/class-kblk-configuration-page.php',
 
 				// KB Configuration
 				'kblk_kb_config_controller'         =>  'includes/admin/kb-configuration/class-kblk-kb-config-controller.php',

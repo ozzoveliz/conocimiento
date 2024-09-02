@@ -100,7 +100,7 @@ class AMGR_License_Handler {
 
 		$stored_license_data = $this->get_license_state();
 		if ( empty($stored_license_data) ) {
-			$output[self::PLUGIN_NAME] = __( 'Could not retrieve license state', 'echo-knowledge-base' );
+			$output[self::PLUGIN_NAME] = esc_html__( 'Could not retrieve license state', 'echo-knowledge-base' );
 			return $output;
 		}
 
@@ -108,7 +108,7 @@ class AMGR_License_Handler {
 
 		// 1. ADD-ON VERSION
 		if ( ! empty($stored_license_data['new_version']) ) {
-			$output_status[] = sprintf( __( 'Please update %s to its latest version %s' , 'echo-knowledge-base' ), '<strong>' . self::PLUGIN_NAME . '</strong>', $stored_license_data['new_version'] );
+			$output_status[] = sprintf( esc_html__( 'Please update %s to its latest version %s' , 'echo-knowledge-base' ), '<strong>' . self::PLUGIN_NAME . '</strong>', $stored_license_data['new_version'] );
 		}
 
 		// 2. EXPIRATION
@@ -143,9 +143,9 @@ class AMGR_License_Handler {
 	}
 
 	public function get_cached_info() {
-		$default_array = array( __( 'Unknown status.', 'echo-knowledge-base' ), '', Echo_Knowledge_Base::$amag_version, '' );
+		$default_array = array( esc_html__( 'Unknown status.', 'echo-knowledge-base' ), '', Echo_Knowledge_Base::$amag_version, '' );
 		$amgr_license_state = EPKB_Utilities::get_wp_option( self::AMGR_LICENSE_STATE, $default_array, true );
-		$status_msg = isset($amgr_license_state[0]) ? $amgr_license_state[0] : __( 'Unknown status.', 'echo-knowledge-base' );
+		$status_msg = isset($amgr_license_state[0]) ? $amgr_license_state[0] : esc_html__( 'Unknown status.', 'echo-knowledge-base' );
 		$license_state = isset($amgr_license_state[1]) ? $amgr_license_state[1] : '';
 		$latest_add_on_version = isset($amgr_license_state[2]) ? $amgr_license_state[2] : Echo_Knowledge_Base::$amag_version;
 		$expiry_date = isset($amgr_license_state[3]) ? $amgr_license_state[3] : '';
@@ -159,8 +159,8 @@ class AMGR_License_Handler {
 	public function handle_license_command() {
 
 		// run a quick security check
-		if ( ! isset( $_REQUEST['_wpnonce_amgr_license_key'] ) || ! wp_verify_nonce( $_REQUEST['_wpnonce_amgr_license_key'], '_wpnonce_amgr_license_key' ) ) {
-			EPKB_Utilities::ajax_show_error_die( __( 'Security check failed.', 'echo-knowledge-base' ) );
+		if ( ! isset( $_REQUEST['_wpnonce_amgr_license_key'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_REQUEST['_wpnonce_amgr_license_key'] ) ), '_wpnonce_amgr_license_key' ) ) {
+			EPKB_Utilities::ajax_show_error_die( esc_html__( 'Security check failed.', 'echo-knowledge-base' ) );
 		}
 
 		// need license key to activate/deactivate the license
@@ -195,9 +195,9 @@ class AMGR_License_Handler {
 			/* @var $result WP_Error */
 			$message = $result->get_error_data();
 			if ( empty($message) ) {
-				EPKB_Utilities::ajax_show_error_die( $result->get_error_message(),  __( 'Could not save settings.', 'echo-knowledge-base' ) );
+				EPKB_Utilities::ajax_show_error_die( $result->get_error_message(),  esc_html__( 'Could not save settings.', 'echo-knowledge-base' ) );
 			}
-			EPKB_Utilities::ajax_show_error_die( $this->generate_error_summary( $result->get_error_data() ), __( 'Settings NOT saved due to following problems:', 'echo-knowledge-base' ) );
+			EPKB_Utilities::ajax_show_error_die( $this->generate_error_summary( $result->get_error_data() ), esc_html__( 'Settings NOT saved due to following problems:', 'echo-knowledge-base' ) );
 		}
 	}
 
@@ -264,7 +264,7 @@ class AMGR_License_Handler {
 	public function contact_license_server( $action, $license_key ) {
 
 		if ( empty($license_key) && $action != 'get_version' ) {
-			return $this->set_error_object( 'empty_license', __( 'Please enter your license.', 'echo-knowledge-base' ) );
+			return $this->set_error_object( 'empty_license', esc_html__( 'Please enter your license.', 'echo-knowledge-base' ) );
 		}
 
 		// data to send in our API request
@@ -349,67 +349,66 @@ class AMGR_License_Handler {
 	 */
 	public function retrieve_status_message( $license_data, $license_key ) {
 
-		$visit_account_page = '<a href="https://www.echoknowledgebase.com/account-dashboard/" target="_blank" title="' . __( 'visit your account page', 'echo-knowledge-base' ) . '">' . __( 'visit your account page', 'echo-knowledge-base' ) . '</a>';
+		$visit_account_page = '<a href="https://www.echoknowledgebase.com/account-dashboard/" target="_blank" title="' . esc_html__( 'visit your account page', 'echo-knowledge-base' ) . '">' . esc_html__( 'visit your account page', 'echo-knowledge-base' ) . '</a>';
 
 		$error_code = empty($license_data->error) ? '[unknown error]' : trim($license_data->error);
 		switch( $error_code ) {
 
 			case 'empty_license':
-				$message = sprintf( __( 'License for %s is missing. Please enter and activate your license.', 'echo-knowledge-base' ), '<strong>' . self::PLUGIN_NAME . '</strong>' );
+				$message = sprintf( esc_html__( 'License for %s is missing. Please enter and activate your license.', 'echo-knowledge-base' ), '<strong>' . self::PLUGIN_NAME . '</strong>' );
 				break;
 
 			case 'expired' : // 'check_license' and 'activate' action
 				$expired_date = empty($license_data->expires) ? '' : strtotime( $license_data->expires, current_time( 'timestamp' ) );
 				$expired_date = empty($expired_date) ? '[unknown]' : date_i18n( get_option( 'date_format' ),  $expired_date);
-				$message = sprintf( __( 'Your license key expired on %s. Please <a href="%s" target="_blank" title="Renew your license key">renew your license key</a>.', 'echo-knowledge-base' ),
+				$message = sprintf( esc_html__( 'Your license key expired on %s. Please <a href="%s" target="_blank" title="Renew your license key">renew your license key</a>.', 'echo-knowledge-base' ),
 									$expired_date, 'https://www.echoknowledgebase.com/checkout/?edd_license_key=' . $license_key);
 				break;
 
 			case 'missing' :
-				$message = sprintf( __( 'Invalid license key. Please %s and verify it.', 'echo-knowledge-base' ), $visit_account_page );
+				$message = sprintf( esc_html__( 'Invalid license key. Please %s and verify it.', 'echo-knowledge-base' ), $visit_account_page );
 				break;
 
 			case 'site_inactive' :  // 'check_license' action
-				$message = sprintf( __( 'This license is not active for this URL. Either activate (save) the license or %s to manage your license key URLs.', 'echo-knowledge-base' ), $visit_account_page );
+				$message = sprintf( esc_html__( 'This license is not active for this URL. Either activate (save) the license or %s to manage your license key URLs.', 'echo-knowledge-base' ), $visit_account_page );
 				break;
 
 			case 'invalid' :        // 'check_license' action
-				$message = sprintf( __( 'The entered license is not valid. Please enter a valid license or %s to manage your license key(s).', 'echo-knowledge-base' ), $visit_account_page );
+				$message = sprintf( esc_html__( 'The entered license is not valid. Please enter a valid license or %s to manage your license key(s).', 'echo-knowledge-base' ), $visit_account_page );
 				break;
 
 			case 'item_name_mismatch':  // 'check_license' and 'activate' action
 			case 'invalid_item_id':	    // 'check_license' and 'activate' action
-				$message = __( 'This license is not for ', 'echo-knowledge-base' ) . self::PLUGIN_NAME;
+				$message = esc_html__( 'This license is not for ', 'echo-knowledge-base' ) . self::PLUGIN_NAME;
 				break;
 
 			case 'no_activations_left':  // 'activate' action
 				$max_sites = isset( $license_data->max_sites) ?  $license_data->max_sites : 0;
-				$message = sprintf( __( 'This license key is registered on other %s website%s which is the license limit. In order to register the license on this website you can either: ' .
+				$message = sprintf( esc_html__( 'This license key is registered on other %s website%s which is the license limit. In order to register the license on this website you can either: ' .
 										'a) increase the number of websites the license can handle OR b) de-register your old website URL and register this ' .
 										'website URL. Please %s to make the URL change.', 'echo-knowledge-base' ), $max_sites, ($max_sites == 1 ? '' : 's'), $visit_account_page );
 				break;
 
 			case 'revoked':      // 'activate' action
 			case 'disabled':	// 'check_license' action
-				$message = sprintf(
-								__( 'Your license key has been disabled. Please <a href="%s" target="_blank">contact support</a> for more information.', 'echo-knowledge-base' ),
-									'https://www.echoknowledgebase.com/contact-us/');
+				$message = sprintf( esc_html__( 'Your license key has been disabled. Please %s contact support %s for more information.', 'echo-knowledge-base' ),
+									'<a href="https://www.echoknowledgebase.com/contact-us/" target="_blank">', '</a>' );
 				break;
 
 			case 'license_not_activable':  // 'activate' action
-				$message = __( 'The key you entered belongs to a bundle, please use this add-on specific license key.', 'echo-knowledge-base' );
+				$message = esc_html__( 'The key you entered belongs to a bundle, please use this add-on specific license key.', 'echo-knowledge-base' );
 				break;
 
 			case 'failed_to_deactivate':
-				$message = __( 'Error occurred (a30)', 'echo-knowledge-base' ) . ' - ' . $error_code;
+				$message = esc_html__( 'Error occurred', 'echo-knowledge-base' ) . ' (a30) - ' . $error_code;
 				break;
 
 			case 'key_mismatch':    // 'activate' action see EDD_Software_Licensing
-				$message = __( 'Error occurred (a31)', 'echo-knowledge-base' ) . ' - ' . $error_code;
+				$message = esc_html__( 'Error occurred', 'echo-knowledge-base' ) . ' (a31) - ' . $error_code;
 				break;
 
 			default:
-				$message = __( 'Error occurred (a32)', 'echo-knowledge-base' ) . ' - ' . $error_code;
+				$message = esc_html__( 'Error occurred', 'echo-knowledge-base' ) . ' (a32) - ' . $error_code;
 				break;
 		}
 
@@ -442,26 +441,26 @@ class AMGR_License_Handler {
 			return '';
 		}
 
-		$msg = __( 'Please', 'echo-knowledge-base' ) .' <a href="https://www.echoknowledgebase.com/checkout/?edd_license_key=' . esc_attr($this->license_key) .
-		        '" target="_blank" title="' . __( 'renew your license key', 'echo-knowledge-base' ) . '">' . __( 'renew your license key', 'echo-knowledge-base' ) . '</a>.';
+		$msg = esc_html__( 'Please', 'echo-knowledge-base' ) .' <a href="https://www.echoknowledgebase.com/checkout/?edd_license_key=' . esc_attr($this->license_key) .
+		        '" target="_blank" title="' . esc_html__( 'renew your license key', 'echo-knowledge-base' ) . '">' . esc_html__( 'renew your license key', 'echo-knowledge-base' ) . '</a>.';
 
 		if ( $difference_in_days > 0 ) {
-			return sprintf( __( 'Your license will expire in %s days.', 'echo-knowledge-base' ), $difference_in_days ) . ' ' . $msg;
+			return sprintf( esc_html__( 'Your license will expire in %s days.', 'echo-knowledge-base' ), $difference_in_days ) . ' ' . $msg;
 		} else {
-			return __( 'Your license ', 'echo-knowledge-base' ) . ( $difference_in_days < 0 ? __( 'expired ', 'echo-knowledge-base' ) . abs($difference_in_days) .
-					__( ' days ago. ', 'echo-knowledge-base' ) : __( ' will expire today. ', 'echo-knowledge-base' ) . $msg ) ;
+			return esc_html__( 'Your license ', 'echo-knowledge-base' ) . ( $difference_in_days < 0 ? esc_html__( 'expired ', 'echo-knowledge-base' ) . abs($difference_in_days) .
+					esc_html__( ' days ago. ', 'echo-knowledge-base' ) : esc_html__( ' will expire today. ', 'echo-knowledge-base' ) . $msg ) ;
 		}
 	}
 
 	private function generate_error_summary( $errors ) {
 
 		if ( empty( $errors ) || ! is_array( $errors )) {
-			return __( 'unknown error (334)', 'echo-knowledge-base' );
+			return esc_html__( 'Error occurred ', 'echo-knowledge-base' ) . ' (334)';
 		}
 
 		$output = '<ol>';
 		foreach( $errors as $error ) {
-			$output .= '<li>' . wp_kses( $error, array('strong') ) . '</li>';
+			$output .= '<li>' . wp_kses( $error, ['strong'] ) . '</li>';
 		}
 		$output .= '</ol>';
 
@@ -515,7 +514,8 @@ class AMGR_License_Handler {
 
 			// wait 4 weeks before reporting connectivity issue
 			if ( ! empty($stored_license_data['last_connection_error']) && EPKB_Utilities::get_days_since( $stored_license_data['last_connection_error'] ) > 30 ) {
-				$stored_license_data['error'] = sprintf( __( 'Could not contact licensing server.<a href="%s" target="_blank">Check your license status here.</a>.', 'echo-knowledge-base' ), $licenses_tab_url );
+				$stored_license_data['error'] = sprintf( esc_html__( 'Could not contact licensing server. %s Check your license status here %s.', 'echo-knowledge-base' ),
+													'<a href="' . $licenses_tab_url . '" target="_blank">', '</a>' );
 				return $stored_license_data;
 			}
 
@@ -550,11 +550,11 @@ class AMGR_License_Handler {
 		// 3. LICENSE STATE
 		// License is active and valid
 		if ( $license_state == 'valid' ) {
-			$status_msg = __( 'License is valid and active.', 'echo-knowledge-base' );
+			$status_msg = esc_html__( 'License is valid and active.', 'echo-knowledge-base' );
 			$stored_license_data['error'] = '';
 		// license is deactivated
 		} else if ( $license_state == 'deactivated' ) {
-			$status_msg = sprintf( __( 'License %s has been removed and deactivated for this website.', 'echo-knowledge-base' ), $license_key );
+			$status_msg = sprintf( esc_html__( 'License %s has been removed and deactivated for this website.', 'echo-knowledge-base' ), $license_key );
 			$stored_license_data['error'] = $status_msg;
 		// License is empty OR invalid (inactive, expired, wrong product etc.)
 		} else {
@@ -565,7 +565,9 @@ class AMGR_License_Handler {
 		// 4. WARNING MESSAGE
 		// check if add-on is dormant and display message
 		if ( $license_state != 'valid' ) {
-			$stored_license_data['warning'] = __( 'Your license has to be both <strong>active</strong> and <strong>valid</strong> in order to receive <strong>add-on fixes, new features and support</strong>.<br/>', 'echo-knowledge-base' );
+			$stored_license_data['warning'] = sprintf( esc_html__( 'Your license has to be both %s active %s and %s valid %s in order to ' .
+													'receive %s add-on fixes, new features and support %s', 'echo-knowledge-base' ),
+													'<strong>', '</strong>', '<strong>', '</strong>', '<strong>', '</strong><br/>' );
 		}
 
 		EPKB_Utilities::save_wp_option('amgr_last_license_check', $stored_license_data );

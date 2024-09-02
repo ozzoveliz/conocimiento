@@ -18,6 +18,7 @@ class ASEA_Search_Box_View {
         add_action( 'asea_section_1_styles', array( $this, 'asea_section_1_styles' ) );
         add_action( 'asea_search_container_style_tags', array( $this, 'asea_search_container_style_tags' ) );
 		add_action( 'eckb_after_theme_preview', array( $this, 'asea_search_container_style_tags' ), 10, 2 );
+	    add_action( 'eckb_doc_search_container_after', array( $this, 'search_toggle' ) );
     }
 
 	/**
@@ -39,16 +40,16 @@ class ASEA_Search_Box_View {
 
 		$kb_config = array_merge( $asea_config, $kb_config );
 
-		// TODO - OLD REMOVE
-		if ( ASEA_Core_Utilities::get_search_kb_config( $kb_config, 'advanced_search_*_box_visibility' ) === 'asea-visibility-search-form-2' ) {
-			return;
+		$toggle_search_icon = '';
+		if ( ASEA_Core_Utilities::get_search_kb_config( $kb_config, 'advanced_search_*_visibility' ) == 'on' ) {
+			$toggle_search_icon = 'asea-visibility-search-form-3';
 		}
 
 		$is_main_page = ASEA_Core_Utilities::get_search_index( $kb_config ) == 'mp';
-		$main_page_indicator = $is_main_page ? '' : 'eckb_search_on_main_page';         ?>
+		$main_page_indicator = $is_main_page ? 'eckb_search_on_main_page' : '';         ?>
 
 		<!-------- ASEA Main Container ----------->
-		<div id="asea-doc-search-container" class="<?php echo $main_page_indicator . ' '; ?>">
+		<div id="asea-doc-search-container" class="<?php echo $main_page_indicator . ' ' . $toggle_search_icon; ?>">
 
 			<?php do_action('asea_search_container_style_tags', $kb_config ); ?>
 
@@ -170,13 +171,14 @@ class ASEA_Search_Box_View {
 		}
 
 		// user can specify tag for search title
-		$title_tag =  ASEA_Core_Utilities::get_search_kb_config( $kb_config, 'advanced_search_*_title_tag');
+		$title_tag_escaped = ASEA_Core_Utilities::get_search_kb_config( $kb_config, 'advanced_search_*_title_tag');
+		$title_tag_escaped = ASEA_Utilities::sanitize_html_tag( $title_tag_escaped );
 		if ( $search_title_toggle == 'on' ) {
 			$inline_styles = '#asea-search-title {
 				' . $title_style . '
 			}'; ?>
 			<style><?php echo ASEA_Minifier::minify_css( $inline_styles ); ?></style>
-			<<?php echo $title_tag; ?> id="asea-search-title"> <?php echo wp_kses_post( $search_title ); ?></<?php echo $title_tag; ?>>	<?php
+			<<?php echo esc_attr( $title_tag_escaped ); ?> id="asea-search-title"> <?php echo wp_kses_post( $search_title ); ?></<?php echo esc_attr( $title_tag_escaped ); ?>>	<?php
 		}
 	}
 
@@ -249,7 +251,7 @@ class ASEA_Search_Box_View {
 	public function display_search_input_and_results_box( $kb_config ) {
 
 		// Search Filter state: on/off
-		$search_filter = empty($kb_config['search_multiple_kbs']) ? ASEA_Core_Utilities::get_search_kb_config( $kb_config, 'advanced_search_*_filter_toggle' ) : 'off';
+		$search_filter = empty( $kb_config['search_multiple_kbs'] ) ? ASEA_Core_Utilities::get_search_kb_config( $kb_config, 'advanced_search_*_filter_toggle' ) : 'off';
 
 		// Search Icon position: none/left/right
 		$search_icon_placement = ASEA_Core_Utilities::get_search_kb_config( $kb_config, 'advanced_search_*_input_box_search_icon_placement' );
@@ -322,6 +324,9 @@ class ASEA_Search_Box_View {
 		$clear_results_title = ASEA_Core_Utilities::get_search_kb_config( $kb_config, 'advanced_search_*_title_clear_results' );
 		$clear_results_title = trim($clear_results_title);
 
+		$is_main_page = ASEA_Core_Utilities::get_search_index( $kb_config ) == 'mp';
+		$search_box_hint = $is_main_page ? $kb_config['search_box_hint'] : $kb_config['article_search_box_hint'];
+
 		$kb_ids = empty( $kb_config['search_multiple_kbs'] ) ? $kb_config['id'] : $kb_config['search_multiple_kbs'];  ?>
 
 		<div id="asea-doc-search-box-container">
@@ -348,10 +353,10 @@ class ASEA_Search_Box_View {
 
 					<input type="search"  id="asea_advanced_search_terms" name="kb-search" value=""
 					       aria-autocomplete="list" autocapitalize="off" autocomplete="off" spellcheck="false"
-					       aria-label="<?php echo esc_attr( ASEA_Core_Utilities::get_search_kb_config( $kb_config, 'advanced_search_*_box_hint') ); ?>"
+					       aria-label="<?php echo esc_attr( $search_box_hint ); ?>"
 						   aria-controls="asea_search_results"
 					       data-language="<?php echo ASEA_Search_Query_Extras::get_current_language( $kb_config['id'] ); ?>"
-					       placeholder="<?php echo esc_attr( ASEA_Core_Utilities::get_search_kb_config( $kb_config, 'advanced_search_*_box_hint') ); ?>" />
+					       placeholder="<?php echo esc_attr( $search_box_hint ); ?>" />
 					<input type="hidden" id="asea_kb_id" value="<?php echo $kb_ids; ?>"/>					<?php
 
 					if ( ! empty($kb_config['seq_id']) ) { ?>
@@ -586,7 +591,7 @@ class ASEA_Search_Box_View {
 
 		// Icons wrap if the Search Filter is active
 		// IMPORTANT: need to avoid any empty space between HTML tags here, otherwise extra space causes alignment issue for inline-block elements
-		echo '<div class="asea-search-box__icons-wrap" ' . $icons_wrap_style . '>';
+		echo '<button type="submit" class="asea-search-box__icons-wrap" ' . $icons_wrap_style . '>';
 
 			// LEFT ICONS WRAP
 			if ( $icons_wrap_position == 'left' ) {
@@ -616,7 +621,7 @@ class ASEA_Search_Box_View {
 
 			}
 
-		echo '</div>';
+		echo '</button>';
 	}
 
 	/**
@@ -700,5 +705,14 @@ class ASEA_Search_Box_View {
 	public function get_css_class( $kb_config, $classes ) {
 		$classes = str_replace('*', ASEA_Core_Utilities::get_search_index( $kb_config ), $classes);
 		return ASEA_Utilities::get_css_class( $classes, $kb_config );
+	}
+
+	// Add Search Toggle on Sidebar template for Advanced Search
+	public function search_toggle( $kb_config ) {
+		if ( ASEA_Core_Utilities::get_search_kb_config( $kb_config, 'advanced_search_*_visibility' ) == 'on' ) {    	?>
+			<div class="asea-search-toggle">
+				<span class="asea-search-icon epkbfa epkbfa-search"></span>
+			</div>		<?php
+		}
 	}
 }

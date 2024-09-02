@@ -32,7 +32,7 @@ class EPKB_Site_Builders {
 		}
 
 		// check only on KB pages only
-		$is_kb_request = EPKB_KB_Handler::is_kb_request();   // TODO FUTURE show in Errors tab
+		$is_kb_request = EPKB_KB_Handler::is_kb_request();
 		if ( ! $is_kb_request ) {
 			return;
 		}
@@ -51,32 +51,32 @@ class EPKB_Site_Builders {
 
 		// check elementor
 		if ( ! $this->check_elementor_cpt() ) {
-			$this->show_builder_notice( __( 'Elementor', 'echo-knowledge-base' ), '?page=elementor', __( 'Post types', 'echo-knowledge-base' ), self::ELEMENTOR_OPTION_NAME );
+			$this->show_builder_notice( esc_html__( 'Elementor', 'echo-knowledge-base' ), '?page=elementor', esc_html__( 'Post types', 'echo-knowledge-base' ), self::ELEMENTOR_OPTION_NAME );
 		}
 
 		// check divi
 		if ( ! $this->check_divi_cpt() ) {
-			$this->show_builder_notice( __( 'Divi', 'echo-knowledge-base' ), 'admin.php?page=et_divi_options', __( 'Builder tab', 'echo-knowledge-base' ), self::DIVI_OPTION_NAME );
+			$this->show_builder_notice( esc_html__( 'Divi', 'echo-knowledge-base' ), 'admin.php?page=et_divi_options', esc_html__( 'Builder tab', 'echo-knowledge-base' ), self::DIVI_OPTION_NAME );
 		}
 
 		// check Visual Composer
 		if ( ! $this->check_vc_cpt() ) {
-			$this->show_builder_notice( __( 'Visual Composer', 'echo-knowledge-base' ), 'admin.php?page=vcv-role-manager', __( 'Role Manager', 'echo-knowledge-base' ), self::VC_OPTION_NAME );
+			$this->show_builder_notice( esc_html__( 'Visual Composer', 'echo-knowledge-base' ), 'admin.php?page=vcv-role-manager', esc_html__( 'Role Manager', 'echo-knowledge-base' ), self::VC_OPTION_NAME );
 		}
 
 		// check WPBakery
 		if ( ! $this->check_wpb_cpt() ) {
-			$this->show_builder_notice( __( 'WPBakery Page Builder', 'echo-knowledge-base' ), 'admin.php?page=vc-roles', __( 'Role Manager', 'echo-knowledge-base' ), self::WPB_OPTION_NAME );
+			$this->show_builder_notice( esc_html__( 'WPBakery Page Builder', 'echo-knowledge-base' ), 'admin.php?page=vc-roles', esc_html__( 'Role Manager', 'echo-knowledge-base' ), self::WPB_OPTION_NAME );
 		}
 
 		// check Beaver
 		if ( ! $this->check_beaver_cpt() ) {
-			$this->show_builder_notice( __( 'Beaver Builder', 'echo-knowledge-base' ), 'options-general.php?page=fl-builder-settings#post-types', __( 'Settings -> Beaver Builder -> Post Types', 'echo-knowledge-base' ), self::BEAVER_OPTION_NAME );
+			$this->show_builder_notice( esc_html__( 'Beaver Builder', 'echo-knowledge-base' ), 'options-general.php?page=fl-builder-settings#post-types', esc_html__( 'Settings -> Beaver Builder -> Post Types', 'echo-knowledge-base' ), self::BEAVER_OPTION_NAME );
 		}
 
 		// check SiteOrigin
 		if ( ! $this->check_so_cpt() ) {
-			$this->show_builder_notice( __( 'SiteOrigin	Builder', 'echo-knowledge-base' ), 'options-general.php?page=siteorigin_panels', __( 'General -> Post Types', 'echo-knowledge-base' ), self::SITE_ORIGIN_OPTION_NAME );
+			$this->show_builder_notice( esc_html__( 'SiteOrigin	Builder', 'echo-knowledge-base' ), 'options-general.php?page=siteorigin_panels', esc_html__( 'General -> Post Types', 'echo-knowledge-base' ), self::SITE_ORIGIN_OPTION_NAME );
 		}
 	}
 
@@ -92,11 +92,11 @@ class EPKB_Site_Builders {
 
 		// title
 		$link       = '<a href="' . esc_url( admin_url( $builder_admin_url ) ) . '" target="_blank">' . esc_html__( 'here', 'echo-knowledge-base' ) . '</a>';
-		$title      = esc_html( sprintf( __( 'Please enable KB Articles for %s.', 'echo-knowledge-base' ), $builder_name ) ) . ' ' . $link;
+		$title      = esc_html( sprintf( esc_html__( 'Please enable KB Articles for %s.', 'echo-knowledge-base' ), $builder_name ) ) . ' ' . $link;
 
 		// message
-		$reason     = __( 'Ensure that your Knowledge Base name is checked.', 'echo-knowledge-base' );
-		$message    = sprintf( __( 'Please go to the %s settings, and then go to the %s.', 'echo-knowledge-base' ), $builder_name, $place ) . ' ' . $reason;
+		$reason     = esc_html__( 'Ensure that your Knowledge Base name is checked.', 'echo-knowledge-base' );
+		$message    = sprintf( esc_html__( 'Please go to the %s settings, and then go to the %s.', 'echo-knowledge-base' ), $builder_name, $place ) . ' ' . $reason;
 
 		EPKB_Admin_Notices::add_ongoing_notice( 'large-notice', $option_name, $message, $title, '<i class="epkbfa epkbfa-exclamation-triangle"></i>' );
 	}

@@ -1,4 +1,4 @@
-<?php
+<?php if ( ! defined( 'ABSPATH' ) ) exit;
 
 /**
  * Lists all KB configuration settings and adds filter to get configuration from add-ons.
@@ -39,67 +39,67 @@ class AMGR_KB_Config_Specs {
 					'default'     => $kb_id
 				),
 				'no_access_title' => array(
-						'label'       => __( 'No Access - Title', 'echo-knowledge-base' ),
+						'label'       => esc_html__( 'No Access - Title', 'echo-knowledge-base' ),
 						'name'        => 'no_access_title',
-						'info'        => __( 'If user cannot access content and 403 return code is configured to be returned then this title will be displayed.' ),
+						'info'        => esc_html__( 'If user cannot access content and 403 return code is configured to be returned then this title will be displayed.' ),
 						'size'        => '30',
 						'max'         => '100',
 						'min'         => '1',
 						'mandatory'   => false,
 						'type'        => EPKB_Input_Filter::TEXT,
-						'default'     => __( 'Access Denied', 'echo-knowledge-base' )
+						'default'     => esc_html__( 'Access Denied', 'echo-knowledge-base' )
 				),
 				'no_access_text' => array(
-						'label'       => __( 'No Access - Message (User Not Logged In)', 'echo-knowledge-base' ),
+						'label'       => esc_html__( 'No Access - Message (User Not Logged In)', 'echo-knowledge-base' ),
 						'name'        => 'no_access_text',
-						'info'        => __( 'If user cannot access content and 403 return code is configured to be returned then this message will be displayed.' ),
+						'info'        => esc_html__( 'If user cannot access content and 403 return code is configured to be returned then this message will be displayed.' ),
 						'size'        => '30',
 						'max'         => '500',
 						'min'         => '1',
 						'mandatory'   => false,
 						'type'        => EPKB_Input_Filter::TEXT,
-						'default'     => __( 'You do not have permission to access this KB content.', 'echo-knowledge-base' )
+						'default'     => esc_html__( 'You do not have permission to access this KB content.', 'echo-knowledge-base' )
 				),
 				'no_access_text_logged' => array(
-					'label'       => __( 'No Access - Message (User Logged In)', 'echo-knowledge-base' ),
+					'label'       => esc_html__( 'No Access - Message (User Logged In)', 'echo-knowledge-base' ),
 					'name'        => 'no_access_text_logged',
-					'info'        => __( 'If user cannot access content and 403 return code is configured to be returned then this message will be displayed.' ),
+					'info'        => esc_html__( 'If user cannot access content and 403 return code is configured to be returned then this message will be displayed.' ),
 					'size'        => '30',
 					'max'         => '500',
 					'min'         => '1',
 					'mandatory'   => false,
 					'type'        => EPKB_Input_Filter::TEXT,
-					'default'     => __( 'You do not have permission to access this KB content.', 'echo-knowledge-base' )
+					'default'     => esc_html__( 'You do not have permission to access this KB content.', 'echo-knowledge-base' )
 				),
 				'no_access_action_user_without_login' => array(
-						'label'       => __( 'No Access Action - User Not Logged In', 'echo-knowledge-base' ),
+						'label'       => esc_html__( 'No Access Action - User Not Logged In', 'echo-knowledge-base' ),
 						'name'        => 'no_access_action_user_without_login',
-						'info'        => __( 'What should happen if visitor (no login) is not permitted to access content.' ),
+						'info'        => esc_html__( 'What should happen if visitor (no login) is not permitted to access content.' ),
 						'type'        => EPKB_Input_Filter::SELECTION,
 						'options'     => array(
-								'redirect_to_login_page'    => __( 'Redirect to login page', 'echo-knowledge-base' ),
-								'return_403_http_code'      => __( 'Return 403 (Not Authorized)', 'echo-knowledge-base' ),
-								'display_404_page'          => __( 'Display 404 page (Not Found)', 'echo-knowledge-base' ),
-								'show_access_denied_msg'    => __( 'Show Access Denied Message', 'echo-knowledge-base' ),
-								'redirect_to_custom_page'   => __( 'Redirect to custom page', 'echo-knowledge-base' )
+								'redirect_to_login_page'    => esc_html__( 'Redirect to login page', 'echo-knowledge-base' ),
+								'return_403_http_code'      => esc_html__( 'Return 403 (Not Authorized)', 'echo-knowledge-base' ),
+								'display_404_page'          => esc_html__( 'Display 404 page (Not Found)', 'echo-knowledge-base' ),
+								'show_access_denied_msg'    => esc_html__( 'Show Access Denied Message', 'echo-knowledge-base' ),
+								'redirect_to_custom_page'   => esc_html__( 'Redirect to custom page', 'echo-knowledge-base' )
 						),
 						'default'     => 'redirect_to_login_page'
 				),
 				'no_access_action_user_with_login' => array(
-						'label'       => __( 'No Access Action - User is Logged In', 'echo-knowledge-base' ),
+						'label'       => esc_html__( 'No Access Action - User is Logged In', 'echo-knowledge-base' ),
 						'name'        => 'no_access_action_user_with_login',
-						'info'        => __( 'What should happen if user (who is logged in) is not permitted to access content.' ),
+						'info'        => esc_html__( 'What should happen if user (who is logged in) is not permitted to access content.' ),
 						'type'        => EPKB_Input_Filter::SELECTION,
 						'options'     => array(
-								'return_403_http_code'      => __( 'Return 403 (Not Authorized)', 'echo-knowledge-base' ),
-								'display_404_page'          => __( 'Display 404 page (Not Found)', 'echo-knowledge-base' ),
-								'show_access_denied_msg'    => __( 'Show Access Denied Message', 'echo-knowledge-base' ),
-								'redirect_to_custom_page'   => __( 'Redirect to custom page', 'echo-knowledge-base' )
+								'return_403_http_code'      => esc_html__( 'Return 403 (Not Authorized)', 'echo-knowledge-base' ),
+								'display_404_page'          => esc_html__( 'Display 404 page (Not Found)', 'echo-knowledge-base' ),
+								'show_access_denied_msg'    => esc_html__( 'Show Access Denied Message', 'echo-knowledge-base' ),
+								'redirect_to_custom_page'   => esc_html__( 'Redirect to custom page', 'echo-knowledge-base' )
 						),
 						'default'     => 'return_403_http_code'
 				),
 				'no_access_redirect_to_custom_page' => array(
-					'label'       => __( 'Custom Page for Redirect', 'echo-knowledge-base' ),
+					'label'       => esc_html__( 'Custom Page for Redirect', 'echo-knowledge-base' ),
 					'name'        => 'no_access_redirect_to_custom_page',
 					'size'        => '50',
 					'max'         => '200',
@@ -109,9 +109,9 @@ class AMGR_KB_Config_Specs {
 					'default'     => ''
 				),
 				'show_private_article_prefix' => array(
-					'label'       => __( "Show 'Private' article prefix", 'echo-knowledge-base' ),
+					'label'       => esc_html__( "Show 'Private' article prefix", 'echo-knowledge-base' ),
 					'name'        => 'show_private_article_prefix',
-					'info'        => __( "WordPress adds 'Private' prefix to private articles. Select whether to show the prefix." ),
+					'info'        => esc_html__( "WordPress adds 'Private' prefix to private articles. Select whether to show the prefix." ),
 					'type'        => EPKB_Input_Filter::CHECKBOX,
 					'default'     => 'on'
 				),

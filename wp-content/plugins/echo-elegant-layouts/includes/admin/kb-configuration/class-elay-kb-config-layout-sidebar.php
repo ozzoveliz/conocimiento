@@ -194,14 +194,6 @@ class ELAY_KB_Config_Layout_Sidebar {
                 'type'        => ELAY_Input_Filter::NUMBER,
                 'default'     => 40
             ),
-            'sidebar_search_box_input_width' => array(
-                'label'       => __( 'Width (%)', 'echo-elegant-layouts' ),
-                'name'        => 'sidebar_search_box_input_width',
-                'max'         => '100',
-                'min'         => '0',
-                'type'        => ELAY_Input_Filter::NUMBER,
-                'default'     => 50
-            ),
 
 
 	        /***   Main or Article Page -> Articles Listed in Sub-Category ***/
@@ -430,22 +422,6 @@ class ELAY_KB_Config_Layout_Sidebar {
                 'min'         => '7',
                 'type'        => ELAY_Input_Filter::COLOR_HEX,
                 'default'     => '#FFFFFF'
-            ),
-            'sidebar_search_btn_background_color' => array(
-                'label'       => __( 'Background', 'echo-elegant-layouts' ),
-                'name'        => 'sidebar_search_btn_background_color',
-                'max'         => '7',
-                'min'         => '7',
-                'type'        => ELAY_Input_Filter::COLOR_HEX,
-                'default'     => '#686868'
-            ),
-            'sidebar_search_btn_border_color' => array(
-                'label'       => __( 'Border', 'echo-elegant-layouts' ),
-                'name'        => 'sidebar_search_btn_border_color',
-                'max'         => '7',
-                'min'         => '7',
-                'type'        => ELAY_Input_Filter::COLOR_HEX,
-                'default'     => '#F1F1F1'
             ),
 
 

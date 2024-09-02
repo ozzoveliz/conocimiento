@@ -10,21 +10,22 @@ class EPKB_Convert {
 	 *
 	 * @param $posts
 	 * @param $taxonomies
+	 * @param $is_post_conversion
 	 * @return string
 	 */
-	public static function get_posts_table( $posts, $taxonomies ) {
+	public static function get_posts_table( $posts, $taxonomies, $is_post_conversion ) {
 
 		if ( empty( $posts ) ) {
-			return '<div class="epkb-no-results">' . esc_html__( 'No posts found', 'echo-knowledge-base' ) . '</div>';
+			return '<div class="epkb-no-results">' . ( $is_post_conversion ? esc_html__( 'No posts found', 'echo-knowledge-base' ) : esc_html__( 'No articles found', 'echo-knowledge-base' ) ) . '</div>';
 		}
 
-		$description = __( 'Below are posts that can be converted to KB articles', 'echo-knowledge-base' );
+		$description = $is_post_conversion ? esc_html__( 'Below are posts that can be converted to KB articles', 'echo-knowledge-base' ) : esc_html__( 'Below are KB articles that can be converted to posts', 'echo-knowledge-base' );
 		$check_all_input = "<input type='checkbox' id='check_all_convert'>";
 
 		$table_header = [
-			$check_all_input . __( 'Selection', 'echo-knowledge-base' ),
+			$check_all_input . esc_html__( 'Selection', 'echo-knowledge-base' ),
 			__( 'Status', 'echo-knowledge-base' ),
-			__( 'Post Title', 'echo-knowledge-base' ),
+			( $is_post_conversion ? __( 'Post Title', 'echo-knowledge-base' ) : __( 'Article Title', 'echo-knowledge-base' ) ),
 			__( 'Taxonomies', 'echo-knowledge-base' ),
 		];
 
@@ -65,7 +66,8 @@ class EPKB_Convert {
 			$table_rows[] = $table_row;
 		}
 
-		return self::display_import_table( __( 'Convert Posts', 'echo-knowledge-base' ), $description, $table_header, $table_rows, 'new', $taxonomies );
+		$title = $is_post_conversion ? esc_html__( 'Convert Posts', 'echo-knowledge-base' ) : esc_html__( 'Convert Articles', 'echo-knowledge-base' );
+		return self::display_import_table( $title, $description, $table_header, $table_rows, 'new', $taxonomies );
 	}
 
 	/**
@@ -154,11 +156,11 @@ class EPKB_Convert {
 		}
 
 		$post_type_label = EPKB_Utilities::get_post_type_label( $post_type_object );
-		$mapping_title = sprintf( '%s <b>%s</b>', esc_html__( 'Map Categories and Tags from', 'echo-knowledge-base' ), $post_type_label ); ?>
+		$mapping_title = sprintf( '%s %s', esc_html__( 'Map Categories and Tags from', 'echo-knowledge-base' ), $post_type_label ) . ': '; ?>
 
 		<div class="epkb-author-mapping-container">
 		<div class="epkb-author-mapping__header">
-			<h3><?php echo $mapping_title; ?></h3>
+			<h3><?php echo esc_html( $mapping_title ); ?></h3>
 		</div>
 		<div class="epkb-author-mapping__author-list">
 			<div class="epkb-author-mapping__author-list__author-container">
@@ -167,10 +169,8 @@ class EPKB_Convert {
 				<div class="epkb-author__curr_auth">
 					<select name="categories_taxonomy">
 						<option value="" <?php selected( '', $selected_category ); ?>><?php esc_html_e( 'Not selected', 'echo-knowledge-base' ); ?></option><?php
-
 						foreach ( $taxonomies as $tax ) { ?>
-							<option
-							value="<?php echo esc_attr( $tax->name ); ?>" <?php selected( $tax->name, $selected_category ); ?>><?php echo esc_attr( $tax->label ); ?></option><?php
+							<option value="<?php echo esc_attr( $tax->name ); ?>" <?php selected( $tax->name, $selected_category ); ?>><?php echo esc_html( $tax->label ); ?></option><?php
 						} ?>
 					</select>
 				</div>
@@ -181,10 +181,8 @@ class EPKB_Convert {
 				<div class="epkb-author__curr_auth">
 					<select name="tags_taxonomy">
 						<option value="" <?php selected( '', $selected_tag ); ?>><?php esc_html_e( 'Not selected', 'echo-knowledge-base' ); ?></option><?php
-
 						foreach ( $taxonomies as $tax ) { ?>
-							<option
-							value="<?php echo esc_attr( $tax->name ); ?>" <?php selected( $tax->name, $selected_tag ); ?>><?php echo esc_attr( $tax->label ); ?></option><?php
+							<option value="<?php echo esc_attr( $tax->name ); ?>" <?php selected( $tax->name, $selected_tag ); ?>><?php echo esc_html( $tax->label ); ?></option><?php
 						} ?>
 					</select>
 				</div>
@@ -201,7 +199,7 @@ class EPKB_Convert {
 	 */
 	public static function get_taxonomy_filter( $taxonomy ) {
 
-		$all_label = __( 'All', 'echo-knowledge-base' ) . ' ' . $taxonomy->label;
+		$all_label = esc_html__( 'All', 'echo-knowledge-base' ) . ' ' . $taxonomy->label;
 
 		$terms = get_terms( [
 			'taxonomy' => $taxonomy->name,

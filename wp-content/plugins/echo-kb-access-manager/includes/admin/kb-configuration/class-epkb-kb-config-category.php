@@ -79,18 +79,19 @@ class EPKB_KB_Config_Category {
 		}
 
 		$is_new_category = ! is_object( $category );
+		$message = esc_html__( 'Category Icons are disabled', 'echo-knowledge-base' );
 
 		// if icons disabled just show turn on/off link
 		if ( $location == 'no_icons' ) {
 		    if ( $is_new_category ) {
-			    $this->category_icon_message( 'epkb-icons-are-disabled', 'Category Icons are <strong>disabled.</strong>' , $this->get_on_off_icons_link( $main_page_layout ),
+			    self::category_icon_message( 'epkb-icons-are-disabled', $message , $this->get_on_off_icons_link(),
 				                                'Turn Category Icons ON. See Categories & Articles Module settings.' );
 			} else {    ?>
 				<tr class="form-field epkb-term-options-wrap">
 				<th scope="row">
 					<label><?php esc_html_e( 'Category Icon', 'echo-knowledge-base' ); ?></label>
 				</th>
-				<td><?php $this->category_icon_message( 'epkb-icons-are-disabled', 'Category Icons are <strong>disabled.</strong>' , $this->get_on_off_icons_link( $main_page_layout ),
+				<td><?php self::category_icon_message( 'epkb-icons-are-disabled', $message , $this->get_on_off_icons_link(),
 												'Turn Category Icons ON. See Categories & Articles Module settings.' ); ?></td>
 			    </tr><?php
 			}
@@ -100,13 +101,13 @@ class EPKB_KB_Config_Category {
 		// not all categories have icons
 		switch( $main_page_layout ) {
 			case 'Tabs':
-				$category_icon_message = __( 'Only sub-categories in Tabs Layout have icons.', 'echo-knowledge-base' );
+				$category_icon_message = esc_html__( 'Only sub-categories in Tabs Layout have icons.', 'echo-knowledge-base' );
 				break;
 			case 'Sidebar':
-				$category_icon_message = __( 'Sidebar Layout does not use icons for categories.', 'echo-knowledge-base' );
+				$category_icon_message = esc_html__( 'Sidebar Layout does not use icons for categories.', 'echo-knowledge-base' );
 				break;
 			default:
-				$category_icon_message = __( 'Only top-level categories have icons visible.', 'echo-knowledge-base' );
+				$category_icon_message = esc_html__( 'Only top-level categories have icons visible.', 'echo-knowledge-base' );
 				break;
 		}
 
@@ -130,7 +131,7 @@ class EPKB_KB_Config_Category {
 			</<?php echo $is_new_category ? 'div' : 'th'; ?>>
 			<<?php echo $is_new_category ? 'div' : 'td'; ?>>				<?php
 
-				$this->category_icon_message( 'epkb-icons-are-enabled', $category_icon_message, '', '');        ?>
+				self::category_icon_message( 'epkb-icons-are-enabled', $category_icon_message, '', '');        ?>
                 
 				<div class="epkb-categories-icons epkb-categories-icons--visible">
 					<div class="epkb-categories-icons__tabs-header">
@@ -157,11 +158,11 @@ class EPKB_KB_Config_Category {
 		</<?php echo $is_new_category ? 'div' : 'tr'; ?>> <?php 
 	}
 
-	private function category_icon_message( $class, $message , $url , $urlText ) {      ?>
+	public static function category_icon_message( $class, $message , $url , $urlText ) {      ?>
 		<div class="epkb-term-options-message <?php echo esc_attr( $class ); ?>">
 			<i class="epkbfa epkbfa-info-circle" aria-hidden="true"></i>
 			<p>				<?php
-				_e( $message, 'echo-knowledge-base');
+				echo esc_html( $message );
 				if ( ! empty( $url ) ) {   ?>
 					<a href="<?php echo esc_url( $url ); ?>" target="_blank"><?php esc_html_e( $urlText, 'echo-knowledge-base' ); ?></a>				<?php
 				}   ?>
@@ -193,13 +194,14 @@ class EPKB_KB_Config_Category {
 								} else {
 									$dimension = $width . $height;
 								}
-								echo '<option value="' . esc_attr( $key ) . '" ' . selected( $key, $image_size ) . '>' . esc_html( ucwords( __( $key, 'echo-knowledge-base' ) ) ) . ' (' . esc_html( $dimension ) . 'px)</option>';
+								echo '<option value="' . esc_attr( $key ) . '" ' . selected( $key, $image_size ) . '>' . esc_html( ucwords( esc_html__( $key, 'echo-knowledge-base' ) ) ) . ' (' . esc_html( $dimension ) . 'px)</option>';
 							}
 						} ?>
 					</select>
 				</label>
 			</div>
-			<div class="epkb-category-image__button <?php echo $image_url ? 'epkb-category-image__button--have-image' : 'epkb-category-image__button--no-image'; ?>" style="<?php echo $image_url ? 'background-image: url('.$image_url.');' : ''; ?>" data-title="<?php esc_attr_e('Choose Category Icon', 'echo-knowledge-base'); ?>">
+			<div class="epkb-category-image__button <?php echo $image_url ? 'epkb-category-image__button--have-image' : 'epkb-category-image__button--no-image'; ?>"
+			        style="<?php echo $image_url ? 'background-image: url(' . esc_url( $image_url ) . ');' : ''; ?>" data-title="<?php esc_attr_e('Choose Category Icon', 'echo-knowledge-base'); ?>">
 				<i class="epkbfa ep_font_icon_plus"></i>
 				<i class="epkbfa epkbfa-pencil"></i>
 			</div>
@@ -403,7 +405,7 @@ class EPKB_KB_Config_Category {
 	}
 
 	// open Editor for user to switch on/off icons
-	private function get_on_off_icons_link( $main_page_layout ) {  // TODO remove
+	private function get_on_off_icons_link() {
 		return admin_url( 'edit.php?post_type=' . EPKB_KB_Handler::get_post_type( $this->kb_id ) . '&page=epkb-kb-configuration#settings__main-page' );
 	}
 
@@ -491,14 +493,14 @@ class EPKB_KB_Config_Category {
 		// check draft
 		$categories_data = self::get_category_data_option( $kb_id );
 		if ( ! empty( $categories_data[$tag->term_id] ) && ! empty( $categories_data[$tag->term_id]['is_draft'] ) ) {
-			$tag_name .= ' - ' . __( 'Draft', 'echo-knowledge-base' );
+			$tag_name .= ' - ' . esc_html__( 'Draft', 'echo-knowledge-base' );
 		}
 
 		return $tag_name;
 	}
 
 	/**
-	 * Backward capability. TODO: remove in June 2024
+	 * Backward capability.
 	 */
 	public static function get_category_icons_option( $kb_id ) {
 		return self::get_category_data_option( $kb_id );

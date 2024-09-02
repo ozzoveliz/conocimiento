@@ -148,6 +148,10 @@ class KBLK_KB_Handler {
 				continue;
 			}
 
+			if ( KBLK_Utilities::is_wpml_enabled( $kb_config ) ) {
+				$post_id = apply_filters( 'wpml_object_id', $post_id, 'page', true );
+			}
+
 			$post = get_post( $post_id );
 			if ( ! empty( $post ) && ! is_array( $post ) ) {
 

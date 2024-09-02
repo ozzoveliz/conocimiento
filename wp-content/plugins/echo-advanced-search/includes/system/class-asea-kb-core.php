@@ -93,8 +93,7 @@ class ASEA_KB_Core {
 	 * Get all KB Configuration
 	 *
 	 * @param boolean $skip_check
-	 * @return array|string with value or $default value if this settings not found
-	 *
+	 * @return array|WP_Error with value or $default value if this settings not found
 	 */
 	public static function get_kb_configs( $skip_check=false ) {
 		if ( function_exists('epkb_get_instance') && isset(epkb_get_instance()->kb_config_obj) ) {
@@ -155,17 +154,6 @@ class ASEA_KB_Core {
 		return self::get_param_result( 'AMGR_Access_Utilities', 'filter_user_categories', array( $terms ), array() );
 	}
 
-	/**
-	 * Get KB Configuration
-	 *
-	 * @param string $theme
-	 * @return string
-	 *
-	 */
-	public static function get_theme_data( $theme ) {
-		return self::get_param_result( 'EPKB_KB_Wizard_Themes', 'get_theme_data', array( $theme ), '' );
-	}
-
 	public static function get_font_data() {
 		
 		if ( class_exists( 'Echo_Knowledge_Base' )
@@ -208,10 +196,13 @@ class ASEA_KB_Core {
 	 */
 	private static function get_result( $class_name, $method, $default ) {
 
-		// instantiate certain classes
 		$class = $class_name;
-		if ( ! is_callable( array($class, $method) ) ) {
-			ASEA_Logging::add_log("Cannot invoke class $class with method $method.");
+		if ( in_array( $class_name, array( 'EPKB_KB_Config_DB' ) ) ) {
+			$class = new $class_name();
+		}
+
+		if ( ! is_callable( array( $class, $method ) ) ) {
+			ASEA_Logging::add_log( "Cannot invoke class $class_name with method $method." );
 			return $default;
 		}
 
@@ -229,14 +220,13 @@ class ASEA_KB_Core {
 	 */
 	private static function get_param_result( $class_name, $method, $params, $default ) {
 
-		// instantiate certain classes
 		$class = $class_name;
-		if ( in_array($class_name, array('AMGR_Access_Articles_Front')) ) {
+		if ( in_array($class_name, array( 'AMGR_Access_Articles_Front', 'EPKB_Admin_UI_Access' ) ) ) {
 			$class = new $class_name();
 		}
 
-		if ( ! is_callable( array($class, $method ) ) ) {
-			ASEA_Logging::add_log("Cannot invoke class $class with method $method.");
+		if ( ! is_callable( array( $class, $method ) ) ) {
+			ASEA_Logging::add_log( "Cannot invoke class $class_name with method $method." );
 			return $default;
 		}
 

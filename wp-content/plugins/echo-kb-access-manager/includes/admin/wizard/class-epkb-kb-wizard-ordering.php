@@ -38,7 +38,7 @@ class EPKB_KB_Wizard_Ordering {
             return $HTML::notification_box_middle (
                 array(
                     'type' => 'error-no-icon',
-                    'desc' => 'Ensure that Multiple KB add-on is active and refresh this page. '.EPKB_Utilities::contact_us_for_support() ,
+                    'desc' => 'Ensure that Unlimited KBs add-on is active and refresh this page. '.EPKB_Utilities::contact_us_for_support() ,
                 ) ,true );
 		}       ?>
 
@@ -70,7 +70,7 @@ class EPKB_KB_Wizard_Ordering {
 				</div>
 				<input type="hidden" id="epkb_wizard_kb_id" name="epkb_wizard_kb_id" value="<?php echo esc_attr( $this->kb_id ); ?>"/>
 				<input type="hidden" id="use_top_sequence" value="<?php echo ( $this->kb_config['kb_main_page_layout'] == 'Tabs' ) ? 'yes' : 'no'; ?>">
-				<input type="hidden" id="original_show_articles_before_categories" value="<?php echo empty( $this->kb_config['show_articles_before_categories'] ) ? '' : $this->kb_config['show_articles_before_categories']; ?>">
+				<input type="hidden" id="original_show_articles_before_categories" value="<?php echo empty( $this->kb_config['show_articles_before_categories'] ) ? '' : esc_attr( $this->kb_config['show_articles_before_categories'] ); ?>">
 
 				<div class="eckb-bottom-notice-message"></div>
 			</div>
@@ -112,7 +112,7 @@ class EPKB_KB_Wizard_Ordering {
 				</button>
 				<button value="apply" id="epkb-wizard-button-apply" class="epkb-wizard-button epkb-wizard-button-apply"  data-wizard-type="ordering"><?php esc_html_e( 'Apply', 'echo-knowledge-base' ); ?></button>
 
-				<input type="hidden" id="_wpnonce_epkb_ajax_action" name="_wpnonce_epkb_ajax_action" value="<?php echo wp_create_nonce( "_wpnonce_epkb_ajax_action" ); ?>">
+				<input type="hidden" id="_wpnonce_epkb_ajax_action" name="_wpnonce_epkb_ajax_action" value="<?php echo wp_create_nonce( "_wpnonce_epkb_ajax_action" ); //phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>">
 			</div>
 		</div>	<?php
 	}
@@ -138,9 +138,9 @@ class EPKB_KB_Wizard_Ordering {
 		$feature_specs = EPKB_KB_Config_Specs::get_fields_specification( $kb_id );
 
 		self::option_group_wizard( $feature_specs, array(
-			'option-heading'    => __( 'I want organize Categories and Articles', 'echo-knowledge-base' ),
+			'option-heading'    => esc_html__( 'I want organize Categories and Articles', 'echo-knowledge-base' ),
 			'class'             => 'eckb-wizard-features',
-			'inputs' => array(
+			'inputs_escaped' => array(
 				'0' => EPKB_HTML_Elements::radio_buttons_vertical( $feature_specs['categories_display_sequence'] + array(
 						'id'        => 'front-end-columns',
 						'value'     => $kb_config['categories_display_sequence'],
@@ -225,7 +225,8 @@ class EPKB_KB_Wizard_Ordering {
 				}		            ?>
 			</div>            <?php
 
-			foreach ( $args['inputs'] as $input ) {
+			foreach ( $args['inputs_escaped'] as $input ) {
+				//phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped 
 				echo $input;
 			}
 

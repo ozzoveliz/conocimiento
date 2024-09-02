@@ -23,6 +23,10 @@ class EPKB_KB_Wizard_Cntrl {
 		add_action( 'wp_ajax_nopriv_epkb_report_admin_error', array( 'EPKB_Utilities', 'user_not_logged_in' ) );
 	}
 
+	/**
+	 * Apply GLOBAL URL OR ORDERING WIZARD CHANGES
+	 * @return void
+	 */
 	public function apply_wizard_changes() {
 
 		// get Wizard type
@@ -194,10 +198,11 @@ class EPKB_KB_Wizard_Cntrl {
 		$sequence_settings = EPKB_Utilities::post( 'sequence_settings', [] );
 		$kb_id = EPKB_Utilities::post( 'epkb_kb_id', 0 );
 		if ( empty( $sequence_settings ) || empty( $kb_id ) ) {
-			EPKB_Utilities::ajax_show_error_die( __( 'Invalid parameters. Please refresh your page.', 'echo-knowledge-base' ) . ' (174)' );
+			EPKB_Utilities::ajax_show_error_die( esc_html__( 'Invalid parameters. Please refresh your page.', 'echo-knowledge-base' ) . ' (174)' );
 		}
-		
-		$_GET['wizard-on'] = true;
+
+		// allows to show articles without links and without show more feature
+		$_GET['ordering-wizard-on'] = true;
 		
 		$orig_config = epkb_get_instance()->kb_config_obj->get_kb_config_or_default( $kb_id );
 		$new_kb_config = array_merge( $orig_config, $sequence_settings );
@@ -262,7 +267,7 @@ class EPKB_KB_Wizard_Cntrl {
 		$new_kb_config['section_category_icon_color'] = '#000000';
 		$new_kb_config['section_body_background_color'] = '#f5f5f5';
 		$new_kb_config['section_head_background_color'] = '#f5f5f5';
-		$new_kb_config['background_color'] = '#fff';
+		$new_kb_config['background_color'] = '';
 
 		$eckb_is_kb_main_page = true;   // pretend this is Main Page
 		$main_page_output = EPKB_Layouts_Setup::output_main_page( $new_kb_config, true, $article_seq, $category_seq );
@@ -271,15 +276,9 @@ class EPKB_KB_Wizard_Cntrl {
 	}
 
 	/**
-	 * Handle Apply button for Setup Wizard
+	 * Apply SETUP WIZARD CHANGES
 	 */
 	public function apply_setup_wizard_changes() {
-		global $eckb_setup_wizard_end;
-
-		$eckb_setup_wizard_end = false;
-		if ( function_exists( 'register_shutdown_function' ) ) {
-			register_shutdown_function( array( 'EPKB_Utilities', 'handle_fatal_error' ) );
-		}
 
 		$is_setup_run_first_time = EPKB_Core_Utilities::is_run_setup_wizard_first_time() || EPKB_Utilities::post( 'emkb_admin_notice' ) == 'kb_add_success';
 
@@ -289,32 +288,11 @@ class EPKB_KB_Wizard_Cntrl {
 		// get current KB ID
 		$kb_id = EPKB_Utilities::post( 'epkb_wizard_kb_id' );
 		if ( empty( $kb_id ) || ! EPKB_Utilities::is_positive_int( $kb_id ) ) {
-			EPKB_Utilities::ajax_show_error_die( EPKB_Utilities::report_generic_error( 159 ) );
+			EPKB_Utilities::ajax_show_error_die( EPKB_Utilities::report_generic_error( 159, '', false ) );
 		}
 
-		// get selected Theme Name - support for old Setup Wizard (versions before KB 11.30.0); new Setup Wizard uses $categories_articles_preset_name
-		$theme_name_old_wizard = EPKB_Utilities::post( 'theme_name' );
-		if ( empty( $theme_name_old_wizard ) ) {
-			EPKB_Utilities::ajax_show_error_die( EPKB_Utilities::report_generic_error( 160 ) );
-		}
-
-		// get Layout Name - is always set in new Setup Wizard (introduced in KB 11.30.0); is empty in old Setup Wizard
+		// get Layout Name
 		$layout_name = EPKB_Utilities::post( 'layout_name' );
-
-		// get current KB configuration (or new one if first time setup)
-		$orig_config = epkb_get_instance()->kb_config_obj->get_kb_config( $kb_id, true );
-		if ( is_wp_error( $orig_config ) ) {
-			EPKB_Utilities::ajax_show_error_die( EPKB_Utilities::report_generic_error( 8, $orig_config ) );
-		}
-
-		// get current Add-ons configuration
-		$orig_config = apply_filters( 'epkb_all_wizards_get_current_config', $orig_config, $kb_id );
-		if ( empty( $orig_config ) || ! is_array( $orig_config ) || count( $orig_config ) < 3 ) {
-			EPKB_Utilities::ajax_show_error_die( EPKB_Utilities::report_generic_error( 500, EPKB_Utilities::get_variable_string( $orig_config ) ) );
-		}
-
-		// if user selected a theme then apply it - for new Setup Wizard is always 'current' (see usage of get_themed_kb_config() with $categories_articles_preset_name below)
-		$new_config = $theme_name_old_wizard == 'current' ? $orig_config : $this->get_themed_kb_config( $theme_name_old_wizard, $orig_config );
 
 		// create demo KB only for the first time and save it; ignore errors
 		if ( $is_setup_run_first_time ) {
@@ -322,13 +300,34 @@ class EPKB_KB_Wizard_Cntrl {
 			EPKB_Core_Utilities::remove_kb_flag( 'epkb_run_setup' );
 		}
 
-		// apply Categories & Articles module theme preset - is always set in new Setup Wizard (introduced in KB 11.30.0); is empty in old Setup Wizard
-		$categories_articles_preset_name = EPKB_Utilities::post( 'categories_articles_preset_name' );
-		if ( ! empty( $categories_articles_preset_name ) ) {
-			$new_config = $categories_articles_preset_name == 'current' ? $orig_config : $this->get_themed_kb_config( $categories_articles_preset_name, $orig_config );
+		// get current KB configuration (or new one if first time setup)
+		$orig_config = epkb_get_instance()->kb_config_obj->get_kb_config( $kb_id, true );
+		if ( is_wp_error( $orig_config ) ) {
+			EPKB_Utilities::ajax_show_error_die( EPKB_Utilities::report_generic_error( 8, $orig_config, false ) );
 		}
 
-		// apply Layout Name - is always set in new Setup Wizard (introduced in KB 11.30.0); is empty in old Setup Wizard
+		// get current Add-ons configuration
+		$orig_config = apply_filters( 'epkb_all_wizards_get_current_config', $orig_config, $kb_id );
+		if ( empty( $orig_config ) || ! is_array( $orig_config ) || count( $orig_config ) < 3 ) {
+			EPKB_Utilities::ajax_show_error_die( EPKB_Utilities::report_generic_error( 500, EPKB_Utilities::get_variable_string( $orig_config ), false ) );
+		}
+
+		$new_config = $orig_config;
+
+		// initially if WPML is active or enabled then enable it by default
+		if ( $is_setup_run_first_time && ( EPKB_Utilities::is_wpml_plugin_active() || EPKB_Utilities::is_wpml_enabled( $new_config ) ) ) {
+			$new_config['wpml_is_enabled'] = 'on';
+		}
+
+		// apply Categories & Articles module theme preset; set to 'current' if user did not select a new theme i.e. keep current settings
+		$is_theme_selected = false;
+		$categories_articles_preset_name = EPKB_Utilities::post( 'categories_articles_preset_name' );
+		if ( $categories_articles_preset_name != 'current' ) {
+			$is_theme_selected = true;
+			$new_config = EPKB_KB_Wizard_Themes::get_theme( $categories_articles_preset_name, $orig_config );
+		}
+
+		// apply Layout Name
 		$new_config['kb_main_page_layout'] = empty( $layout_name ) ? $new_config['kb_main_page_layout'] : $layout_name;
 
 		// apply selected Modules
@@ -343,7 +342,7 @@ class EPKB_KB_Wizard_Cntrl {
 		$row_5_module = EPKB_Utilities::post( 'row_5_module' );
 		$new_config['ml_row_5_module'] = empty( $row_5_module ) ? $new_config['ml_row_5_module'] : $row_5_module;
 
-		// apply Modular Sidebar location for Categories & Articles module - is always set in new Setup Wizard (introduced in KB 11.30.0); is empty in old Setup Wizard
+		// apply Modular Sidebar location for Categories & Articles module
 		$categories_articles_sidebar_location = EPKB_Utilities::post( 'categories_articles_sidebar_location' );
 		$new_config['ml_categories_articles_sidebar_toggle'] = empty( $categories_articles_sidebar_location )
 			? $new_config['ml_categories_articles_sidebar_toggle']
@@ -363,7 +362,7 @@ class EPKB_KB_Wizard_Cntrl {
 		// get and sanitize KB Nickname
 		$kb_nickname = EPKB_Utilities::post( 'kb_name', '', 'text', 50 );
 		if ( empty( $kb_nickname ) ) {
-			$kb_nickname = __( 'Knowledge Base', 'echo-knowledge-base' ) . ( $kb_id == EPKB_KB_Config_DB::DEFAULT_KB_ID ? '' : ' ' . $kb_id );
+			$kb_nickname = esc_html__( 'Knowledge Base', 'echo-knowledge-base' ) . ( $kb_id == EPKB_KB_Config_DB::DEFAULT_KB_ID ? '' : ' ' . $kb_id );
 		}
 		$new_config['kb_name'] = $kb_nickname;
 
@@ -375,8 +374,8 @@ class EPKB_KB_Wizard_Cntrl {
 		$kb_slug_changed = $is_setup_run_first_time;
 		if ( EPKB_Admin_UI_Access::is_user_access_to_context_allowed( 'admin_eckb_access_frontend_editor_write' ) ) {
 
-			// allow change slug if Setup Wizard is running for the first time
-			if ( $is_setup_run_first_time || EPKB_Utilities::get_wp_option( 'epkb_not_completed_setup_wizard_' . $kb_id, false )  ) {
+			// allow change slug if Setup Wizard is running for the first time or no KB Main Pages detected
+			if ( $is_setup_run_first_time || EPKB_Utilities::get_wp_option( 'epkb_not_completed_setup_wizard_' . $kb_id, false ) || empty( EPKB_KB_Handler::get_kb_main_pages( $orig_config ) ) ) {
 				$kb_slug = EPKB_Utilities::post( 'kb_slug', '', 'text', 100 );
 				$kb_slug = empty( $kb_slug ) ? EPKB_KB_Handler::get_default_slug( $kb_id ) : sanitize_title_with_dashes( $kb_slug );
 				wp_update_post( array( 'ID' => $main_page_id, 'post_name' => $kb_slug ) );
@@ -395,7 +394,7 @@ class EPKB_KB_Wizard_Cntrl {
 		$sidebar_settings_id = (int)EPKB_Utilities::post( 'sidebar_selection', 0 );
 		if ( $sidebar_settings_id ) {
 
-			foreach ( EPKB_KB_Wizard_Themes::$sidebar_compacted as $setting_name => $values ) {
+			foreach ( EPKB_KB_Wizard_Themes::$sidebar_themes as $setting_name => $values ) {
 				// something went wrong with the settings
 				if ( ! isset( $values[ $sidebar_settings_id ] ) ) {
 					continue;
@@ -430,16 +429,10 @@ class EPKB_KB_Wizard_Cntrl {
 			$new_config['sidebar_main_page_intro_text'] = $orig_config['sidebar_main_page_intro_text'];
 		}
 
-		EPKB_Core_Utilities::start_update_kb_configuration( $kb_id, $new_config );
+		EPKB_Core_Utilities::start_update_kb_configuration( $kb_id, $new_config, $is_theme_selected );
 
-		// OLD WIZARD: (TODO remove) update icons if user chose another theme design - for new Setup Wizard is always 'current'
-		if ( $theme_name_old_wizard != 'current' ) {
-			// if user selects Image theme then change font icons to image icons
-			EPKB_Core_Utilities::get_or_update_new_category_icons( $new_config, $theme_name_old_wizard, true );
-		}
-
-		// update icons if user chose another theme design - is always set in new Setup Wizard (introduced in KB 11.30.0); is empty in old Setup Wizard
-		if ( ! empty( $categories_articles_preset_name ) && $categories_articles_preset_name != 'current' ) {
+		// update icons if user chose another theme design
+		if ( $is_theme_selected ) {
 			// if user selects Image theme then change font icons to image icons
 			EPKB_Core_Utilities::get_or_update_new_category_icons( $new_config, $categories_articles_preset_name, true );
 		}
@@ -456,7 +449,7 @@ class EPKB_KB_Wizard_Cntrl {
 			EPKB_Admin_Notices::remove_ongoing_notice( 'epkb_changed_slug' );
 		}
 
-		// mark setup wizard was completed at least once for the current KB - does not matter admin or editor user
+		// setup wizard was completed at least once for the current KB - does not matter admin or editor user
 		delete_option( 'epkb_not_completed_setup_wizard_' . $kb_id );
 
 		// update KB ids list option that indicates for which KBs the Setup Wizard is completed at least once
@@ -464,30 +457,9 @@ class EPKB_KB_Wizard_Cntrl {
 
 		EPKB_Core_Utilities::remove_kb_flag( 'epkb_run_setup' );
 
-		// Restore the previous error handler
-		$eckb_setup_wizard_end = true;
-
 		wp_die( wp_json_encode( array(
 			'message' => 'success',
 			'redirect_to_url' => admin_url( 'edit.php?post_type=' . EPKB_KB_Handler::get_post_type( $new_config['id'] ) . '&page=epkb-kb-need-help&epkb_after_kb_setup' ) ) ) );
-	}
-
-	/**
-	 * SETUP WIZARD - get updated configuration from selected pre-made design and add-ons
-	 *
-	 * @param $theme_name
-	 * @param $orig_config
-	 * @return array
-	 */
-	private function get_themed_kb_config( $theme_name, $orig_config ) {
-
-		// get selected theme config
-		$theme_config = EPKB_KB_Wizard_Themes::get_theme( $theme_name, $orig_config );
-
-		// overwrite current KB configuration with new configuration from this Wizard
-		$new_config = array_merge( $orig_config, $theme_config );
-
-		return $new_config;
 	}
 
 	/**
@@ -513,7 +485,7 @@ class EPKB_KB_Wizard_Cntrl {
 		if ( is_wp_error( $new_kb_main_page ) ) {
 			EPKB_Logging::add_log( 'Could not create KB main page', $kb_id, $new_kb_main_page );
 		} else {
-			$new_config['kb_articles_common_path'] = urldecode(sanitize_title_with_dashes( $new_kb_main_page->post_name, '', 'save' ));
+			$new_config['kb_articles_common_path'] = urldecode( sanitize_title_with_dashes( $new_kb_main_page->post_name, '', 'save' ) );
 			$kb_main_pages[ $new_kb_main_page->ID ] = $new_kb_main_page->post_title;
 			$new_config['kb_main_pages'] = $kb_main_pages;
 		}

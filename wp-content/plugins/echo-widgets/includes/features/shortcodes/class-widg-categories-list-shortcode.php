@@ -143,7 +143,7 @@ class WIDG_Categories_List_Shortcode {
 		if ( ! empty( $category_data ) ) {
 			// remove draft categories
 			foreach ( $terms as $key => $term ) {
-				if ( empty( $category_data[ $term->term_id ] ) || ! empty( $category_data[ $term->term_id ]['is_draft'] ) ) {
+				if ( ! empty( $category_data[ $term->term_id ] ) && ! empty( $category_data[ $term->term_id ]['is_draft'] ) ) {
 					unset( $terms[ $key ] );
 				}
 			}

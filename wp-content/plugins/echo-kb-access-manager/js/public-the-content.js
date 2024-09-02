@@ -1,10 +1,10 @@
 'use strict';
 jQuery(document).ready(function($) {
 
-	// get all article copies
+	// get all article copies on this page
 	let $articles_counter_class = $('.eckb-article-page-content-counter');
 
-	// check if we have issue
+	// check if we have duplicate article content
 	if ( $articles_counter_class.length < 2 ) {
 		return;
 	}
@@ -31,7 +31,7 @@ jQuery(document).ready(function($) {
 			return;
 		}
 
-		// replace content щи the body
+		// replace content with the single body
 		$.get( location.href ).success(function(data){
 			document.open();
 			document.write(data);

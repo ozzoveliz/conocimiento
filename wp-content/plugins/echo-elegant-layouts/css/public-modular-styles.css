@@ -335,7 +335,12 @@
         font-weight: inherit; }
       #elay-sidebar-container-v2 .elay-sidebar__cat-container .elay-sidebar__cat__top-cat .elay-sidebar__cat__top-cat__body-container .elay-sidebar__body__sub-cat {
         font-family: inherit;
-        font-weight: inherit; }
+        font-weight: inherit;
+        padding-top: 10px;
+        padding-bottom: 10px; }
+        #elay-sidebar-container-v2 .elay-sidebar__cat-container .elay-sidebar__cat__top-cat .elay-sidebar__cat__top-cat__body-container .elay-sidebar__body__sub-cat .elay-sub-sub-category {
+          padding-top: 10px;
+          padding-bottom: 10px; }
         #elay-sidebar-container-v2 .elay-sidebar__cat-container .elay-sidebar__cat__top-cat .elay-sidebar__cat__top-cat__body-container .elay-sidebar__body__sub-cat li {
           font-family: inherit;
           font-weight: inherit; }
@@ -374,7 +379,8 @@
     position: relative;
     display: block;
     font-family: inherit;
-    font-weight: inherit; }
+    font-weight: inherit;
+    font-size: 1em; }
     #elay-sidebar-container-v2 .elay-article-title .elay-article-title__icon {
       position: absolute;
       top: 2px;
@@ -385,22 +391,8 @@
       line-height: 1.3em;
       font-family: inherit;
       font-weight: inherit; }
-  #elay-sidebar-container-v2 .elay-article-title {
-    position: relative;
-    font-size: 1em;
-    display: block;
-    font-family: inherit;
-    font-weight: inherit; }
-    #elay-sidebar-container-v2 .elay-article-title .eckb-article-title__icon {
-      position: absolute;
-      top: 2px;
-      left: 0; }
-    #elay-sidebar-container-v2 .elay-article-title .eckb-article-title__text {
-      margin-left: 1.5em;
-      display: block;
-      line-height: 1.3em;
-      font-family: inherit;
-      font-weight: inherit; }
+  #elay-sidebar-container-v2 .elay-article--no-icon .elay-article-title__text {
+    margin-left: 0 !important; }
 
 /* Shared
 --------------------------------------------------------------*/
@@ -735,6 +727,8 @@
 
 .ast-container .eckb-kb-template {
   width: 100%; }
+.ast-container #eckb-archive-page-container {
+  width: 100% !important; }
 
 .epkb-editor-preview .site-content {
   z-index: 9999999;

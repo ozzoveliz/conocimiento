@@ -48,7 +48,7 @@ class EPKB_Articles_Admin {
 		// - post_type is empty or is not KB post type
 		// - or previous post_status or current post_status is empty
 		// - or previous post_status and current post_status are draft or auto-draft
-		if ( empty($now_post_type) || empty($before_post_status) || empty($now_post_status)
+		if ( empty( $now_post_type ) || empty( $before_post_status ) || empty( $now_post_status )
 		     || ( ( $before_post_status == 'auto-draft' || $before_post_status == 'draft' ) && ( $now_post_status == 'auto-draft' || $now_post_status == 'draft' ) )
 			 || ! EPKB_KB_Handler::is_kb_post_type( $now_post_type ) ) {
 			return;
@@ -316,15 +316,15 @@ class EPKB_Articles_Admin {
 		}
 
 		wp_dropdown_categories( array(
-			'show_option_all' => __("Show All {$info_taxonomy->label}"),
+			'show_option_all' => esc_html__("Show All {$info_taxonomy->label}"),
 			'taxonomy'        => $taxonomy,
 			'name'            => $taxonomy,
 			'orderby'         => 'name',
 			'value_field'     => 'slug',
 			'selected'        => $selected,
 			'hierarchical'    => true,
-			'show_count'      => true,
-			'hide_empty'      => true,
+			'show_count'      => false,
+			'hide_empty'      => false,
 		));
 	}
 }

@@ -359,7 +359,7 @@ class WIDG_KB_Config_DB {
 	}
 
 	/**
-	 * When a new KB is added through Multiple KBs add-on, create for it this add-on configuration
+	 * When a new KB is added through Unlimited KBs add-on, create for it this add-on configuration
 	 *
 	 * @param $kb_id
 	 */

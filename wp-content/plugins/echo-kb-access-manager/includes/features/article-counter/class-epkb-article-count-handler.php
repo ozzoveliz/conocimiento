@@ -101,7 +101,7 @@ class EPKB_Article_Count_Handler {
 			return;
 		}
 
-		add_meta_box( 'epkb_article_counter_meta_box', __( 'KB Article Views', 'echo-knowledge-base' ), array( $this, 'display_article_counter_meta_box' ), EPKB_KB_Handler::get_post_type( $kb_id ), 'side', 'high' );
+		add_meta_box( 'epkb_article_counter_meta_box', esc_html__( 'KB Article Views', 'echo-knowledge-base' ), array( $this, 'display_article_counter_meta_box' ), EPKB_KB_Handler::get_post_type( $kb_id ), 'side', 'high' );
 	}
 
 	/**
@@ -236,7 +236,7 @@ class EPKB_Article_Count_Handler {
 			return $columns;
 		}
 
-		$columns['epkb_article_views'] = __( 'Views', 'echo-knowledge-base' );
+		$columns['epkb_article_views'] = esc_html__( 'Views', 'echo-knowledge-base' );
 
 		return $columns;
 	}
@@ -247,7 +247,9 @@ class EPKB_Article_Count_Handler {
 			return;
 		}
 
-		echo EPKB_Utilities::get_postmeta( $post_id, 'epkb-article-views', 0 );
+		$view_count = EPKB_Utilities::get_postmeta( $post_id, 'epkb-article-views', 0 );
+
+		echo esc_html( $view_count );
 	}
 
 	public function add_sortable_columns( $sortable_columns ) {

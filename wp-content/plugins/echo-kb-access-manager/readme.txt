@@ -2,11 +2,12 @@
 Author URI: https://www.echoknowledgebase.com/about-us/
 Plugin URI: https://www.echoknowledgebase.com/
 Contributors: echoplugins
-Tags: knowledge base, docs, ChatGPT, documentation, documents, faq, knowledgebase, help, AI, GPT-3, openai, wiki, faqs, articles, support
+Donate link: https://www.echoknowledgebase.com
+Tags: knowledge base, knowledgebase, documentation, documents, faqs
 Requires at least: 5.2
 Requires PHP: 5.6
-Tested up to: 6.4
-Stable tag: 8.42.0
+Tested up to: 6.6
+Stable tag: 9.11.1
 
 Access Manager enables companies and organizations to control and restrict access to their Knowledge Base.
 
@@ -27,6 +28,37 @@ We support the current major release and one past major release of the following
 
 
 == Changelog ==
+
+= 9.11.1 =
+Release Date: Aug 27, 2024
+* Fix: Cleanup and minor fixes
+
+= 9.11.0 =
+Release Date: July 8, 2024
+* Update: WordPress 6.6
+* New: Utility to convert selected articles to posts
+* Fix: Articles views counter
+* Fix: Cleanup and minor fixes
+
+= 9.10.0 =
+Release Date: May 20, 2024
+* New: toggle article list icons on/off
+* New: custom article list icons (Elegant Layout)
+* New: Category Archive Page with separate KB Template
+* Update: FAQs shortcode with extra parameters
+* Fix: Cleanup and minor fixes
+* Update: demo data
+* Update: security improvements
+* Fix: Cleanup and minor fixes
+
+= 9.0.0 =
+Release Date: Apr 13, 2024
+* New: Category Archive Page v3 with new designs and settings
+* Update: security improvements
+* Update: Show KB Main Page tag in list of pages
+* Update: WordPress 6.5
+* Update: Category Archive Page v3 with more settings and features
+* Fix: Cleanup and minor fixes
 
 = 8.42.0 =
 Release Date: Feb 26, 2024

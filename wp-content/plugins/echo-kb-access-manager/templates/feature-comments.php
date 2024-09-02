@@ -26,6 +26,7 @@ if ( comments_open() || get_comments_number() ) {
 	echo '<div class="epkb-comments-container">';
 
 	if ( function_exists( 'wp_is_block_theme' ) && wp_is_block_theme() ) {
+		//phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		echo do_blocks( '<!-- wp:post-comments /-->' );
 	} else {
 		comments_template( '', true );

@@ -1,11 +1,12 @@
 === KB - Advanced Search ===
+Requires Plugins: echo-knowledge-base
 Author URI: https://www.echoknowledgebase.com
 Plugin URI: https://www.echoknowledgebase.com/wordpress-plugin/advanced-search/
 Contributors: echoplugins
 Tags: search, articles, media, pdf, knowledge base, documents, documentation, urls, plugin, add-on
 Requires at least: 5.4
-Tested up to: 6.4
-Stable tag: 2.33.0
+Tested up to: 6.5
+Stable tag: 2.34.1
 
 Knowledge Base Advanced Search
 
@@ -32,6 +33,15 @@ Please read instructions at https://www.echoknowledgebase.com/documentation/?top
 Please read instructions at https://www.echoknowledgebase.com/documentation/?top-category=add-ons/
 
 == Changelog ==
+
+= 2.34.1, May 28, 2024 =
+* Fix: Search toggle issue
+
+= 2.34.0, May 11, 2024 =
+* Fix: Various minor fixes and improvements
+
+= 2.33.1, Apr 27, 2024 =
+* Fix: Various minor fixes and improvements
 
 = 2.33.0, Feb 25, 2024 =
 * Fix: Various minor fixes and improvements

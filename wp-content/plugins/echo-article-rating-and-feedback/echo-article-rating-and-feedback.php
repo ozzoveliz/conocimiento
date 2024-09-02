@@ -3,7 +3,7 @@
  * Plugin Name: KB - Article Rating and Feedback
  * Plugin URI: https://www.echoknowledgebase.com/wordpress-add-ons/
  * Description: allow reader of your articles to vote on article quality and provide feedback.
- * Version: 2.0.4
+ * Version: 2.0.5
  * Author: Echo Plugins
  * Author URI: https://www.echoknowledgebase.com
  * Text Domain: echo-article-rating-and-feedback
@@ -41,7 +41,7 @@ final class Echo_Article_Rating_And_Feedback {
 	/* @var Echo_Article_Rating_And_Feedback */
 	private static $instance;
 
-	public static $version = '2.0.4';
+	public static $version = '2.0.5';
 	public static $plugin_dir;
 	public static $plugin_url;
 	public static $plugin_file = __FILE__;
@@ -71,7 +71,7 @@ final class Echo_Article_Rating_And_Feedback {
 	 */
 	public static function instance( $dormant=false ) {
 
-		if ( isset( self::$instance ) || self::$instance instanceof Echo_Article_Rating_And_Feedback  ) {
+		if ( ! empty( self::$instance ) && ( self::$instance instanceof Echo_Article_Rating_And_Feedback ) ) {
 			return self::$instance;
 		}
 

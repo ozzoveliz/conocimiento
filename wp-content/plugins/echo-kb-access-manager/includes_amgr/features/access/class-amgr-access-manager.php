@@ -360,7 +360,7 @@ class AMGR_Access_Manager {
 			return;
 		}
 
-		$amgr_table_check = EPKB_Utilities::get_wp_option( 'amgr_table_check', false, false );
+		$amgr_table_check = EPKB_Utilities::get_wp_option( 'amgr_table_check', false );
 		if ( ! empty( $amgr_table_check ) ) {
 			return;
 		}

@@ -110,7 +110,6 @@ class ASEA_HTML_Forms {
 	 * @param bool $return_html Optional. Returns html if true, otherwise echo's out function html.
 	 *
 	 * @return string
-	 * @since 9.0.0
 	 */
 	public static function notification_box_top( array $args = array(), $return_html=false ) {
 
@@ -192,9 +191,10 @@ class ASEA_HTML_Forms {
 	 *
 	 * @param array $args Array of Settings.
 	 * @param bool $return_html Optional. Returns html if true, otherwise echo's out function html.
+     *
+     * Types - success, error, error-no-icon, warning, info
 	 *
 	 * @return string
-	 * @since 9.0.0
 	 */
 	public static function notification_box_middle( array $args = array(), $return_html=false ) {
 
@@ -202,13 +202,15 @@ class ASEA_HTML_Forms {
 		switch ( $args['type']) {
 			case 'error':   $icon = 'epkbfa-exclamation-triangle';
 				break;
-			case 'error-no-icon':   $icon = '';
-				break;
 			case 'success': $icon = 'epkbfa-check-circle';
 				break;
 			case 'warning': $icon = 'epkbfa-exclamation-circle';
 				break;
 			case 'info':    $icon = 'epkbfa-info-circle';
+				break;
+			case 'error-no-icon':
+			case 'success-no-icon':
+			default:
 				break;
 		}
 
@@ -216,8 +218,7 @@ class ASEA_HTML_Forms {
 			ob_start();
 		}        ?>
 
-		<div <?php echo isset( $args['id'] ) ? 'id="' . $args['id'] . '"' : ''; ?> class="epkb-notification-box-middle <?php echo 'epkb-notification-box-middle--' . $args['type']; ?>">
-
+		<div <?php echo isset( $args['id'] ) ? 'id="' . esc_attr( $args['id'] ) . '"' : ''; ?> class="epkb-notification-box-middle <?php echo 'epkb-notification-box-middle--' . esc_attr( $args['type'] ); ?>">
 
 			<div class="epkb-notification-box-middle__icon">
 				<div class="epkb-notification-box-middle__icon__inner epkbfa <?php echo esc_html( $icon ); ?>"></div>
@@ -241,10 +242,16 @@ class ASEA_HTML_Forms {
 
 				if ( isset( $args['desc'] ) ) { ?>
 					<div class="epkb-notification-box-middle__body__desc"><?php
-						echo wp_kses( $args['desc'], array( 'a' => array(
-							'href'  => array(),
-							'title' => array()
-						),
+						echo wp_kses( $args['desc'], array(
+							'a' => array(
+								'href'   => array(),
+								'title'  => array(),
+								'target' => array(),
+								'class'  => array(),
+							),
+							'span'      => array(
+								'class' => array(),
+							),
 							'br'        => array(),
 							'em'        => array(),
 							'strong'    => array(),
@@ -254,7 +261,7 @@ class ASEA_HTML_Forms {
 					</div> <?php
 				}
 
-				if ( ! empty( $args['id'] ) ) {  ?>
+				if ( ! empty( $args['id'] ) && ! empty( $args['button_confirm'] ) ) {  ?>
 					<div class="epkb-notification-box-middle__buttons-wrap">
 						<span class="epkb-notification-box-middle__button-confirm epkb-notice-dismiss"<?php echo empty( $args['close_target'] ) ? '' : ' data-target="' . esc_html( $args['close_target'] ) . '"'; ?>>
 							<?php echo esc_html( $args['button_confirm'] ); ?></span>
@@ -305,12 +312,13 @@ class ASEA_HTML_Forms {
 	 *	$values ['accept_type']         Text for Accept button. ( success, default, primary, error , warning )
 	 *	$values ['show_cancel_btn']     ( yes, no )
 	 *	$values ['show_close_btn']      ( yes, no )
+	 *  $values ['hidden']              true/false hidden form or not, not required
 	 *
 	 * @param $values
 	 */
 	public static function dialog_confirm_action( $values ) { ?>
 
-		<div id="<?php echo esc_attr( $values[ 'id' ] ); ?>" class="epkb-dialog-box-form">
+		<div id="<?php echo esc_attr( $values[ 'id' ] ); ?>" class="epkb-dialog-box-form" style="<?php echo empty( $values['hidden'] ) ? '' : 'display: none;'; ?>">
 
 			<!---- Header ---->
 			<div class="epkb-dbf__header">
@@ -319,15 +327,15 @@ class ASEA_HTML_Forms {
 
 			<!---- Body ---->
 			<div class="epkb-dbf__body">				<?php
-				echo empty( $values['body']) ? '' : esc_html( $values['body'] ); ?>
+				echo empty( $values['body']) ? '' : wp_kses( $values['body'], ASEA_Utilities::get_admin_ui_extended_html_tags() ); ?>
 			</div>
 
 			<!---- Form ---->			<?php
-			if ( !empty( $values[ 'form_method' ] ) ) { 		?>
-				<form class="epkb-dbf__form"<?php echo empty( $values['form_method'] ) ? '' : ' method="' . esc_attr( $values['form_method'] ) . '"'; ?>>				<?php
+			if ( ! empty( $values[ 'form_method' ] ) ) { 		?>
+				<form class="epkb-dbf__form"  method="<?php echo esc_attr( $values['form_method'] ); ?>">				<?php
 					if ( isset($values['form_inputs']) ) {
 						foreach ( $values['form_inputs'] as $input ) {
-							echo '<div class="epkb-dbf__form__input">' . wp_kses( $input, ['image', 'a', 'form', 'input'] ) . '</div>';
+							echo '<div class="epkb-dbf__form__input">' . wp_kses( $input, ASEA_Utilities::get_admin_ui_extended_html_tags() ) . '</div>';
 						}
 					} ?>
 				</form>			<?php

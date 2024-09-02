@@ -284,6 +284,8 @@
 
 .ast-container .eckb-kb-template {
   width: 100%; }
+.ast-container #eckb-archive-page-container {
+  width: 100% !important; }
 
 .epkb-editor-preview .site-content {
   z-index: 9999999;

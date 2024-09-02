@@ -36,7 +36,7 @@ class EPKB_Editor_Sidebar_Config {
 			'sidebar_section_category_heading'  => [
 				'editor_tab' => self::EDITOR_TAB_STYLE,
 				'type' => 'header',
-				'content' => __( 'Category Name', 'echo-knowledge-base' ),
+				'content' => esc_html__( 'Category Name', 'echo-knowledge-base' ),
 			],
 			'sidebar_section_category_typography'           => [
 				'editor_tab' => self::EDITOR_TAB_STYLE,
@@ -62,7 +62,7 @@ class EPKB_Editor_Sidebar_Config {
 			'sidebar_section_category_description_heading'  => [
 				'editor_tab' => self::EDITOR_TAB_STYLE,
 				'type' => 'header',
-				'content' => __( 'Category Description', 'echo-knowledge-base' ),
+				'content' => esc_html__( 'Category Description', 'echo-knowledge-base' ),
 			],
 			'sidebar_section_category_typography_desc'           => [
 				'editor_tab' => self::EDITOR_TAB_STYLE,
@@ -106,7 +106,7 @@ class EPKB_Editor_Sidebar_Config {
 			'epkb_sidebar_heading'  => [
 				'editor_tab' => self::EDITOR_TAB_FEATURES,
 				'type' => 'header',
-				'content' => __( 'Navigation', 'echo-knowledge-base' ),
+				'content' => esc_html__( 'Navigation', 'echo-knowledge-base' ),
 			],
 
 			'sidebar_section_box_shadow' 		=> [
@@ -128,7 +128,7 @@ class EPKB_Editor_Sidebar_Config {
 			'epkb_sidebar_category_heading'  => [
 				'editor_tab' => self::EDITOR_TAB_FEATURES,
 				'type' => 'header',
-				'content' => __( 'Categories', 'echo-knowledge-base' ),
+				'content' => esc_html__( 'Categories', 'echo-knowledge-base' ),
 			],
 			'sidebar_section_head_alignment'                => [
 				'editor_tab' => self::EDITOR_TAB_FEATURES,
@@ -150,7 +150,7 @@ class EPKB_Editor_Sidebar_Config {
 			'sidebar_section_divider_heading'  => [
 				'editor_tab' => self::EDITOR_TAB_FEATURES,
 				'type' => 'header',
-				'content' => __( 'Article List Divider', 'echo-knowledge-base' ),
+				'content' => esc_html__( 'Article List Divider', 'echo-knowledge-base' ),
 			],
 			'sidebar_section_divider'                       => [
 				'editor_tab' => self::EDITOR_TAB_FEATURES,
@@ -175,7 +175,7 @@ class EPKB_Editor_Sidebar_Config {
 			'sidebar_section_padding_group' => [
 				'editor_tab' => self::EDITOR_TAB_ADVANCED,
 				'group_type' => self::EDITOR_GROUP_DIMENSIONS,
-				'label' => __( 'Padding', 'echo-knowledge-base' ),
+				'label' => esc_html__( 'Padding', 'echo-knowledge-base' ),
 				'units' => 'px',
 				'subfields' => [
 					'sidebar_section_head_padding_left' => [
@@ -204,9 +204,9 @@ class EPKB_Editor_Sidebar_Config {
 
 		return [
 			'epkb_sidebar_navigation_zone' => [
-				'title'     =>  __( 'Navigation', 'echo-knowledge-base' ),
+				'title'     =>  esc_html__( 'Navigation', 'echo-knowledge-base' ),
 				'classes'   => '#epkb-sidebar-container-v2',
-				'parent_zone_tab_title' => __( 'Navigation', 'echo-knowledge-base' ),
+				'parent_zone_tab_title' => esc_html__( 'Navigation', 'echo-knowledge-base' ),
 				'settings'  => $settings
 			]];
 	}
@@ -277,7 +277,7 @@ class EPKB_Editor_Sidebar_Config {
 
 		return [
 			'sidebar_articles_zone' => [
-				'title'     =>  __( 'Articles', 'echo-knowledge-base' ),
+				'title'     =>  esc_html__( 'Articles', 'echo-knowledge-base' ),
 				'classes'   => '.epkb-articles',
 				'settings'  => $settings
 			]];

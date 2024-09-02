@@ -4,8 +4,8 @@ Plugin URI: https://www.echoknowledgebase.com/wordpress-plugin/elegant-layouts/
 Contributors: echoplugins
 Tags: sidebar, layouts, knowledge base, articles, documents, documentation, wiki, categories, plugin, add-on
 Requires at least: 5.4
-Tested up to: 6.4
-Stable tag: 2.21.0
+Tested up to: 6.5
+Stable tag: 2.23.1
 
 Use Grid Layout or Sidebar Layout for KB Main page or combine Basic, Tabs, Grid and Sidebar layouts in many cool ways.
 This is an add-on the core knowledge base plugin.
@@ -33,6 +33,32 @@ Please read instructions at https://www.echoknowledgebase.com/documentation/?top
 Please read instructions at https://www.echoknowledgebase.com/documentation/?top-category=add-ons
 
 == Changelog ==
+
+= 2.23.1, June 8, 2024 =
+* Fix: minor fixes and adjustments
+
+= 2.23.0, May 11, 2024 =
+* New: Article icons selection
+* Fix: minor fixes and adjustments
+
+= 2.22.5, Apr 27, 2024 =
+* Fix: minor fixes and adjustments
+
+= 2.22.4, Apr 5, 2024 =
+* Fix: minor fixes and adjustments
+
+= 2.22.3, Mar 25, 2024 =
+* Fix: minor fixes and adjustments
+
+= 2.22.2, Mar 24, 2024 =
+* Update: WordPress 6.5
+
+= 2.22.1, Mar 10, 2024 =
+* Fix: sidebar category heading color missing
+
+= 2.22.0, Mar 8, 2024 =
+* New: support for Category Archive Page v3
+* Fix: minor fixes and adjustments
 
 = 2.21.0, Feb 25, 2024 =
 * Fix: minor fixes and adjustments

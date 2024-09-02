@@ -4,8 +4,8 @@ Plugin URI: https://www.echoknowledgebase.com/wordpress-plugin/kb-groups/
 Contributors: echoplugins
 Tags: groups, roles, users, knowledge base, articles, documents, documentation, urls, plugin, add-on
 Requires at least: 4.7
-Tested up to: 6.2
-Stable tag: 2.8.0
+Tested up to: 6.6
+Stable tag: 2.10.0
 
 KB Groups And KB Roles for Access Manager
 
@@ -32,6 +32,14 @@ Please read instructions at https://www.echoknowledgebase.com/documentation/?top
 Please read instructions at https://www.echoknowledgebase.com/documentation/?top-category=access-manager
 
 == Changelog ==
+
+= 2.10.0, July 8, 2024 =
+* Update: WordPress 6.6
+* Update: security improvements
+* Fix: Various minor fixes
+
+= 2.9.0, Mar 2, 2024 =
+* Fix: Various minor fixes
 
 = 2.8.0, July 14, 2023 =
 * Fix: Various minor fixes

@@ -7,6 +7,10 @@
  */
 class EMKB_KB_Handler {
 
+	// name of KB shortcode
+	const KB_MAIN_PAGE_SHORTCODE_NAME = 'epkb-knowledge-base'; // changing this requires db update
+	const KB_BLOCK_NAME = 'echo-document-blocks/knowledge-base';
+
 	// Prefix for custom post type name associated with given KB; this will never change
 	const KB_POST_TYPE_PREFIX = EMKB_KB_Core::EMKB_KB_POST_TYPE_PREFIX;  // changing this requires db update
 	const KB_CATEGORY_TAXONOMY_SUFFIX = '_category';  // changing this requires db update; do not translate
@@ -48,14 +52,16 @@ class EMKB_KB_Handler {
 	 */
 	public static function is_kb_request() {
 
-		$kb_post_type = empty($_REQUEST['post_type']) ? '' : preg_replace('/[^A-Za-z0-9 \-_]/', '', $_REQUEST['post_type']);
-		$is_kb_post_type = empty($kb_post_type) ? false : self::is_kb_post_type( $kb_post_type );
+		// phpcs:disable WordPress.Security.NonceVerification.Recommended
+		$kb_post_type = empty( $_REQUEST['post_type'] ) ? '' : preg_replace( '/[^A-Za-z0-9 \-_]/', '', EMKB_Utilities::request_key( 'post_type' ) );
+		$is_kb_post_type = !empty( $kb_post_type ) && self::is_kb_post_type( $kb_post_type );
 		if ( $is_kb_post_type ) {
 			return true;
 		}
 
-		$kb_taxonomy = empty($_REQUEST['taxonomy']) ? '' : preg_replace('/[^A-Za-z0-9 \-_]/', '', $_REQUEST['taxonomy']);
-		$is_kb_taxonomy = empty($kb_taxonomy) ? false : self::is_kb_taxonomy( $kb_taxonomy );
+		// phpcs:disable WordPress.Security.NonceVerification.Recommended
+		$kb_taxonomy = empty( $_REQUEST['taxonomy'] ) ? '' : preg_replace( '/[^A-Za-z0-9 \-_]/', '', EMKB_Utilities::request_key( 'taxonomy' ) );
+		$is_kb_taxonomy = !empty( $kb_taxonomy ) && self::is_kb_taxonomy( $kb_taxonomy );
 
 		return $is_kb_taxonomy;
 	}
@@ -116,6 +122,120 @@ class EMKB_KB_Handler {
 	}
 
 	/**
+	 * Determine if the current page is KB main page i.e. it contains KB shortcode and return its KB ID if any
+	 * @param null $the_post - either pass post to the method or use current post
+	 * @return int|null return KB ID if current page is KB main page otherwise null
+	 */
+	public static function get_kb_id_from_kb_main_shortcode( $the_post=null ) {
+		/** @var $wpdb Wpdb */
+		global $wpdb;
+
+		// ensure WP knows about the shortcode
+		add_shortcode( self::KB_MAIN_PAGE_SHORTCODE_NAME, array( 'EP'.'KB_Layouts_Setup', 'output_kb_page_shortcode' ) );
+
+		$global_post = empty( $GLOBALS['post'] ) ? '' : $GLOBALS['post'];
+		$found_post = empty( $the_post ) ? $global_post : $the_post;
+		if ( empty( $found_post ) || empty( $found_post->post_content ) || empty( $found_post->ID ) ) {
+			return null;
+		}
+
+		// search GT for KB Main Page block
+		if ( function_exists( 'parse_blocks' ) ) { // added  in wp 5.0
+
+			$blocks = parse_blocks( $found_post->post_content );
+
+			if ( is_array( $blocks ) && count( $blocks ) ) {
+				foreach ( $blocks as $block ) {
+					if ( $block['blockName'] == self::KB_BLOCK_NAME ) {
+						if ( ! empty( $block['attrs']['kb_id'] ) ) {
+							return $block['attrs']['kb_id'];
+						} else {
+							return EMKB_KB_Core::DEFAULT_KB_ID;
+						}
+					}
+				}
+			}
+		}
+
+		// find shortcode in post content or meta data
+		if ( has_shortcode( $found_post->post_content, self::KB_MAIN_PAGE_SHORTCODE_NAME ) ) {
+			$content = $found_post->post_content;
+		} else {
+			$content = $wpdb->get_var( $wpdb->prepare( "SELECT meta_value FROM $wpdb->postmeta " .
+			                           "WHERE post_id = %d and meta_value LIKE '%%" . self::KB_MAIN_PAGE_SHORTCODE_NAME . "%%'",
+										$found_post->ID ) );
+		}
+
+		// does page have KB shortcode?
+		if ( empty( $content ) ) {
+			return null;
+		}
+
+		$kb_id = self::get_shortcode_default( $content );
+		if ( empty( $kb_id ) ) {
+			$kb_id = self::get_shortcode_custom( $content );
+			if ( empty( $kb_id) ) {
+				$kb_id = EMKB_KB_Core::DEFAULT_KB_ID;
+			}
+		}
+
+		return $kb_id;
+	}
+
+	private static function get_shortcode_default( $content ) {
+
+		if ( ! preg_match_all( '/' . get_shortcode_regex( [self::KB_MAIN_PAGE_SHORTCODE_NAME] ) . '/s', $content, $matches, PREG_SET_ORDER ) ) {
+			return null;
+		}
+
+		// get KB ID from the shortcode
+		foreach ( $matches as $shortcode ) {
+			$attributes = shortcode_parse_atts( $shortcode[3] );
+
+			// shortcode may not have the 'id' attribute, then use default id
+			if ( empty( $attributes['id'] ) ) {
+				return null;
+			}
+
+			$kb_id = $attributes['id'];
+			if ( EMKB_Utilities::is_positive_int( $kb_id ) ) {
+				return (int)$kb_id;
+			}
+		}
+
+		return null;
+	}
+
+	private static function get_shortcode_custom( $content ) {
+
+		$start = strpos( $content, self::KB_MAIN_PAGE_SHORTCODE_NAME );
+		if ( empty( $start ) || $start < 0 ) {
+			return null;
+		}
+
+		$end = strpos( $content, ']', $start );
+		if ( empty( $end ) || $end < 1 ) {
+			return null;
+		}
+
+		$shortcode = substr( $content, $start, $end );
+		if ( empty( $shortcode ) || strlen( $shortcode ) < strlen( self::KB_MAIN_PAGE_SHORTCODE_NAME ) ) {
+			return null;
+		}
+
+		preg_match_all('!\d+!', $shortcode, $number);
+		$number = empty($number[0][0]) ? 0 : $number[0][0];
+		if ( ! EMKB_Utilities::is_positive_int( $number ) ) {
+			return null;
+		}
+
+		return (int)$number;
+	}
+
+	/**
+	}
+
+	/**
 	 * Find KB Main Page that is not in trash and get its URL (page that matches kb_articles_common_path in KB config or first main page URL).
 	 *
 	 * @param $kb_config
@@ -130,6 +250,10 @@ class EMKB_KB_Handler {
 
 			if ( empty( $post_id ) ) {
 				continue;
+			}
+
+			if ( EMKB_Utilities::is_wpml_enabled( $kb_config ) ) {
+				$post_id = apply_filters( 'wpml_object_id', $post_id, 'page', true );
 			}
 
 			$post = get_post( $post_id );
@@ -150,71 +274,4 @@ class EMKB_KB_Handler {
 		return $first_page_url;
 	}
 
-
-	/**
-	 * Determine if the current page is KB main page i.e. it contains KB shortcode and return its KB ID if any
-	 * @param null $the_post - either pass post to the method or use current post
-	 * @return int|null return KB ID if current page is KB main page otherwise null
-	 */
-	public static function get_kb_id_from_kb_main_shortcode( $the_post=null ) {
-		/** @var $wpdb Wpdb */
-		global $wpdb;
-
-		// ensure WP knows about the shortcode
-		add_shortcode( EMKB_KB_Core::KB_MAIN_PAGE_SHORTCODE_NAME, array( 'EP'.'KB_Layouts_Setup', 'output_kb_page_shortcode' ) );
-
-		$global_post = empty( $GLOBALS['post'] ) ? '' : $GLOBALS['post'];
-		$apost = empty( $the_post ) ? $global_post : $the_post;
-		if ( empty( $apost ) || ! $apost instanceof WP_Post ) {
-			return null;
-		}
-
-		// determine whether this page contains this plugin shortcode
-		$content = '';
-		if ( has_shortcode( $apost->post_content, EMKB_KB_Core::KB_MAIN_PAGE_SHORTCODE_NAME ) ) {
-			$content = $apost->post_content;
-		} else if ( isset($apost->ID) ) {
-			$content = $wpdb->get_var( "SELECT meta_value FROM $wpdb->postmeta " .
-			                           "WHERE post_id = {$apost->ID} and meta_value LIKE '%%" . EMKB_KB_Core::KB_MAIN_PAGE_SHORTCODE_NAME . "%%'" );
-		}
-
-		return self::get_kb_id_from_shortcode( $content );
-	}
-
-	/**
-	 * Retrieve KB ID from post content - shortcode
-	 *
-	 * @param String $content should have the shortcode with KB ID
-	 *
-	 * @return int|null returns KB ID if found
-	 */
-	private static function get_kb_id_from_shortcode( $content ) {
-
-		if ( empty($content) || ! is_string($content) ) {
-			return null;
-		}
-
-		$start = strpos($content, EMKB_KB_Core::KB_MAIN_PAGE_SHORTCODE_NAME);
-		if ( empty($start) || $start < 0 ) {
-			return null;
-		}
-
-		$end = strpos($content, ']', $start);
-		if ( empty($start) || $start < 1 ) {
-			return null;
-		}
-
-		$shortcode = substr($content, $start, $end);
-		if ( empty($shortcode) || strlen($shortcode) < strlen(EMKB_KB_Core::KB_MAIN_PAGE_SHORTCODE_NAME)) {
-			return null;
-		}
-
-		preg_match_all('!\d+!', $shortcode, $number);
-		$number = empty($number[0][0]) ? 0 : $number[0][0];
-		if ( ! EMKB_Utilities::is_positive_int( $number ) ) {
-			return null;
-		}
-
-		return (int)$number;
-	}
 }

@@ -2,9 +2,6 @@
 
 /**
  * Various utility functions
- *
- * @copyright   Copyright (C) 2018, Echo Plugins
- * @license http://opensource.org/licenses/gpl-2.0.php GNU Public License
  */
 class ELAY_Utilities {
 
@@ -20,10 +17,10 @@ class ELAY_Utilities {
 	 */
 	public static function get_post_status_text( $post_status ) {
 
-		$post_statuses = array( 'draft' => __( 'Draft' ), 'pending' => __( 'Pending' ),
-								'publish' => __( 'Published' ), 'future' => __( 'Scheduled' ),
-								'private' => __( 'Private' ),
-								'trash'   => __( 'Trash' ));
+		$post_statuses = array( 'draft' => esc_html__( 'Draft' ), 'pending' => esc_html__( 'Pending' ),
+		                        'publish' => esc_html__( 'Published' ), 'future' => esc_html__( 'Scheduled' ),
+								'private' => esc_html__( 'Private' ),
+								'trash'   => esc_html__( 'Trash' ));
 
 		if ( empty($post_status) || ! in_array($post_status, array_keys($post_statuses)) ) {
 			return $post_status;
@@ -35,6 +32,11 @@ class ELAY_Utilities {
 	public static function get_eckb_kb_id( $default=1 ) {
 		global $eckb_kb_id;
 		return empty( $eckb_kb_id ) ? $default : $eckb_kb_id;
+	}
+
+	public static function get_current_category() {
+		$term = get_queried_object();
+		return empty( $term ) || ! $term instanceof WP_Term ? null : $term;
 	}
 
 
@@ -279,13 +281,13 @@ class ELAY_Utilities {
 		$time = abs($time2 - $time1);
 		$time = ( $time < 1 )? 1 : $time;
 		$tokens = array (
-			31536000 => __( 'year' ),
-			2592000 => __( 'month' ),
-			604800 => __( 'week' ),
-			86400 => __( 'day' ),
-			3600 => __( 'hour' ),
-			60 => __( 'min' ),
-			1 => __( 'sec' )
+			31536000 => esc_html__( 'year' ),
+			2592000 => esc_html__( 'month' ),
+			604800 => esc_html__( 'week' ),
+			86400 => esc_html__( 'day' ),
+			3600 => esc_html__( 'hour' ),
+			60 => esc_html__( 'min' ),
+			1 => esc_html__( 'sec' )
 		);
 
 		$output = '';
@@ -402,11 +404,11 @@ class ELAY_Utilities {
 		}
 
 		$user = wp_get_current_user();
-		if ( empty( $user ) || empty ( $user->roles ) ) {
+		if ( empty( $user ) || empty( $user->roles ) ) {
 			return '';
 		}
 
-		if ( ! in_array( 'administrator', $user->roles ) && ! in_array( 'administrator', $user->roles ) ) {
+		if ( ! in_array( 'administrator', $user->roles ) ) {
 			return '';
 		}
 
@@ -461,7 +463,7 @@ class ELAY_Utilities {
 	 *
 	 * @param $number
 	 * @param int $default
-	 * @return int <default>
+	 * @return int|$default
 	 */
 	public static function sanitize_int( $number, $default=0 ) {
 
@@ -554,6 +556,12 @@ class ELAY_Utilities {
         return $sanitized_array;
     }
 
+	public static function sanitize_html_tag( $tag, $default='div' ) {
+		$tag = trim( $tag );
+		$tag = substr( $tag, 0, 4);
+		return in_array( $tag, ['h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'div', 'span', 'p'] ) ? $tag : $default;
+	}
+
 	/**
 	 * Decode and sanitize form fields.
 	 *
@@ -562,13 +570,13 @@ class ELAY_Utilities {
 	 * @return array
 	 */
 	public static function retrieve_and_sanitize_form( $form, $all_fields_specs ) {
-		if ( empty($form) ) {
+		if ( empty( $form ) ) {
 			return array();
 		}
 
 		// first urldecode()
-		if (is_string($form)) {
-			parse_str($form, $submitted_fields);
+		if ( is_string( $form ) ) {
+			parse_str( $form, $submitted_fields );
 		} else {
 			$submitted_fields = $form;
 		}
@@ -607,13 +615,13 @@ class ELAY_Utilities {
 	 */
 	public static function sanitize_comma_separated_ints( $text, $default='' ) {
 
-		if ( empty($text) || ! is_string($text) ) {
+		if ( empty( $text ) || ! is_string( $text ) ) {
 			return $default;
 		}
 
-		$text = preg_replace('/[^0-9 \,_]/', '', $text);
+		$text = preg_replace( '/[^0-9 \,_]/', '', $text );
 
-		return empty($text) ? $default : $text;
+		return empty( $text ) ? $default : $text;
 	}
 
 	/**
@@ -625,6 +633,8 @@ class ELAY_Utilities {
 	 * @param int $max_length
 	 * @return array|string - empty if not found
 	 */
+	// phpcs:disable WordPress.Security.NonceVerification.Recommended -- Verified elsewhere.
+	// phpcs:disable WordPress.Security.NonceVerification.Missing -- Verified elsewhere.
 	public static function post( $key, $default = '', $value_type = 'text', $max_length = 0 ) {
 
 		if ( isset( $_POST[$key] ) ) {
@@ -647,6 +657,8 @@ class ELAY_Utilities {
 	 * @param int $max_length
 	 * @return array|string - empty if not found
 	 */
+	// phpcs:disable WordPress.Security.NonceVerification.Recommended -- Verified elsewhere.
+	// phpcs:disable WordPress.Security.NonceVerification.Missing -- Verified elsewhere.
 	private static function post_sanitize( $key, $default = '', $value_type = 'text', $max_length = 0 ) {
 
 		if ( $_POST[$key] === null || is_object( $_POST[$key] )  ) {
@@ -658,18 +670,14 @@ class ELAY_Utilities {
 			return $_POST[$key];
 		}
 
-		if ( is_array( $_POST[$key] ) ) {
-			return self::sanitize_array( $_POST[$key] );
+		// config is sanitizing with its own specs separately
+		if ( $value_type == 'db-config-json' ) {
+			$decoded_value = json_decode( stripcslashes( $_POST[$key] ), true );
+			return empty( $decoded_value ) ? $default : $decoded_value;
 		}
 
-		// jquery serialized form. sanitize values in array
-		if ( $value_type == 'form' ) {
-			$result = is_array( $default ) ? $default : [];
-			wp_parse_str( stripslashes( $_POST[$key] ), $decoded_form );
-			foreach ( $decoded_form as $field => $val ) {
-				$result[$field] = wp_kses_post( $val );
-			}
-			return $result;
+		if ( is_array( $_POST[$key] ) ) {
+			return self::sanitize_array( $_POST[$key] );
 		}
 
 		if ( $value_type == 'text-area' ) {
@@ -686,15 +694,16 @@ class ELAY_Utilities {
 
 		// optionally limit the value by length
 		if ( ! empty( $max_length ) ) {
-			$value = substr( $value, 0, $max_length );
+			$value = self::substr( $value, 0, $max_length );
 		}
 
 		return $value;
 	}
 
+	// phpcs:disable WordPress.Security.NonceVerification.Recommended -- Verified elsewhere.
 	public static function request_key( $key, $default = '' ) {
 
-		if ( is_string( $_REQUEST[$key] ) ) {
+		if ( isset( $_REQUEST[$key] ) && is_string( $_REQUEST[$key] ) ) {
 			return sanitize_key( $_REQUEST[$key] );
 		}
 
@@ -710,6 +719,7 @@ class ELAY_Utilities {
 	 * @param int $max_length
 	 * @return array|string - empty if not found
 	 */
+	// phpcs:disable WordPress.Security.NonceVerification.Recommended -- Verified elsewhere.
 	public static function get( $key, $default = '', $value_type = 'text', $max_length = 0 ) {
 
 		if ( isset( $_GET[$key] ) ) {
@@ -732,6 +742,7 @@ class ELAY_Utilities {
 	 * @param int $max_length
 	 * @return array|string - empty if not found
 	 */
+	// phpcs:disable WordPress.Security.NonceVerification.Recommended -- Verified elsewhere.
 	private static function get_sanitize( $key, $default = '', $value_type = 'text', $max_length = 0 ) {
 
 		if ( $_GET[$key] === null || is_object( $_GET[$key] )  ) {
@@ -743,18 +754,14 @@ class ELAY_Utilities {
 			return $_GET[$key];
 		}
 
-		if ( is_array( $_GET[$key] ) ) {
-			return self::sanitize_array( $_GET[$key] );
+		// config is sanitizing with its own specs separately
+		if ( $value_type == 'db-config-json' ) {
+			$decoded_value = json_decode( stripcslashes( $_GET[$key] ), true );
+			return empty( $decoded_value ) ? $default : $decoded_value;
 		}
 
-		// jquery serialized form. sanitize values in array
-		if ( $value_type == 'form' ) {
-			$result = is_array( $default ) ? $default : [];
-			wp_parse_str( stripslashes( $_GET[$key] ), $decoded_form );
-			foreach ( $decoded_form as $field => $val ) {
-				$result[$field] = wp_kses_post( $val );
-			}
-			return $result;
+		if ( is_array( $_GET[$key] ) ) {
+			return self::sanitize_array( $_GET[$key] );
 		}
 
 		if ( $value_type == 'text-area' ) {
@@ -771,7 +778,7 @@ class ELAY_Utilities {
 
 		// optionally limit value by length
 		if ( ! empty( $max_length ) ) {
-			$value = substr( $value, 0, $max_length );
+			$value = self::substr( $value, 0, $max_length );
 		}
 
 		return $value;
@@ -946,9 +953,9 @@ class ELAY_Utilities {
 	 * @param $meta_key
 	 * @param $default
 	 * @param bool|false $is_array
-	 * @param bool $return_error
+	 * @param bool|WP_Error $return_error
 	 *
-	 * @return array|string or default or error if $return_error is true
+	 * @return array|string|WP_Error or default or error if $return_error is true
 	 */
 	public static function get_postmeta( $post_id, $meta_key, $default, $is_array=false, $return_error=false ) {
 		/** @var $wpdb Wpdb */
@@ -963,7 +970,7 @@ class ELAY_Utilities {
 		}
 
 		// retrieve specific option
-		$option = $wpdb->get_var( $wpdb->prepare("SELECT meta_value FROM $wpdb->postmeta WHERE post_id = %d and meta_key = '%s'", $post_id, $meta_key ) );
+		$option = $wpdb->get_var( $wpdb->prepare( "SELECT meta_value FROM $wpdb->postmeta WHERE post_id = %d and meta_key = %s", $post_id, $meta_key ) );
 		if ($option !== null ) {
 			$option = maybe_unserialize( $option );
 		}
@@ -1021,7 +1028,7 @@ class ELAY_Utilities {
 		}
 
 		// check if the meta field already exists before doing 'upsert'
-		$result = $wpdb->get_row( $wpdb->prepare( "SELECT meta_value FROM $wpdb->postmeta WHERE meta_key = '%s' AND post_id = %d", $meta_key, $post_id ) );
+		$result = $wpdb->get_row( $wpdb->prepare( "SELECT meta_value FROM $wpdb->postmeta WHERE meta_key = %s AND post_id = %d", $meta_key, $post_id ) );
 		if ( $result === null && ! empty($wpdb->last_error) ) {
 			$wpdb_last_error = $wpdb->last_error;   // add_log changes last_error so store it first
 			ELAY_Logging::add_log( "DB failure: " . $wpdb_last_error );
@@ -1035,7 +1042,7 @@ class ELAY_Utilities {
 				return new WP_Error( '33', __( 'Error occurred', 'echo-knowledge-base' ) );
 			}
 		} else {
-			if ( false === $wpdb->query( $wpdb->prepare( "UPDATE $wpdb->postmeta SET meta_value = %s WHERE meta_key = '%s' AND post_id = %d", $serialized_value, $meta_key, $post_id ) ) ) {
+			if ( false === $wpdb->query( $wpdb->prepare( "UPDATE $wpdb->postmeta SET meta_value = %s WHERE meta_key = %s AND post_id = %d", $serialized_value, $meta_key, $post_id ) ) ) {
 				ELAY_Logging::add_log("Failed to update meta data. ", $meta_key);
 				return new WP_Error( '33', __( 'Error occurred', 'echo-knowledge-base' ) );
 			}
@@ -1068,7 +1075,7 @@ class ELAY_Utilities {
 		}
 
 		// delete specific option
-		if ( false === $wpdb->query( $wpdb->prepare( "DELETE FROM $wpdb->postmeta WHERE post_id = %d and meta_key = '%s'", $post_id, $meta_key ) ) ) {
+		if ( false === $wpdb->query( $wpdb->prepare( "DELETE FROM $wpdb->postmeta WHERE post_id = %d and meta_key = %s", $post_id, $meta_key ) ) ) {
 			ELAY_Logging::add_log("Could not delete post '" . self::get_variable_string($meta_key) . "'' metadata: ", $post_id);
 			return false;
 		}
@@ -1258,30 +1265,14 @@ class ELAY_Utilities {
 	}
 
 	/**
-	 * Check first installed version. Return true if $version less or equal than first installed version. Also return true if epkb_version_first was removed. Use to apply some functions only to new users
-	 * for the NEW install return true
+	 * Check first installed version. Return true if $version less or equal than first installed version.
+	 * for the NEW installation return true
+	 * @param $kb_config
 	 * @param $version
 	 * @return bool
 	 */
-	public static function is_new_user( $version ) {
-		$plugin_first_version = self::get_wp_option( 'epkb_version_first', $version );      // TODO replace with $kb_config['first_plugin_version']
-		return ! version_compare( $plugin_first_version, $version, '<' );
-	}
-
-	/**
-	 * Check the first installed version. Return true if $version less or equal than first installed version or not defined.
-	 * Also return false if epkb_version_first was removed. Use to apply some functions only to new users
-	 * For the NEW install will return false
-	 * @param $version
-	 * @return bool
-	 */
-	public static function is_new_user_2( $version ) {
-
-		$plugin_first_version = self::get_wp_option( 'epkb_version_first', '' );  // TODO replace with $kb_config['first_plugin_version']
-		if ( empty( $plugin_first_version ) ) {
-			return false;
-		}
-
+	public static function is_new_user( $kb_config, $version ) {
+		$plugin_first_version = empty( $kb_config['elay_first_plugin_version'] ) ? '11.30.0' : $kb_config['elay_first_plugin_version'];
 		return ! version_compare( $plugin_first_version, $version, '<' );
 	}
 
@@ -1444,6 +1435,17 @@ class ELAY_Utilities {
 		return trim($output) . '"';
 	}
 
+	public static function get_font_css( $kb_config, $config_name, $font_param_name, $delta=0 ) {
+
+		if ( empty( $kb_config[$config_name][$font_param_name] ) ) {
+			return $font_param_name . ': inherit;';
+		}
+
+		$value = empty( $delta ) ? $kb_config[$config_name][$font_param_name] : intval( $kb_config[$config_name][$font_param_name] ) + $delta;
+
+		return $font_param_name . ': ' . $value . ( $font_param_name == 'font-size' ? 'px' : '' ) . ' !important;';
+	}
+
 	public static function get_typography_config( $typography ) {
 		$typography_styles = '';
 
@@ -1470,6 +1472,97 @@ class ELAY_Utilities {
 		return $typography_styles;
 	}
 
+	public static function get_single_article_link( $kb_config, $title, $article_id, $type, $seq_no='' ) {
+
+		$title_style = '';
+
+		switch( $type ) {
+
+			case 'Article_Sidebar':
+				$a_tag_class = 'epkb-sidebar-article';
+				$outer_span = 'eckb-article-title';
+				$icon_class = 'eckb-article-title__icon ep_font_icon_document';
+				$article_color = self::get_inline_style( 'color:: sidebar_article_font_color', $kb_config );
+				$icon_color = self::get_inline_style( 'color:: sidebar_article_icon_color', $kb_config );
+				$title_style = self::get_inline_style( 'typography:: sidebar_section_body_typography', $kb_config );
+				$title_class = 'eckb-article-title__text';
+				break;
+
+			case ELAY_Layout::CLASSIC_LAYOUT:
+			case ELAY_Layout::DRILL_DOWN_LAYOUT;
+			case 'Module':
+			case 'Category_Archive_Page':
+				$a_tag_class = 'epkb-ml-article-container';
+				$outer_span = 'epkb-article-inner';
+				$icon_class = 'epkb-article__icon ep_font_icon_document';
+				$article_color = self::get_inline_style( 'color:: article_font_color', $kb_config );
+				$title_class = 'epkb-article__text';
+				switch ( $kb_config['kb_main_page_layout'] ) {
+					case ELAY_Layout::SIDEBAR_LAYOUT:
+						$icon_color = self::get_inline_style( 'color:: sidebar_article_icon_color', $kb_config );
+						break;
+					default:
+						$icon_color = self::get_inline_style( 'color:: article_icon_color', $kb_config );
+				}
+				break;
+
+			case ELAY_Layout::BASIC_LAYOUT:
+			case ELAY_Layout::TABS_LAYOUT:
+			case ELAY_Layout::CATEGORIES_LAYOUT:
+			default:
+				$a_tag_class = 'epkb-mp-article';
+				$outer_span = 'eckb-article-title';
+				$icon_class = 'eckb-article-title__icon ep_font_icon_document';
+				$article_color = self::get_inline_style( 'color:: article_font_color', $kb_config );
+				$icon_color = self::get_inline_style( 'color:: article_icon_color', $kb_config );
+				$title_class = 'eckb-article-title__text';
+		}
+
+		// handle any add-on content
+		$escaped_title_attr = '';
+		$new_tab = '';
+		$link = '';
+		if ( has_filter( 'eckb_single_article_filter' ) ) {
+
+			$result = apply_filters('eckb_single_article_filter', $article_id, array( $kb_config['id'], $title, $outer_span, $article_color, $icon_color ) );
+
+			// keep for old compatibility for links to output separately
+			if ( ! empty( $result ) && $result === true ) {
+				return;
+			}
+
+			if ( is_array( $result) && isset( $result['url_value'] ) ) {
+				$link = $result['url_value'];
+				$escaped_title_attr = 'title="' . esc_attr( $result['title_attr_value'] ) . '"';
+				$new_tab = $result['new_tab'];
+				$icon_class = 'eckb-article-title__icon epkbfa epkbfa-' . $result['icon'];
+			}
+		}
+
+		if ( empty( $link ) ) {
+			$link = get_permalink( $article_id );
+			if ( ! has_filter('article_with_seq_no_in_url_enable') ) {
+				$link = empty( $seq_no ) || $seq_no < 2 ? $link : add_query_arg('seq_no', $seq_no, $link);
+				$link = empty( $link ) || is_wp_error( $link ) ? '' : $link;
+			}
+		}
+
+		// output link if wizard is not on otherwise output span
+		$wizard_off = empty( $_GET['ordering-wizard-on'] );
+		$opening_tag = $wizard_off ? '<a href="' . esc_url( $link ) . '"' : '<span';
+		$closing_tag = $wizard_off ? '</a>' : '</span>';
+
+		echo $opening_tag . ' ' . $escaped_title_attr; ?> class="<?php echo $a_tag_class; ?>" data-kb-article-id="<?php echo esc_attr( $article_id ); ?>" <?php echo $new_tab; ?>>
+			<span class="<?php echo $outer_span; ?>" <?php echo $article_color; ?> >
+				<span class="<?php echo $icon_class; ?>" <?php echo $icon_color; ?> aria-hidden="true"></span>
+				<span class="<?php echo $title_class; ?>" <?php echo $title_style; ?>><?php echo esc_html( $title ); ?></span>
+			</span> <?php
+			if ( $type == 'Category_Archive_Page' && ! empty( $kb_config['archive_content_articles_arrow_toggle'] ) && $kb_config['archive_content_articles_arrow_toggle'] == 'on' ) { ?>
+				<span class="eckb-category-archive-arrow epkbfa epkbfa-arrow-right"></span> <?php
+			}
+		echo $closing_tag;
+	}
+
 	/**
 	 * Check if Aaccess Manager is considered active.
 	 *
@@ -1489,9 +1582,9 @@ class ELAY_Utilities {
 		}
 
 		$table = $wpdb->prefix . 'am'.'gr_kb_groups';
-		$result = $wpdb->get_var( "SHOW TABLES LIKE '" . $table ."'" );
+		$result = $wpdb->get_var( $wpdb->prepare( "SHOW TABLES LIKE %s", $table ) );
 
-		return ( ! empty($result) && ( $table == $result ) );
+		return ( ! empty( $result ) && ( $table == $result ) );
 	}
 	
 	/**
@@ -1675,6 +1768,11 @@ class ELAY_Utilities {
 		}
 
 		return is_plugin_active( 'classic-editor/classic-editor.php' );
+	}
+
+	public static function is_kb_main_page() {
+		global $eckb_is_kb_main_page;
+		return isset( $eckb_is_kb_main_page ) && $eckb_is_kb_main_page;
 	}
 
 	/**
@@ -1991,7 +2089,7 @@ class ELAY_Utilities {
 	}
 
 	/**
-	 * Return 'true' if the current user can view the given article
+	 * Return 'true' if the current user can view the given article  TODO rename to is_private_article_allowed_for_current_user
 	 *
 	 * @param $article_id
 	 *
@@ -2045,5 +2143,153 @@ class ELAY_Utilities {
 		}
 
 		return $value;
+	}
+
+	public static function get_post_type_labels( $disallowed_post_types, $allowed_post_types=[], $exclude_kb=false ) {
+
+		$cpts = [];
+
+		$wp_cpts = get_post_types( [ 'public' => true ], 'object' );
+		foreach ( $wp_cpts as $post_type => $post_type_object ) {
+
+			if ( $exclude_kb && ELAY_KB_Handler::is_kb_post_type( $post_type ) ) {
+				continue;
+			}
+
+			if ( in_array( $post_type, $disallowed_post_types ) ) {
+				continue;
+			}
+
+			if ( ! ELAY_KB_Handler::is_kb_post_type( $post_type ) && ! empty( $allowed_post_types ) && ! in_array( $post_type, $allowed_post_types ) ) {
+				continue;
+			}
+
+			$cpts[ $post_type ] = self::get_post_type_label( $post_type_object );
+		}
+
+		return $cpts;
+	}
+
+	/**
+	 * Return pretty label for post type
+	 *
+	 * @param $post_type_object - see get_post_types() results
+	 * @return string
+	 */
+	public static function get_post_type_label( $post_type_object ) {
+
+		// Standard
+		if ( $post_type_object->name == 'post' ) {
+			return __( 'Post' );
+		}
+
+		if ( $post_type_object->name == 'page' ) {
+			return __( 'Page' );
+		}
+
+		if ( in_array( $post_type_object->name, ['ip_lesson', 'ip_quiz', 'ip_question', 'ip_course'] ) ) {
+			return $post_type_object->label . ' (LearnPress)';
+		}
+
+		if ( in_array( $post_type_object->name, ['sfwd-lessons', 'sfwd-quiz', 'sfwd-topic'] ) ) {
+			return $post_type_object->label . ' (LearnDash)';
+		}
+
+		if ( in_array( $post_type_object->name, ['forum', 'topic'] ) ) {
+			return $post_type_object->label . ' (bbPress)';
+		}
+
+		// BasePress
+		if ( $post_type_object->name == 'knowledgebase' && count($post_type_object->taxonomies) == 1 && isset( $post_type_object->taxonomies[0] ) && $post_type_object->taxonomies[0] == 'knowledgebase_cat' ) {
+			return $post_type_object->label . ' (BasePress)';
+		}
+
+		// weDocs
+		if ( $post_type_object->name == 'docs' && count($post_type_object->taxonomies) == 1 && isset( $post_type_object->taxonomies[0] ) && $post_type_object->taxonomies[0] == 'doc_tag' ) {
+			return $post_type_object->label . ' (WeDocs)';
+		}
+
+		// BetterDocs
+		if ( $post_type_object->name == 'docs' && count($post_type_object->taxonomies) == 0 ) {
+			return $post_type_object->label . ' (BetterDocs)';
+		}
+
+		// Woocommerce
+		if ( $post_type_object->name == 'product' ) {
+			return $post_type_object->label . ' (WooCommerce)';
+		}
+
+		return $post_type_object->label;
+	}
+
+	/**
+	 * Return if the theme is block theme. Checks to see if they are using a compatible version of WP, or if not they have a compatible version of the Gutenberg plugin installed.
+	 *
+	 * @return boolean
+	 */
+	public static function is_block_theme() {
+		if ( function_exists( 'wp_is_block_theme' ) ) {
+			return (bool) wp_is_block_theme();
+		}
+
+		return false;
+	}
+
+	/**
+	 * Removes comments, spaces, and line breaks form CSS. Limits single line length. Removes empty rule blocks.
+	 *
+	 * @param $css
+	 * @return string
+	 */
+	public static function minify_css( $css ) {
+
+		if ( ! is_string( $css ) ) {
+			return '';
+		}
+
+		// Remove comments
+		$css = preg_replace( '/(?<!\\\\)\/\*(.*?)\*(?<!\\\\)\//Ss', '', $css );
+
+		// Process quoted unquotable attribute selectors to unquote them. Covers most common cases.
+		// Likelyhood of a quoted attribute selector being a substring in a string: Very very low.
+		$css = preg_replace( '/\[\s*([a-z][a-z-]+)\s*([\*\|\^\$~]?=)\s*[\'"](-?[a-z_][a-z0-9-_]+)[\'"]\s*\]/Ssi', '[$1$2$3]', $css );
+
+		// Normalize all whitespace strings to single spaces
+		$css = preg_replace('/\s+/S', ' ', $css );
+
+		// Remove spaces before the things that should not have spaces before them.
+		$css = preg_replace( '/ ([@{};>+)\]~=,\/\n])/S', '$1', $css );
+
+		// Remove the spaces after the things that should not have spaces after them.
+		$css = preg_replace( '/([{}:;>+(\[~=,\/\n]) /S', '$1', $css );
+
+		// Find a fraction that may used in some @media queries such as: (min-aspect-ratio: 1/1)
+		// Add token to add the "/" back in later
+		$css = preg_replace( '/\(([a-z-]+):([0-9]+)\/([0-9]+)\)/Si', '($1:$2'. '_CSSMIN_QF_' .'$3)', $css );
+
+		// Remove empty rule blocks up to 2 levels deep.
+		$css = preg_replace( array_fill( 0, 2, '/(\{)[^{};\/\n]+\{\}/S' ), '$1', $css );
+		$css = preg_replace( '/[^{};\/\n]+\{\}/S', '', $css );
+
+		// Restore fraction
+		$css = str_replace( '_CSSMIN_QF_', '/', $css );
+
+		// Some source control tools don't like it when files containing lines longer
+		// than, say 8000 characters, are checked in. The linebreak option is used in
+		// that case to split long lines after a specific column.
+		$line_break_position = 5000;
+		$l = strlen( $css );
+		$offset = $line_break_position;
+		while ( preg_match( '/(?<!\\\\)\}(?!\n)/S', $css, $matches, PREG_OFFSET_CAPTURE, $offset ) ) {
+			$matchIndex = $matches[0][1];
+			$css = substr_replace( $css, "\n", $matchIndex + 1, 0 );
+			$offset = $matchIndex + 2 + $line_break_position;
+			$l += 1;
+			if ( $offset > $l ) {
+				break;
+			}
+		}
+
+		return $css;
 	}
 }

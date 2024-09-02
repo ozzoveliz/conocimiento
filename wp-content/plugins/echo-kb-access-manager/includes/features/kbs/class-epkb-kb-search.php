@@ -31,8 +31,6 @@ class EPKB_KB_Search {
 		$search_terms = stripslashes( $search_terms );
 		$search_terms = str_replace('?', '', $search_terms);
 		$search_terms = str_replace( array( "\r", "\n" ), '', $search_terms );
-		// replace non-standard spaces with standard space so wordpress will search words separately
-		// TODO FUTURE$search_terms = preg_replace('~\s+~u', ' ', $search_terms);
 
 		// require minimum size of search word(s)
 		if ( empty($search_terms) ) {
@@ -121,7 +119,7 @@ class EPKB_KB_Search {
 		$search_params['post_status'] = array( 'publish' );
 		if ( EPKB_Utilities::is_amag_on() ) {
 			$search_params['post_status'] = array( 'publish', 'private' );
-		} else if ( EPKB_Utilities::is_new_user( '7.4.0' ) && is_user_logged_in() ) {
+		} else if ( is_user_logged_in() ) {
 			$search_params['post_status'] = array( 'publish', 'private' );
 		}
 
@@ -147,7 +145,7 @@ class EPKB_KB_Search {
 	 */
 	public static function get_search_form( $kb_config ) {
 
-		// SEARCH BOX OFF - TODO REMOVE when 'search_layout' option is removed
+		// SEARCH BOX OFF
 		if ( $kb_config['search_layout'] == 'epkb-search-form-0' ) {
 			return;
 		}
@@ -175,7 +173,7 @@ class EPKB_KB_Search {
 
 		$prefix = $is_kb_main_page ? '' : 'article_';
 
-		$style1 = self::get_inline_style( $kb_config,
+		$style1_escaped = self::get_inline_style( $kb_config,
 			'background-color:: ' . $prefix . 'search_background_color,
 			 padding-top:: ' . $prefix . 'search_box_padding_top,
 			 padding-right:: ' . $prefix . 'search_box_padding_right,
@@ -185,32 +183,38 @@ class EPKB_KB_Search {
 			 margin-bottom:: ' . $prefix . 'search_box_margin_bottom,
 			 ');
 
-		$style2 = self::get_inline_style( $kb_config,
+		$style2_escaped = self::get_inline_style( $kb_config,
 			'background-color:: ' . $prefix . 'search_btn_background_color,
 			 background:: ' . $prefix . 'search_btn_background_color, 
 			 border-color:: ' . $prefix . 'search_btn_border_color'
 			 );
-		$style3 = self::get_inline_style( $kb_config, 'color:: ' . $prefix . 'search_title_font_color, typography:: ' . $prefix . 'search_title_typography');
-		$style4 = self::get_inline_style( $kb_config, 'border-width:: ' . $prefix . 'search_input_border_width, border-color:: ' . $prefix . 'search_text_input_border_color,
+		$style3_escaped = self::get_inline_style( $kb_config, 'color:: ' . $prefix . 'search_title_font_color, typography:: ' . $prefix . 'search_title_typography');
+		$style4_escaped = self::get_inline_style( $kb_config, 'border-width:: ' . $prefix . 'search_input_border_width, border-color:: ' . $prefix . 'search_text_input_border_color,
 											background-color:: ' . $prefix . 'search_text_input_background_color, background:: ' . $prefix . 'search_text_input_background_color, typography:: ' . $prefix . 'search_input_typography' );
-		$class1 = self::get_css_class( $kb_config, 'epkb-search, :: ' . $prefix . 'search_layout' );
+		$class1_escaped = self::get_css_class( $kb_config, 'epkb-search, :: ' . $prefix . 'search_layout' );
 
-		$search_title_tag = empty($kb_config[$prefix . 'search_title_html_tag']) ? 'div' : $kb_config[$prefix . 'search_title_html_tag'];
+		$search_title = $kb_config[ $prefix . 'search_title' ];
+
+		$search_title_tag_escaped = EPKB_Utilities::sanitize_html_tag( $kb_config[$prefix . 'search_title_html_tag'] );
+
 		$search_input_width = $kb_config[$prefix . 'search_box_input_width'];
-		$form_style = self::get_inline_style( $kb_config, 'width:' . $search_input_width . '%' );
+		$form_style_escaped = self::get_inline_style( $kb_config, 'width:' . $search_input_width . '%' );
 
 	   $main_page_indicator = $is_kb_main_page ? 'eckb_search_on_main_page' : '';    ?>
 
-		<div class="epkb-doc-search-container <?php echo $main_page_indicator; ?>" <?php echo $style1; ?> >
+		<div class="epkb-doc-search-container <?php echo esc_attr( $main_page_indicator ); ?>" <?php echo $style1_escaped; ?> >     <?php
 
-			<<?php echo $search_title_tag; ?> class="epkb-doc-search-container__title" <?php echo $style3; ?>> <?php echo esc_html( $kb_config[$prefix . 'search_title'] ); ?></<?php echo $search_title_tag; ?>>
-			<form id="epkb_search_form" <?php echo $form_style . ' ' . $class1; ?> method="get" action="/">
+			if ( ! empty( $search_title ) ) {   ?>
+				<<?php echo esc_attr( $search_title_tag_escaped ); ?> class="epkb-doc-search-container__title" <?php echo $style3_escaped; ?>> <?php echo esc_html( $search_title ); ?></<?php echo esc_attr( $search_title_tag_escaped ); ?>>   <?php
+			}	?>
+
+			<form id="epkb_search_form" <?php echo $form_style_escaped . ' ' . $class1_escaped; ?> method="get" action="/">
 
 				<div class="epkb-search-box">
-					<input type="text" <?php echo $style4; ?> id="epkb_search_terms" aria-label="<?php echo esc_attr( $kb_config[$prefix . 'search_box_hint'] ); ?>" name="s" value="" placeholder="<?php echo esc_attr( $kb_config[$prefix . 'search_box_hint'] ); ?>" aria-controls="epkb_search_results" >
-					<input type="hidden" id="epkb_kb_id" value="<?php echo $kb_config['id']; ?>">
+					<input type="text" <?php echo $style4_escaped; ?> id="epkb_search_terms" aria-label="<?php echo esc_attr( $kb_config[$prefix . 'search_box_hint'] ); ?>" name="s" value="" placeholder="<?php echo esc_attr( $kb_config[$prefix . 'search_box_hint'] ); ?>" aria-controls="epkb_search_results" >
+					<input type="hidden" id="epkb_kb_id" value="<?php echo esc_attr( $kb_config['id'] ); ?>">
 					<div class="epkb-search-box_button-wrap">
-						<button type="submit" id="epkb-search-kb" <?php echo $style2; ?>><?php echo esc_html( $kb_config[$prefix . 'search_button_name'] ); ?> </button>
+						<button type="submit" id="epkb-search-kb" <?php echo $style2_escaped; ?>><?php echo esc_html( $kb_config[$prefix . 'search_button_name'] ); ?> </button>
 					</div>
 					<div class="loading-spinner"></div>
 				</div>
@@ -259,19 +263,19 @@ class EPKB_KB_Search {
 		$output_html = '<div class="epkb-search-results-message">' . esc_html( $kb_config[$prefix . 'search_results_msg'] ) . ' ' . $search_terms . '</div>';
 		$output_html .= '<ul>';
 
-		$title_style = '';
-		$icon_style  = '';
+		$title_style_escaped = '';
+		$icon_style_escaped  = '';
 		if ( $kb_config['search_box_results_style'] == 'on' ) {
 			$color_prefix = EPKB_Utilities::is_elegant_layouts_enabled() ? 'sidebar_' : '';  // are we taking color from Sidebar ?
-			$title_style = EPKB_Utilities::get_inline_style( 'color:: ' . $color_prefix . 'article_font_color' , $kb_config);
-			$icon_style = EPKB_Utilities::get_inline_style( 'color:: ' . $color_prefix . 'article_icon_color' , $kb_config);
+			$title_style_escaped = EPKB_Utilities::get_inline_style( 'color:: ' . $color_prefix . 'article_font_color' , $kb_config);
+			$icon_style_escaped = EPKB_Utilities::get_inline_style( 'color:: ' . $color_prefix . 'article_icon_color' , $kb_config);
 		}
 
 		// display one line for each search result
 		foreach ( $search_results as $post ) {
 
 			$article_url = get_permalink( $post->ID );
-			if ( empty($article_url) || is_wp_error( $article_url )) {
+			if ( empty( $article_url ) || is_wp_error( $article_url ) ) {
 				continue;
 			}
 
@@ -284,17 +288,17 @@ class EPKB_KB_Search {
 
 			// linked articles have the open in new tab option
 			$new_tab = '';
-			if ( class_exists( 'KBLK_Utilities' ) && method_exists( 'KBLK_Utilities', 'get_postmeta' ) ) {
-				$link_editor_config = KBLK_Utilities::get_postmeta( $post->ID, 'kblk-link-editor-data', [], true );
-				$new_tab            = empty( $link_editor_config['open-new-tab'] ) ? '' : 'target="_blank"';
+			if ( EPKB_Utilities::is_link_editor_enabled() ) {
+				$link_editor_config = EPKB_Utilities::get_postmeta( $post->ID, 'kblk-link-editor-data', [], true );
+				$new_tab = empty( $link_editor_config['open-new-tab'] ) ? '' : 'target="_blank"';
 			}
 
 			$output_html .=
 				'<li>' .
 					'<a href="' .  esc_url( $article_url ) . '" ' . $new_tab . ' class="epkb-ajax-search" data-kb-article-id="' . $post->ID . '">' .
-						'<span class="epkb_search_results__article-title" ' . $title_style . '>' .
-							'<span class="epkb_search_results__article-title__icon epkbfa ' . esc_attr($article_title_icon) . ' ' . $icon_style . '"></span>' .
-							'<span class="epkb_search_results__article-title__text">' . esc_html($post->post_title) . '</span>' .
+						'<span class="epkb_search_results__article-title" ' . $title_style_escaped . '>' .
+							'<span class="epkb_search_results__article-title__icon epkbfa ' . esc_attr( $article_title_icon ) . ' ' . $icon_style_escaped . '"></span>' .
+							'<span class="epkb_search_results__article-title__text">' . esc_html( $post->post_title ) . '</span>' .
 						'</span>' .
 					'</a>' .
 				'</li>';

@@ -33,6 +33,7 @@ function epkb_load_public_resources() {
 		'load_template'                 => esc_html__( 'Loading Template...', 'echo-knowledge-base' ),
 		'nonce'                         => wp_create_nonce( "_wpnonce_epkb_ajax_action" ),
 		'toc_editor_msg'                => esc_html__( 'The TOC is not displayed because there are no matching headers in the article.', 'echo-knowledge-base' ),
+		'creating_demo_data'            => esc_html__( 'Creating a Knowledge Base with demo categories and articles. It will be completed shortly.', 'echo-knowledge-base' )
 	);
 
 	// add article views counter method only for KB article pages
@@ -54,10 +55,9 @@ function epkb_load_public_resources() {
 	 * KB PAGES
 	 */
 
-	// TODO FUTURE: is temporary solution until not all page types have separate file with vital CSS - avoid in future
 	$has_vital_css_flag = false;
 
-	// CASE: KB Category page
+	// CASE: KB Category Archive page
 	$current_css_file_slug = '';
 	if ( is_archive() ) {
 		$current_css_file_slug = 'cp-frontend-layout';
@@ -223,8 +223,54 @@ function epkb_frontend_kb_theme_styles_now( $kb_config, $css_file_slug ) {
 			border-top-color: ' . $kb_config['tab_nav_border_color'] . '!important
 		}';
 	}
+	if ( in_array( $css_file_slug, [ 'mp-frontend-basic-layout' ] ) ) {
 
-	if ( in_array( $css_file_slug, [ 'mp-frontend-basic-layout', 'mp-frontend-tab-layout', 'mp-frontend-category-layout' ] ) ) {
+		// General -------------------------------------------/
+		$output .= ' 
+                #epkb-main-page-container, 
+				#epkb-main-page-container .epkb-doc-search-container__title, 
+				#epkb-main-page-container #epkb-search-kb, 
+				#epkb-main-page-container #epkb_search_terms, 
+				#epkb-main-page-container .epkb-cat-name, 
+				#epkb-main-page-container .epkb-cat-desc, 
+				#epkb-main-page-container .eckb-article-title, 
+				#epkb-main-page-container .epkb-category-level-2-3__cat-name,
+				#epkb-main-page-container .epkb-articles-coming-soon,
+				#epkb-main-page-container .epkb-show-all-articles { 
+				    	font-family: ' . ( ! empty( $kb_config['general_typography']['font-family'] ) ? $kb_config['general_typography']['font-family'] .'!important' : 'inherit !important' ) . ';
+				}';
+		// Headings  -----------------------------------------/
+		$output .= '
+			#epkb-main-page-container .epkb-cat-name { 
+				font-size: ' . ( ! empty( $kb_config['section_head_typography']['font-size'] ) ? $kb_config['section_head_typography']['font-size'] . 'px !important' : 'inherit !important' ) . ';
+				font-weight: ' . ( ! empty( $kb_config['section_head_typography']['font-weight'] ) ? $kb_config['section_head_typography']['font-weight'] : 'inherit !important' ) . ';
+			}';
+		$output .= '
+			#epkb-main-page-container .epkb-cat-desc { 
+				font-size: ' . ( ! empty( $kb_config['section_head_description_typography']['font-size'] ) ? $kb_config['section_head_description_typography']['font-size'] . 'px !important' : 'inherit !important' ) . ';
+				font-weight: ' . ( ! empty( $kb_config['section_head_description_typography']['font-weight'] ) ? $kb_config['section_head_description_typography']['font-weight'] : 'inherit !important' ) . ';
+			}
+			#epkb-main-page-container .epkb-category-level-2-3,
+			#epkb-main-page-container .epkb-category-level-2-3__cat-name {
+		        font-size: ' . ( empty( $kb_config['section_typography']['font-size'] ) ? 'inherit;' : $kb_config['section_typography']['font-size'] . 'px!important;' ) . '
+	            font-weight: ' . ( ! empty( $kb_config['section_typography']['font-weight'] ) ? $kb_config['section_typography']['font-weight'] : 'inherit !important' ) . ';
+			}';
+
+		// Articles  -----------------------------------------/
+		$output .= '
+			#epkb-main-page-container .epkb-section-body .eckb-article-title { 
+				font-size: ' . ( ! empty( $kb_config['article_typography']['font-size'] ) ? $kb_config['article_typography']['font-size'] . 'px !important' : 'inherit !important' ) . ';
+				font-weight: ' . ( ! empty( $kb_config['article_typography']['font-weight'] ) ? $kb_config['article_typography']['font-weight'] : 'inherit !important' ) . ';
+			}';
+
+		$output .= '
+			#epkb-main-page-container .epkb-articles-coming-soon, 
+			#epkb-main-page-container .epkb-show-all-articles { 
+				font-size: ' . ( ! empty( $kb_config['section_typography']['font-size'] ) ? $kb_config['section_typography']['font-size'] . 'px !important' : 'inherit !important' ) . ';
+				font-weight: ' . ( ! empty( $kb_config['section_typography']['font-weight'] ) ? $kb_config['section_typography']['font-weight'] : 'inherit !important' ) . ';
+			} ';
+	}
+	if ( in_array( $css_file_slug, [ 'mp-frontend-tab-layout', 'mp-frontend-category-layout' ] ) ) {
 
 		$kb_config['section_typography'] = array_merge( EPKB_Typography::$typography_defaults, $kb_config['section_typography'] );
 		$kb_config['article_typography'] = array_merge( EPKB_Typography::$typography_defaults, $kb_config['article_typography'] );
@@ -258,15 +304,18 @@ function epkb_frontend_kb_theme_styles_now( $kb_config, $css_file_slug ) {
 	if ( in_array( $css_file_slug, ['ap-frontend-layout', 'mp-frontend-sidebar-layout'] ) ) {
 		$output .= EPKB_Articles_Setup::generate_article_structure_css_v2( $kb_config );
 
-		// Elegant Layout outputs its own Sidebar and CSS - ELAY version 2.15.3 and earlier does not have method get_inline_styles() and outputs the inline CSS directly itself
+		// Elegant Layout outputs its own Sidebar and CSS - Elegant Layout version 2.15.3 and earlier does not have method get_inline_styles() and outputs the inline CSS directly itself
 		if ( EPKB_Utilities::is_elegant_layouts_enabled() && class_exists( 'ELAY_Layout_Sidebar_v2' ) && method_exists( 'ELAY_Layout_Sidebar_v2', 'get_inline_styles' ) ) {
 			$output .= ELAY_Layout_Sidebar_v2::get_inline_styles( $output, $kb_config );
 		}
 
 		// KB Core Article Page Sidebar CSS
-		if ( ! in_array( $css_file_slug, ['mp-frontend-sidebar-layout'] ) && ! EPKB_Utilities::is_elegant_layouts_enabled() ) {
+		if ( ! in_array( $css_file_slug, ['mp-frontend-sidebar-layout'] ) ) {
 			$output .= EPKB_Layout_Article_Sidebar::generate_sidebar_CSS_V2( $kb_config );
 		}
+	}
+	if ( $css_file_slug == 'mp-frontend-modular-sidebar-layout' ) {
+		$output .= EPKB_Layout_Article_Sidebar::generate_sidebar_CSS_V2( $kb_config );
 	}
 
 	// Article Page Modular Search
@@ -290,7 +339,6 @@ function epkb_frontend_kb_theme_styles_now( $kb_config, $css_file_slug ) {
 	}
 
 	$output .= '
-
 		/* Frontend Editor button on top admin bar (frontend)
 		-----------------------------------------------------------------------*/
 		#wpadminbar #wp-admin-bar-epkb-edit-mode-button > .ab-item:before {
@@ -309,6 +357,16 @@ function epkb_frontend_kb_theme_styles_now( $kb_config, $css_file_slug ) {
 		#wpadminbar #wp-admin-bar-epkb-edit-mode-button > .ab-item:hover:before{
 			color:#4391F3;
 		}';
+
+	// Category Archive Page V3
+	if ( $css_file_slug == 'cp-frontend-layout' && $kb_config['archive_page_v3_toggle'] == 'on' ) {
+		$output .= EPKB_Category_Archive_Setup::get_all_inline_styles( $kb_config );
+
+		if ( $kb_config['archive_left_sidebar_toggle'] == 'on' || $kb_config['archive_right_sidebar_toggle'] == 'on' ) {
+			$output .= EPKB_Layout_Article_Sidebar::generate_sidebar_CSS_V2( $kb_config );
+			$output .= apply_filters( 'epkb_ml_sidebar_layout_styles', '', $kb_config );
+		}
+	}
 
 	$output .= $add_on_output;
 
@@ -358,11 +416,7 @@ function epkb_enqueue_the_content_scripts() {
 		return;
 	}
 
-	if ( ! EPKB_Utilities::is_new_user_2( '9.2.0' ) ) {
-		return;
-	}
-
-	// if flag is already set - don't need the scripts any more
+	// if flag is already set - don't need the scripts anymore
 	if ( EPKB_Core_Utilities::is_kb_flag_set( 'epkb_the_content_fix' ) ) {
 		return;
 	}
@@ -375,7 +429,7 @@ function epkb_enqueue_the_content_scripts() {
 		return;
 	}
 
-	// fix the content issue only if author, editor, admin is reviewing the page
+	// fix the content issue only if author, editor, or admin is reviewing the page
 	if ( ! EPKB_Admin_UI_Access::is_user_admin_editor_author() ) {
 		return;
 	}
@@ -403,6 +457,10 @@ add_action( 'epkb_enqueue_font_scripts', 'epkb_enqueue_font' ); // use this acti
  */
 function epkb_front_end_body_classes( $classes ) {
 
+	if ( EPKB_Utilities::is_kb_main_page() ) {
+		return $classes;
+	}
+
 	$kb_id = EPKB_Utilities::get_eckb_kb_id( '' );
 
 	// load only on article pages
@@ -423,21 +481,6 @@ function epkb_front_end_body_classes( $classes ) {
 		return $classes;
 	}
 
-	// is this KB Main Page ?
-	$eckb_is_kb_main_page = false;
-	$all_kb_configs = epkb_get_instance()->kb_config_obj->get_kb_configs( true );
-	foreach ( $all_kb_configs as $one_kb_config ) {
-		if ( ! empty($one_kb_config['kb_main_pages']) && is_array($one_kb_config['kb_main_pages']) &&
-		     in_array($post->ID, array_keys($one_kb_config['kb_main_pages']) ) ) {
-			$eckb_is_kb_main_page = true;
-			break;  // found matching KB Main Page
-		}
-	}
-
-	if ( $eckb_is_kb_main_page ) {
-		return $classes;
-	}
-
 	$classes[] = 'eckb-front-end-body';
 
 	return $classes;
@@ -454,18 +497,18 @@ function epkb_register_kb_sidebar() {
 
 	foreach( $kb_configs as $kb_config ) {
 
-		$widget_kb_name = count( $kb_configs ) > 1 ? $kb_config['kb_name'] : '';
+		$widget_kb_name = count( $kb_configs ) > 1 ? ' - ' . $kb_config['kb_name'] : '';
 		$widget_id = $kb_config['id'] == 1 ? 'eckb_articles_sidebar' : 'eckb_articles_sidebar_' . $kb_config['id'];
 
 		// add KB sidebar area
-		register_sidebar(array(
-			'name' => esc_html__('KB Sidebar for' , 'echo-knowledge-base') . ' ' . esc_html( $widget_kb_name ),
+		register_sidebar( array(
+			'name' => esc_html__('KB Sidebar' , 'echo-knowledge-base') . esc_html( $widget_kb_name ),
 			'id' => $widget_id,
 			'before_widget' => '<div id="eckb-%1$s" class="eckb-article-widget-sidebar-body__widget">',
 			'after_widget' => '</div> <!-- end Widget -->',
 			'before_title' => '<h4>',
 			'after_title' => '</h4>'
-		));
+		) );
 	}
 }
 add_action( 'widgets_init', 'epkb_register_kb_sidebar' );

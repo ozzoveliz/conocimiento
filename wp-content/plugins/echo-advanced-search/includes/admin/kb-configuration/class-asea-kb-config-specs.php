@@ -44,8 +44,8 @@ class ASEA_KB_Config_Specs {
 		$default_style = array(
 
 				//Container Settings
-				'advanced_search_box_padding_top'                       =>  50,
-				'advanced_search_box_padding_bottom'                    =>  50,
+				'advanced_search_box_padding_top'                       =>  30,
+				'advanced_search_box_padding_bottom'                    =>  30,
 				'advanced_search_box_padding_left'                      =>  0,
 				'advanced_search_box_padding_right'                     =>  0,
 				'advanced_search_box_margin_top'                        =>  0,
@@ -291,16 +291,11 @@ class ASEA_KB_Config_Specs {
 				'type'        => ASEA_Input_Filter::COLOR_HEX,
 				'default'     => $default_color['advanced_search_search_result_category_color']
 			),
-			'advanced_search_mp_box_visibility' => array(       // TODO REMOVE
-				'label'       => __( 'Visibility', 'echo-advanced-search' ),
-				'name'        => 'advanced_search_mp_box_visibility',
-				'type'        => ASEA_Input_Filter::SELECTION,
-				'options'     => array(
-					'asea-visibility-search-form-1' => __( 'Visible' ),
-					'asea-visibility-search-form-2' => __( 'Hidden' ),
-					'asea-visibility-search-form-3' => __( 'Hidden With Toggle to Show It' )
-				),
-				'default'     => 'asea-visibility-search-form-1'
+			'advanced_search_mp_visibility'                 => array(
+				'label'       => __( 'Show Search Toggle Button', 'echo-advanced-search' ),
+				'name'        => 'advanced_search_mp_visibility',
+				'type'        => ASEA_Input_Filter::CHECKBOX,
+				'default'     => 'off'
 			),
 			'advanced_search_mp_auto_complete_wait' => array(
 				'label'       => __( 'Auto-complete Waiting Time [ms]', 'echo-advanced-search' ),
@@ -450,7 +445,7 @@ class ASEA_KB_Config_Specs {
 					),
 				) // https://developer.wordpress.org/reference/functions/wp_kses/
 			),
-			'advanced_search_mp_box_hint'                                   => array(
+			'advanced_search_mp_box_hint'                                   => array(   // TODO REMOVE
 				'label'       => __( 'Search Hint', 'echo-advanced-search' ),
 				'name'        => 'advanced_search_mp_box_hint',
 				'max'         => '60',
@@ -470,7 +465,7 @@ class ASEA_KB_Config_Specs {
 				'label'       => __( 'Search Results Message', 'echo-advanced-search' ),
 				'name'        => 'advanced_search_mp_results_msg',
 				'max'         => '60',
-				'mandatory' => false,
+				'mandatory'   => false,
 				'type'        => ASEA_Input_Filter::TEXT,
 				'default'     => __( 'Search Results for', 'echo-advanced-search' )
 			),
@@ -511,7 +506,7 @@ class ASEA_KB_Config_Specs {
 				'min'         => '1',
 				'mandatory'   => false,
 				'type'        => ASEA_Input_Filter::TEXT,
-				'default'     => __( '', 'echo-advanced-search' )
+				'default'     => ''
 			),
 			'advanced_search_mp_search_result_category_label'               => array(
 				'label'       => __( 'Label for category in search results', 'echo-advanced-search' ),
@@ -519,7 +514,7 @@ class ASEA_KB_Config_Specs {
 				'max'         => '40',
 				'min'         => '1',
 				'type'        => ASEA_Input_Filter::TEXT,
-				'default'     => __( 'Top Category:', 'echo-advanced-search' )
+				'default'     => __( 'Top Category', 'echo-advanced-search' ) . ':'
 			),
 			'advanced_search_mp_box_padding_top'                            => array(
 				'label'       => __( 'Top', 'echo-advanced-search' ),
@@ -681,7 +676,7 @@ class ASEA_KB_Config_Specs {
 				'default'     => $default_style['advanced_search_input_border_width']
 			),
 			'advanced_search_mp_box_input_width'                            => array(
-				'label'       => __( 'Width (%)', 'echo-advanced-search' ),
+				'label'       => __( 'Search Input Width', 'echo-advanced-search' ) . ' (%)',
 				'name'        => 'advanced_search_mp_box_input_width',
 				'max'         => '100',
 				'min'         => '0',
@@ -861,7 +856,7 @@ class ASEA_KB_Config_Specs {
 				'name'        => 'advanced_search_mp_background_image_url',
 				'max'         => '300',
 				'min'         => '0',
-				'mandatory'    => false,
+				'mandatory'   => false,
 				'type'        => ASEA_Input_Filter::TEXT,
 				'default'     => ''
 			),
@@ -892,7 +887,7 @@ class ASEA_KB_Config_Specs {
 				'name'        => 'advanced_search_mp_background_pattern_image_url',
 				'max'         => '300',
 				'min'         => '0',
-				'mandatory'    => false,
+				'mandatory'   => false,
 				'type'        => ASEA_Input_Filter::TEXT,
 				'default'     => ''
 			),
@@ -1114,16 +1109,11 @@ class ASEA_KB_Config_Specs {
 				'type'        => ASEA_Input_Filter::COLOR_HEX,
 				'default'     => $default_color['advanced_search_search_result_category_color']
 			),
-			'advanced_search_ap_box_visibility' => array(       // TODO REMOVE
-				'label'       => __( 'Visibility', 'echo-advanced-search' ),
-				'name'        => 'advanced_search_ap_box_visibility',
-				'type'        => ASEA_Input_Filter::SELECTION,
-				'options'     => array(
-					'asea-visibility-search-form-1' => __( 'Visible' ),
-					'asea-visibility-search-form-2' => __( 'Hidden' ),
-					'asea-visibility-search-form-3' => __( 'Hidden With Toggle to Show It' )
-				),
-				'default'     => 'asea-visibility-search-form-1'
+			'advanced_search_ap_visibility'                 => array(
+				'label'       => __( 'Show Search Toggle Button', 'echo-advanced-search' ),
+				'name'        => 'advanced_search_ap_visibility',
+				'type'        => ASEA_Input_Filter::CHECKBOX,
+				'default'     => 'off'
 			),
 			'advanced_search_ap_auto_complete_wait' => array(
 				'label'       => __( 'Auto-complete Waiting Time [ms]', 'echo-advanced-search' ),
@@ -1273,7 +1263,7 @@ class ASEA_KB_Config_Specs {
 					),
 				) // https://developer.wordpress.org/reference/functions/wp_kses/
 			),
-			'advanced_search_ap_box_hint'                       => array(
+			'advanced_search_ap_box_hint'                       => array(       // TODO REMOVE
 				'label'       => __( 'Search Hint', 'echo-advanced-search' ),
 				'name'        => 'advanced_search_ap_box_hint',
 				'max'         => '60',
@@ -1293,7 +1283,7 @@ class ASEA_KB_Config_Specs {
 				'label'       => __( 'Search Results Message', 'echo-advanced-search' ),
 				'name'        => 'advanced_search_ap_results_msg',
 				'max'         => '60',
-				'mandatory' => false,
+				'mandatory'   => false,
 				'type'        => ASEA_Input_Filter::TEXT,
 				'default'     => __( 'Search Results for', 'echo-advanced-search' )
 			),
@@ -1334,7 +1324,7 @@ class ASEA_KB_Config_Specs {
 				'min'         => '1',
 				'mandatory'   => false,
 				'type'        => ASEA_Input_Filter::TEXT,
-				'default'     => __( '', 'echo-advanced-search' )
+				'default'     => ''
 			),
 			'advanced_search_ap_search_result_category_label'               => array(
 				'label'       => __( 'Label for category in search results', 'echo-advanced-search' ),
@@ -1342,7 +1332,7 @@ class ASEA_KB_Config_Specs {
 				'max'         => '40',
 				'min'         => '1',
 				'type'        => ASEA_Input_Filter::TEXT,
-				'default'     => __( 'Top Category:', 'echo-advanced-search' )
+				'default'     => __( 'Top Category', 'echo-advanced-search' ) . ':'
 			),
 			'advanced_search_ap_box_padding_top'                => array(
 				'label'       => __( 'Top', 'echo-advanced-search' ),
@@ -1504,7 +1494,7 @@ class ASEA_KB_Config_Specs {
 				'default'     => $default_style['advanced_search_input_border_width']
 			),
 			'advanced_search_ap_box_input_width'                => array(
-				'label'       => __( 'Width (%)', 'echo-advanced-search' ),
+				'label'       => __( 'Search Input Width', 'echo-advanced-search' ) . ' (%)',
 				'name'        => 'advanced_search_ap_box_input_width',
 				'max'         => '100',
 				'min'         => '0',

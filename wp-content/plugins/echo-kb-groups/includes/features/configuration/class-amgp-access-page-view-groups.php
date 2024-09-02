@@ -5,17 +5,12 @@
  */
 class AMGP_Access_Page_View_Groups {
 
+	/** @var  AMGP_HTML_Elements */
 	private $html;
 	private $kb_id;
 	private $kb_groups;
 
 	public function __construct() {
-
-		if ( ! current_user_can('admin_eckb_access_manager_page') || ! current_user_can('admin_eckb_access_crud_groups') ) {
-			AMGP_Utilities::output_inline_error_notice(__( 'You do not have permission.', 'echo-knowledge-base' ) . ' (E12)');
-			return;
-		}
-
 		add_action( 'eckb_kb_groups_tab_content', array($this, 'show_group_section') );
 	}
 
@@ -69,8 +64,7 @@ class AMGP_Access_Page_View_Groups {
 						'name'          => 'create-group-name',
 						'label'         => 'Group Name: ',
 						'input_class'   => 'amgp-group-name' ) );
-					$this->html->submit_button( __( 'Create', 'echo-knowledge-base' ), 'amgp_add_kb_group_ajax', 'amag-btn-wrap--plain', '', true, '', 'amag-success-btn' );
-					?>
+					$this->html->submit_button_v2( esc_html__( 'Create', 'echo-knowledge-base' ), 'amgp_add_kb_group_ajax', 'amag-btn-wrap--plain', '', true, '', 'amag-success-btn' );					?>
 				</div>
 			</div>
 		</section>
@@ -90,30 +84,24 @@ class AMGP_Access_Page_View_Groups {
 
 						if ( $is_group_public === false ) {  ?>
 							<span class="amag-list-action amgp-list-action">
-                            <button class="amag-success-btn amag-rename-group-toggle">Rename</button>
-                            <div class="amgp-rename-group-input">                             <?php
-	                            $this->html->text_basic( array(
-		                            'name'        => 'rename-group-name' . $kb_group->kb_group_id,
-		                            'label'       => 'New Name: ',
-		                            'input_class' => 'amgp-new-name'
-	                            ) );
-	                            $this->html->submit_button( __( 'Save', 'echo-knowledge-base' ), 'amgp_rename_kb_group_ajax' . $kb_group->kb_group_id, 'amag-btn-wrap--plain', '', true, '', 'amag-success-btn' );
-	                            ?>
-                            </div>
-                            <input type="hidden" class="amgp_kb_group_id" name="amgp_kb_group_id" value="<?php echo esc_attr($kb_group->kb_group_id); ?>" />
-                            <input type="hidden" class="amgp_kb_group_name" name="amgp_kb_group_name" value="<?php echo esc_attr($kb_group->name) ?>" />
-                            <button id="amgp-delete-kb-group<?php echo $kb_group->kb_group_id; ?>" class="amag-error-btn">Delete</button>
-                        </span>     <?php
+	                            <button class="amag-success-btn amag-rename-group-toggle">Rename</button>
+	                            <div class="amgp-rename-group-input">                             <?php
+		                            $this->html->text_basic( array(
+			                            'name'        => 'rename-group-name' . $kb_group->kb_group_id,
+			                            'label'       => 'New Name: ',
+			                            'input_class' => 'amgp-new-name'
+		                            ) );
+		                            $this->html->submit_button_v2( esc_html__( 'Save', 'echo-knowledge-base' ), 'amgp_rename_kb_group_ajax' . $kb_group->kb_group_id, 'amag-btn-wrap--plain', '', true, '', 'amag-success-btn' );	                            ?>
+	                            </div>
+	                            <input type="hidden" class="amgp_kb_group_id" name="amgp_kb_group_id" value="<?php echo esc_attr($kb_group->kb_group_id); ?>" />
+	                            <input type="hidden" class="amgp_kb_group_name" name="amgp_kb_group_name" value="<?php echo esc_attr($kb_group->name) ?>" />
+	                            <button id="amgp-delete-kb-group<?php esc_attr_e( $kb_group->kb_group_id ); ?>" class="amag-error-btn">Delete</button>
+                            </span>     <?php
 						}                    ?>
 
 					</li>            <?php
 				}   ?>
 			</ol>
-		</section>
-
-
-		<?php
-
-		return true;
+		</section>		<?php
 	}
 }

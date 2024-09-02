@@ -74,8 +74,10 @@ class EPKB_Error_Handler {
 			<h4><?php esc_html_e( 'This page is not loading the KB front-end Editor.', 'echo-knowledge-base' ); ?></h4>
 			<p><?php esc_html_e( 'Instead use the KB visual Editor on the back-end. To do this you need to switch on the back end Editor.', 'echo-knowledge-base' ); ?></p>
 			<a class="epkb-editor-safe-mode-link" href="<?php echo esc_url( admin_url( '/edit.php?post_type=' . EPKB_KB_Handler::get_post_type( EPKB_KB_Handler::get_current_kb_id() ) . '&page=epkb-kb-configuration&action=enable_editor_backend_mode&_wpnonce_epkb_ajax_action=' ) ) .
-                                                                  wp_create_nonce( '_wpnonce_epkb_ajax_action' ); ?>#settings__editor"><?php esc_html_e( 'Click here to go to the Configuration Page and turn on Editor back-end mode.', 'echo-knowledge-base' ); ?></a>
+				//phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+                wp_create_nonce( '_wpnonce_epkb_ajax_action' ); ?>#settings__editor"><?php esc_html_e( 'Click here to go to the Configuration Page and turn on Editor back-end mode.', 'echo-knowledge-base' ); ?></a>
 			<p><?php
+				//phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 				echo EPKB_Utilities::contact_us_for_support();   ?>
 			</p>    <?php
 			return;
@@ -92,6 +94,7 @@ class EPKB_Error_Handler {
 			</li>
 		</ul>
 		<p><?php
+			//phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 			echo EPKB_Utilities::contact_us_for_support();   ?>
 		</p>    <?php
 	}

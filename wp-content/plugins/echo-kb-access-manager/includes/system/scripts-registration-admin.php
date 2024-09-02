@@ -89,6 +89,8 @@ function epkb_load_admin_plugin_pages_resources() {
 			' ' . esc_html__( 'Then, the page will reload.', 'echo-knowledge-base' ),
 		'on_faqs_presets_selection'     => esc_html__( 'First, the current settings will be saved.', 'echo-knowledge-base' ) .
 			' ' . esc_html__( 'Then, the page will reload.', 'echo-knowledge-base' ),
+		'on_archive_page_v3_toggle'     => esc_html__( 'First, the current settings will be saved.', 'echo-knowledge-base' ) .
+			' ' . esc_html__( 'Then, the page will reload.', 'echo-knowledge-base' ),
 	));
 
 	// used by WordPress color picker  ( wpColorPicker() )
@@ -164,9 +166,11 @@ function epkb_load_admin_kb_setup_wizard_script() {
 		'sending_error_report' 		=> esc_html__( 'Sending, please wait', 'echo-knowledge-base' ),
 		'send_report_error' 	    => esc_html__( 'Could not submit the error.', 'echo-knowledge-base' ) . EPKB_Utilities::contact_us_for_support(),
 		'setup_wizard_error_title'  => esc_html__( 'Setup Wizard encountered an error.', 'echo-knowledge-base' ),
-		'setup_wizard_error_desc'   => esc_html__( 'We have detected an error. Please submit the issue so that we can help you fix it.', 'echo-knowledge-base' ),
+		'setup_wizard_error_desc'   => esc_html__( 'We have detected an error. Please report the issue so that we can help you resolve it.', 'echo-knowledge-base' ),
 		'wizard_help_images_path'   => Echo_Knowledge_Base::$plugin_url . 'img/',
 		'need_help_url'             => admin_url( 'edit.php?post_type=' . EPKB_KB_Handler::KB_POST_TYPE_PREFIX . EPKB_KB_Config_DB::DEFAULT_KB_ID . '&page=epkb-kb-need-help' ),
+		'saving_changes'            => esc_html__( 'Saving changes...', 'echo-knowledge-base' ),
+		'creating_demo_data'        => esc_html__( 'Creating a Knowledge Base with demo categories and articles. It will be completed shortly.', 'echo-knowledge-base' ),
 	));
 }
 
@@ -275,12 +279,25 @@ function epkb_add_admin_bar_button( WP_Admin_Bar $wp_admin_bar ) {
 		return;
 	}
 
-	// show frontend Editor link on KB Main Page, KB Article Pages and Category Archive page that has at least one article
+	// show frontend Editor link on KB Main Page, KB Article Pages
 	$title = epkb_front_end_editor_title();
 	if ( ! empty( $title ) ) {
 
+		$kb_id = EPKB_KB_Handler::get_current_kb_id();
+
+		// do not show Editor link for Archive Page V3
+		if ( is_archive() ) {
+			$kb_config = epkb_get_instance()->kb_config_obj->get_kb_config_or_default( $kb_id );
+			if ( $kb_config['archive_page_v3_toggle'] == 'on' ) {
+				return;
+			}
+		}
+
+		$open_editor_hash = EPKB_Editor_Utilities::epkb_front_end_editor_type();
+		$open_editor_hash = empty( $open_editor_hash ) ? '' : '____' . $open_editor_hash . '-editor';
+
 		$url = EPKB_Core_Utilities::is_kb_flag_set( 'editor_backend_mode' ) ?
-			admin_url( '/edit.php?post_type=' . EPKB_KB_Handler::get_post_type( EPKB_KB_Handler::get_current_kb_id() ) . '&page=epkb-kb-configuration#settings__editor' ) :
+			admin_url( '/edit.php?post_type=' . EPKB_KB_Handler::get_post_type( $kb_id ) . '&page=epkb-kb-configuration#settings__general__general-full-editor' . $open_editor_hash ) :
 			add_query_arg( [ 'action' => 'epkb_load_editor' ] );
 		$wp_admin_bar->add_menu( array( 'id' => 'epkb-edit-mode-button', 'title' => $title, 'href' => $url ) );
 
@@ -293,16 +310,16 @@ function epkb_front_end_editor_title() {
 	$title = '';
 	switch ( EPKB_Editor_Utilities::epkb_front_end_editor_type() ) {
 		case 'article-page':
-			$title = __( 'Edit KB Article Page', 'echo-knowledge-base' );
+			$title = esc_html__( 'Edit KB Article Page', 'echo-knowledge-base' );
 			break;
 		case 'main-page':
-			$title = __( 'Edit KB Main Page', 'echo-knowledge-base' );
+			$title = esc_html__( 'Edit KB Main Page', 'echo-knowledge-base' );
 			break;
 		case 'archive-page':
-			$title = __( 'Edit KB Archive Page', 'echo-knowledge-base' );
+			$title = esc_html__( 'Edit KB Archive Page', 'echo-knowledge-base' );
 			break;
 		case 'search-page':
-			$title = __( 'Edit KB Search Page', 'echo-knowledge-base' );
+			$title = esc_html__( 'Edit KB Search Page', 'echo-knowledge-base' );
 			break;
 	}
 
@@ -355,75 +372,79 @@ function epkb_load_editor_styles() {
 		'kb_url' 						=> admin_url( 'edit.php?post_type=' . EPKB_KB_Handler::KB_POST_TYPE_PREFIX . $kb_id ),
 		'epkb_editor_kb_id' 			=> $kb_id,
 		'page_type' 					=> $editor_page_type,
-		'turned_on'         			=> __( 'Hide KB Settings', 'echo-knowledge-base' ),
-		'loading'           			=> __( 'Loading...', 'echo-knowledge-base' ),
+		'turned_on'         			=> esc_html__( 'Hide KB Settings', 'echo-knowledge-base' ),
+		'loading'           			=> esc_html__( 'Loading...', 'echo-knowledge-base' ),
 		'turned_off'        			=> epkb_front_end_editor_title(),
-		'default_header'    			=> __( 'Settings panel', 'echo-knowledge-base' ),
-		'epkb_name'         			=> __( 'Echo Knowledge Base', 'echo-knowledge-base' ),
-		'tab_content'       			=> __( 'Content', 'echo-knowledge-base' ),
-		'tab_style'         			=> __( 'Style', 'echo-knowledge-base' ),
-		'tab_features'      			=> __( 'Features', 'echo-knowledge-base' ),
-		'tab_advanced'      			=> __( 'Advanced', 'echo-knowledge-base' ),
-		'tab_global'      				=> __( 'General Settings', 'echo-knowledge-base' ),
-		'tab_hidden'      				=> __( 'Disabled Sections', 'echo-knowledge-base' ),
-		'save_button'       			=> __( 'Save', 'echo-knowledge-base' ),
-		'exit_button'       			=> __( 'Exit Editor', 'echo-knowledge-base' ),
-		'clear_modal_notice' 			=> __( 'Click on any page element to change its settings', 'echo-knowledge-base' ),
-		'no_settings'     				=> __( 'This zone have no settings yet', 'echo-knowledge-base' ),
-		'checkbox_on'    				=> __( 'Yes', 'echo-knowledge-base' ),
-		'checkbox_off'    				=> __( 'No', 'echo-knowledge-base' ),
-		'wrong_dimensions' 				=> __( 'Invalid dimensions', 'echo-knowledge-base' ),
-		'left_panel' 					=> __( 'Left Panel', 'echo-knowledge-base' ),
-		'right_panel' 					=> __( 'Right Panel', 'echo-knowledge-base' ),
-		'edit_button' 					=> __( 'Edit', 'echo-knowledge-base' ),
+		'default_header'    			=> esc_html__( 'Settings panel', 'echo-knowledge-base' ),
+		'epkb_name'         			=> esc_html__( 'Echo Knowledge Base', 'echo-knowledge-base' ),
+		'tab_content'       			=> esc_html__( 'Content', 'echo-knowledge-base' ),
+		'tab_style'         			=> esc_html__( 'Style', 'echo-knowledge-base' ),
+		'tab_features'      			=> esc_html__( 'Features', 'echo-knowledge-base' ),
+		'tab_advanced'      			=> esc_html__( 'Advanced', 'echo-knowledge-base' ),
+		'tab_global'      				=> esc_html__( 'General Settings', 'echo-knowledge-base' ),
+		'tab_hidden'      				=> esc_html__( 'Disabled Sections', 'echo-knowledge-base' ),
+		'save_button'       			=> esc_html__( 'Save', 'echo-knowledge-base' ),
+		'exit_button'       			=> esc_html__( 'Exit Editor', 'echo-knowledge-base' ),
+		'clear_modal_notice' 			=> esc_html__( 'Click on any page element to change its settings', 'echo-knowledge-base' ),
+		'no_settings'     				=> esc_html__( 'This zone have no settings yet', 'echo-knowledge-base' ),
+		'checkbox_on'    				=> esc_html__( 'Yes', 'echo-knowledge-base' ),
+		'checkbox_off'    				=> esc_html__( 'No', 'echo-knowledge-base' ),
+		'wrong_dimensions' 				=> esc_html__( 'Invalid dimensions', 'echo-knowledge-base' ),
+		'left_panel' 					=> esc_html__( 'Left Panel', 'echo-knowledge-base' ),
+		'right_panel' 					=> esc_html__( 'Right Panel', 'echo-knowledge-base' ),
+		'edit_button' 					=> esc_html__( 'Edit', 'echo-knowledge-base' ),
 		'preopen_zone' 					=> EPKB_Utilities::post( 'preopen_zone', '' ),
 		'preopen_setting' 				=> EPKB_Utilities::post( 'preopen_setting', '' ),
-		'settings_html' 				=> EPKB_Editor_View::get_editor_settings_html( $kb_config ),
+		'settings_html' 				=> EPKB_Editor_View::get_editor_settings_html(),
 		'menu_links_html'				=> EPKB_Editor_View::get_editor_modal_menu_links( $editor_page_type, $kb_config ),
-		'urls_and_slug' 				=> __( 'URLs and Slug', 'echo-knowledge-base' ),
+		'urls_and_slug' 				=> esc_html__( 'URLs and Slug', 'echo-knowledge-base' ),
 		'urls_and_slug_url'				=> admin_url( '/edit.php?post_type=' . EPKB_KB_Handler::get_post_type( EPKB_KB_Handler::get_current_kb_id() ) . '&page=epkb-kb-configuration#kb-url' ),
-		'order_categories' 				=> __( 'Order Categories and Articles', 'echo-knowledge-base' ),
+		'order_categories' 				=> esc_html__( 'Order Categories and Articles', 'echo-knowledge-base' ),
 		'order_categories_url'			=> admin_url( '/edit.php?post_type=' . EPKB_KB_Handler::get_post_type( EPKB_KB_Handler::get_current_kb_id() ) . '&page=epkb-kb-configuration#ordering' ),
-		'rename_kb' 					=> __( 'Rename KB Name', 'echo-knowledge-base' ),
+		'rename_kb' 					=> esc_html__( 'Rename KB Name', 'echo-knowledge-base' ),
 		'rename_kb_url'					=> admin_url( '/edit.php?post_type=' . EPKB_KB_Handler::get_post_type( EPKB_KB_Handler::get_current_kb_id() ) . '&page=epkb-kb-configuration#settings__general' ),
-		'theme_link' 					=> __( 'Theme Compatibility Mode', 'echo-knowledge-base' ),
-		'color_value' 					=> __( 'Color value', 'echo-knowledge-base' ),
-		'select_color' 					=> __( 'Select Color', 'echo-knowledge-base' ),
-		'default' 						=> __( 'Default', 'echo-knowledge-base' ),
-		'inherit' 						=> __( 'Inherit', 'echo-knowledge-base' ),
-		'select_default_color' 			=> __( 'Select default color', 'echo-knowledge-base' ),
-		'clear' 						=> __( 'Clear', 'echo-knowledge-base' ),
-		'clear_color' 					=> __( 'Clear color', 'echo-knowledge-base' ),
-		'sidebar_settings'				=> __( 'The Sidebar setting can be changed on the article page.', 'echo-knowledge-base' ),
-		'navigation' 					=> __( 'Navigation', 'echo-knowledge-base' ),
-		'enabled_list' 					=> __( 'Enabled Sections', 'echo-knowledge-base' ),
-		'enable_disable_sections_link' 	=> __( 'Disabled Sections', 'echo-knowledge-base' ),
-		'all_zones_active' 				=> __( 'All Sections are enabled', 'echo-knowledge-base' ),
-		'edit_zone' 					=> __( 'Edit Section', 'echo-knowledge-base' ),
-		'need_help' 					=> __( 'Need Help', 'echo-knowledge-base' ),
-		'sending_error_report' 			=> __( 'Sending, please wait', 'echo-knowledge-base' ),
-		'send_report_error' 			=> __( 'Error occurred', 'echo-knowledge-base' ) . ' (2214) - ' . EPKB_Utilities::contact_us_for_support(),
+		'theme_link' 					=> esc_html__( 'Theme Compatibility Mode', 'echo-knowledge-base' ),
+		'color_value' 					=> esc_html__( 'Color value', 'echo-knowledge-base' ),
+		'select_color' 					=> esc_html__( 'Select Color', 'echo-knowledge-base' ),
+		'default' 						=> esc_html__( 'Default', 'echo-knowledge-base' ),
+		'inherit' 						=> esc_html__( 'Inherit', 'echo-knowledge-base' ),
+		'select_default_color' 			=> esc_html__( 'Select default color', 'echo-knowledge-base' ),
+		'clear' 						=> esc_html__( 'Clear', 'echo-knowledge-base' ),
+		'clear_color' 					=> esc_html__( 'Clear color', 'echo-knowledge-base' ),
+		'sidebar_settings'				=> esc_html__( 'The Sidebar setting can be changed on the article page.', 'echo-knowledge-base' ),
+		'navigation' 					=> esc_html__( 'Navigation', 'echo-knowledge-base' ),
+		'enabled_list' 					=> esc_html__( 'Enabled Sections', 'echo-knowledge-base' ),
+		'enable_disable_sections_link' 	=> esc_html__( 'Disabled Sections', 'echo-knowledge-base' ),
+		'all_zones_active' 				=> esc_html__( 'All Sections are enabled', 'echo-knowledge-base' ),
+		'edit_zone' 					=> esc_html__( 'Edit Section', 'echo-knowledge-base' ),
+		'need_help' 					=> esc_html__( 'Need Help', 'echo-knowledge-base' ),
+		'sending_error_report' 			=> esc_html__( 'Sending, please wait', 'echo-knowledge-base' ),
+		'send_report_error' 			=> esc_html__( 'Error occurred', 'echo-knowledge-base' ) . ' (2214) - ' . EPKB_Utilities::contact_us_for_support(),
 		'timeout2_error' 				=> EPKB_Error_Handler::timeout2_error(),
 		'other_error_found' 			=> EPKB_Error_Handler::other_error_found(),
 		'csr_error' 					=> EPKB_Error_Handler::get_csr_error_text(),
 		'ns_error_unexpected_error' 	=> EPKB_Error_Handler::get_ns_error_text(),
-		'wrong_select' 					=> __( 'No value to select', 'echo-knowledge-base' ),
-		'article_header_rows' 			=> __( 'Article Header Rows', 'echo-knowledge-base' ),
+		'wrong_select' 					=> esc_html__( 'No value to select', 'echo-knowledge-base' ),
+		'article_header_rows' 			=> esc_html__( 'Article Header Rows', 'echo-knowledge-base' ),
 		'typography_defaults' 			=> EPKB_Typography::$typography_defaults,
 		'typography_fonts' 				=> EPKB_Typography::$font_data,
-		'typography_title' 				=> __( 'Typograhy', 'echo-knowledge-base' ),
-		'typography_font_family' 		=> __( 'Font Family', 'echo-knowledge-base' ),
-		'typography_font_size' 			=> __( 'Font Size (px)', 'echo-knowledge-base' ),
-		'typography_font_weight' 		=> __( 'Font Weight', 'echo-knowledge-base' ),
-		'zone_absent_error'				=> __( 'Cannot open settings for', 'echo-knowledge-base' ),
-		'zone_disabled_error'			=> __( 'Cannot open settings because the section is disabled. You can turn it on here', 'echo-knowledge-base' ) . ':',
-		'zone_disabled_text'			=> __( 'Settings Zone was disabled. You can enable it back.', 'echo-knowledge-base' ),
+		'typography_title' 				=> esc_html__( 'Typograhy', 'echo-knowledge-base' ),
+		'typography_font_family' 		=> esc_html__( 'Font Family', 'echo-knowledge-base' ),
+		'typography_font_size' 			=> esc_html__( 'Font Size (px)', 'echo-knowledge-base' ),
+		'typography_font_weight' 		=> esc_html__( 'Font Weight', 'echo-knowledge-base' ),
+		'zone_absent_error'				=> esc_html__( 'Cannot open settings for', 'echo-knowledge-base' ),
+		'zone_disabled_error'			=> esc_html__( 'Cannot open settings because the section is disabled. You can turn it on here', 'echo-knowledge-base' ) . ':',
+		'zone_disabled_text'			=> esc_html__( 'Settings Zone was disabled. You can enable it back.', 'echo-knowledge-base' ),
 		'config_backend_mode_link'  	=> admin_url( '/edit.php?post_type=' . EPKB_KB_Handler::get_post_type( EPKB_KB_Handler::get_current_kb_id() ) . '&page=epkb-kb-configuration&action=enable_editor_backend_mode&_wpnonce_epkb_ajax_action=' . wp_create_nonce( '_wpnonce_epkb_ajax_action' ) . '#settings__editor' ),
-		'outside_editor_msg'            => __( 'This area is controlled by your theme.', 'echo-knowledge-base' ),
+		'outside_editor_msg'            => esc_html__( 'This area is controlled by your theme.', 'echo-knowledge-base' ),
 		'outside_editor_msg_with_link'  => sprintf( '%s <a href="https://www.echoknowledgebase.com/documentation/current-theme-template-vs-kb-template/" target="_blank">%s</a>',
 			__( 'This area is controlled by your theme.', 'echo-knowledge-base' ),
 			__( 'Read more about Current Theme Template', 'echo-knowledge-base' ) ),
-		'inside_modules_editor_msg'     => __( 'These settings are available in the admin configurations.', 'echo-knowledge-base' ),
+		'inside_modules_editor_msg'     => esc_html__( 'These settings are available in the admin configurations.', 'echo-knowledge-base' ),
+		'archive_page_v3_edit_msg'      => sprintf( '%s <a href="%s" target="_blank">%s</a>',
+			__( 'These settings are available in the', 'echo-knowledge-base' ),
+			esc_url( admin_url( '/edit.php?post_type=' . EPKB_KB_Handler::get_post_type( EPKB_KB_Handler::get_current_kb_id() ) . '&page=epkb-kb-configuration#settings__archive-page' ) ),
+			__( 'Category Archive Page settings', 'echo-knowledge-base' ) ),
 	);
 
 	$epkb_editor_params = apply_filters( 'epkb_editor_localize', $epkb_editor_params );
