@@ -17,9 +17,9 @@ class ELAY_ML_Resource_Links {
 	public static function display_resource_links( $kb_config ) {
 
 		if ( ! empty( $kb_config['ml_resource_links_container_title_text'] ) ) {
-			$title_html_tag = $kb_config['ml_resource_links_container_title_html_tag']; ?>
+			$title_html_tag_sanitized = ELAY_Utilities::sanitize_html_tag( $kb_config['ml_resource_links_container_title_html_tag'], 'h2' ); ?>
 			<!-- Title -->
-			<<?php echo esc_html( $title_html_tag ); ?> class="elay-ml__module-resource-links__title"><?php echo esc_html( $kb_config['ml_resource_links_container_title_text'] ); ?></<?php echo esc_html( $title_html_tag ); ?>><?php
+			<<?php echo esc_html( $title_html_tag_sanitized ); ?> class="elay-ml__module-resource-links__title"><?php echo esc_html( $kb_config['ml_resource_links_container_title_text'] ); ?></<?php echo esc_html( $title_html_tag_sanitized ); ?>><?php
 		}
 
 		if ( ! empty( $kb_config['ml_resource_links_container_description_text'] ) ) {    ?>

@@ -273,7 +273,7 @@ class ELAY_Input_Filter {
 	private function filter_select( $value, $field_spec ) {
 
 		// don't check layouts
-		if ( $field_spec['name'] == 'kb_main_page_layout' || $field_spec['name'] == 'kb_article_page_layout' ) {
+		if ( $field_spec['name'] == 'kb_main_page_layout' ) {
 			return $value;
 		}
 		

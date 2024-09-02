@@ -108,8 +108,7 @@ class ELAY_KB_Core {
 	 * Get all KB Configuration
 	 *
 	 * @param boolean $skip_check
-	 * @return array|string with value or $default value if this settings not found
-	 *
+	 * @return array|WP_Error with value or $default value if this settings not found
 	 */
 	public static function get_kb_configs( $skip_check=false ) {
 		if ( function_exists('epkb_get_instance') && isset(epkb_get_instance()->kb_config_obj) ) {
@@ -174,7 +173,7 @@ class ELAY_KB_Core {
 	}
 
 	public static function get_font_data() {
-		return class_exists('EPKB_Typography') ? EPKB_Typography::$font_data : [];
+		return class_exists( 'EPKB_Typography' ) ? EPKB_Typography::$font_data : [];
 	}
 
 
@@ -194,14 +193,13 @@ class ELAY_KB_Core {
 	 */
 	private static function get_result( $class_name, $method, $default ) {
 
-		// instantiate certain classes
 		$class = $class_name;
-		if ( in_array($class_name, array('EPKB_KB_Config_DB')) ) {
+		if ( in_array( $class_name, array( 'EPKB_KB_Config_DB', 'EPKB_Admin_UI_Access' ) ) ) {
 			$class = new $class_name();
 		}
 
-		if ( ! is_callable( array($class, $method) ) ) {
-			ELAY_Logging::add_log("Cannot invoke class $class with method $method.");
+		if ( ! is_callable( array( $class, $method ) ) ) {
+			ELAY_Logging::add_log( "Cannot invoke class $class_name with method $method." );
 			return $default;
 		}
 
@@ -217,16 +215,15 @@ class ELAY_KB_Core {
 	 * @param $default
 	 * @return mixed
 	 */
-	public static function get_param_result( $class_name, $method, $params, $default ) {
+	private static function get_param_result( $class_name, $method, $params, $default ) {
 
-		// instantiate certain classes
 		$class = $class_name;
-		if ( in_array( $class_name, array( 'EPKB_KB_Config_DB', 'AMGR_Access_Articles_Front', 'EPKB_Admin_UI_Access' ) ) ) {
+		if ( in_array( $class_name, array( 'EPKB_KB_Config_DB', 'EPKB_Admin_UI_Access' ) ) ) {
 			$class = new $class_name();
 		}
 
 		if ( ! is_callable( array( $class, $method ) ) ) {
-			ELAY_Logging::add_log( "Cannot invoke class $class with method $method." );
+			ELAY_Logging::add_log( "Cannot invoke class $class_name with method $method." );
 			return $default;
 		}
 

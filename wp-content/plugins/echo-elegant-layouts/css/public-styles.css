@@ -405,12 +405,6 @@
       font-family: inherit;
       font-weight: inherit; }
 
-.mobile-sidebar .elay-single-article {
-  width: 100% !important; }
-.mobile-sidebar .elay-sidebar {
-  width: 100% !important;
-  margin: 10px 0 20px 0; }
-
 /* Shared
 --------------------------------------------------------------*/
 @keyframes spin {

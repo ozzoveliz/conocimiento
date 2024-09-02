@@ -14,6 +14,7 @@ class ELAY_KB_Config_Controller {
 		add_filter( ELAY_KB_Core::ELAY_KB_ADD_ON_CONFIG_SPECS, array( $this, 'get_add_on_config_specs' ), 10, 1 );
 		add_filter( ELAY_KB_Core::ELAY_ALL_WIZARDS_GET_CURRENT_CONFIG, array( $this, 'get_current_config' ), 10, 2 );
 		add_filter( ELAY_KB_Core::ELAY_KB_CONFIG_SAVE_INPUT_V3, array( $this, 'save_new_kb_config_changes' ), 10, 4 );
+		add_filter( 'eckb_article_list_icon_filter', array( $this, 'get_article_icon'), 10, 2 );
 	}
 
 	/**
@@ -113,5 +114,15 @@ class ELAY_KB_Config_Controller {
 		}
 
 		return ELAY_Utilities::save_kb_option( $kb_id, self::RESOURCE_LINKS_ICON, $resource_links_icon_data );
+	}
+
+	public function get_article_icon( $article_id, $args ) {
+		$kb_id  = empty( $args[0] ) ? ELAY_KB_Core::DEFAULT_KB_ID : $args[0];
+		$elay_config = elay_get_instance()->kb_config_obj->get_kb_config_or_default( $kb_id );
+
+		$type  = empty( $args[1] ) ? '' : ( $args[1] == 'Article_Sidebar' ? 'sidebar_' : '' );
+		$icon = empty( $elay_config['elay_' . $type . 'article_icon'] ) ? 'ep_font_icon_document' : $elay_config['elay_' . $type . 'article_icon'];
+
+		return [ 'icon' => 'eckb-article-title__icon ' . ( str_contains( $icon, 'ep_font_' ) ? '' : 'epkbfa epkbfa-' ) . $icon ];
 	}
 }

@@ -3,7 +3,7 @@
  * Plugin Name: KB - Elegant Layouts
  * Plugin URI: https://www.echoknowledgebase.com/wordpress-add-ons/
  * Description: Combine Basic, Tabs, Grid and Sidebar layouts in many cool ways.
- * Version: 2.21.0
+ * Version: 2.23.1
  * Author: Echo Plugins
  * Author URI: https://www.echoknowledgebase.com
  * Text Domain: echo-elegant-layouts
@@ -41,7 +41,7 @@ final class Echo_Elegant_Layouts {
 	/* @var Echo_Elegant_Layouts */
 	private static $instance;
 
-	public static $version = '2.21.0';
+	public static $version = '2.23.1';
 	public static $plugin_dir;
 	public static $plugin_url;
 	public static $plugin_file = __FILE__;
@@ -163,7 +163,7 @@ final class Echo_Elegant_Layouts {
 	 * @param $action
 	 */
 	private function handle_action_request( $action ) {
-		if ( in_array($action, array('epkb_load_editor', 'eckb_apply_editor_changes', 'eckb_editor_get_themes_list', 'eckb_theme_wizard_get_themes_v2', 'epkb_apply_settings_changes' )) ) {
+		if ( in_array($action, array('epkb_load_editor', 'eckb_apply_editor_changes', 'eckb_theme_wizard_get_themes_v2', 'epkb_apply_settings_changes' )) ) {
 			ELAY_KB_Editor_Config::register_editor_hooks();
 			return;
 		}

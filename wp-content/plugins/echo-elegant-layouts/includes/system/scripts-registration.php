@@ -34,8 +34,13 @@ function elay_register_public_resources() {
 		default: $current_css_file_slug = 'public' . $modular_css_file_slug . '-styles'; break;
 	}
 
+	// Archive Page V3
+	if ( is_archive() ) {
+		$current_css_file_slug = 'cp-frontend-layout';
+	}
+
 	wp_register_style( 'elay-' . $current_css_file_slug, Echo_Elegant_Layouts::$plugin_url . 'css/' . $current_css_file_slug . $suffix . '.css', array(), Echo_Elegant_Layouts::$version );
-	if ( ELAY_KB_Core::get_value( $kb_id, 'modular_main_page_toggle' ) == 'on' ) {
+	if ( ELAY_KB_Core::get_value( $kb_id, 'modular_main_page_toggle' ) == 'on' && ! is_archive() ) {
 		wp_register_style( 'elay-' . 'public-modular-styles', Echo_Elegant_Layouts::$plugin_url . 'css/' . 'public-modular-styles' . $suffix . '.css', array(), Echo_Elegant_Layouts::$version );
 	}
 
@@ -72,6 +77,8 @@ function elay_enqueue_public_resources( $kb_id=0 ) {
 		'public-modular-styles',                // Modular common styles
 		'mp-frontend-modular-grid-layout',      // Modular Grid layout
 		'mp-frontend-modular-sidebar-layout',   // Modular Sidebar layout
+
+		'cp-frontend-layout',                   // Archive Page V3
 	];
 
 	// enqueue either regular or modular styles
