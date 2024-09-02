@@ -1,4 +1,4 @@
-<?php
+<?php  if ( ! defined( 'ABSPATH' ) ) exit;
 
 /**
  * Setup links and information on Plugins WordPress page
@@ -17,7 +17,7 @@ function amcr_add_plugin_action_links ( $links ) {
 	$my_links = array(
 		__( 'Configuration', 'echo-knowledge-base' )   => '<a href="' . admin_url(AMCR_KB_Core::AMCR_KB_CONFIGURATION_URL) . '">' . esc_html__( 'Configuration', 'echo-knowledge-base' ) . '</a>',
 		__( 'Documentation', 'echo-knowledge-base' )   => '<a href="https://www.echoknowledgebase.com/documentation/?top-category=access-manager" target="_blank">' . esc_html__( 'Docs', 'echo-knowledge-base' ) . '</a>',
-		__( 'Support', 'echo-knowledge-base' )   	   => '<a href="https://www.echoknowledgebase.com/contact-us/?inquiry-type=technical">' . esc_html__( 'Support', 'echo-knowledge-base' ) . '</a>'
+		__( 'Support', 'echo-knowledge-base' )   	   => '<a href="https://www.echoknowledgebase.com/contact-us/?inquiry-type=technical" target="_blank">' . esc_html__( 'Support', 'echo-knowledge-base' ) . '</a>'
 	);
 
 	return array_merge( $my_links, $links );

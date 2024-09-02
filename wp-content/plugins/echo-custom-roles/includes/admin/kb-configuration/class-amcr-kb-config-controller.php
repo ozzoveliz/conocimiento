@@ -1,4 +1,4 @@
-<?php
+<?php  if ( ! defined( 'ABSPATH' ) ) exit;
 
 /**
  * Handle saving specific plugin configuration.

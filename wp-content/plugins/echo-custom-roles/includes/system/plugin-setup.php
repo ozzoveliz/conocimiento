@@ -1,4 +1,4 @@
-<?php
+<?php  if ( ! defined( 'ABSPATH' ) ) exit;
 
 /**
  * Activate the plugin
@@ -13,23 +13,16 @@
  * @param bool $network_wide - If the plugin is being network-activated
  */
 function amcr_activate_plugin( $network_wide=false ) {
-	global $wpdb;
-
 	if ( is_multisite() && $network_wide ) {
-		foreach ( $wpdb->get_col( "SELECT blog_id FROM $wpdb->blogs LIMIT 100" ) as $blog_id ) {
-			switch_to_blog( $blog_id );
-			amcr_get_instance()->kb_config_obj->reset_cache();
-			amcr_activate_plugin_do();
-			restore_current_blog();
-		}
+		wp_die('Access Manager cannot be activated on multisite as a network plugin.');
 	} else {
 		amcr_activate_plugin_do();
 	}
 }
+register_activation_hook( Echo_Custom_roles::$plugin_file, 'amcr_activate_plugin' );
 
 function amcr_activate_plugin_do() {
 
-	// setup configuration
 	require_once 'class-amcr-autoloader.php';
 
 	AMCR_Logging::disable_logging();
@@ -62,7 +55,6 @@ function amcr_activate_plugin_do() {
 
 	set_transient( '_amcr_plugin_activated', true, 3600 );
 }
-register_activation_hook( Echo_Custom_roles::$plugin_file, 'amcr_activate_plugin' );
 
 /**
  * User deactivates this plugin so refresh the permalinks

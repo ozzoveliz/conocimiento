@@ -5,7 +5,6 @@
  */
 class AMCR_Access_Page_View_WP_Roles {
 
-	private $html;
 	private $kb_id;
 	private $wp_roles_mappings = array();
 
@@ -36,7 +35,7 @@ class AMCR_Access_Page_View_WP_Roles {
 	 */
 	public function ajax_update_tab_content( $kb_id ) {
 
-		$this->html = new AMCR_HTML_Elements();
+		$html = new AMCR_HTML_Elements();
 		$this->kb_id = $kb_id;
 
 		if ( ! current_user_can('admin_eckb_access_manager_page') ) {
@@ -61,7 +60,7 @@ class AMCR_Access_Page_View_WP_Roles {
 				AMCR_Utilities::output_inline_error_notice( 'Internal Error occurred (a303)' );
 				return false;
 			} else if ( empty($kb_groups) ) {
-				AMCR_Utilities::output_inline_error_notice( __( 'No KB Group defined. First create a KB Group.', 'echo-knowledge-base' ) );
+				AMCR_Utilities::output_inline_error_notice( esc_html__( 'No KB Group defined. First create a KB Group.', 'echo-knowledge-base' ) );
 				return true;
 			}
 		}     ?>
@@ -72,18 +71,18 @@ class AMCR_Access_Page_View_WP_Roles {
 				<div class="amcr-add-wp-role-map-container">
 					<div id="amcr-add-wp-role-map-input" class="amcr-wp-role-map-input">
 
-						<ul>
-							<li class="amcr-role-name-list">
+						<div class="amcr-wp-role-map-input-options">
+							<div class="amcr-role-name-list">
 								<label>WP Role Name: </label>
 								<select id="create-wp-role-name" class="amcr-wp-role-name">		<?php
 									foreach( get_editable_roles() as $role_name => $role_info ) {
 										if ( $role_name == 'administrator' ) {
 											continue;
 										}   ?>
-										<option value="<?php echo $role_name ?>"><?php echo $role_info['name'] ?></option>		<?php
+										<option value="<?php echo esc_attr( $role_name ); ?>"><?php esc_html_e( $role_info['name'] ); ?></option>		<?php
 									}       ?>
 								</select>
-							</li>		<?php
+							</div>		<?php
 
 							if ( AMCR_KB_Core::use_kb_groups() ) {
 
@@ -92,7 +91,7 @@ class AMCR_Access_Page_View_WP_Roles {
 									$kb_group_list[$kb_group->kb_group_id] = $kb_group->name;
 								}
 
-								$this->html->dropdown( array(
+								$html->dropdown( array(
 									'name'          => 'create-kb-group-id',
 									'label'         => 'KB Group: ',
 									'input_class'   => 'amcr-kb-group-id',
@@ -100,30 +99,30 @@ class AMCR_Access_Page_View_WP_Roles {
 								) );
 							}
 
-							$this->html->dropdown( array(
+							$html->dropdown( array(
 								'name'          => 'create-kb-role-name',
 								'label'         => 'KB Role Name: ',
 								'input_class'   => 'amcr-kb-role-name',
 								'options'       => self::KB_ROLES
-							) );    ?>
+							) );
 
-							<li>    <?php
-								$this->html->submit_button( __( 'Create', 'echo-knowledge-base' ), 'amcr_add_wp_role_map_ajax', 'amag-btn-wrap--plain', '', true, '', 'amag-success-btn' );
-								?>
-							</li>
+							$html->submit_button_v2( esc_html__( 'Create', 'echo-knowledge-base' ), 'amcr_add_wp_role_map_ajax', 'amag-btn-wrap--plain', '', true, '', 'amag-success-btn' );								?>
 
-						</ul>
-
+						</div>
 					</div>
 				</div>
 			</section>
 		</div>  <?php
 
 
-		if ( empty($this->wp_roles_mappings) ) {      ?>
-            <div class="callout callout_error">
-                <h4>No WP Roles have been mapped.</h4>
-            </div>     <?php
+		if ( empty($this->wp_roles_mappings) ) {
+
+			EPKB_HTML_Forms::notification_box_middle( array(
+				'type' => 'info',
+				'desc' => '<p>' . sprintf( esc_html__( 'No WP Roles have been mapped.', 'echo-knowledge-base' ).'</p>'
+			) ) );
+			?>
+              <?php
 			return true;
 		}
 
@@ -198,7 +197,7 @@ class AMCR_Access_Page_View_WP_Roles {
 					if ( AMCR_KB_Core::use_kb_groups() ) {
 						$kb_group_name = empty($kb_group_names[$kb_group_id]) ? ' --- ' : $kb_group_names[$kb_group_id];  ?>
 						<span class="amag-list-name amcr_kb_group_name"><?php echo esc_html($kb_group_name); ?></span>
-						<input type="hidden" class="amcr_kb_group_id" name="amcr_kb_group_id" value="<?php echo $kb_group_id; ?>"/>  <?php
+						<input type="hidden" class="amcr_kb_group_id" name="amcr_kb_group_id" value="<?php esc_attr_e( $kb_group_id ); ?>"/>  <?php
 					}           ?>
 					<span class="amag-list-name amcr_kb_role_name"><?php echo esc_html($kb_roles[$kb_role_name]); ?></span>
 					<span class="amag-list-action">

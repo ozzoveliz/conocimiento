@@ -3,7 +3,7 @@
  * Plugin Name: KB - Custom Roles
  * Plugin URI: https://www.echoknowledgebase.com/wordpress-add-ons/
  * Description: Map roles to KB Roles / KB Groups.
- * Version: 1.7.0
+ * Version: 1.9.0
  * Author: Echo Plugins
  * Author URI: https://www.echoknowledgebase.com
  * Text Domain: echo-knowledge-base
@@ -41,7 +41,7 @@ final class Echo_Custom_roles {
 	/* @var Echo_Custom_roles */
 	private static $instance;
 
-	public static $version = '1.7.0';
+	public static $version = '1.9.0';
 	public static $plugin_dir;
 	public static $plugin_url;
 	public static $plugin_file = __FILE__;
@@ -343,19 +343,19 @@ function amcr_display_version_error() {
 	// if KB Core plugin is not installed or active then let user know
 	if ( $plugins_check == 'core_missing' ) {
 		echo '<div class="error amcr-notice"><p>Custom Roles requires <a href="https://wordpress.org/plugins/echo-knowledge-base/"
-		                title="' . $kb_plugin_name . '" target="_blank">' . $kb_plugin_name . '</a>. Please install it to continue.</p></div>';
+		                title="' . esc_attr( $kb_plugin_name ) . '" target="_blank">' . esc_html( $kb_plugin_name ) . '</a>. Please install it to continue.</p></div>';
 		return;
 	}
 
 	// compare core and add-on versions
 	if ( $plugins_check == 'core_too_old' ) {
 		echo '<div class="error amcr-notice">Custom Roles plugin requires at least ' . Echo_Custom_roles::$needs_min_core_version .
-		     ' version of the ' . $kb_plugin_name . ' plugin.	To continue please update ' . $kb_plugin_name . '.</p></div>';
+		     ' version of the ' . esc_html( $kb_plugin_name ) . ' plugin.	To continue please update ' . esc_html( $kb_plugin_name ) . '.</p></div>';
 
     } else if ( $plugins_check == 'core_too_new' ) {
 	    $add_on_url = admin_url('edit.php?post_type=' . $kb_post_prefix . '_1&page=ep'.'kb-add-ons&ep'.'kb-tab=licenses');
-		echo '<div class="error amcr-notice">' . $kb_plugin_name . ' plugin requires the most recent version of the Custom Roles plugin. The old version of Custom Roles stays
-			<strong>disabled</strong> until updated. <a href="' . $add_on_url .'" target="_blank">Check its status here.</a></p></div>';
+		echo '<div class="error amcr-notice">' . esc_html( $kb_plugin_name ) . ' plugin requires the most recent version of the Custom Roles plugin. The old version of Custom Roles stays
+			<strong>disabled</strong> until updated. <a href="' . esc_url( $add_on_url ) .'" target="_blank">Check its status here.</a></p></div>';
 	} else {
 	    // should not happen
 	    echo '<div class="error amcr-notice">Custom Roles: unknown add-on version conflict.</div>';

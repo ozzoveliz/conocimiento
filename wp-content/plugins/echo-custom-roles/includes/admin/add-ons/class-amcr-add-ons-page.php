@@ -78,7 +78,7 @@ class AMCR_Add_Ons_Page {
 			$license_data = $license_handler->handle_license_command();
 		}
 
-		wp_die( json_encode( array( 'output' => $this->get_license_state( $license_handler, $license_data ), $type='success') ) );
+		wp_die( wp_json_encode(  array( 'output' => $this->get_license_state( $license_handler, $license_data ), $type='success') ) );
 	}
 
 	/**
@@ -181,7 +181,7 @@ class AMCR_Add_Ons_Page {
 				<li><input type="text" name="<?php echo AMCR_License_Handler::LICENSE_KEY_OPTION_ID; ?>" id="<?php echo AMCR_License_Handler::LICENSE_KEY_OPTION_ID; ?>"
 				           value="<?php echo esc_attr( $license_key ); ?>" placeholder="Enter your license key"
 				           data-status="<?php echo esc_attr($status); ?>" data-current-license-key="<?php echo esc_attr($license_key); ?>" maxlength="50"/></li>
-				<li><span class="amcr_license_action"><input id="amcr_save_btn" class="primary-btn" type="button" name="amcr_save_btn" value="<?php echo  __( 'Save', 'echo-knowledge-base' ); ?>"/>
+				<li><span class="amcr_license_action"><input id="amcr_save_btn" class="primary-btn" type="button" name="amcr_save_btn" value="<?php echo  esc_html__( 'Save', 'echo-knowledge-base' ); ?>"/>
 						<input type="hidden" id="_wpnonce_amcr_license_key" name="_wpnonce_amcr_license_key" value="<?php echo wp_create_nonce( "_wpnonce_amcr_license_key" ); ?>"/></span></li>
 			</ul>
 		</div>
@@ -190,7 +190,7 @@ class AMCR_Add_Ons_Page {
 		<div class="ekb-license-status">
 			<ul>
 				<li>
-					<span class="ekb-status-icon <?php echo $status == 'valid' ? 'ep_font_icon_checkmark' : 'ep_font_icon_error_circle'; ?>"></span>
+					<span class="ekb-status-icon <?php echo ( $status == 'valid' ? 'ep_font_icon_checkmark' : 'ep_font_icon_error_circle' ); ?>"></span>
 				</li>
 				<li><strong>Status:</strong></li>
 				<li><span id="amcr_license_key_status"><?php echo wp_kses_post( $status_msg ); ?></span></li>
@@ -209,7 +209,7 @@ class AMCR_Add_Ons_Page {
 			$expiry_msg = empty($expiry_msg) ? AMCR_Utilities::get_formatted_datetime_string( $expiry_date ) : $expiry_msg;			?>
 
 			<ul>
-				<li><span class="ekb-status-icon <?php echo $expiry_icon; ?>"></span></li>
+				<li><span class="ekb-status-icon <?php echo esc_attr( $expiry_icon ); ?>"></span></li>
 				<li><strong>Expires on:</strong></li>
 				<li><?php echo wp_kses_post( $expiry_msg ); ?></li>
 			</ul>
@@ -222,7 +222,7 @@ class AMCR_Add_Ons_Page {
 			$icon = $new_version_available ? 'ep_font_icon_error_circle' : 'ep_font_icon_checkmark';			?>
 
 			<ul>
-				<li><span class="ekb-status-icon <?php echo $icon; ?>"></span></li>
+				<li><span class="ekb-status-icon <?php echo esc_attr( $icon ); ?>"></span></li>
 				<li><strong>Add-on Version: </strong></li>
 				<li>Installed: <?php echo Echo_Custom_roles::$version; ?></li>
 				<li>Latest: <?php echo esc_html($latest_add_on_version); ?></li>
@@ -243,6 +243,6 @@ class AMCR_Add_Ons_Page {
 	}
 
 	public function user_not_logged_in() {
-		AMCR_Utilities::ajax_show_error_die( '<p>' . __( 'You are not logged in. Refresh your page and log in', 'echo-knowledge-base' ) . '.</p>', __( 'Cannot save your changes', 'echo-knowledge-base' ) );
+		AMCR_Utilities::ajax_show_error_die( '<p>' . esc_html__( 'You are not logged in. Refresh your page and log in', 'echo-knowledge-base' ) . '.</p>', esc_html__( 'Cannot save your changes', 'echo-knowledge-base' ) );
 	}
 }

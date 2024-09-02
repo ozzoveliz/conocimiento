@@ -1,4 +1,4 @@
-<?php
+<?php  if ( ! defined( 'ABSPATH' ) ) exit;
 
 /**
  * @copyright   Copyright (C) 2018, Echo Plugins
@@ -37,29 +37,29 @@ class AMCR_Admin_Notices {
 		switch ( $admin_notice_type ) {
 
 			case 'kb_refresh_page' :
-				$title = __( 'Refresh your page', 'echo-knowledge-base' );
+				$title = esc_html__( 'Refresh your page', 'echo-knowledge-base' );
 				break;
 			case 'kb_refresh_page_error' :
-				$title = __( 'Error occurred. Please refresh your browser and try again.', 'echo-knowledge-base' );
+				$title = esc_html__( 'Error occurred. Please refresh your browser and try again.', 'echo-knowledge-base' );
 				break;
 			case 'kb_security_failed' :
-				$title = __( 'You do not have permission.', 'echo-knowledge-base' );
+				$title = esc_html__( 'You do not have permission.', 'echo-knowledge-base' );
 				break;
 			case 'amcr_misconfigured' :
-				$title = __( 'Access Manager found an issue. Please contact customer support.', 'echo-knowledge-base' );
+				$title = esc_html__( 'Access Manager found an issue. Please contact customer support.', 'echo-knowledge-base' );
 				break;
 			default:
 				$title = 'unknown error (133)';
 				break;
 		}
-		$message = __( 'Please copy the error and contact customer support.' . '<br>' . 'You can then clear the error' . '<br>' . $error_message, 'echo-knowledge-base' );  ?>
+		$message = esc_html__( 'Please copy the error and contact customer support.' . '<br>' . 'You can then clear the error' . '<br>' . $error_message, 'echo-knowledge-base' );  ?>
 
 		<div class="eckb-bottom-notice-message-large eckb-bottom-notice-message--error-large">
 
 			<div class="eckb-bottom-notice-message__header">
 				<div class="eckb-bottom-notice-message__header__title"><?php echo esc_html( $title ); ?></div>
 				<div class="eckb-bottom-notice-message__header__clear-log">
-					<a href="#" class="amcr_notice_reset_logs_ajax" data-nonce="<?php echo wp_create_nonce( "_wpnonce_epkb_ajax_action" ); ?>"><?php echo __( 'Clear Log', 'echo-knowledge-base' ); ?></a>
+					<a href="#" class="amcr_notice_reset_logs_ajax" data-nonce="<?php echo wp_create_nonce( "_wpnonce_epkb_ajax_action" ); ?>"><?php echo esc_html__( 'Clear Log', 'echo-knowledge-base' ); ?></a>
 				</div>
 				<div class="eckb-bottom-notice-message__header__close epkb-close-notice epkbfa epkbfa-window-close"></div>
 			</div>
@@ -80,8 +80,8 @@ class AMCR_Admin_Notices {
 	 */
 	function dismiss_admin_notices() {
 
-		if ( empty( $_GET['amcr_dismiss_notice_nonce'] ) || ! wp_verify_nonce( $_GET['amcr_dismiss_notice_nonce'], 'amcr_dismiss_notice') ) {
-			wp_die( __( 'Security check failed', 'echo-knowledge-base' ), __( 'Error', 'echo-knowledge-base' ), array( 'response' => 403 ) );
+		if ( empty( $_GET['amcr_dismiss_notice_nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_GET['amcr_dismiss_notice_nonce'] ) ), 'amcr_dismiss_notice') ) {
+			wp_die( esc_html__( 'Security check failed', 'echo-knowledge-base' ), esc_html__( 'Error', 'echo-knowledge-base' ), array( 'response' => 403 ) );
 		}
 
 		if ( ! empty( $_GET['amcr_admin_notice'] ) ) {

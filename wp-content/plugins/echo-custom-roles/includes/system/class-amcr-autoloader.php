@@ -32,12 +32,11 @@ class AMCR_Autoloader {
 				'amcr_settings_page'                =>  'includes/admin/settings/class-amcr-settings-page.php',
 
 				// ADMIN PLUGIN MENU PAGES
+
 				// KB Configuration
 				'amcr_kb_config_controller'         =>  'includes/admin/kb-configuration/class-amcr-kb-config-controller.php',
 				'amcr_kb_config_specs'              =>  'includes/admin/kb-configuration/class-amcr-kb-config-specs.php',
 				'amcr_kb_config_db'                 =>  'includes/admin/kb-configuration/class-amcr-kb-config-db.php',
-				'amcr_kb_config_elements'           =>  'includes/admin/kb-configuration/class-amcr-kb-config-elements.php',
-				'amcr_kb_config_page'               =>  'includes/admin/kb-configuration/class-amcr-kb-config-page.php',
 				'amcr_add_ons_page'                 =>  'includes/admin/add-ons/class-amcr-add-ons-page.php',
 
 				// FEATURES 

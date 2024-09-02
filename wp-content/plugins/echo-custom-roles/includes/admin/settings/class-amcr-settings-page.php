@@ -67,13 +67,13 @@ class AMCR_Settings_Page {
 
 		// 1. Is User Admin ?
 		if ( ! current_user_can('admin_eckb_access_manager_page') ) {
-			AMCR_Utilities::ajax_show_error_die( __( 'You do not have ability to change access privileges.', 'echo-knowledge-base' ) );
+			AMCR_Utilities::ajax_show_error_die( esc_html__( 'You do not have ability to change access privileges.', 'echo-knowledge-base' ) );
 		}
 
 		AMCR_Logging::reset_logs();
 	}
 
 	public function user_not_logged_in() {
-		AMCR_Utilities::ajax_show_error_die( '<p>' . __( 'You are not logged in. Refresh your page and log in', 'echo-knowledge-base' ) . '.</p>', __( 'Cannot save your changes', 'echo-knowledge-base' ) );
+		AMCR_Utilities::ajax_show_error_die( '<p>' . esc_html__( 'You are not logged in. Refresh your page and log in', 'echo-knowledge-base' ) . '.</p>', esc_html__( 'Cannot save your changes', 'echo-knowledge-base' ) );
 	}
 }
