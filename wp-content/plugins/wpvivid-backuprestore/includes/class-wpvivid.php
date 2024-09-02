@@ -1243,27 +1243,84 @@ class WPvivid
     }
 
     public function check_backup_file_json($file_name){
-        if(!class_exists('WPvivid_ZipClass'))
-            include_once WPVIVID_PLUGIN_DIR . '/includes/class-wpvivid-zipclass.php';
-        $zip=new WPvivid_ZipClass();
+        $setting=get_option('wpvivid_common_setting',array());
+        $zip_method=isset($setting['zip_method'])?$setting['zip_method']:'ziparchive';
 
-        $general_setting=WPvivid_Setting::get_setting(true, "");
-        $backup_folder = $general_setting['options']['wpvivid_local_setting']['path'];
-        $backup_path=WP_CONTENT_DIR.DIRECTORY_SEPARATOR.$backup_folder.DIRECTORY_SEPARATOR;
-        $file_path=$backup_path.$file_name;
-
-        $ret=$zip->get_json_data($file_path);
-        if($ret['result'] === WPVIVID_SUCCESS) {
-            $json=$ret['json_data'];
-            $json = json_decode($json, 1);
-            if (is_null($json)) {
-                return false;
-            } else {
-                return $json;
+        if($zip_method=='ziparchive'||empty($zip_method))
+        {
+            if(class_exists('ZipArchive'))
+            {
+                if(method_exists('ZipArchive', 'addFile'))
+                {
+                    $zip_method='ziparchive';
+                }
+                else
+                {
+                    $zip_method='pclzip';
+                }
+            }
+            else
+            {
+                $zip_method='pclzip';
             }
         }
-        elseif($ret['result'] === WPVIVID_FAILED){
-            return false;
+        else
+        {
+            $zip_method='pclzip';
+        }
+
+        if($zip_method=='ziparchive')
+        {
+            $general_setting=WPvivid_Setting::get_setting(true, "");
+            $backup_folder = $general_setting['options']['wpvivid_local_setting']['path'];
+            $backup_path=WP_CONTENT_DIR.DIRECTORY_SEPARATOR.$backup_folder.DIRECTORY_SEPARATOR;
+            $file_path=$backup_path.$file_name;
+
+            $zip_object=new ZipArchive();
+            $zip_object->open($file_path);
+
+            $json=$zip_object->getFromName('wpvivid_package_info.json');
+            if($json !== false)
+            {
+                $json = json_decode($json, 1);
+                if (is_null($json))
+                {
+                    return false;
+                }
+                else
+                {
+                    return $json;
+                }
+            }
+            else
+            {
+                return false;
+            }
+        }
+        else
+        {
+            if(!class_exists('WPvivid_ZipClass'))
+                include_once WPVIVID_PLUGIN_DIR . '/includes/class-wpvivid-zipclass.php';
+            $zip=new WPvivid_ZipClass();
+
+            $general_setting=WPvivid_Setting::get_setting(true, "");
+            $backup_folder = $general_setting['options']['wpvivid_local_setting']['path'];
+            $backup_path=WP_CONTENT_DIR.DIRECTORY_SEPARATOR.$backup_folder.DIRECTORY_SEPARATOR;
+            $file_path=$backup_path.$file_name;
+
+            $ret=$zip->get_json_data($file_path);
+            if($ret['result'] === WPVIVID_SUCCESS) {
+                $json=$ret['json_data'];
+                $json = json_decode($json, 1);
+                if (is_null($json)) {
+                    return false;
+                } else {
+                    return $json;
+                }
+            }
+            elseif($ret['result'] === WPVIVID_FAILED){
+                return false;
+            }
         }
     }
 

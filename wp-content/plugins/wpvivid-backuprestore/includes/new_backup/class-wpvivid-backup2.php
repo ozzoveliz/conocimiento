@@ -276,8 +276,28 @@ class WPvivid_Backup_2
         return $settings;
     }
 
+    public function has_backup_task_noreponse()
+    {
+        $tasks = get_option('wpvivid_task_list', array());
+        foreach ($tasks as $task)
+        {
+            $current_time=time();
+            $run_time=$task['status']['run_time'];
+            $noreponse_time=$current_time-$run_time;
+            if($noreponse_time >= 3600)
+            {
+                if ($task['status']['str']=='running'||$task['status']['str']=='no_responds'||$task['status']['str']=='wait_resume')
+                {
+                    unset($tasks[$task['id']]);
+                }
+            }
+        }
+        update_option('wpvivid_task_list', $tasks, 'no');
+    }
+
     public function main_schedule($schedule_id='')
     {
+        $this->has_backup_task_noreponse();
         global $wpvivid_plugin;
 
         do_action('wpvivid_set_current_schedule_id', $schedule_id);

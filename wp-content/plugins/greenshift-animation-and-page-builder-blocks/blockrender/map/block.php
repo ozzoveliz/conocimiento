@@ -84,7 +84,7 @@ class GspbMap
 
 		$blockId = 'gspb_id-' . esc_attr($id);
 		$blockClassName = $blockId;
-		$blockMapId = 'gspb_map-' . esc_attr($id);
+		$blockMapId = 'gspb_map-' . esc_attr($id).'';
 
 		$wrapper_attributes = get_block_wrapper_attributes(
 			array(
@@ -151,7 +151,7 @@ class GspbMap
 		wp_localize_script('gspb_map', str_replace('-', '_', $blockId), $localizeArray);
 
 		$out = '<div ' . $wrapper_attributes . '' . gspb_AnimationRenderProps($animation) . '>';
-		$out .= '<div data-key="' . str_replace('-', '_', $blockId) . '" class="gspb_map-wrapper gspb_' . $maptype . '" id=' . $blockMapId . '></div>';
+		$out .= '<div data-key="' . str_replace('-', '_', $blockId) . '" class="gspb_map-wrapper gspb_' . $maptype . '" id="' . $blockMapId . '"></div>';
 		$out .= '</div>';
 
 		return $out;

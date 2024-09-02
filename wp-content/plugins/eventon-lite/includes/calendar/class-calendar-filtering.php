@@ -1,7 +1,7 @@
 <?php
 /**
 * Calendar Filtering
-* @version Lite 2.2.5
+* @version L2.2.20
 */
 
 class EVO_Cal_Filering{
@@ -392,7 +392,7 @@ class EVO_Cal_Filering{
 			return array('_V'=>$vals, '_VA'=>$vals_array, '_FO'=> $filter_op);
 		}
 
-	// Apply filters to calendar WP Query arguments
+	// Apply filters to calendar WP Query arguments @2.2.20
 		public function apply_evo_filters_to_wp_argument($wp_arguments){
 						
 			$SC = $this->cal->shortcode_args;
@@ -411,9 +411,15 @@ class EVO_Cal_Filering{
 					$tax_name = $name == 'event_tag'? 'post_tag':$name;
 
 					$SC_val = $SC[$name];
-					$SC_filter_val = apply_filters('eventon_event_type_value', $SC_val, $name, $SC);					
+					$SC_filter_val = apply_filters('eventon_event_type_value', $SC_val, $name, $SC);				
 
-					if($SC_filter_val == 'all') continue;
+					$terms_array = $values_array = explode(',', $SC_filter_val);
+					$terms_array = array_filter( array_unique($terms_array) );
+
+					// if this tax is all > skip it
+					if( in_array('all', $terms_array) && count($terms_array) == 1) continue;
+					if( in_array('IN -all', $terms_array) && count($terms_array) == 1) continue;
+
 
 					if(in_array($name, $meta_query_keys)){
 						$wp_meta_query[] = array(
@@ -435,7 +441,11 @@ class EVO_Cal_Filering{
 								$V = str_replace('NOT-', '', $SC_filter_val);
 								$terms = explode(',', $V);
 							}
+
+						// IN values
 						}else{
+							$SC_filter_val = str_replace('IN -','', $SC_filter_val);
+
 							$terms = explode(',', $SC_filter_val);
 						}
 
@@ -452,7 +462,8 @@ class EVO_Cal_Filering{
 			// Append to wp_query
 				if(!empty($wp_tax_query)){
 					
-					$filter_relationship = isset($SC['filter_relationship'])? $SC['filter_relationship']: 'AND';
+					$filter_relationship = isset($SC['filter_relationship'])? 
+						$SC['filter_relationship']: 'AND';
 					$wp_tax_query['relation']= $filter_relationship;
 
 					$filters_tax_wp_argument = array('tax_query'=>$wp_tax_query);					
@@ -463,6 +474,7 @@ class EVO_Cal_Filering{
 					$wp_arguments = array_merge($wp_arguments, $filters_meta_wp_argument);
 				}
 			
+			//print_r($wp_arguments);
 
 			return $wp_arguments;
 		}

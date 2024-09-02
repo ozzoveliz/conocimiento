@@ -1,7 +1,7 @@
 <?php
 /**
   * evo settings class
-  * @version lite 2.2.19
+  * @version lite 2.2.20
   */
 class evo_settings_settings{
 	
@@ -708,6 +708,7 @@ class evo_settings_settings{
 			return  ob_get_clean();
 		}
 
+		// @2.2.20
 		function eventtop_settings(){
 			
 			$num = evo_calculate_cmd_count($this->evcal_opt[1]);
@@ -724,7 +725,7 @@ class evo_settings_settings{
 			for($n=1; $n<= $_add_tax_count; $n++){
 				$__tax_fields = 'eventtype'.($n==1?'':$n);
 				$__tax_name = $_tax_names_array[$n];
-				$arr[$__tax_fields] = sprintf(__('%s (Category #%d)','eventon'),  $n , $__tax_name );
+				$arr[$__tax_fields] = sprintf(__('%s (Category #%d)','eventon'),  $__tax_name , $n );
 			}
 
 
