@@ -1,7 +1,7 @@
-<?php
+<?php  if ( ! defined( 'ABSPATH' ) ) exit;
 
 /**
- * Manage KB configuration FOR THIS ADD_ON in the database.
+ * Manage plugin configuration FOR THIS ADD_ON in the database.
  *
  * @copyright   Copyright (C) 2018, Echo Plugins
  */
@@ -26,7 +26,7 @@ class AMGP_KB_Config_DB {
 	 *
 	 * @return array settings for all registered knowledge bases OR default config if none found
 	 */
-	function get_kb_configs( $skip_check=false ) {
+	public function get_kb_configs( $skip_check=false ) {
 		/** @var $wpdb Wpdb */
 		global $wpdb;
 
@@ -54,7 +54,7 @@ class AMGP_KB_Config_DB {
 		// retrieve all KB options for existing knowledge bases from WP Options table
 		$kb_options = $wpdb->get_results("SELECT option_value FROM $wpdb->options WHERE option_name LIKE '" . self::KB_CONFIG_PREFIX . "%'", ARRAY_A );
 		if ( empty($kb_options) || ! is_array($kb_options) ) {
-			AMGP_Logging::add_log("Did not retrieve any kb config. Using defaults", $kb_options);
+			AMGP_Logging::add_log( "Did not retrieve any kb config. Using defaults (22). Last error: " . $wpdb->last_error, $kb_options );
 			$kb_options = array();
 		}
 
@@ -68,17 +68,13 @@ class AMGP_KB_Config_DB {
 
 			$config = maybe_unserialize( $row['option_value'] );
 			if ( $config === false ) {
-				AMGP_Logging::add_log("Could not unserialize configuration");
+				AMGP_Logging::add_log( "Could not unserialize configuration: ", AMGP_Utilities::get_variable_string( $row['option_value'] ) );
 				continue;
 			}
 
 			if ( empty($config) || ! is_array($config) ) {
 				AMGP_Logging::add_log("Did not find configuration");
 				continue;
-			}
-
-			if ( count($config) < 1 ) {
-				AMGP_Logging::add_log("Found KB configuration is incomplete", count($config));
 			}
 
 			if ( empty($config['id']) ) {
@@ -113,16 +109,20 @@ class AMGP_KB_Config_DB {
 	/**
 	 * Get IDs for all existing knowledge bases. If missing, return default KB ID
 	 *
+	 * @param bool $ignore_error
+	 *
 	 * @return array containing all existing KB IDs
 	 */
-	public function get_kb_ids() {
+	public function get_kb_ids( $ignore_error=false ) {
 		/** @var $wpdb Wpdb */
 		global $wpdb;
 
 		// retrieve all KB option names for existing knowledge bases from WP Options table
 		$kb_option_names = $wpdb->get_results("SELECT option_name FROM $wpdb->options WHERE option_name LIKE '" . AMGP_KB_Core::AMGP_KB_CONFIG_PREFIX . "%'", ARRAY_A );
 		if ( empty($kb_option_names) || ! is_array($kb_option_names) ) {
-			AMGP_Logging::add_log("Did not retrieve any kb config. Using defaults", $kb_option_names);
+			if ( ! $ignore_error ) {
+				AMGP_Logging::add_log( "Did not retrieve any kb config. Try to deactivate and active KB plugin to see if the issue will be fixed (11). Last error: " . $wpdb->last_error, $kb_option_names );
+			}
 			$kb_option_names = array();
 		}
 
@@ -148,7 +148,7 @@ class AMGP_KB_Config_DB {
 
 	/**
 	 * GET KB configuration from the WP Options table. If not found then return ERROR.
-	 * Logs all errors so the caller doesn't need to.
+	 * Logs all errors so the caller does not need to.
 	 *
 	 * @param String $kb_id to get configuration for
 	 * @param bool $default_on_error - do not return default configuration on error
@@ -180,14 +180,10 @@ class AMGP_KB_Config_DB {
 			$config = maybe_unserialize( $config );
 		}
 
-		// if KB configuration is missing
+		// if KB configuration is missing then return error
 		if ( empty($config) || ! is_array($config) ) {
 			AMGP_Logging::add_log("Did not find AMGP configuration (DB23).", $kb_id);
 			return ( $default_on_error ? AMGP_KB_Config_Specs::get_default_kb_config() : new WP_Error('get_kb_config', 'Did not find KB Config') );
-		}
-
-		if ( count($config) < 1 ) {
-			AMGP_Logging::add_log("Found AMGP configuration is incomplete", count($config));
 		}
 
 		// use defaults for missing or empty fields
@@ -209,7 +205,7 @@ class AMGP_KB_Config_DB {
 	public function get_kb_config_or_default( $kb_id ) {
 
 		$kb_config = $this->get_kb_config( $kb_id );
-		if ( is_wp_error( $kb_config ) ) {
+		if ( empty( $kb_config ) || ! is_array( $kb_config ) || is_wp_error( $kb_config ) ) {
 			return AMGP_KB_Config_Specs::get_default_kb_config();
 		}
 
@@ -222,11 +218,11 @@ class AMGP_KB_Config_DB {
 	 * @param string $kb_id
 	 * @param $setting_name
 	 * @param string $default
-	 * @return array|string with value or $default value if this settings not found
+	 * @return string|array with value or specs $default value if this settings not found
 	 */
 	public function get_value( $kb_id, $setting_name, $default = '' ) {
 
-		if ( empty($setting_name) ) {
+		if ( empty( $setting_name ) ) {
 			return $default;
 		}
 
@@ -335,8 +331,9 @@ class AMGP_KB_Config_DB {
 		                                        ( $upsert ? "ON DUPLICATE KEY UPDATE `option_name` = VALUES(`option_name`), `option_value` = VALUES(`option_value`), `autoload` = VALUES(`autoload`)" : '' ),
 												$option_name, $serialized_config, 'no' ) );
 		if ( $result === false ) {
-			AMGP_Logging::add_log( 'Failed to update kb config for kb_id', $kb_id );
-			return new WP_Error( 'save_kb_config', 'Failed to update kb config for kb_id ' . $kb_id );
+			$wpdb_last_error = $wpdb->last_error;   // add_log changes last_error so store it first
+			AMGP_Logging::add_log( 'Failed to update kb config for kb_id', $kb_id, 'Last DB ERROR: (' . $wpdb_last_error . ')' );
+			return new WP_Error( 'save_kb_config', 'Failed to update kb config for kb_id ' . $kb_id . ' Last DB ERROR: (' . $wpdb_last_error . ')' );
 		}
 
 		// cached the settings for future use

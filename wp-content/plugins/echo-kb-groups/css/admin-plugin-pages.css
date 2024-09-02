@@ -240,11 +240,10 @@
   100% {
     opacity: 0; } }
 .amag-private-admin .amgp-admin-list-page-chosen-group-container {
-  border: solid 1px #2EA3F2;
   float: left;
   width: 100%;
   margin: 15px 0; }
-  .amag-private-admin .amgp-admin-list-page-chosen-group-container .main_label {
+  .amag-private-admin .amgp-admin-list-page-chosen-group-container .epkb-main_label {
     display: block;
     float: left;
     width: 100%;
@@ -252,23 +251,15 @@
     font-weight: bold;
     margin-bottom: 10px;
     padding: 0 10px; }
-  .amag-private-admin .amgp-admin-list-page-chosen-group-container .radio-buttons-vertical {
+  .amag-private-admin .amgp-admin-list-page-chosen-group-container .epkb-radio-buttons-container {
     float: left;
     width: 100%; }
-    .amag-private-admin .amgp-admin-list-page-chosen-group-container .radio-buttons-vertical ul {
-      padding: 10px;
+    .amag-private-admin .amgp-admin-list-page-chosen-group-container .epkb-radio-buttons-container .epkb-input-container {
       float: left;
-      width: 100%; }
-      .amag-private-admin .amgp-admin-list-page-chosen-group-container .radio-buttons-vertical ul li {
-        float: left;
-        width: 10%;
-        border: solid 1px #ddd;
-        padding: 10px;
-        margin-left: 5px; }
-        .amag-private-admin .amgp-admin-list-page-chosen-group-container .radio-buttons-vertical ul li .input_container {
-          float: left; }
-        .amag-private-admin .amgp-admin-list-page-chosen-group-container .radio-buttons-vertical ul li label {
-          float: left; }
+      width: 10%;
+      border: solid 1px #ddd;
+      padding: 10px;
+      margin-left: 5px; }
   .amag-private-admin .amgp-admin-list-page-chosen-group-container .amgp-radio-checked {
     background-color: #2EA3F2;
     border-color: #0e8bdf !important;
@@ -305,7 +296,7 @@
   .amag-private-admin #amag-access-manager-container #amgp-kb-groups-content .amgp-add-group-container {
     float: left;
     width: 100%;
-    margin-top: 20px; }
+    margin: 20px 0; }
     .amag-private-admin #amag-access-manager-container #amgp-kb-groups-content .amgp-add-group-container .amgp-group-input {
       display: none;
       margin-left: 20px;
@@ -365,30 +356,32 @@
     .amag-private-admin #amag-access-manager-container #amgp-users-content #amgp-kb-group-search-record-container .amgp-kb-group-search-record-inputs {
       margin: 0;
       padding: 0;
-      list-style-type: none; }
-      .amag-private-admin #amag-access-manager-container #amgp-users-content #amgp-kb-group-search-record-container .amgp-kb-group-search-record-inputs li {
+      list-style-type: none;
+      display: flex;
+      align-items: center; }
+      .amag-private-admin #amag-access-manager-container #amgp-users-content #amgp-kb-group-search-record-container .amgp-kb-group-search-record-inputs label {
         display: inline-block;
-        vertical-align: middle;
+        padding: 0 10px;
+        line-height: 64px; }
+      .amag-private-admin #amag-access-manager-container #amgp-users-content #amgp-kb-group-search-record-container .amgp-kb-group-search-record-inputs input {
+        width: 200px;
+        display: block;
+        margin: 13px;
+        height: 38px; }
+        .amag-private-admin #amag-access-manager-container #amgp-users-content #amgp-kb-group-search-record-container .amgp-kb-group-search-record-inputs input.primary-btn {
+          border-radius: 3px;
+          padding: 10px;
+          display: block; }
+      .amag-private-admin #amag-access-manager-container #amgp-users-content #amgp-kb-group-search-record-container .amgp-kb-group-search-record-inputs .input_container {
+        display: inline-block;
+        vertical-align: middle; }
+      .amag-private-admin #amag-access-manager-container #amgp-users-content #amgp-kb-group-search-record-container .amgp-kb-group-search-record-inputs .epkb-input-group {
         margin: 0;
+        display: flex;
+        align-content: center; }
+      .amag-private-admin #amag-access-manager-container #amgp-users-content #amgp-kb-group-search-record-container .amgp-kb-group-search-record-inputs .submit {
+        margin: 13px;
         padding: 0; }
-        .amag-private-admin #amag-access-manager-container #amgp-users-content #amgp-kb-group-search-record-container .amgp-kb-group-search-record-inputs li label {
-          display: inline-block;
-          padding: 20px 10px; }
-        .amag-private-admin #amag-access-manager-container #amgp-users-content #amgp-kb-group-search-record-container .amgp-kb-group-search-record-inputs li input {
-          width: 200px;
-          display: block;
-          margin: 13px;
-          height: 38px; }
-          .amag-private-admin #amag-access-manager-container #amgp-users-content #amgp-kb-group-search-record-container .amgp-kb-group-search-record-inputs li input.primary-btn {
-            border-radius: 3px;
-            padding: 10px;
-            display: block; }
-        .amag-private-admin #amag-access-manager-container #amgp-users-content #amgp-kb-group-search-record-container .amgp-kb-group-search-record-inputs li .input_container {
-          display: inline-block;
-          vertical-align: middle; }
-        .amag-private-admin #amag-access-manager-container #amgp-users-content #amgp-kb-group-search-record-container .amgp-kb-group-search-record-inputs li .submit {
-          margin: 13px;
-          padding: 0; }
   .amag-private-admin #amag-access-manager-container #amgp-users-content #amgp-kb-group-users-list {
     float: left;
     width: 100%; }

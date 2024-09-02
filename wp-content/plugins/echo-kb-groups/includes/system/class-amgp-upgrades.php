@@ -76,7 +76,7 @@ class AMGP_Upgrades {
 
 		if ( AMGP_Utilities::get_wp_option( 'amgp_show_upgrade_message', false ) ) {
 
-			$plugin_name = '<strong>' . __('KB Groups', 'echo-knowledge-base') . '</strong>';
+			$plugin_name = '<strong>' . esc_html__('KB Groups', 'echo-knowledge-base') . '</strong>';
 			$output .= '<p>' . $plugin_name . ' ' . sprintf( esc_html( _x( 'add-on was updated to version %s.',
 									' version number, link to what is new page', 'echo-knowledge-base' ) ),
 									Echo_KB_Groups::$version ) . '</p>';

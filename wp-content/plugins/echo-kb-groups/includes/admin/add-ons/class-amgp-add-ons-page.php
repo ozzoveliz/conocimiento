@@ -78,7 +78,7 @@ class AMGP_Add_Ons_Page {
 			$license_data = $license_handler->handle_license_command();
 		}
 
-		wp_die( json_encode( array( 'output' => $this->get_license_state( $license_handler, $license_data ), $type='success') ) );
+		wp_die( wp_json_encode( array( 'output' => $this->get_license_state( $license_handler, $license_data ), $type='success') ) );
 	}
 
 	/**
@@ -172,16 +172,16 @@ class AMGP_Add_Ons_Page {
 			$warning_msg = 'Your license has to be both <strong>active</strong> and <strong>valid</strong> in order to receive <strong>add-on fixes, new features and support</strong>.';
 		}		?>
 
-		<p class="ekb-error"><?php echo empty($warning_msg) ? '' : '<span>Warning: </span>' . wp_kses_post( $warning_msg ); ?></p>
+		<p class="ekb-error"><?php echo empty( $warning_msg ) ? '' : '<span>Warning: </span>' . wp_kses_post( $warning_msg ); ?></p>
 
 		<!-- LICENSE KEY -->
 		<div class="ekb-license-key">
 			<ul>
 				<li><label>License Key:</label></li>
-				<li><input type="text" name="<?php echo AMGP_License_Handler::LICENSE_KEY_OPTION_ID; ?>" id="<?php echo AMGP_License_Handler::LICENSE_KEY_OPTION_ID; ?>"
+				<li><input type="text" name="<?php echo esc_attr( AMGP_License_Handler::LICENSE_KEY_OPTION_ID ); ?>" id="<?php echo esc_attr( AMGP_License_Handler::LICENSE_KEY_OPTION_ID ); ?>"
 				           value="<?php echo esc_attr( $license_key ); ?>" placeholder="Enter your license key"
-				           data-status="<?php echo esc_attr($status); ?>" data-current-license-key="<?php echo esc_attr($license_key); ?>" maxlength="50"/></li>
-				<li><span class="amgp_license_action"><input id="amgp_save_btn" class="primary-btn" type="button" name="amgp_save_btn" value="<?php echo  __( 'Save', 'echo-knowledge-base' ); ?>"/>
+				           data-status="<?php echo esc_attr( $status ); ?>" data-current-license-key="<?php echo esc_attr( $license_key ); ?>" maxlength="50"/></li>
+				<li><span class="amgp_license_action"><input id="amgp_save_btn" class="primary-btn" type="button" name="amgp_save_btn" value="<?php echo  esc_html__( 'Save', 'echo-knowledge-base' ); ?>"/>
 						<input type="hidden" id="_wpnonce_amgp_license_key" name="_wpnonce_amgp_license_key" value="<?php echo wp_create_nonce( "_wpnonce_amgp_license_key" ); ?>"/></span></li>
 			</ul>
 		</div>
@@ -190,7 +190,7 @@ class AMGP_Add_Ons_Page {
 		<div class="ekb-license-status">
 			<ul>
 				<li>
-					<span class="ekb-status-icon <?php echo $status == 'valid' ? 'ep_font_icon_checkmark' : 'ep_font_icon_error_circle'; ?>"></span>
+					<span class="ekb-status-icon <?php echo ( $status == 'valid' ? 'ep_font_icon_checkmark' : 'ep_font_icon_error_circle' ); ?>"></span>
 				</li>
 				<li><strong>Status:</strong></li>
 				<li><span id="amgp_license_key_status"><?php echo wp_kses_post( $status_msg ); ?></span></li>
@@ -209,7 +209,7 @@ class AMGP_Add_Ons_Page {
 			$expiry_msg = empty($expiry_msg) ? AMGP_Utilities::get_formatted_datetime_string( $expiry_date ) : $expiry_msg;			?>
 
 			<ul>
-				<li><span class="ekb-status-icon <?php echo $expiry_icon; ?>"></span></li>
+				<li><span class="ekb-status-icon <?php echo esc_attr( $expiry_icon ); ?>"></span></li>
 				<li><strong>Expires on:</strong></li>
 				<li><?php echo wp_kses_post( $expiry_msg ); ?></li>
 			</ul>
@@ -222,10 +222,10 @@ class AMGP_Add_Ons_Page {
 			$icon = $new_version_available ? 'ep_font_icon_error_circle' : 'ep_font_icon_checkmark';			?>
 
 			<ul>
-				<li><span class="ekb-status-icon <?php echo $icon; ?>"></span></li>
+				<li><span class="ekb-status-icon <?php echo esc_attr( $icon ); ?>"></span></li>
 				<li><strong>Add-on Version: </strong></li>
-				<li>Installed: <?php echo Echo_KB_Groups::$version; ?></li>
-				<li>Latest: <?php echo esc_html($latest_add_on_version); ?></li>
+				<li>Installed: <?php echo esc_html( Echo_KB_Groups::$version ); ?></li>
+				<li>Latest: <?php echo esc_html( $latest_add_on_version ); ?></li>
 				<li>					<?php
 
 					// show update link only if license is valid
@@ -243,6 +243,6 @@ class AMGP_Add_Ons_Page {
 	}
 
 	public function user_not_logged_in() {
-		AMGP_Utilities::ajax_show_error_die( '<p>' . __( 'You are not logged in. Refresh your page and log in', 'echo-knowledge-base' ) . '.</p>', __( 'Cannot save your changes', 'echo-knowledge-base' ) );
+		AMGP_Utilities::ajax_show_error_die( '<p>' . esc_html__( 'You are not logged in. Refresh your page and log in', 'echo-knowledge-base' ) . '.</p>', esc_html__( 'Cannot save your changes', 'echo-knowledge-base' ) );
 	}
 }

@@ -1,7 +1,4 @@
-<?php
-// Exit if accessed directly
-if ( ! defined( 'ABSPATH' ) ) exit;
-
+<?php  if ( ! defined( 'ABSPATH' ) ) exit;
 /**
  * Handle KB Users in database.
  * Based on EDD_DB_Customers

@@ -1,4 +1,4 @@
-<?php
+<?php  if ( ! defined( 'ABSPATH' ) ) exit;
 
 /**
  * Various utility functions
@@ -58,10 +58,10 @@ class AMGP_Utilities {
 
 	public static function get_post_status_text( $post_status ) {
 
-		$post_statuses = array( 'draft' => __( 'Draft', 'echo-knowledge-base' ), 'pending' => __( 'Pending', 'echo-knowledge-base' ),
-		                        'publish' => __( 'Published', 'echo-knowledge-base' ), 'future' => __( 'Scheduled', 'echo-knowledge-base' ),
-								'private' => __( 'Private', 'echo-knowledge-base' ),
-								'trash'   => __( 'Trash', 'echo-knowledge-base' ));
+		$post_statuses = array( 'draft' => esc_html__( 'Draft', 'echo-knowledge-base' ), 'pending' => esc_html__( 'Pending', 'echo-knowledge-base' ),
+		                        'publish' => esc_html__( 'Published', 'echo-knowledge-base' ), 'future' => esc_html__( 'Scheduled', 'echo-knowledge-base' ),
+								'private' => esc_html__( 'Private', 'echo-knowledge-base' ),
+								'trash'   => esc_html__( 'Trash', 'echo-knowledge-base' ));
 
 		if ( empty($post_status) || ! in_array($post_status, array_keys($post_statuses)) ) {
 			return $post_status;
@@ -257,13 +257,13 @@ class AMGP_Utilities {
 		$time = abs($time2 - $time1);
 		$time = ( $time < 1 )? 1 : $time;
 		$tokens = array (
-			31536000 => __( 'year', 'echo-knowledge-base' ),
-			2592000 => __( 'month', 'echo-knowledge-base' ),
-			604800 => __( 'week', 'echo-knowledge-base' ),
-			86400 => __( 'day', 'echo-knowledge-base' ),
-			3600 => __( 'hour', 'echo-knowledge-base' ),
-			60 => __( 'min', 'echo-knowledge-base' ),
-			1 => __( 'sec', 'echo-knowledge-base' )
+			31536000 => esc_html__( 'year', 'echo-knowledge-base' ),
+			2592000 => esc_html__( 'month', 'echo-knowledge-base' ),
+			604800 => esc_html__( 'week', 'echo-knowledge-base' ),
+			86400 => esc_html__( 'day', 'echo-knowledge-base' ),
+			3600 => esc_html__( 'hour', 'echo-knowledge-base' ),
+			60 => esc_html__( 'min', 'echo-knowledge-base' ),
+			1 => esc_html__( 'sec', 'echo-knowledge-base' )
 		);
 
 		$output = '';
@@ -291,7 +291,7 @@ class AMGP_Utilities {
 	 * @param $message
 	 */
 	public static function ajax_show_content( $message ) {
-		wp_die( json_encode( array( 'message' => $message ) ) );
+		wp_die( wp_json_encode(  array( 'message' => $message ) ) );
 	}
 
 	/**
@@ -302,7 +302,7 @@ class AMGP_Utilities {
 	 * @param string $type
 	 */
 	public static function ajax_show_info_die( $message, $title='', $type='success' ) {
-		wp_die( json_encode( array( 'message' => self::get_bottom_notice_message_box( $message, $title, $type) ) ) );
+		wp_die( wp_json_encode(  array( 'message' => self::get_bottom_notice_message_box( $message, $title, $type) ) ) );
 	}
 
 	/**
@@ -312,7 +312,7 @@ class AMGP_Utilities {
 	 * @param string $title
 	 */
 	public static function ajax_show_error_die( $message, $title='' ) {
-		wp_die( json_encode( array( 'error' => true, 'message' => self::get_bottom_notice_message_box( $message, $title, 'error') ) ) );
+		wp_die( wp_json_encode(  array( 'error' => true, 'message' => self::get_bottom_notice_message_box( $message, $title, 'error') ) ) );
 	}
 
 	/**
@@ -335,7 +335,7 @@ class AMGP_Utilities {
 					if ( !empty($error['error_str']) && strpos($error['error_str'], $table_name) !== false ) {
 						//LOG Only Access Manager Error
 						AMGP_Logging::add_log( 'Database error', $EZSQL_ERROR );
-						$message .= __( '. Database Error.', 'echo-knowledge-base' );
+						$message .= esc_html__( '. Database Error.', 'echo-knowledge-base' );
 					}
 				}
 
@@ -357,7 +357,7 @@ class AMGP_Utilities {
 	}
 
 	public static function user_not_logged_in() {
-		self::ajax_show_error_die( '<p>' . __( 'You are not logged in. Refresh your page and log in.', 'echo-knowledge-base' ) . '</p>', __( 'Cannot save your changes', 'echo-knowledge-base' ) );
+		self::ajax_show_error_die( '<p>' . esc_html__( 'You are not logged in. Refresh your page and log in.', 'echo-knowledge-base' ) . '</p>', esc_html__( 'Cannot save your changes', 'echo-knowledge-base' ) );
 	}
 
 	/**
@@ -427,19 +427,19 @@ class AMGP_Utilities {
 
 		if ( empty( $id) || is_wp_error($id) ) {
 			AMGP_Logging::add_log( 'Error occurred (01)' );
-			return new WP_Error('E001', __( 'invalid ID', 'echo-knowledge-base' ) );
+			return new WP_Error('E001', esc_html__( 'invalid ID', 'echo-knowledge-base' ) );
 		}
 
 		if ( is_array( $id) ) {
 			if ( ! isset( $id['id']) ) {
 				AMGP_Logging::add_log( 'Error occurred (02)' );
-				return new WP_Error('E002', __( 'invalid ID', 'echo-knowledge-base' ) );
+				return new WP_Error('E002', esc_html__( 'invalid ID', 'echo-knowledge-base' ) );
 			}
 
 			$id_value = $id['id'];
 			if ( ! self::is_positive_int( $id_value ) ) {
 				AMGP_Logging::add_log( 'Error occurred (03)', $id_value );
-				return new WP_Error('E003', __( 'invalid ID', 'echo-knowledge-base' ) . self::get_variable_string($id_value));
+				return new WP_Error('E003', esc_html__( 'invalid ID', 'echo-knowledge-base' ) . self::get_variable_string($id_value));
 			}
 
 			return (int) $id_value;
@@ -447,7 +447,7 @@ class AMGP_Utilities {
 
 		if ( ! self::is_positive_int( $id ) ) {
 			AMGP_Logging::add_log( 'Error occurred (04)', $id );
-			return new WP_Error('E004', __( 'invalid ID', 'echo-knowledge-base' ) . $id);
+			return new WP_Error('E004', esc_html__( 'invalid ID', 'echo-knowledge-base' ) . $id);
 		}
 
 		return (int) $id;

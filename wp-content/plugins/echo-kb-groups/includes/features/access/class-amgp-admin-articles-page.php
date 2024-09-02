@@ -26,14 +26,14 @@ class AMGP_Admin_Articles_Page {
 	public function switch_kb_group() {
 
 		// run a quick security check
-		if ( ! isset( $_REQUEST['_wpnonce_amgp_article_switch_kb'] ) || ! wp_verify_nonce( $_REQUEST['_wpnonce_amgp_article_switch_kb'], '_wpnonce_amgp_article_switch_kb' ) ) {
+		if ( ! isset( $_REQUEST['_wpnonce_amgp_article_switch_kb'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_REQUEST['_wpnonce_amgp_article_switch_kb'] ) ), '_wpnonce_amgp_article_switch_kb' ) ) {
 			AMGP_Utilities::ajax_show_error_die('Security check failed.');
 		}
 
 		// retrieve KB ID
 		$kb_id = empty($_POST['amgp_kb_id']) ? '' : AMGP_Utilities::sanitize_get_id( $_POST['amgp_kb_id'] );
 		if ( empty($kb_id) || is_wp_error( $kb_id ) ) {
-			AMGP_Utilities::ajax_show_error_die( __( 'This page is outdated. Please refresh your browser (90)', 'echo-knowledge-base' ) );
+			AMGP_Utilities::ajax_show_error_die( esc_html__( 'This page is outdated. Please refresh your browser (90)', 'echo-knowledge-base' ) );
 		}
 
 		// ensure user has correct permission
@@ -43,10 +43,10 @@ class AMGP_Admin_Articles_Page {
 
 		$active_group_id = AMGP_Access_Utilities::get_valid_active_group( $kb_id, AMGP_KB_Role::KB_ROLE_CONTRIBUTOR );
 		if ( empty($active_group_id) ) {
-			AMGP_Utilities::ajax_show_error_die( __( 'This page is outdated. Please refresh your browser (91)', 'echo-knowledge-base' ) );
+			AMGP_Utilities::ajax_show_error_die( esc_html__( 'This page is outdated. Please refresh your browser (91)', 'echo-knowledge-base' ) );
 		}
 
-		wp_die( json_encode( array( 'amag_chosen_kb_group' => $active_group_id ) ) );
+		wp_die( wp_json_encode(  array( 'amag_chosen_kb_group' => $active_group_id ) ) );
 	}
 
 	/**
@@ -66,7 +66,7 @@ class AMGP_Admin_Articles_Page {
 
         // display KB Groups form
 	    echo'<form>';
-		$this->display_group_selection_html( $kb_id, AMGP_KB_Role::KB_ROLE_CONTRIBUTOR, 'article_switch_kb' );
+			$this->display_group_selection_html( $kb_id, AMGP_KB_Role::KB_ROLE_CONTRIBUTOR, 'article_switch_kb' );
         echo '</form>';
 	}
 
@@ -84,7 +84,7 @@ class AMGP_Admin_Articles_Page {
 		// get user KB Groups to choose from
 		$user_groups = AMGP_Access_Utilities::get_user_groups_with_min_role( $kb_id, $lowest_role );
 		if ( $user_groups === null ) {
-			echo 'Problem retrieving KB Groups';
+			esc_html_e( 'Problem retrieving KB Groups. Please refresh your page and try again.', 'echo-knowledge-base' ) . ' (E955)';
 			return;
 		}
 
@@ -115,14 +115,12 @@ class AMGP_Admin_Articles_Page {
 		$html = new AMGP_HTML_Elements();
 		$args = array('name' => 'amag_chosen_kb_group_' . $suffix, 'label' => 'KB Groups', 'options' => $options, 'current' => $chosen_group_id );    ?>
 
-		<section class="amgp-admin-list-page-chosen-group-container">
-			<ul>    <?php
-				$html->radio_buttons_vertical( $args );     ?>
-			</ul>
+		<section class="amgp-admin-list-page-chosen-group-container"> <?php
+            $html->radio_buttons_vertical( $args ); ?>
 		</section>
-		<input type="hidden" id="amag_chosen_kb_group" name="amag_chosen_kb_group" value="<?php echo $active_group_id; ?>"/>
-		<input type="hidden" id="amgp_kb_id" name="amgp_kb_id" value="<?php echo $kb_id; ?>"/>
-		<input type="hidden" id="_wpnonce_amgp_<?php echo $suffix; ?>" name="_wpnonce_amgp_<?php echo $suffix; ?>" value="<?php echo wp_create_nonce( "_wpnonce_amgp_" . $suffix ); ?>"/>    <?php
+		<input type="hidden" id="amag_chosen_kb_group" name="amag_chosen_kb_group" value="<?php esc_attr_e( $active_group_id ); ?>"/>
+		<input type="hidden" id="amgp_kb_id" name="amgp_kb_id" value="<?php esc_attr_e( $kb_id ); ?>"/>
+		<input type="hidden" id="_wpnonce_amgp_<?php esc_attr_e( $suffix ); ?>" name="_wpnonce_amgp_<?php esc_attr_e( $suffix ); ?>" value="<?php echo wp_create_nonce( "_wpnonce_amgp_" . $suffix ); ?>"/>    <?php
 	}
 
 	/**
@@ -141,7 +139,7 @@ class AMGP_Admin_Articles_Page {
 			return;
 		}
 
-		add_meta_box( 'amgp-group-article-access', __( 'Assign Group Categories', 'echo-knowledge-base' ), array( $this, 'amgp_display_kb_categories_list'),
+		add_meta_box( 'amgp-group-article-access', esc_html__( 'Assign Group Categories', 'echo-knowledge-base' ), array( $this, 'amgp_display_kb_categories_list'),
 						AMGP_KB_Handler::get_post_type( $kb_id ), 'side', 'default' );
 	}
 
@@ -169,7 +167,7 @@ class AMGP_Admin_Articles_Page {
 
 	        $handler = AMGP_KB_Core::AMGP_Access_Article( true );
 	        if ( $handler->check_post_access( $post, AMGP_KB_Core::AMGP_ARTICLE_EDIT ) !== AMGP_KB_Core::ALLOWED ) {
-		        echo '<div>Problem retrieving KB Groups. Please refresh your page and try again. (E95)</div>';
+		        echo '<div>' . esc_html__( 'Problem retrieving KB Groups. Please refresh your page and try again.', 'echo-knowledge-base' ) . ' (E95)' . '</div>';
 		        return;
 	        }
 
@@ -178,7 +176,7 @@ class AMGP_Admin_Articles_Page {
 	        foreach( $user_valid_groups_records as $user_valid_groups_record ) {
 	        	$user_auth_group = amgp_get_instance()->db_kb_groups->get_group( $kb_id, $user_valid_groups_record->kb_group_id );
 	        	if ( empty($user_auth_group) ) {
-			        echo '<div>Problem retrieving KB Groups. Please refresh your page and try again. (E90)</div>';
+			        echo '<div>' . esc_html__( 'Problem retrieving KB Groups. Please refresh your page and try again.', 'echo-knowledge-base' ) . ' (E90)' . '</div>';
 			        return;
 		        }
 		        $user_valid_groups[] = $user_auth_group;
@@ -188,7 +186,7 @@ class AMGP_Admin_Articles_Page {
 	        // get user KB Groups to display
 	        $user_valid_groups = AMGP_Access_Utilities::get_user_groups_with_min_role( $kb_id, AMGP_KB_Role::KB_ROLE_CONTRIBUTOR );
 	        if ( $user_valid_groups === null ) {
-		        echo '<div>Problem retrieving KB Groups. Please refresh your page and try again. (E96)</div>';
+		        echo '<div>' . esc_html__( 'Problem retrieving KB Groups. Please refresh your page and try again.', 'echo-knowledge-base' ) . ' (E96)' . '</div>';
 		        return;
 	        }
         }
@@ -212,7 +210,7 @@ class AMGP_Admin_Articles_Page {
 			$css_user_type = 'amgp-group-categories';
 		}        ?>
 
-		<div id="amgp-article-page-inner-container" class="<?php echo $css_user_type; ?>">			<?php
+		<div id="amgp-article-page-inner-container" class="<?php esc_attr_e( $css_user_type ); ?>">			<?php
 
 			if ( AMGP_Access_Utilities::is_admin_or_kb_manager( $user ) ) {
 				$this->show_admin_categories( $kb_id, $post->ID );
@@ -278,9 +276,9 @@ class AMGP_Admin_Articles_Page {
 					}       ?>
 
 					<li>
-						<input type="checkbox" id="<?php echo $escaped_group_id; ?>" name="<?php echo $escaped_group_id; ?>"
-						       value="<?php echo $escaped_group_id; ?>" <?php echo $isChecked ? 'checked' : ''; ?>>
-						<label for="<?php echo $escaped_group_id; ?>"><?php _e( $user_group->name, 'group_access' ); ?></label>
+						<input type="checkbox" id="<?php esc_attr_e( $escaped_group_id ); ?>" name="<?php esc_attr_e( $escaped_group_id ); ?>"
+						       value="<?php esc_attr_e( $escaped_group_id ); ?>" <?php echo ( $isChecked ? 'checked' : '' ); ?>>
+						<label for="<?php esc_attr_e( $escaped_group_id ); ?>"><?php echo $user_group->name; ?></label>
 						<div class="amgp-group-icon-placeholder-container">                                <?php
 							echo $this->amgp_group_icon_placeholder_editor_version( $user_group->name, $ix++, $user_group->kb_group_id );    ?>
 						</div>
@@ -360,7 +358,7 @@ class AMGP_Admin_Articles_Page {
 						<li class="amgp-group-parent-placeholder">
 							<?php echo str_repeat("&nbsp;&nbsp;&nbsp;", 1); ?>
 							<span class="amgp-parent-icon-placeholder fa fa-caret-square-o-down"></span>
-							<span class="amgp-parent-name"><?php _e( $last_level_1_no_access_category, 'group_access' ); ?></span>
+							<span class="amgp-parent-name"><?php esc_html_e( $last_level_1_no_access_category, 'group_access' ); ?></span>
 						</li>    <?php
 						$last_level_1_no_access_category = null;
 					}
@@ -369,13 +367,13 @@ class AMGP_Admin_Articles_Page {
 						<li class="amgp-group-parent-placeholder ">
 							<?php echo str_repeat("&nbsp;&nbsp;&nbsp;", 2); ?>
 							<span class="amgp-parent-icon-placeholder fa fa-caret-square-o-down"></span>
-							<span class="amgp-parent-name"><?php _e( $last_level_2_no_access_category, 'group_access' ); ?></span>
+							<span class="amgp-parent-name"><?php esc_html_e( $last_level_2_no_access_category, 'group_access' ); ?></span>
 						</li>    <?php
 						$last_level_2_no_access_category = null;
 					}
 
 					// collect group icons and ids
-					$category_groups_icons = '';
+					$category_groups_icons_escaped = '';
 					$group_ids = '';
 					foreach( $common_groups_ids as $common_groups_id ) {
 						if ( empty($group_to_color_map[$common_groups_id]) ) {
@@ -383,7 +381,7 @@ class AMGP_Admin_Articles_Page {
 						}
 
 						$user_group = $group_to_color_map[$common_groups_id];
-						$category_groups_icons .= $this->amgp_group_icon_placeholder_editor_version( $user_group['name'], $user_group['color_number'], $common_groups_id );
+						$category_groups_icons_escaped .= $this->amgp_group_icon_placeholder_editor_version( $user_group['name'], $user_group['color_number'], $common_groups_id );
 						$group_ids .= ( empty($group_ids) ? '' : ',' ) . $common_groups_id;
 					}
 
@@ -397,12 +395,12 @@ class AMGP_Admin_Articles_Page {
 					$found_group_with_categories = true;
 					$escaped_tag = esc_attr($kb_category_id_tag); ?>
 
-					<li data-amgp-group-id="<?php echo esc_attr($group_ids); ?>">    <?php
+					<li data-amgp-group-id="<?php esc_attr_e( $group_ids ); ?>">    <?php
 						echo str_repeat("&nbsp;&nbsp;&nbsp;", $category_level); ?>
-						<input type="checkbox" id="<?php echo $escaped_tag; ?>" name="<?php echo $escaped_tag; ?>"
-						       value="<?php echo $escaped_tag; ?>" <?php echo $isChecked ? 'checked' : ''; ?>>
-						<label for="<?php echo $escaped_tag; ?>"><?php _e( $kb_category_name, 'group_access' ); ?></label>
-						<div class="amgp-group-icon-placeholder-container"><?php echo $category_groups_icons; ?></div>
+						<input type="checkbox" id="<?php esc_attr_e( $escaped_tag ); ?>" name="<?php esc_attr_e( $escaped_tag ); ?>"
+						       value="<?php esc_attr_e( $escaped_tag ); ?>" <?php echo ( $isChecked ? 'checked' : '' ); ?>>
+						<label for="<?php esc_attr_e( $escaped_tag ); ?>"><?php esc_html_e( $kb_category_name, 'group_access' ); ?></label>
+						<div class="amgp-group-icon-placeholder-container"><?php echo $category_groups_icons_escaped; ?></div>
 					</li>                    <?php
 				}
 
@@ -436,8 +434,8 @@ class AMGP_Admin_Articles_Page {
 						$category_name = empty($article_seq_data[$categories_with_no_groups_id][0]) ? "<unknown>" : $article_seq_data[$categories_with_no_groups_id][0];
 						$kb_category_name = esc_html( $category_name );     ?>
 						<li style="display:block">
-							<input type="checkbox" name="<?php echo $kb_category_name; ?>" checked  onclick="return false;" readonly/>
-							<label for="<?php echo $kb_category_name; ?>"><?php _e( $kb_category_name, 'group_access' ); ?></label>
+							<input type="checkbox" name="<?php esc_attr_e( $kb_category_name ); ?>" checked  onclick="return false;" readonly/>
+							<label for="<?php esc_attr_e( $kb_category_name ); ?>"><?php esc_html_e( $kb_category_name, 'group_access' ); ?></label>
 						</li>   <?php
 					}
 				}
@@ -469,23 +467,21 @@ class AMGP_Admin_Articles_Page {
 			return null;
 		}
 
-		$i18_category_access_link = '<a style="padding-left: 10px; font-weight: normal;" href="' . admin_url('edit.php?post_type=' . AMGP_KB_Handler::KB_POST_TYPE_PREFIX . '1&page=amag-access-mgr') . '" target="_blank">' .
+		$i18_category_access_link_escaped = '<a style="padding-left: 10px; font-weight: normal;" href="' . admin_url('edit.php?post_type=' . AMGP_KB_Handler::KB_POST_TYPE_PREFIX . '1&page=amag-access-mgr') . '" target="_blank">' .
 		                                esc_html__( 'Edit Categories Access', 'echo-knowledge-base' ) . '</a>';		 ?>
 
 		<!--- Groups Container -->
 		<div class="amgp-article-page-group-container">
-			<h3>Groups <?php echo $i18_category_access_link;  ?></h3>
+			<h3><?php echo esc_html__( 'Groups', 'echo-knowledge-base' ) . $i18_category_access_link_escaped;  ?></h3>
 			<ul>    <?php
 
 				$ix = 1;
 				$group_to_color_map = array();
-				$user_groups_ids = array();
 				$found_full_access_group = false;
 				$user_group_categories_ids = array();
 				foreach( $user_valid_groups as $user_group ) {
 
 					$found_full_access_group = true;
-					$user_groups_ids[] = $user_group->kb_group_id;
 					$group_to_color_map[$user_group->kb_group_id] = array('color_number' => $ix, 'name' => $user_group->name );
 					$escaped_group_id = esc_attr($user_group->kb_group_id);
 
@@ -495,7 +491,7 @@ class AMGP_Admin_Articles_Page {
 					}       ?>
 
 					<li>
-						<label for="<?php echo $escaped_group_id; ?>"><?php _e( $user_group->name, 'group_access' ); ?></label>
+						<label for="<?php esc_attr_e( $escaped_group_id ); ?>"><?php esc_html_e( $user_group->name, 'group_access' ); ?></label>
 						<div class="amgp-group-icon-placeholder-container">                                <?php
 							echo $this->amgp_group_icon_placeholder( $user_group->name, ' amgp-group-color', $user_group->kb_group_id );    ?>
 						</div>
@@ -554,7 +550,7 @@ class AMGP_Admin_Articles_Page {
 					$category_group_ids = array_merge($category_group_ids, $read_only_group_ids);
 
 					// collect group icons and ids
-					$category_groups_icons = '';
+					$category_groups_icons_escaped = '';
 					$group_ids = '';
 					foreach( $category_group_ids as $common_groups_id ) {
 
@@ -582,7 +578,7 @@ class AMGP_Admin_Articles_Page {
 						}
 
 						$user_group = $group_to_color_map[$common_groups_id];
-						$category_groups_icons .= $this->amgp_group_icon_placeholder( $user_group['name'], $access_class, $common_groups_id );
+						$category_groups_icons_escaped .= $this->amgp_group_icon_placeholder( $user_group['name'], $access_class, $common_groups_id );
 						$group_ids .= ( empty($group_ids) ? '' : ',' ) . $common_groups_id;
 					}
 
@@ -597,12 +593,12 @@ class AMGP_Admin_Articles_Page {
 					$esc_kb_category_name = esc_html( $category_name );
 					$category_level = $category_ids_level[$kb_category_id];					?>
 
-					<li data-amgp-group-id="<?php echo esc_attr($group_ids); ?>">    <?php
+					<li data-amgp-group-id="<?php esc_attr_e( $group_ids ); ?>">    <?php
 						echo str_repeat("&nbsp;&nbsp;&nbsp;", $category_level); ?>
 						<input type="checkbox" id="<?php echo $escaped_tag; ?>" name="<?php echo $escaped_tag; ?>"
-						       value="<?php echo $escaped_tag; ?>" <?php echo $isChecked ? 'checked' : ''; ?>>
-						<label for="<?php echo $escaped_tag; ?>"><?php _e( $esc_kb_category_name, 'group_access' ); ?></label>
-						<div class="amgp-group-icon-placeholder-container"><?php echo $category_groups_icons; ?></div>
+						       value="<?php echo $escaped_tag; ?>" <?php echo ( $isChecked ? 'checked' : '' ); ?>>
+						<label for="<?php echo $escaped_tag; ?>"><?php esc_html_e( $esc_kb_category_name, 'group_access' ); ?></label>
+						<div class="amgp-group-icon-placeholder-container"><?php echo $category_groups_icons_escaped; ?></div>
 					</li>                    <?php
 
 				}       ?>
@@ -622,6 +618,6 @@ class AMGP_Admin_Articles_Page {
 	}
 
 	public function user_not_logged_in() {
-		AMGP_Utilities::ajax_show_error_die( '<p>' . __( 'You are not logged in. Refresh your page and log in', 'echo-knowledge-base' ) . '.</p>', __( 'Cannot save your changes', 'echo-knowledge-base' ) );
+		AMGP_Utilities::ajax_show_error_die( '<p>' . esc_html__( 'You are not logged in. Refresh your page and log in', 'echo-knowledge-base' ) . '.</p>', esc_html__( 'Cannot save your changes', 'echo-knowledge-base' ) );
 	}
 }

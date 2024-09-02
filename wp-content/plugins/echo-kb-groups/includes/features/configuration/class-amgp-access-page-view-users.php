@@ -78,7 +78,7 @@ class AMGP_Access_Page_View_Users {
 
 		        // first All Groups for KB managers
 	            if ( current_user_can('manage_options') ) {
-		            echo '<option ' . ( $kb_group_id === self::KB_MANAGERS ? 'selected' : '' ) . ' value="999999" style="font-weight:bold; color: goldenrod;">All Groups (KB Managers)</option>';
+		            echo '<option ' . ( $kb_group_id === self::KB_MANAGERS ? 'selected' : '' ) . ' value="999999" style="font-weight:bold; color: goldenrod;">' . esc_html__( 'All Groups (KB Managers)', 'echo-knowledge-base' ) . '</option>';
 	            }
 
 	            // next display individual KB Groups
@@ -142,7 +142,7 @@ class AMGP_Access_Page_View_Users {
 
 	            $active_role = empty($active_role) ? ( $is_group_public ? 'authors' : 'subscribers' ) : $active_role;
 
-                //Setup the Active Tab and Panel if no Post value set subscribers other wise get value and set the last active tab.
+                //Setup the Active Tab and Panel if no Post value set subscribers otherwise get value and set the last active tab.
                 $tab_class = array(
                    'subscribers' => '',
                    'contributors' => '',
@@ -156,34 +156,34 @@ class AMGP_Access_Page_View_Users {
                     'editors' => ''
                 );
 
-                $tab_class[$active_role]       = 'class="amag-active-tab"';
-                $tab_panel_class[$active_role] = ' amag-active-panel'; ?>
-				<li id="subscribers" <?php echo $tab_class['subscribers'] ?>><span class="amag-kb-prefix">KB: </span> Subscribers</li>
-	            <li id="contributors" <?php echo $tab_class['contributors'] ?>>  <span class="amag-kb-prefix">KB: </span>Contributors</li>
-                <li id="authors"     <?php echo $tab_class['authors'] ?>>  <span class="amag-kb-prefix">KB: </span>Authors</li>
-                <li id="editors"     <?php echo $tab_class['editors'] ?>>  <span class="amag-kb-prefix">KB: </span> Editors</li>
+                $tab_class[$active_role] = 'amag-active-tab';
+                $tab_panel_class[$active_role] = 'amag-active-panel'; ?>
+				<li id="subscribers" class="<?php esc_attr_e( $tab_class['subscribers'] ); ?>"><span class="amag-kb-prefix">KB: </span> Subscribers</li>
+	            <li id="contributors" class="<?php esc_attr_e( $tab_class['contributors'] ); ?>">  <span class="amag-kb-prefix">KB: </span>Contributors</li>
+                <li id="authors" class="<?php esc_attr_e( $tab_class['authors'] ); ?>">  <span class="amag-kb-prefix">KB: </span>Authors</li>
+                <li id="editors" class="<?php esc_attr_e( $tab_class['editors'] ); ?>">  <span class="amag-kb-prefix">KB: </span> Editors</li>
             </ul>
             <div class="amag-tab-content">
-                <div class="amag-tab-panel <?php echo $tab_panel_class['subscribers'] ?>" id="subscribers-panel">            <?php
+                <div class="amag-tab-panel <?php esc_attr_e( $tab_panel_class['subscribers'] ); ?>" id="subscribers-panel">            <?php
                     if ( $is_group_public ) {
-                        echo 'Everyone is a subscriber to the Public Group.';
+                        esc_html_e( 'Everyone is a subscriber to the Public Group.', 'echo-knowledge-base' );
                     } else {
 	                    if ( ! $this->display_role_users( $kb_group_id, AMGP_KB_Role::KB_ROLE_SUBSCRIBER ) ) {
 		                    return false;
 	                    }
                     }       ?>
                 </div>
-	            <div class="amag-tab-panel <?php echo $tab_panel_class['contributors'] ?>" id="contributors-panel">			<?php
+	            <div class="amag-tab-panel <?php esc_attr_e( $tab_panel_class['contributors'] ); ?>" id="contributors-panel">			<?php
 		            if ( ! $this->display_role_users( $kb_group_id, AMGP_KB_Role::KB_ROLE_CONTRIBUTOR ) ) {
 			            return false;
 		            }   ?>
 	            </div>
-                <div class="amag-tab-panel <?php echo $tab_panel_class['authors'] ?>" id="authors-panel">			<?php
+                <div class="amag-tab-panel <?php esc_attr_e( $tab_panel_class['authors'] );?>" id="authors-panel">			<?php
 	                if ( ! $this->display_role_users( $kb_group_id, AMGP_KB_Role::KB_ROLE_AUTHOR ) ) {
 		                return false;
 	                }   ?>
                 </div>
-                <div class="amag-tab-panel <?php echo $tab_panel_class['editors'] ?>" id="editors-panel">			<?php
+                <div class="amag-tab-panel <?php esc_attr_e( $tab_panel_class['editors'] ); ?>" id="editors-panel">			<?php
 	                if ( ! $this->display_role_users( $kb_group_id, AMGP_KB_Role::KB_ROLE_EDITOR ) ) {
 		                return false;
 	                }   ?>
@@ -263,32 +263,32 @@ class AMGP_Access_Page_View_Users {
 
 		//Add Styling and Heading to Group list
 		$manually_assigned_group_class   = '';
-		$manually_assigned_group_heading = '';
+		$manually_assigned_group_heading_escaped = '';
 		if ( defined( 'AM'.'CR_PLUGIN_NAME' ) && count( $wp_role_map_user_ids ) > 0 ) {
 			$manually_assigned_group_class    = 'amgp-manually-assigned-roles-list';
-			$manually_assigned_group_heading  = '<h3>Group Users</h3>';
+			$manually_assigned_group_heading_escaped  = '<h3>Group Users</h3>';
 		}		?>
 
-        <div class="amgp-group-roles" data-kb_group_user_id="<?php echo $kb_group_id; ?>">
+        <div class="amgp-group-roles" data-kb_group_user_id="<?php esc_attr_e( $kb_group_id );; ?>">
 
 	        <!-- Tab Title -->
             <section class="amag-header">
-                <input type="hidden" class="amgp_kb_role_name" value="<?php echo $kb_role_name; ?>"/>
+                <input type="hidden" class="amgp_kb_role_name" value="<?php esc_attr_e( $kb_role_name );; ?>"/>
             </section>
 
 	        <!-- Group User selection -->
-			<section id="amgp-control-<?php echo $kb_role_name; ?>"class="amgp-control">				<?php
+			<section id="amgp-control-<?php esc_attr_e( $kb_role_name );; ?>"class="amgp-control">				<?php
 				$page_number = AMGP_Utilities::get('amag_current_page_number', 1);
 				$return = self::get_user_page( $this->kb_id, $kb_group_id, $kb_role_name, $page_number );
-				if ( $return == false ) {
+				if ( ! $return ) {
 					return false;
 				}   ?>
 			</section>
 
 	        <!-- List of users assigned with Groups add-on -->
-	        <section class="amag-list <?php echo $manually_assigned_group_class; ?>">
+	        <section class="amag-list <?php esc_attr_e( $manually_assigned_group_class ); ?>"> <?php
 
-		        <?php echo $manually_assigned_group_heading; ?>
+		        echo $manually_assigned_group_heading_escaped; ?>
 		        <div class="amag-list-heading">
 			        <span class="amag-list-username">Username</span>
 			        <span class="amag-list-name">Name</span>
@@ -396,10 +396,10 @@ class AMGP_Access_Page_View_Users {
 		$users = $wp_user_query->get_results();		 ?>
 
 		<div id="amgp-kb-group-search-record-container">
-			<ul class="amgp-kb-group-search-record-inputs">
-				<li><label>Search for User:</label></li>				<?php
+			<div class="amgp-kb-group-search-record-inputs">
+				<label>Search for User:</label>				<?php
 				$html->text( array(
-						'label'       => __( 'Keyword', 'echo-knowledge-base' ),
+						'label'       => esc_html__( 'Keyword', 'echo-knowledge-base' ),
 						'name'        => 'amgp_user_filter' . '-' . $kb_role_name,
 						'type'        => AMGP_Input_Filter::TEXT,
 						'value'       => $user_search_filter,
@@ -407,8 +407,8 @@ class AMGP_Access_Page_View_Users {
 						'label_class' => '',
 						'input_class' => ''
 				) );			    ?>
-				<li><?php $html->submit_button( __( 'Search', 'echo-knowledge-base' ), 'amgp_filter_users', '', '', true, '', 'primary-btn' ); ?></li>
-			</ul>
+				<?php $html->submit_button_v2( esc_html__( 'Search', 'echo-knowledge-base' ), 'amgp_filter_users', '', '', true, '', 'primary-btn' ); ?>
+			</div>
 			<input type="hidden" id="_wpnonce_amgp_get_user_page_ajax" name="_wpnonce_amgp_get_user_page_ajax" value="<?php echo wp_create_nonce( "_wpnonce_amgp_get_user_page_ajax" ); ?>"/>
 		</div> <?php
 
@@ -417,13 +417,13 @@ class AMGP_Access_Page_View_Users {
 
 			<div id="amgp-kb-group-users-list">
 
-				<input type="hidden" id="ammgp-page-number" data-page-number="<?php echo $page_number; ?>"/> <?php
+				<input type="hidden" id="ammgp-page-number" data-page-number="<?php esc_attr_e( $page_number ); ?>"/> <?php
 
 				foreach ($users as $user) {
 
 					$user_added_class       = '';
-					$user_role_msg    = '';
-					$user_mapped_msg        = '';
+					$user_role_msg_escaped    = '';
+					$user_mapped_msg_escaped        = '';
 					$user_mapped            = false;
 
 					$user_info = get_userdata($user->ID);
@@ -432,7 +432,7 @@ class AMGP_Access_Page_View_Users {
 					if ( in_array( $user->ID, array_keys($kb_group_user_role_wp_ids) ) ) {
 						$user_added_class = ' amgp-user-added ';
 						$kb_role_name = $kb_group_user_role_wp_ids[$user->ID];
-						$user_role_msg = '<span class="amgp-user-record-kb-manager-text">' . AMGP_KB_Role::get_kb_role_name($kb_role_name) . '</span>';
+						$user_role_msg_escaped = '<span class="amgp-user-record-kb-manager-text">' . AMGP_KB_Role::get_kb_role_name( $kb_role_name ) . '</span>';
 					}
 
 					// If there mapped users, find out who they are and add a message in their profile and remove the Add button.
@@ -441,7 +441,7 @@ class AMGP_Access_Page_View_Users {
 						//If the user is Mapped, output a message in the corner saying Mapped.
 					    if ( in_array($user->ID, $wp_role_map_user_ids) ) {
 
-					    	$user_mapped_msg = '<span class="amgp-user-record-mapped-text">Mapped</span>';
+					    	$user_mapped_msg_escaped = '<span class="amgp-user-record-mapped-text">' . esc_html__( 'Mapped', 'echo-knowledge-base' ) . '</span>';
 					    	$user_added_class .= ' amgp-user-mapped ';
 
 							//Setting this true will set the condition down below to hide the add button.
@@ -450,12 +450,12 @@ class AMGP_Access_Page_View_Users {
 					}
 										?>
 
-					<div class="amgp-user-record <?php echo $user_added_class; ?>">
+					<div class="amgp-user-record <?php esc_attr_e( $user_added_class ); ?>">
 
 						<div class="amgp-user-record-inner">							<?php
 
-							echo $user_role_msg;
-							echo $user_mapped_msg;
+							echo $user_role_msg_escaped;
+							echo $user_mapped_msg_escaped;
 
 							// Only show users not already in the group
 							if ( in_array( $user->ID, array_keys($kb_group_user_role_wp_ids) ) ) {
@@ -463,18 +463,18 @@ class AMGP_Access_Page_View_Users {
 							} else {
 								//If user is already mapped do not show the Add button.
 								if ( ! $user_mapped ) {
-									$html->submit_button( __( 'Add', 'echo-knowledge-base' ), 'amgp_add_kb_group_user_ajax', 'amag-btn-wrap--plain amag-btn-wrap--float-right', '', false, '', 'primary-btn' );
+									$html->submit_button_v2( esc_html__( 'Add', 'echo-knowledge-base' ), 'amgp_add_kb_group_user_ajax', 'amag-btn-wrap--plain amag-btn-wrap--float-right', '', false, '', 'primary-btn' );
 								}
 							}   ?>
 
 							<div class="amgp-user-record-img"><?php echo get_avatar( $user->ID, 50 ); ?></div>
 							<ul class="amgp-user-record-info">
-								<li class="amgp-user-record-display-name"><strong>Display name</strong> :  <?php echo $user_info->display_name; ?></li>
-								<li class="amgp-user-record-first-name">  <strong>First name</strong> :    <?php echo $user_info->first_name; ?></li>
-								<li class="amgp-user-record-last-name">   <strong>Last name</strong> :     <?php echo $user_info->last_name; ?></li>
-								<li class="amgp-user-record-email">       <strong>Email</strong> : <?php echo $user_info->user_email; ?></li>
+								<li class="amgp-user-record-display-name"><strong>Display name</strong> :  <?php esc_html_e( $user_info->display_name ); ?></li>
+								<li class="amgp-user-record-first-name">  <strong>First name</strong> :    <?php esc_html_e( $user_info->first_name ); ?></li>
+								<li class="amgp-user-record-last-name">   <strong>Last name</strong> :     <?php esc_html_e( $user_info->last_name ); ?></li>
+								<li class="amgp-user-record-email">       <strong>Email</strong> : <?php esc_html_e( $user_info->user_email ); ?></li>
 							</ul>
-							<input type="hidden" class="amgp-wp-user-id" value="<?php echo esc_attr( $user->ID ); ?>"/>
+							<input type="hidden" class="amgp-wp-user-id" value="<?php esc_attr_e( $user->ID ); ?>"/>
 
 						</div>
 					</div>				<?php
@@ -491,8 +491,8 @@ class AMGP_Access_Page_View_Users {
 			echo paginate_links( array(
 				'base' => admin_url('edit.php?page=amag-access-mgr&type=amag-user-page-number'),
 				'format' => '&p=%#%', // this defines the query parameter that will be used, in this case "p"
-				'prev_text' => __('Previous'), // text for previous page
-				'next_text' => __('Next'), // text for next page
+				'prev_text' => esc_html__('Previous'), // text for previous page
+				'next_text' => esc_html__('Next'), // text for next page
 				'total' => $total_pages, // the total number of pages we have
 				'current' => $page_number, // the current page
 				'end_size' => 1,
@@ -557,15 +557,14 @@ class AMGP_Access_Page_View_Users {
 		$name = empty( $wp_user ) || empty( $wp_user->display_name ) ? '<unknown>' : $wp_user->display_name;
 		$email = empty( $wp_user ) || empty( $wp_user->user_email ) ? '<unknown>' : $wp_user->user_email; ?>
 		<li>
-			<span class="amag-list-username"><?php echo esc_html( $user_name ); ?></span>
-			<span class="amag-list-name"><?php echo esc_html( $name ); ?></span>
-			<span class="amag-list-email"><?php echo esc_html( $email ); ?></span>      <?php
+			<span class="amag-list-username"><?php esc_html_e( $user_name ); ?></span>
+			<span class="amag-list-name"><?php esc_html_e( $name ); ?></span>
+			<span class="amag-list-email"><?php esc_html_e( $email ); ?></span>      <?php
 
 			if ( $remove_on ) {				?>
 				<span class="amag-list-action">
-			        <input type="hidden" class="amgp-wp-user-id" value="<?php echo esc_attr( $wp_user_id ); ?>"/> <?php
-						$this->html->submit_button( __( 'Remove', 'echo-knowledge-base' ), 'amgp_remove_kb_group_user_ajax', 'amag-btn-wrap--plain', '', true, '', 'amgp_remove_kb_group_user_ajax amag-remove-user' );
-						?>
+			        <input type="hidden" class="amgp-wp-user-id" value="<?php esc_attr_e( $wp_user_id ); ?>"/> <?php
+						$this->html->submit_button_v2( esc_html__( 'Remove', 'echo-knowledge-base' ), 'amgp_remove_kb_group_user_ajax', 'amag-btn-wrap--plain', '', true, '', 'amgp_remove_kb_group_user_ajax amag-remove-user' );						?>
 		        </span>     <?php
 			}				?>
 		</li>                        <?php

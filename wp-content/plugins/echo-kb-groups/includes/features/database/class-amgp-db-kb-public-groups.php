@@ -1,6 +1,4 @@
-<?php
-// Exit if accessed directly
-if ( ! defined( 'ABSPATH' ) ) exit;
+<?php  if ( ! defined( 'ABSPATH' ) ) exit;
 
 /**
  * Handle PUBLIC Groups

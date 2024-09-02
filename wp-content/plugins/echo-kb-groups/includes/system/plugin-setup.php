@@ -1,10 +1,4 @@
-<?php
-
-/**
- * Activate the plugin
- *
- * @copyright   Copyright (C) 2018, Echo Plugins
-*/
+<?php  if ( ! defined( 'ABSPATH' ) ) exit;
 
 /**
  * Activate this plugin i.e. setup tables, data etc.
@@ -13,30 +7,23 @@
  * @param bool $network_wide - If the plugin is being network-activated
  */
 function amgp_activate_plugin( $network_wide=false ) {
-	global $wpdb;
-
 	if ( is_multisite() && $network_wide ) {
-		foreach ( $wpdb->get_col( "SELECT blog_id FROM $wpdb->blogs LIMIT 100" ) as $blog_id ) {
-			switch_to_blog( $blog_id );
-			amgp_get_instance()->kb_config_obj->reset_cache();
-			amgp_activate_plugin_do();
-			restore_current_blog();
-		}
+		wp_die('Access Manager cannot be activated on multisite as a network plugin.');
 	} else {
 		amgp_activate_plugin_do();
 	}
 }
+register_activation_hook( Echo_KB_Groups::$plugin_file, 'amgp_activate_plugin' );
 
 function amgp_activate_plugin_do() {
 
-	// setup configuration
 	require_once 'class-amgp-autoloader.php';
 
 	AMGP_Logging::disable_logging();
 
-	// true if the plugin was activated for the first time since installation
+	// true if the plugin is activated for the first time since installation
 	$plugin_version = get_option( 'amgp_version' );
-	if ( empty($plugin_version) ) {
+	if ( empty( $plugin_version ) ) {
 
 		update_option( 'amgp_version', Echo_KB_Groups::$version );
 		set_transient( '_amgp_plugin_installed', true, 3600 );
@@ -46,6 +33,7 @@ function amgp_activate_plugin_do() {
 
 			// retrieve all existing KB IDs
 			$all_kb_ids = $kb_db->get_kb_ids();
+			// setup configuration
 			foreach ( $all_kb_ids as $kb_id ) {
 
 				// update configuration if not found
@@ -62,7 +50,6 @@ function amgp_activate_plugin_do() {
 
 	set_transient( '_amgp_plugin_activated', true, 3600 );
 }
-register_activation_hook( Echo_KB_Groups::$plugin_file, 'amgp_activate_plugin' );
 
 /**
  * User deactivates this plugin so refresh the permalinks

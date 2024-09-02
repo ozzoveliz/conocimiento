@@ -1,4 +1,4 @@
-<?php
+<?php  if ( ! defined( 'ABSPATH' ) ) exit;
 
 /**
  * Handle managing Groups configuration
@@ -28,7 +28,7 @@ class AMGP_Access_Page_Cntrl_Groups extends AMGP_Access_Page_Controller {
 	public function display_groups_tab() {
 
 		// verify that the request is authentic
-		if ( empty( $_REQUEST['_wpnonce_amar_access_content_action_ajax'] ) || ! wp_verify_nonce( $_REQUEST['_wpnonce_amar_access_content_action_ajax'], '_wpnonce_amar_access_content_action_ajax' ) ) {
+		if ( empty( $_REQUEST['_wpnonce_amar_access_content_action_ajax'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_REQUEST['_wpnonce_amar_access_content_action_ajax'] ) ), '_wpnonce_amar_access_content_action_ajax' ) ) {
 			AMGP_Utilities::ajax_show_error_die(__( 'Refresh your page', 'echo-knowledge-base' ));
 		}
 
@@ -63,7 +63,7 @@ class AMGP_Access_Page_Cntrl_Groups extends AMGP_Access_Page_Controller {
 	public function create_kb_group() {
 
 		// verify that the request is authentic
-		if ( empty( $_REQUEST['_wpnonce_amar_access_content_action_ajax'] ) || ! wp_verify_nonce( $_REQUEST['_wpnonce_amar_access_content_action_ajax'], '_wpnonce_amar_access_content_action_ajax' ) ) {
+		if ( empty( $_REQUEST['_wpnonce_amar_access_content_action_ajax'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_REQUEST['_wpnonce_amar_access_content_action_ajax'] ) ), '_wpnonce_amar_access_content_action_ajax' ) ) {
 			AMGP_Utilities::ajax_show_error_die(__( 'Refresh your page first.', 'echo-knowledge-base' ));
 		}
 
@@ -93,7 +93,7 @@ class AMGP_Access_Page_Cntrl_Groups extends AMGP_Access_Page_Controller {
 
 		// we are done here
 		$reload = false;
-		AMGP_Utilities::ajax_show_info_die( $reload ? __( 'Reload Settings saved. PAGE WILL RELOAD NOW.', 'echo-knowledge-base' ) : __( 'Group Added', 'echo-knowledge-base' ) );
+		AMGP_Utilities::ajax_show_info_die( $reload ? esc_html__( 'Reload Settings saved. PAGE WILL RELOAD NOW.', 'echo-knowledge-base' ) : esc_html__( 'Group Added', 'echo-knowledge-base' ) );
 	}
 
 	/**
@@ -102,7 +102,7 @@ class AMGP_Access_Page_Cntrl_Groups extends AMGP_Access_Page_Controller {
 	public function delete_kb_group() {
 
 		// verify that the request is authentic
-		if ( empty( $_REQUEST['_wpnonce_amar_access_content_action_ajax'] ) || ! wp_verify_nonce( $_REQUEST['_wpnonce_amar_access_content_action_ajax'], '_wpnonce_amar_access_content_action_ajax' ) ) {
+		if ( empty( $_REQUEST['_wpnonce_amar_access_content_action_ajax'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_REQUEST['_wpnonce_amar_access_content_action_ajax'] ) ), '_wpnonce_amar_access_content_action_ajax' ) ) {
 			AMGP_Utilities::ajax_show_error_die(__( 'Group NOT deleted. First refresh your page', 'echo-knowledge-base' ));
 		}
 
@@ -176,7 +176,7 @@ class AMGP_Access_Page_Cntrl_Groups extends AMGP_Access_Page_Controller {
 		// delete the KB Group
 		$result = amgp_get_instance()->db_kb_groups->delete_group( $kb_id, $kb_group_id );
 		if ( empty($result) ) {
-			AMGP_Utilities::ajax_show_error_die( 'Error Deleting Group', __( 'Could not delete KB Group . ' . $kb_group_name, 'echo-knowledge-base' ) );
+			AMGP_Utilities::ajax_show_error_die( 'Error Deleting Group', esc_html__( 'Could not delete KB Group . ' . $kb_group_name, 'echo-knowledge-base' ) );
 		}
 
 		// delete all KB Group mappings
@@ -195,7 +195,7 @@ class AMGP_Access_Page_Cntrl_Groups extends AMGP_Access_Page_Controller {
 	public function rename_kb_group() {
 
 		// verify that the request is authentic
-		if ( empty( $_REQUEST['_wpnonce_amar_access_content_action_ajax'] ) || ! wp_verify_nonce( $_REQUEST['_wpnonce_amar_access_content_action_ajax'], '_wpnonce_amar_access_content_action_ajax' ) ) {
+		if ( empty( $_REQUEST['_wpnonce_amar_access_content_action_ajax'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_REQUEST['_wpnonce_amar_access_content_action_ajax'] ) ), '_wpnonce_amar_access_content_action_ajax' ) ) {
 			AMGP_Utilities::ajax_show_error_die(__( 'Group NOT renamed. First refresh your page', 'echo-knowledge-base' ));
 		}
 
@@ -248,7 +248,7 @@ class AMGP_Access_Page_Cntrl_Groups extends AMGP_Access_Page_Controller {
 		// rename the KB Group
 		$result = amgp_get_instance()->db_kb_groups->rename_group( $kb_id, $kb_group_id, $new_kb_group_name );
 		if ( empty($result) ) {
-			AMGP_Utilities::ajax_show_error_die( 'Error Renaming Group', __( 'Could not add KB Group . ' . $new_kb_group_name, 'echo-knowledge-base' ) );
+			AMGP_Utilities::ajax_show_error_die( 'Error Renaming Group', esc_html__( 'Could not add KB Group . ' . $new_kb_group_name, 'echo-knowledge-base' ) );
 		}
 
 		// we are done here
@@ -310,13 +310,13 @@ class AMGP_Access_Page_Cntrl_Groups extends AMGP_Access_Page_Controller {
 	public function reset_log() {
 
 		// verify that the request is authentic
-		if ( empty( $_REQUEST['_wpnonce_epkb_ajax_action'] ) || ! wp_verify_nonce( $_REQUEST['_wpnonce_epkb_ajax_action'], '_wpnonce_epkb_ajax_action' ) ) {
-			AMGP_Utilities::ajax_show_error_die( __( 'First refresh your page', 'echo-knowledge-base' ) );
+		if ( empty( $_REQUEST['_wpnonce_epkb_ajax_action'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_REQUEST['_wpnonce_epkb_ajax_action'] ) ), '_wpnonce_epkb_ajax_action' ) ) {
+			AMGP_Utilities::ajax_show_error_die( esc_html__( 'First refresh your page', 'echo-knowledge-base' ) );
 		}
 
 		// ensure user has correct permissions
 		if ( ! current_user_can('admin_eckb_access_manager_page') ) {
-			AMGP_Utilities::ajax_show_error_die( __( 'You do not have ability to change access privileges.', 'echo-knowledge-base' ) );
+			AMGP_Utilities::ajax_show_error_die( esc_html__( 'You do not have ability to change access privileges.', 'echo-knowledge-base' ) );
 		}
 
 		AMGP_Logging::reset_logs();
