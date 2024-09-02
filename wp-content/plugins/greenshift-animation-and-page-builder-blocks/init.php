@@ -223,7 +223,7 @@ function gspb_greenShift_register_scripts_blocks(){
 		'gstabs',
 		GREENSHIFT_DIR_URL . 'libs/tabs/tabs.js',
 		array(),
-		'1.5',
+		'1.6',
 		true
 	);
 
@@ -248,7 +248,7 @@ function gspb_greenShift_register_scripts_blocks(){
 		'gs-smooth-scroll',
 		GREENSHIFT_DIR_URL . 'libs/motion/smoothscroll.js',
 		array(),
-		'1.1',
+		'1.2',
 		true
 	);
 
@@ -507,25 +507,25 @@ function gspb_greenShift_register_scripts_blocks(){
 		'greenShift-library-editor',
 		GREENSHIFT_DIR_URL . 'build/gspbLibrary.css',
 		'',
-		'9.3.5'
+		'9.4'
 	);
 	wp_register_style(
 		'greenShift-block-css', // Handle.
 		GREENSHIFT_DIR_URL . 'build/index.css', // Block editor CSS.
 		array('greenShift-library-editor', 'wp-edit-blocks'),
-		'9.3.5'
+		'9.4'
 	);
 	wp_register_style(
 		'greenShift-stylebook-css', // Handle.
 		GREENSHIFT_DIR_URL . 'build/gspbStylebook.css', // Block editor CSS.
 		array(),
-		'9.3.5'
+		'9.4'
 	);
 	wp_register_style(
 		'greenShift-admin-css', // Handle.
 		GREENSHIFT_DIR_URL . 'templates/admin/style.css', // admin css
 		array(),
-		'9.3.5'
+		'9.4'
 	);
 
 	//Script for ajax reusable loading
@@ -1082,12 +1082,10 @@ function gspb_greenShift_block_script_assets($html, $block)
 			while ( $p->next_tag() ) {
 				// Skip an element if it's not supposed to be processed.
 				if ( method_exists('WP_HTML_Tag_Processor', 'has_class') && $p->has_class( 't-panel' ) ) {
-					if($itab == 0){
-						$p->set_attribute( 'aria-hidden', 'false');
-					}else{
-						$p->set_attribute( 'aria-hidden', 'true');
-					}
 					$p->set_attribute( 'id', 'gspb-tab-item-content-'.$block['attrs']['id'].'-'.$itab);
+					$p->set_attribute( 'aria-labelledby', 'gspb-tab-item-btn-'.$block['attrs']['id'].'-'.$itab);
+					$p->set_attribute( 'role', 'tabpanel');
+					$p->set_attribute( 'tabindex', '0');
 					$itab ++;
 				}
 			}
@@ -1147,6 +1145,9 @@ function gspb_greenShift_block_script_assets($html, $block)
 						$dynamicAttributes[$index]['value'] = GSPB_make_dynamic_text($dynamicAttributes[$index]['value'], $block['attrs'], $block, $value);
 					}else{
 						$dynamicAttributes[$index]['value'] = sanitize_text_field($value['value']);
+						if(strpos($value['name'], 'on') === 0){
+							$dynamicAttributes[$index]['value'] = '';
+						}
 					}
 				}
 				if(!empty($dynamicAttributes)){

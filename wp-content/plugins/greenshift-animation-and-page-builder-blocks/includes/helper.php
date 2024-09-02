@@ -409,6 +409,13 @@ function greenshift_sanitize_multi_array($data)
 	return $data;
 }
 
+function greenshift_sanitize_id_key($id) {
+	if (empty($id)) return '';
+    // Remove anything that isn't a-z, A-Z, 0-9, -, _, or .
+    $sanitized_id = preg_replace('/[^a-zA-Z0-9\-\_\.]/', '', $id);
+    return esc_attr($sanitized_id);
+}
+
 //////////////////////////////////////////////////////////////////
 // Preset Classes
 //////////////////////////////////////////////////////////////////
