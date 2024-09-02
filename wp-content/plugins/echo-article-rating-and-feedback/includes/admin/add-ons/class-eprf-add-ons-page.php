@@ -74,7 +74,7 @@ class EPRF_Add_Ons_Page {
 			$license_data = $license_handler->handle_license_command();
 		}
 
-		wp_die( json_encode( array( 'output' => $this->get_license_state( $license_handler, $license_data ), $type='success') ) );
+		wp_die( wp_json_encode( array( 'output' => $this->get_license_state( $license_handler, $license_data ), $type='success') ) );
 	}
 
 	/**

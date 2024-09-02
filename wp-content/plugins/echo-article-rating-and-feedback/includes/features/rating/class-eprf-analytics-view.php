@@ -322,7 +322,7 @@ class EPRF_Analytics_View {
 		$end_date = EPRF_Utilities::post( 'end_date', date_i18n('Y-m-d') );
 		$filtered_rating_data = $this->display_rating_results_table( $kb_id, $start_date, $end_date );
 
-		wp_die( json_encode( array( 'output' => $filtered_rating_data, $type='success') ) );
+		wp_die( wp_json_encode( array( 'output' => $filtered_rating_data, $type='success') ) );
 	} */
 
 	/**

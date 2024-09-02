@@ -6,16 +6,17 @@
  * FRONT-END pages using our plugin features
  */
 function eprf_load_public_resources() {
-	global $eckb_kb_id, $eckb_is_kb_main_page;
+	global $eckb_is_kb_main_page;
 
-	if ( ! empty( $eckb_is_kb_main_page ) ) {
+	if ( ! empty( $eckb_is_kb_main_page ) || is_archive() ) {
 		return;
 	}
 
 	eprf_register_public_resources();
 	
-	$post = empty($GLOBALS['post']) ? '' : $GLOBALS['post'];
-	if ( ! class_exists( EPRF_KB_Core::EPRF_KB_KNOWLEDGE_BASE) || empty($post) || empty($eckb_kb_id) ) {
+	$post = empty( $GLOBALS['post'] ) ? '' : $GLOBALS['post'];
+	$kb_id = EPRF_Utilities::get_eckb_kb_id( '' );
+	if ( ! class_exists( EPRF_KB_Core::EPRF_KB_KNOWLEDGE_BASE ) || empty( $post ) || empty( $kb_id ) ) {
 		return;
 	}
 
@@ -156,9 +157,8 @@ function eprf_load_admin_plugin_pages_resources() {
  * Enguque fonts that are configured in KB config
  */
 function eprf_enqueue_google_fonts() {
-	global $eckb_kb_id;
 
-	$kb_id = empty($eckb_kb_id) ? EPRF_KB_Config_DB::DEFAULT_KB_ID : $eckb_kb_id;
+	$kb_id = EPRF_Utilities::get_eckb_kb_id();
 	$kb_config = eprf_get_instance()->kb_config_obj->get_kb_config( $kb_id );
 
 	foreach ( $kb_config as $name => $value ) {
@@ -206,9 +206,7 @@ function eprf_load_editor_styles_inline() {
 
 	wp_print_scripts( array( 'eprf-public-scripts' ) );
 
-	global $eckb_kb_id;
-
-	$kb_id = empty($eckb_kb_id) ? EPRF_KB_Config_DB::DEFAULT_KB_ID : $eckb_kb_id;
+	$kb_id = EPRF_Utilities::get_eckb_kb_id();
 	$kb_config = eprf_get_instance()->kb_config_obj->get_kb_config( $kb_id );
 
 	foreach ( $kb_config as $name => $value ) {

@@ -22,7 +22,6 @@ class EPRF_KB_Core {
 	const EPRF_KB_ANALYTICS_PAGE = 'epkb-plugin-analytics';
 
 	// ACTIONS and FILTERS
-	const EPRF_KB_CONFIG_SAVE_INPUT_V2 = 'epkb_kb_config_save_input_v2';
 	const EPRF_KB_CONFIG_SAVE_INPUT_V3 = 'eckb_kb_config_save_input_v3';
 	const EPRF_KB_ADD_ON_CONFIG_SPECS = 'epkb_add_on_config_specs';
 	const EPRF_ALL_WIZARDS_GET_CURRENT_CONFIG = 'epkb_all_wizards_get_current_config';
@@ -91,8 +90,7 @@ class EPRF_KB_Core {
 	 * Get all KB Configuration
 	 *
 	 * @param boolean $skip_check
-	 * @return array|string with value or $default value if this settings not found
-	 *
+	 * @return array|WP_Error with value or $default value if this settings not found
 	 */
 	public static function get_kb_configs( $skip_check=false ) {
 		if ( function_exists('epkb_get_instance') && isset(epkb_get_instance()->kb_config_obj) ) {
@@ -105,20 +103,12 @@ class EPRF_KB_Core {
 		return self::get_result( 'EPKB_KB_Handler', 'get_current_kb_id', EPRF_KB_Config_DB::DEFAULT_KB_ID );
 	}
 
-	public static function is_article_allowed_for_current_user( $article_id ) {
-		return self::get_param_result( 'EPKB_Utilities', 'is_article_allowed_for_current_user', array( $article_id ), true );
-	}
-
 	public static function is_user_access_to_context_allowed( $context ) {
 		return self::get_param_result( 'EPKB_Admin_UI_Access', 'is_user_access_to_context_allowed', array( $context ), false );
 	}
 
-	public static function get_author_capability() {
-		return self::get_result( 'EPKB_Admin_UI_Access', 'get_author_capability', 'publish_posts' );
-	}
-
 	public static function get_font_data() {
-		return class_exists('EPKB_Typography') ? EPKB_Typography::$font_data : [];
+		return class_exists( 'EPKB_Typography' ) ? EPKB_Typography::$font_data : [];
 	}
 
 
@@ -139,8 +129,12 @@ class EPRF_KB_Core {
 	private static function get_result( $class_name, $method, $default ) {
 
 		$class = $class_name;
-		if ( ! is_callable( array($class, $method) ) ) {
-			EPRF_Logging::add_log("Cannot invoke class $class with method $method.");
+		if ( in_array( $class_name, array( 'EPKB_KB_Config_DB' ) ) ) {
+			$class = new $class_name();
+		}
+
+		if ( ! is_callable( array( $class, $method ) ) ) {
+			EPRF_Logging::add_log( "Cannot invoke class $class_name with method $method." );
 			return $default;
 		}
 
@@ -156,11 +150,15 @@ class EPRF_KB_Core {
 	 * @param $default
 	 * @return mixed
 	 */
-	public static function get_param_result( $class_name, $method, $params, $default ) {
+	private static function get_param_result( $class_name, $method, $params, $default ) {
 
 		$class = $class_name;
-		if ( ! is_callable( array($class, $method ) ) ) {
-			EPRF_Logging::add_log("Cannot invoke class $class with method $method.");
+		if ( in_array( $class_name, array( 'AMGR_Access_Articles_Front', 'EPKB_Admin_UI_Access' ) ) ) {
+			$class = new $class_name();
+		}
+
+		if ( ! is_callable( array( $class, $method ) ) ) {
+			EPRF_Logging::add_log( "Cannot invoke class $class_name with method $method." );
 			return $default;
 		}
 

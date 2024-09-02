@@ -468,8 +468,6 @@ class EPRF_Rating_View {
 	 *
 	 * @param $show_stars
 	 * @param $add_on_config
-	 * @param $rating_style
-	 * @param $rating_text
 	 */
 	private static function show_mobile_stars_rating( $show_stars, $add_on_config ) {    ?>
 		<div class="eprf-stars-module__mobile-rating">
@@ -496,7 +494,7 @@ class EPRF_Rating_View {
 	private function show_like_dislike( $add_on_config, $rating, $did_vote ) {
 		global $pagenow;
 
-		//This sets the layout where the text is located and if the statisitics are visible.
+		//This sets the layout where the text is located and if the statistics are visible.
 		$layout = '';
 		switch ( $add_on_config[ 'rating_layout' ] ) {
 			case 'rating_layout_1':

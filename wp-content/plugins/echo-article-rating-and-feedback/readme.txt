@@ -5,7 +5,7 @@ Contributors: echoplugins
 Tags: rating, voting, feedback, help, votes, knowledge base, articles, documents, documentation, wiki, categories, plugin, add-on
 Requires at least: 5.4
 Tested up to: 6.4
-Stable tag: 2.0.4
+Stable tag: 2.0.5
 
 Let your readers rate the quality of your articles and submit insightful feedback. Utilize analytics on the most and least rated articles.
 
@@ -32,6 +32,9 @@ Please read instructions at https://www.echoknowledgebase.com/documentation/?top
 Please read instructions at https://www.echoknowledgebase.com/documentation/?top-category=add-ons
 
 == Changelog ==
+
+= 2.0.5, Mar 8, 2024 =
+* Fix: Cleanup and minor fixes
 
 = 2.0.4, Jan 7, 2024 =
 * Update: Test new plugin update feature

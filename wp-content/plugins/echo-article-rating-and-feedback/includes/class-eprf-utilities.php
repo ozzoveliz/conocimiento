@@ -21,7 +21,7 @@ class EPRF_Utilities {
 	public static function get_post_status_text( $post_status ) {
 
 		$post_statuses = array( 'draft' => __( 'Draft' ), 'pending' => __( 'Pending' ),
-		                        'publish' => __( 'Published' ), 'future' => __( 'Scheduled' ),
+								'publish' => __( 'Published' ), 'future' => __( 'Scheduled' ),
 								'private' => __( 'Private' ),
 								'trash'   => __( 'Trash' ));
 
@@ -30,6 +30,11 @@ class EPRF_Utilities {
 		}
 
 		return $post_statuses[$post_status];
+	}
+
+	public static function get_eckb_kb_id( $default=1 ) {
+		global $eckb_kb_id;
+		return empty( $eckb_kb_id ) ? $default : $eckb_kb_id;
 	}
 
 
@@ -253,9 +258,9 @@ class EPRF_Utilities {
 	 * @param string $title
 	 * @param string $type
 	 */
-	public static function ajax_show_info_die( $message, $title='', $type='success' ) {
+	public static function ajax_show_info_die( $message='', $title='', $type='success' ) {
 		if ( defined('DOING_AJAX') ) {
-			wp_die( json_encode( array( 'message' => EPRF_HTML_Forms::notification_box_bottom( $message, $title, $type ) ) ) );
+			wp_die( wp_json_encode( array( 'message' => EPRF_HTML_Forms::notification_box_bottom( $message, $title, $type ) ) ) );
 		}
 	}
 
@@ -268,7 +273,7 @@ class EPRF_Utilities {
 	 */
 	public static function ajax_show_error_die( $message, $title = '', $error_code = '' ) {
 		if ( defined('DOING_AJAX') ) {
-			wp_die( json_encode( array( 'error' => true, 'message' => EPRF_HTML_Forms::notification_box_bottom( $message, $title, 'error' ), 'error_code' => $error_code ) ) );
+			wp_die( wp_json_encode( array( 'error' => true, 'message' => EPRF_HTML_Forms::notification_box_bottom( $message, $title, 'error' ), 'error_code' => $error_code ) ) );
 		}
 	}
 
@@ -298,7 +303,7 @@ class EPRF_Utilities {
 			return '';
 		}
 
-		return ' ' . esc_html__( 'Please contact us for support', 'echo-knowledge-base' ) . ' ' .
+		return ' ' . esc_html__( 'Please contact us for help', 'echo-knowledge-base' ) . ' ' .
 		       '<a href="https://www.echoknowledgebase.com/technical-support/" target="_blank" rel="noopener noreferrer">' . esc_html__( 'here', 'echo-knowledge-base' ) . '</a>.';
 	}
 
@@ -324,15 +329,15 @@ class EPRF_Utilities {
 	public static function report_generic_error( $error_number=0, $message='', $contact_us=true ) {
 
 		if ( empty( $message ) ) {
-			$message = __( 'Error occurred', 'echo-knowledge-base' );
+			$message = esc_html__( 'Error occurred', 'echo-knowledge-base' );
 		} else if ( is_wp_error( $message ) ) {
 			/** @var WP_Error $message */
 			$message = $message->get_error_message();
 		} else if ( ! is_string( $message ) ) {
-			$message = __( 'Error occurred', 'echo-knowledge-base' );
+			$message = esc_html__( 'Error occurred', 'echo-knowledge-base' );
 		}
 
-		return esc_html( $message ) .
+		return $message .
 				( empty( $error_number ) ? '' : ' (' . $error_number . '). ' ) .
 				( empty( $contact_us ) ? '' : self::contact_us_for_support() );
 	}
@@ -572,7 +577,7 @@ class EPRF_Utilities {
 			$value = sanitize_text_field( stripslashes( $_POST[$key] ) );
 		}
 
-		// optionally limit value by length
+		// optionally limit the value by length
 		if ( ! empty( $max_length ) ) {
 			$value = substr( $value, 0, $max_length );
 		}
@@ -628,7 +633,7 @@ class EPRF_Utilities {
 
 		// config is sanitizing with its own specs separately
 		if ( $value_type == 'db-config' ) {
-			return $_POST[$key];
+			return $_GET[$key];
 		}
 
 		if ( is_array( $_GET[$key] ) ) {
@@ -730,7 +735,7 @@ class EPRF_Utilities {
 	 * @param $option_name - without kb suffix
 	 * @param $default - use if KB option not found
 	 * @param bool $is_array - ensure returned value is an array, otherwise return default
-	 * @return string|array|null or default
+	 * @return string|array or default
 	 */
 	public static function get_kb_option( $kb_id, $option_name, $default, $is_array=false ) {
 		$full_option_name = $option_name . '_' . $kb_id;
@@ -759,7 +764,7 @@ class EPRF_Utilities {
 		}
 
 		// retrieve specific WP option
-		$option = $wpdb->get_var( $wpdb->prepare("SELECT option_value FROM $wpdb->options WHERE option_name = %s", $option_name ) );
+		$option = $wpdb->get_var( $wpdb->prepare( "SELECT option_value FROM $wpdb->options WHERE option_name = %s", $option_name ) );
 		if ( $option !== null ) {
 			$option = maybe_unserialize( $option );
 		}
@@ -771,7 +776,7 @@ class EPRF_Utilities {
 		}
 
 		// if WP option is missing then return defaults
-		if ( $option === null || ( $is_array && ! is_array($option) ) ) {
+		if ( $option === null || ( $is_array && ! is_array( $option ) ) ) {
 			return $default;
 		}
 
@@ -812,14 +817,16 @@ class EPRF_Utilities {
 
 		// do not store null
 		if ( $option_value === null ) {
-            $option_value = '';
-        }
+			$option_value = '';
+		}
 
 		// add or update the option
 		$serialized_value = $option_value;
+
+		// check if array or object type of option can be properly serialized
 		if ( is_array( $option_value ) || is_object( $option_value ) ) {
 			$serialized_value = maybe_serialize($option_value);
-			if ( empty($serialized_value) ) {
+			if ( empty( $serialized_value ) ) {
 				return new WP_Error( '434', __( 'Error occurred', 'echo-knowledge-base' ) . ' ' . $option_name );
 			}
 		}
@@ -1128,12 +1135,12 @@ class EPRF_Utilities {
 	public static function get_current_user() {
 
 		$user = null;
-		if ( function_exists('wp_get_current_user') ) {
+		if ( function_exists( 'wp_get_current_user' ) ) {
 			$user = wp_get_current_user();
 		}
 
 		// is user not logged in? user ID is 0 if not logged
-		if ( empty($user) || ! $user instanceof WP_User || empty($user->ID) ) {
+		if ( empty( $user ) || ! $user instanceof WP_User || empty( $user->ID ) ) {
 			$user = null;
 		}
 
@@ -1292,7 +1299,9 @@ class EPRF_Utilities {
 				}
 			}
 
-			$output .= '; ';
+			if ( $key_value[0] != 'typography' ) {
+				$output .= '; ';
+			}
 		}
 
 		return ' ' . trim( $output ) . '" ';
@@ -1473,6 +1482,22 @@ class EPRF_Utilities {
 		return defined('EP'.'HD_PLUGIN_NAME');
 	}
 
+	public static function is_help_dialog_pro_enabled() {
+		return defined('EP'.'HP_PLUGIN_NAME');
+	}
+
+	public static function is_knowledge_base_enabled() {
+		return defined('EP'.'KB_PLUGIN_NAME');
+	}
+
+	public static function is_groups_enabled() {
+		return defined('AM'.'GP_PLUGIN_NAME');
+	}
+
+	public static function is_custom_roles_enabled() {
+		return defined('AM'.'CR_PLUGIN_NAME');
+	}
+
 	public static function is_link_editor( $post ) {
 		return ! empty($post->post_mime_type) && ( $post->post_mime_type == 'kb_link' or $post->post_mime_type == 'kblink' );
 	}
@@ -1486,7 +1511,9 @@ class EPRF_Utilities {
 	public static function is_plugin_enabled( $plugin_id ) {
 
 		switch ( $plugin_id ) {
-			case 'core' : return true;
+			case 'am'.'gr' :
+			case 'core'    : return true;
+			case 'pro'     : return self::is_help_dialog_pro_enabled();
 			case 'em'.'kb' : return self::is_multiple_kbs_enabled();
 			case 'ep'.'ie' : return self::is_export_import_enabled();
 			case 'el'.'ay' : return self::is_elegant_layouts_enabled();
@@ -1496,6 +1523,8 @@ class EPRF_Utilities {
 			case 'wi'.'dg' : return self::is_kb_widgets_enabled();
 			case 'ep'.'hd' : return self::is_help_dialog_enabled();
 			case 'cr'.'el' : return self::is_creative_addons_widgets_enabled();
+			case 'am'.'gp' : return self::is_groups_enabled();
+			case 'am'.'cr' : return self::is_custom_roles_enabled();
 			default: return false;
 		}
 	}
@@ -1601,7 +1630,7 @@ class EPRF_Utilities {
 		if ( strlen( $subject ) > 200 ) {
 			return __( 'Invalid subject', 'echo-knowledge-base' );
 		}
-		
+
 		if ( strlen( $message ) > 10000 ) {
 			return __( 'Email message is too long', 'echo-knowledge-base' );
 		}
@@ -1764,7 +1793,7 @@ class EPRF_Utilities {
 
 	public static function is_user_allowed_unfiltered_html() {
 		if ( ! function_exists( 'wp_get_current_user' ) ) {
-			require false;
+			return false;
 		}
 
 		return current_user_can( 'unfiltered_html' ) || current_user_can( 'manage_options' );
@@ -1804,7 +1833,7 @@ class EPRF_Utilities {
 	}
 
 	/**
-	 * Return 'true' if the current user cannot view given article
+	 * Return 'true' if the current user can view the given article
 	 *
 	 * @param $article_id
 	 *

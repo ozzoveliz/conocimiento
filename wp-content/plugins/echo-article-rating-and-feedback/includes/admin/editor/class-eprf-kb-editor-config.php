@@ -17,10 +17,10 @@ class EPRF_KB_Editor_Config {
 	const EDITOR_GROUP_DIMENSIONS = 'dimensions';
 
 	public static function register_editor_hooks() {
-		add_filter( 'eckb_editor_fields_specs', array('EPRF_KB_Editor_Config', 'get_editor_fields_specs' ), 10, 2 );
-		add_filter( 'eckb_all_editors_get_current_config', array('EPRF_KB_Editor_Config', 'get_current_config' ), 10, 2 );
-		add_filter( 'eckb_editor_get_default_config', array('EPRF_KB_Editor_Config', 'get_configuration_defaults' ) );
-		add_filter( 'eckb_editor_fields_config', array('EPRF_KB_Editor_Config', 'get_editor_fields_config' ), 10, 3 );
+		add_filter( 'eckb_editor_fields_specs', array( 'EPRF_KB_Editor_Config', 'get_editor_fields_specs' ), 10, 2 );
+		add_filter( 'eckb_all_editors_get_current_config', array( 'EPRF_KB_Editor_Config', 'get_current_config' ), 10, 2 );
+		add_filter( 'eckb_editor_get_default_config', array( 'EPRF_KB_Editor_Config', 'get_configuration_defaults' ) );
+		add_filter( 'eckb_editor_fields_config', array( 'EPRF_KB_Editor_Config', 'get_editor_fields_config' ), 10, 3 );
 	}
 
 	/**
@@ -75,6 +75,6 @@ class EPRF_KB_Editor_Config {
 			$eprf_config += EPRF_KB_Editor_Article_Page_Config::get_config();
 		}
 
-		return array_merge_recursive( $editor_config, $eprf_config );
+		return array_merge( $editor_config, $eprf_config );
 	}
 }
