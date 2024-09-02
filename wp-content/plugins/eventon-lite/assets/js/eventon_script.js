@@ -1,6 +1,6 @@
 /**
  * Javascript code that is associated with the front end of the calendar
- * version: 2.2.19
+ * version: 2.2.20
  */
 
 jQuery(document).ready(function($){
@@ -1495,6 +1495,7 @@ jQuery(document).ready(function($){
 					$(this).parent().fadeOut();
 				}else{					
 					cal_resets( CAL );
+
 							
 					// make changes					
 					filter.data('filter_val', new_filter_val);

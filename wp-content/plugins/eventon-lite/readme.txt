@@ -5,7 +5,7 @@ Author URI: http://ashanjay.com/
 Tags: calendar, event calendar, virtual events, events, event management
 Requires at least: 6.0
 Tested up to: 6.6.1
-Stable tag: 2.2.19
+Stable tag: 2.2.20
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -196,6 +196,10 @@ Check out **[all EventON Addons](https://www.myeventon.com/addons/)**.
 11. Event Edit page event time settings section
 
 == Changelog ==
+= 2.2.20 (2024-8-23) = 
+FIXED: eventtop settings incorrect event type names
+FIXED: event filters not returning events
+
 = 2.2.19 (2024-8-21) = 
 FIXED: settings event paging to use wp cache based calls 
 FIXED: cleaned up unused archive page functions
