@@ -656,27 +656,6 @@ class WPvivid_Backup_Task_2
                 continue;
             }
 
-            /*
-            $zip->add_file($zip_file_name,$file,basename($file),dirname($file));
-            $i++;
-
-            $child_json=$this->get_file_json($file);
-            $this->update_merge_zipped_file_index($i,basename($file),$child_json);
-
-            if($i === $numItems)
-            {
-                continue;
-            }
-
-            if($max_zip_file_size !== 0 && (filesize($zip_file_name)>$max_zip_file_size))
-            {
-                $json=array();
-                $json=$this->get_json_info('backup_merge',$json);
-                $this->update_zip_file(basename($zip_file_name),1,$json);
-                $zip_file_name=$path.$this->add_zip_file('backup_merge');
-            }
-            */
-
             if($max_zip_file_size==0)
                 $max_zip_file_size = 4 * 1024 * 1024 * 1024;
 
@@ -693,7 +672,7 @@ class WPvivid_Backup_Task_2
                     continue;
                 }
 
-                if(filesize($zip_file_name)>$max_zip_file_size)
+                if((filesize($zip_file_name)>$max_zip_file_size) || ($i >= 55000))
                 {
                     $json=array();
                     $json=$this->get_json_info('backup_merge',$json);
@@ -701,7 +680,7 @@ class WPvivid_Backup_Task_2
                     $zip_file_name=$path.$this->add_zip_file('backup_merge');
                 }
             }
-            else if((filesize($zip_file_name) + filesize($file)) < $max_zip_file_size)
+            else if(((filesize($zip_file_name) + filesize($file)) < $max_zip_file_size) && $i < 55000)
             {
                 $zip->add_file($zip_file_name,$file,basename($file),dirname($file));
                 $i++;
@@ -1302,7 +1281,7 @@ class WPvivid_Backup_Task_2
         return $ret;
     }
 
-    public function get_files_from_cache_by_size($cache_file,$index,$max_zip_file_size)
+    public function get_files_from_cache_by_size($cache_file,$index,$max_zip_file_size,$use_pclzip)
     {
         $files=array();
         $file = new SplFileObject($cache_file);
@@ -1322,6 +1301,7 @@ class WPvivid_Backup_Task_2
 
         $current_size=0;
         $current=$index;
+        $current_file_index = 0;
         while(!$file->eof())
         {
             $src = $file->fgets();
@@ -1347,27 +1327,20 @@ class WPvivid_Backup_Task_2
             if($current_size == 0)
             {
                 $current++;
+                $current_file_index++;
                 $files[$src]=$src;
                 $current_size+=filesize($src);
             }
-            else if($current_size>$max_zip_file_size)
+            else if(($current_size>$max_zip_file_size) || ($use_pclzip && ($current_file_index >= 55000)))
             {
                 break;
             }
             else
             {
                 $current++;
+                $current_file_index++;
                 $files[$src]=$src;
             }
-
-            /*$current_size+=filesize($src);
-            $files[$src]=$src;
-
-            if($max_zip_file_size==0)
-                continue;
-
-            if($current_size>$max_zip_file_size)
-                break;*/
         }
 
         $ret['eof']=$file->eof();
@@ -1393,9 +1366,10 @@ class WPvivid_Backup_Task_2
         return $ret;
     }
 
-    public function get_files_size($files,$index,$max_zip_file_size)
+    public function get_files_size($files,$index,$max_zip_file_size,$use_pclzip)
     {
         $current=0;
+        $current_file_index = 0;
         $current_size=0;
         $add_files=array();
         foreach ($files as $file)
@@ -1417,28 +1391,20 @@ class WPvivid_Backup_Task_2
             if($current_size == 0)
             {
                 $current++;
+                $current_file_index++;
                 $add_files[]=$file;
                 $current_size+=filesize($file);
             }
-            else if($current_size>$max_zip_file_size)
+            else if(($current_size>$max_zip_file_size) || ($use_pclzip && ($current_file_index >= 55000)))
             {
                 break;
             }
             else
             {
                 $current++;
+                $current_file_index++;
                 $add_files[]=$file;
             }
-
-            /*$current++;
-            $current_size+=filesize($file);
-            $add_files[]=$file;
-
-            if($max_zip_file_size==0)
-                $max_zip_file_size = 4 * 1024 * 1024 * 1024;
-
-            if($current_size>$max_zip_file_size)
-                break;*/
         }
 
         if($current>=count($files))
@@ -1674,7 +1640,7 @@ class WPvivid_Backup_Task_2
 
                 if ($use_pclzip)
                 {
-                    $files_cache = $this->get_files_from_cache_by_size($cache_file['name'], $cache_file['index'], $max_zip_file_size);
+                    $files_cache = $this->get_files_from_cache_by_size($cache_file['name'], $cache_file['index'], $max_zip_file_size, $use_pclzip);
                     $eof = $files_cache['eof'];
                     $files = $files_cache['files'];
                     $cache_file['index'] = $files_cache['index'];
@@ -1696,7 +1662,7 @@ class WPvivid_Backup_Task_2
                 else
                 {
                     //$files_cache = $this->get_files_from_cache($cache_file['name'], $cache_file['index'], $add_files_count);
-                    $files_cache = $this->get_files_from_cache_by_size($cache_file['name'], $cache_file['index'], $max_zip_file_size);
+                    $files_cache = $this->get_files_from_cache_by_size($cache_file['name'], $cache_file['index'], $max_zip_file_size, $use_pclzip);
                     $eof = $files_cache['eof'];
                     $files = $files_cache['files'];
                     $cache_file['index'] = $files_cache['index'];
@@ -2075,7 +2041,7 @@ class WPvivid_Backup_Task_2
 
             if($use_pclzip)
             {
-                $files_count=$this->get_files_size($files,$index,$max_zip_file_size);
+                $files_count=$this->get_files_size($files,$index,$max_zip_file_size,$use_pclzip);
                 $eof=$files_count['eof'];
                 $index=$files_count['index'];
                 $wpvivid_plugin->wpvivid_log->WriteLog('Compressing zip file:'.basename($zip_file_name).' index:'.$index,'notice');
@@ -2100,7 +2066,7 @@ class WPvivid_Backup_Task_2
             else
             {
                 //$files_count=$this->get_files_count($files,$index,$add_files_count);
-                $files_count=$this->get_files_size($files,$index,$max_zip_file_size);
+                $files_count=$this->get_files_size($files,$index,$max_zip_file_size,$use_pclzip);
                 $eof=$files_count['eof'];
                 //$index+=$add_files_count;
                 $index=$files_count['index'];
@@ -2121,14 +2087,6 @@ class WPvivid_Backup_Task_2
 
                 $this->update_zip_file(basename($zip_file_name),1,$json);
                 $zip_file_name=$path.$this->add_zip_file($backup_type);
-
-                /*if($max_zip_file_size==0)
-                    $max_zip_file_size = 4 * 1024 * 1024 * 1024;
-                if(filesize($zip_file_name)>$max_zip_file_size)
-                {
-                    $this->update_zip_file(basename($zip_file_name),1,$json);
-                    $zip_file_name=$path.$this->add_zip_file($backup_type);
-                }*/
             }
         }
 

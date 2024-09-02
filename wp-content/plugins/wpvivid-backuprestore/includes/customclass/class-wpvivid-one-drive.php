@@ -88,7 +88,7 @@ class WPvivid_one_drive extends WPvivid_Remote
                         update_option('wpvivid_tmp_remote_options',$remote_options,'no');
                         $url = 'https://login.microsoftonline.com/common/oauth2/v2.0/authorize'
                             . '?client_id=' . urlencode('37668be9-b55f-458f-b6a3-97e6f8aa10c9')
-                            . '&scope=' . urlencode('offline_access files.readwrite')
+                            . '&scope=' . urlencode('offline_access files.readwrite.all')
                             . '&response_type=code'
                             . '&redirect_uri=' . urlencode('https://auth.wpvivid.com/onedrive_v2/')
                             . '&state=' . urlencode(admin_url() . 'admin.php?page=WPvivid' . '&action=wpvivid_one_drive_finish_auth&main_tab=storage&sub_tab=one_drive&sub_page=storage_account_one_drive&auth_id='.$auth_id)
@@ -682,8 +682,7 @@ class WPvivid_one_drive extends WPvivid_Remote
         global $wpvivid_plugin;
 
         $downloaded_end=min($downloaded_start+$download_size-1,$file_size-1);
-        $headers['Range']="bytes=$downloaded_start-$downloaded_end";
-        $response=$this->remote_get($url,$headers,false,30);
+        $response=$this->remote_get_download_backup($url,$downloaded_start,$downloaded_end,false,30);
         if ((time() - $this->last_time) > 3) {
             if (is_callable($this->callback)) {
                 call_user_func_array($this->callback, array($downloaded_start, $this->current_file_name,
@@ -710,6 +709,75 @@ class WPvivid_one_drive extends WPvivid_Remote
             {
                 return $response;
             }
+        }
+    }
+
+    public function remote_get_download_backup($url,$downloaded_start,$downloaded_end,$decode=true,$timeout=30,$except_code=array())
+    {
+        if(isset($this->options['is_encrypt']) && $this->options['is_encrypt'] == 1) {
+            $access_token=base64_decode($this->options['token']['access_token']);
+        }
+        else{
+            $access_token=$this->options['token']['access_token'];
+        }
+
+        if(empty($except_code))
+        {
+            $except_code=array(200,201,202,204,206);
+        }
+
+        $curl = curl_init();
+        $curl_options = array(
+            CURLOPT_URL			=> $url,
+            CURLOPT_HTTPHEADER 	=> array(
+                'Authorization: Bearer ' . $access_token,
+                'Range: '."bytes=$downloaded_start-$downloaded_end"
+            ),
+            CURLOPT_CONNECTTIMEOUT => $timeout,
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_AUTOREFERER    => true,
+            CURLOPT_SSL_VERIFYPEER => true
+        );
+        $curl_options[CURLOPT_CAINFO] = WPVIVID_PLUGIN_DIR.'/vendor/guzzle/guzzle/src/Guzzle/Http/Resources/cacert.pem';
+        $curl_options[CURLOPT_FOLLOWLOCATION] = true;
+        curl_setopt_array($curl, $curl_options);
+        $result = curl_exec($curl);
+        $http_info = curl_getinfo($curl);
+        $http_code = array_key_exists('http_code', $http_info) ? (int) $http_info['http_code'] : null;
+        if($result !== false)
+        {
+            curl_close($curl);
+            if($http_code==401)
+            {
+                $this->refresh_token();
+                $ret=$this->remote_get_download_backup($url,$downloaded_start,$downloaded_end,$decode,$timeout,$except_code);
+                return $ret;
+            }
+            else
+            {
+                if(in_array($http_code,$except_code))
+                {
+                    $ret['result']=WPVIVID_SUCCESS;
+                    if($decode)
+                        $ret['body']=json_decode($result,1);
+                    else
+                        $ret['body']=$result;
+                    return $ret;
+                }
+                else
+                {
+                    $ret['result']='failed';
+                    $ret['error']='Download files failed, error code: '.$http_code;
+                    return $ret;
+                }
+            }
+        }
+        else
+        {
+            $ret['result']='failed';
+            $ret['error']=curl_error($curl);
+            curl_close($curl);
+            return $ret;
         }
     }
 
@@ -998,7 +1066,7 @@ class WPvivid_one_drive extends WPvivid_Remote
         $wpvivid_plugin->wpvivid_log->WriteLog('uploadUrl: '.$uploadUrl,'notice');
 
         $url=$uploadUrl;
-        $response=$this->remote_get($url);
+        $response=$this->remote_get_ex($url);
         if($response['result']==WPVIVID_SUCCESS)
         {
             if($response['code']==200)
@@ -1084,7 +1152,7 @@ class WPvivid_one_drive extends WPvivid_Remote
             "Content-Length: $upload_size",
             "Content-Range: bytes $uploaded-$upload_end/".$file_size,
         );
-        $headers[] = 'Authorization: Bearer ' . $access_token;
+        //$headers[] = 'Authorization: Bearer ' . $access_token;
 
         $options = array(
             CURLOPT_URL        => $url,
@@ -1294,6 +1362,68 @@ class WPvivid_one_drive extends WPvivid_Remote
 
         if(!is_wp_error($response))
         {
+            $ret['code']=$response['response']['code'];
+            if(in_array($response['response']['code'],$except_code))
+            {
+                $ret['result']=WPVIVID_SUCCESS;
+                if($decode)
+                    $ret['body']=json_decode($response['body'],1);
+                else
+                    $ret['body']=$response['body'];
+            }
+            else
+            {
+                $ret['result']=WPVIVID_FAILED;
+                $error=json_decode($response['body'],1);
+                $ret['error']=$error['error']['message'].' http code:'.$response['response']['code'];
+            }
+            return $ret;
+        }
+        else
+        {
+            $ret['result']=WPVIVID_FAILED;
+            $ret['error']=$response->get_error_message();
+            return $ret;
+        }
+    }
+
+    public function remote_get_ex($url,$header=array(),$decode=true,$timeout=30,$except_code=array())
+    {
+        if(isset($this->options['is_encrypt']) && $this->options['is_encrypt'] == 1) {
+            $access_token=base64_decode($this->options['token']['access_token']);
+        }
+        else{
+            $access_token=$this->options['token']['access_token'];
+        }
+
+        if(empty($except_code))
+        {
+            $except_code=array(200,201,202,204,206);
+        }
+        $args['timeout']=$timeout;
+        $args['headers']=$header;
+        $response=wp_remote_get($url,$args);
+
+        if(!is_wp_error($response))
+        {
+            if($response['response']['code']==401)
+            {
+                $this->refresh_token();
+
+                if(isset($this->options['is_encrypt']) && $this->options['is_encrypt'] == 1) {
+                    $access_token=base64_decode($this->options['token']['access_token']);
+                }
+                else{
+                    $access_token=$this->options['token']['access_token'];
+                }
+
+                $args=array();
+                $args['timeout']=$timeout;
+                $args['headers']['Authorization']= 'bearer '.$access_token;
+                $args['headers']= $args['headers']+$header;
+                $response=wp_remote_get($url,$args);
+            }
+
             $ret['code']=$response['response']['code'];
             if(in_array($response['response']['code'],$except_code))
             {

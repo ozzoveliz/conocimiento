@@ -335,25 +335,27 @@ class WPvivid_Uploads_Scanner
     public function scan_image_from_nextend()
     {
         global $wpdb;
-        $query = "SELECT image FROM ".$wpdb->prefix."nextend2_image_storage";
-        $metas = $wpdb->get_col( $query );
+
         $file_array=array();
-
-        $upload_dir = wp_upload_dir();
-        $upload_path = $upload_dir['basedir'];
-
-        foreach ($metas as $meta)
+        if($wpdb->get_var( $wpdb->prepare( 'SHOW TABLES LIKE %s', $wpdb->prefix."nextend2_image_storage" ) ) !== null)
         {
-            $exploded = explode( ',', $meta );
-            if ( is_array( $exploded ) )
+            $query = "SELECT image FROM ".$wpdb->prefix."nextend2_image_storage";
+            $metas = $wpdb->get_col( $query );
+            $upload_dir = wp_upload_dir();
+            $upload_path = $upload_dir['basedir'];
+            foreach ($metas as $meta)
             {
-                $file_tmp = $this->array_to_file($exploded);
-                $file = str_replace('$upload$', $upload_path, $file_tmp);
-                if(file_exists($file))
+                $exploded = explode( ',', $meta );
+                if ( is_array( $exploded ) )
                 {
-                    $file_array[] = str_replace('$upload$'.'/', '', $file_tmp);
+                    $file_tmp = $this->array_to_file($exploded);
+                    $file = str_replace('$upload$', $upload_path, $file_tmp);
+                    if(file_exists($file))
+                    {
+                        $file_array[] = str_replace('$upload$'.'/', '', $file_tmp);
+                    }
+                    continue;
                 }
-                continue;
             }
         }
         return $file_array;
@@ -1490,6 +1492,18 @@ class WPvivid_Uploads_Scanner
                             $element_image[]=$item['id'];
                             $attachment_added_ids[]=$item['id'];
                         }
+                    }
+                }
+            }
+
+            if(isset($settings['column_bg_image_new']) && !empty($settings['column_bg_image_new']))
+            {
+                if(isset($settings['column_bg_image_new']['id']))
+                {
+                    if(!in_array($settings['column_bg_image_new']['id'],$attachment_added_ids))
+                    {
+                        $element_image[]=$settings['column_bg_image_new']['id'];
+                        $attachment_added_ids[]=$settings['column_bg_image_new']['id'];
                     }
                 }
             }
