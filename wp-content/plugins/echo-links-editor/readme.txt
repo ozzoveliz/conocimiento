@@ -4,8 +4,8 @@ Plugin URI: https://www.echoknowledgebase.com/wordpress-plugin/links-editor/
 Contributors: echoplugins
 Tags: links, media, pdf, knowledge base, articles, documents, documentation, urls, plugin, add-on
 Requires at least: 5.4
-Tested up to: 6.4
-Stable tag: 1.5.2
+Tested up to: 6.5
+Stable tag: 1.5.5
 
 Links Editor for PDFs and More
 
@@ -32,6 +32,15 @@ Please read instructions at https://www.echoknowledgebase.com/documentation/?top
 Please read instructions at https://www.echoknowledgebase.com/documentation/?top-category=add-ons
 
 == Changelog ==
+
+= 1.5.5, May 11, 2024 =
+* Fix: Various fixes and updates
+
+= 1.5.4, Apr 13, 2024 =
+* Fix: Various fixes and updates
+
+= 1.5.3, Apr 5, 2024 =
+* Fix: Various fixes and updates
 
 = 1.5.2, Feb 10, 2024 =
 * Fix: Various fixes and updates

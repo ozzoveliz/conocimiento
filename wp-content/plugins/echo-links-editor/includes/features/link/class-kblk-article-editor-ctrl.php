@@ -32,7 +32,7 @@ class KBLK_Article_Editor_Cntrl {
 			return $data;
 		}
 
-		// is Links Editor ON ?
+		// is Custom Links ON ?
 		$link_editor_on = KBLK_Utilities::post( 'kblk_link_editor_mode' );
 		if ( $link_editor_on === 'yes' ) {
 			$data['post_mime_type'] = 'kb_link';
@@ -77,7 +77,7 @@ class KBLK_Article_Editor_Cntrl {
 			$link_editor_config['link-editor-on'] = false;
 		}
 
-		// is Links Editor ON ?
+		// is Custom Links ON ?
 		if ( $link_editor_config['link-editor-on'] === true ) {
 			$link_editor_config = $this->retrieve_link_editor_config( $link_editor_config, $post_id );
 			if ( $link_editor_config === false ) {

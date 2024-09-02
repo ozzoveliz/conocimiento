@@ -116,28 +116,28 @@ class KBLK_Article_Display_Link {
 
 		// check if KB Article is linked
 		$link_editor_config = KBLK_Utilities::get_postmeta( $article_id, 'kblk-link-editor-data', array(), true, true );
-		if ( is_wp_error($link_editor_config) ) {
+		if ( is_wp_error( $link_editor_config ) ) {
 			return false;
 		}
 
 		// do not show link if not enabled
-		if ( empty($link_editor_config['link-editor-on']) || $link_editor_config['link-editor-on'] !== true ) {
+		if ( empty( $link_editor_config['link-editor-on'] ) || $link_editor_config['link-editor-on'] !== true ) {
 			return false;
 		}
 
 		// get article link configuration
-		$url_value = empty($link_editor_config['url']) ? '' : $link_editor_config['url'];
+		$url_value = empty( $link_editor_config['url'] ) ? '' : $link_editor_config['url'];
 
-		$title_attr_value = empty($link_editor_config['title-attribute']) ? '' : $link_editor_config['title-attribute'];
-		$new_tab = empty($link_editor_config['open-new-tab']) ? '' : 'target="_blank"';
-		$icon = empty($link_editor_config['icon']) ? 'link' : $link_editor_config['icon'];
+		$title_attr_value = empty( $link_editor_config['title-attribute'] ) ? '' : $link_editor_config['title-attribute'];
+		$new_tab = empty( $link_editor_config['open-new-tab'] ) ? '' : 'target="_blank"';
+		$icon_class = empty( $link_editor_config['icon'] ) ? 'link' : $link_editor_config['icon'];
 
 		// get article KB configuration
-		$kb_id  = empty($link_kb_config[0]) ? KBLK_KB_Core::DEFAULT_KB_ID : $link_kb_config[0];
-		$title  = empty($link_kb_config[1]) ? '' : $link_kb_config[1];
-		$class1 = empty($link_kb_config[2]) ? '' : $link_kb_config[2];
-		$style1 = empty($link_kb_config[3]) ? '' : $link_kb_config[3];
-		$style2 = empty($link_kb_config[4]) ? '' : $link_kb_config[4];
+		$kb_id  = empty( $link_kb_config[0] ) ? KBLK_KB_Core::DEFAULT_KB_ID : $link_kb_config[0];
+		$title  = empty( $link_kb_config[1] ) ? '' : $link_kb_config[1];
+		$class1 = empty( $link_kb_config[2] ) ? '' : $link_kb_config[2];
+		$style1 = empty( $link_kb_config[3] ) ? '' : $link_kb_config[3];
+		$style2 = empty( $link_kb_config[4] ) ? '' : $link_kb_config[4];
 
 		$kb_config = KBLK_KB_Core::get_kb_config_or_default( $kb_id );
 
@@ -145,7 +145,12 @@ class KBLK_Article_Display_Link {
 		$is_kb_new_modular_version =  isset( Echo_Knowledge_Base::$version ) && version_compare( Echo_Knowledge_Base::$version, '11.30.0', '>=' );
 		$is_elay_layout = $kb_config['kb_main_page_layout'] == 'Grid' || $kb_config['kb_main_page_layout'] == 'Sidebar';
 		if ( ! $is_elay_layout && $is_kb_new_modular_version && isset( $kb_config['modular_main_page_toggle'] ) && $kb_config['modular_main_page_toggle'] == 'on' ) {
-			return [ 'url_value' => $url_value, 'title_attr_value' => $title_attr_value, 'new_tab' => $new_tab, 'icon' => $icon ];
+			return [ 'url_value' => $url_value, 'title_attr_value' => $title_attr_value, 'new_tab' => $new_tab, 'icon' => $icon_class ];
+		}
+
+		$icon_class = 'eckb-article-title__icon epkbfa epkbfa-' . $icon_class;
+		if ( isset( $kb_config['sidebar_article_icon_toggle'] ) && $kb_config['sidebar_article_icon_toggle'] == 'off' ) {
+			$icon_class = '';
 		}
 
 		// display the link
@@ -153,15 +158,15 @@ class KBLK_Article_Display_Link {
 			$output = '
 			<a href="' . esc_url( $url_value ) . '" class="epkb-ml-article-container" data-kb-article-id="' . esc_attr( $article_id ) . '">
 				<span class="epkb-article-inner">
-					<span class="eckb-article-title__icon epkbfa epkbfa-' . $icon . '" aria-hidden="true"></span>
+					<span class="' . esc_attr( $icon_class ) . '" aria-hidden="true"></span>
 					<span class="epkb-article__text">' . esc_html( $title ) . '</span>
 				</span>
 			</a>';
 		} else {
 			$output = '
 			<a href="' . esc_url( $url_value ) . '" title="' . esc_attr( $title_attr_value ) . ' " ' . $new_tab . '>
-				<span ' . $class1 . ' ' . $style1 . '>
-					<span class="eckb-article-title__icon epkbfa epkbfa-' . $icon . ' " ' . $style2 . '></span>
+				<span class="' . $class1 . '" ' . $style1 . '>
+					<span class="' . esc_attr( $icon_class ) . ' " ' . $style2 . '></span>
 					<span class="eckb-article-title__text">' . esc_html( $title ) . '</span>
 				</span>
 	        </a>';

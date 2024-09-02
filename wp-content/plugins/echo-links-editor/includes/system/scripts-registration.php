@@ -24,7 +24,7 @@ function kblk_load_admin_plugin_pages_resources(  ) {
 					'reload_try_again'      => esc_html__( 'Please reload the page and try again.', 'echo-knowledge-base' ),
 					'save_config'           => esc_html__( 'Saving configuration', 'echo-knowledge-base' ),
 					'input_required'        => esc_html__( 'Input is required', 'echo-knowledge-base' ),
-					'add_link_tag'     => sprintf( '<a href="%s" class="kblk-page-title-action">%s</a>', $add_article_url, __( 'Add New LINK Article', 'echo-knowledge-base' ))
+					'add_link_tag'     => sprintf( '<a href="%s" class="kblk-page-title-action">%s</a>', $add_article_url, __( 'Add New CUSTOM LINK Article', 'echo-knowledge-base' ))
 				));
 
 	wp_enqueue_style( 'wp-jquery-ui-dialog' );
